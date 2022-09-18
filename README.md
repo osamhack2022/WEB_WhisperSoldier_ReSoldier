@@ -1,4 +1,4 @@
-# Whisper Solder
+# WhisperSolder
 
 ![Logo](https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png)
 
@@ -9,8 +9,11 @@
 
 >
 > "오늘도 지적받았네. 다음엔 더 잘해서 한 사람 몫은 해야지..."
+> 
 > "최 상병님 열심히 공부하시네... 나도 슬슬 전공공부 해야되나"
+> 
 > "여자친구 생일이라 나가봐야 되는데... 부대가 바빠서 나갈 수 있을까"
+> 
 > "전역하면 뭐하고 살아야 하지??"
 >
 > ...
