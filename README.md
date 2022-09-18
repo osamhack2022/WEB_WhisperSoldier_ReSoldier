@@ -52,7 +52,6 @@
 ### Front-end
 - react.js
 - redux
-- material UI kit
 - UI framework
 - 기타 사용한 라이브러리
 
