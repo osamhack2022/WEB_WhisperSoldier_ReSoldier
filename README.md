@@ -1,4 +1,4 @@
-# WhisperSolder
+# WhisperSoldier
 
 ![Logo](https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png)
 
