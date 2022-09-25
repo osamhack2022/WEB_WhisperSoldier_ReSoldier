@@ -1,4 +1,4 @@
-import {Route, Routes} from 'react-router-dom';
+import {Route, Routes, redirect} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import FirstPage from './pages/FirstPage';
 import LoginPage from './pages/LoginPage';
@@ -7,17 +7,31 @@ import PostPage from './pages/PostPage';
 import ProfilePage from './pages/ProfilePage';
 import WritePage from './pages/WritePage';
 import SearchPage from './pages/SearchPage';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { authService } from "./lib/fbase";
 
 const App = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [init, setInit] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    authService.onAuthStateChanged((u) => {
+      if (u) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+      setInit(true);
+    });
+  })
   return (
     <>
       {
       isLogin?
       <Routes>
-        <Route path='/' element={<HomePage/>}/>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/register'>
+          redirect('/')
+        </Route>
         <Route path='/post' element={<PostPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
         <Route path='/write' element={<WritePage/>}/>

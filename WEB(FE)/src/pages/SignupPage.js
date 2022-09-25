@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+    getAuth,
+    createUserWithEmailAndPassword
+} from "firebase/auth"
 
 const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const {rePassword, setRePassword} = useState("");
+    const [rePassword, setRePassword] = useState("");
     const onChange = (e)=>{
         const {
             target : {name, value}
@@ -19,8 +23,17 @@ const SignupPage = () => {
             setRePassword(value);
         }
     }
-    const onSubmit = (e) =>{
+    const onSubmit = async (e) =>{
         e.preventDefault();
+        try {
+            const auth = getAuth();
+            const data = await createUserWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.log(error);
+        }
+        // 이메일 유효성 검사
+        // /\d{13}@narasarang.co.kr/;
+        // 이메일 인증 절차
         /*
         firebase 연동 부분
         */

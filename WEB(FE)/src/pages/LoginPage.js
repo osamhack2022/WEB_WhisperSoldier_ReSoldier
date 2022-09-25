@@ -3,6 +3,7 @@
 // import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // const StyledInputBox = styled.input`
 //     box-sizing: border-box;
@@ -36,8 +37,14 @@ const LoginPage = ()=> {
             setPassword(value);
         }
     }
-    const onSubmit = (e) =>{
+    const onSubmit = async (e) =>{
         e.preventDefault();
+        try {
+            const auth = getAuth();
+            const data = await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.log(error);
+        }
         /*
         firebase 연동 부분
         */
