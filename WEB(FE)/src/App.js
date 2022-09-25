@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import {Route, Routes} from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import FirstPage from './pages/FirstPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import PostPage from './pages/PostPage';
+import ProfilePage from './pages/ProfilePage';
+import WritePage from './pages/WritePage';
+import SearchPage from './pages/SearchPage';
+import { useState } from 'react';
 
-function App() {
+
+const App = () => {
+  const {isLogin, setIsLogin} = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      {isLogin?<Route path='/' element={<HomePage/>}/>:<Route path='/' element={<FirstPage/>}/>}
+      <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/register' element={<SignupPage/>}/>
+      <Route path='/post' element={<PostPage/>}/>
+      <Route path='/profile' element={<ProfilePage/>}/>
+      <Route path='/write' element={<WritePage/>}/>
+      <Route path='/search' element={<SearchPage/>}/>
+    </Routes>
   );
 }
 
