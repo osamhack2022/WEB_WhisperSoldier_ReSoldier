@@ -12,7 +12,6 @@ import { useState } from "react";
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(true);
-  console.log(isLogin);
   return (
     <>
       {isLogin ? (
