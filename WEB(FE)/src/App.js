@@ -11,17 +11,31 @@ import { useState } from 'react';
 
 
 const App = () => {
-  const {isLogin, setIsLogin} = useState(false);
+  const {isLogin, setIsLogin} = useState(true);
   return (
-    <Routes>
-      {isLogin?<Route path='/' element={<HomePage/>}/>:<Route path='/' element={<FirstPage/>}/>}
-      <Route path='/login' element={<LoginPage/>}/>
-      <Route path='/register' element={<SignupPage/>}/>
-      <Route path='/post' element={<PostPage/>}/>
-      <Route path='/profile' element={<ProfilePage/>}/>
-      <Route path='/write' element={<WritePage/>}/>
-      <Route path='/search' element={<SearchPage/>}/>
+    <>{/*
+      {
+      isLogin? 
+      <Routes>
+        <Route path='/' element={<HomePage/>}/> 
+        <Route path='/post' element={<PostPage/>}/>
+        <Route path='/profile' element={<ProfilePage/>}/>
+        <Route path='/write' element={<WritePage/>}/>
+        <Route path='/search' element={<SearchPage/>}/>
+      </Routes> :
+      <Routes>
+        <Route path='/' element={<FirstPage/>}/>
+        <Route path='/login' element={<LoginPage/>}/>
+        <Route path='/register' element={<SignupPage/>}/>
     </Routes>
+      }
+      {isLogin === true ? 1 : {console.log(isLogin === true)}}
+      */
+      }
+      
+    </>
+    
+    
   );
 }
 
