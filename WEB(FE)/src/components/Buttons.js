@@ -4,13 +4,13 @@ const LoginButtonStyled = styled.button`
     width: 320px;
     height: 48px;
     margin: 20px 0 30px;
-    #padding: 17px 140px 17.2px;
+    /* padding: 17px 140px 17.2px; */
     border-radius: 25px;
     border: solid 2px #1a7541;
     background: #1a7541;
 
     &:hover{
-        backgorund : #0d552c;
+        background : #0d552c;
     }
 `;
 
