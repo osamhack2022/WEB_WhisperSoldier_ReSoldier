@@ -13,7 +13,10 @@ const HomePage = () =>{
     }
     return (
     <div>
-        <input name="search" type="search" placeholder="검색어를 입력하세요" value={searchWord} onChange={onChange}/>
+        <p>
+            Home
+        </p>
+        <input name="search" type="search" placeholder="검색어를 입력하세요" value={searchWord} onChange={onChange} />
     </div>
     );
 };

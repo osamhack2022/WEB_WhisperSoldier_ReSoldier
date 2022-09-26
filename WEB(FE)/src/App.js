@@ -1,4 +1,4 @@
-import {Route, Routes, redirect} from 'react-router-dom';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import FirstPage from './pages/FirstPage';
 import LoginPage from './pages/LoginPage';
@@ -9,20 +9,20 @@ import WritePage from './pages/WritePage';
 import SearchPage from './pages/SearchPage';
 import { useEffect, useState } from 'react';
 import { authService } from "./lib/fbase";
+import { onAuthStateChanged } from 'firebase/auth';
 
 const App = () => {
-  const [init, setInit] = useState(false);
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    authService.onAuthStateChanged((u) => {
+    onAuthStateChanged(authService, (u) => {
       if (u) {
         setIsLogin(true);
       } else {
         setIsLogin(false);
       }
-      setInit(true);
     });
-  })
+  }, [])
   return (
     <>
       {
@@ -30,7 +30,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/register'>
-          redirect('/')
+          {navigate('/')}
         </Route>
         <Route path='/post' element={<PostPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
