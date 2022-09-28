@@ -1,20 +1,23 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AuthTemplate from "../components/auth/AuthTemplate";
+import { AuthMainLink, AuthSubLink } from "../components/common/Buttons";
 
-const LinkButton = styled(Link)`
-  /* width: 20px; */
-  /* height: 30px; */
+const Block1 = styled.div`
+  margin: 90px 0px 95px 0px;
 `;
 
 const FirstPage = () => {
   return (
     <div>
       <div>첫 페이지</div>
+      <div></div>
       <AuthTemplate>
-        <LinkButton to="/login">로그인</LinkButton>
+        <Block1></Block1>
+        <AuthMainLink to="/login">로그인</AuthMainLink>
         <br />
-        <LinkButton to="/register">회원가입</LinkButton>
+        <AuthSubLink to="/register" type="ghost">
+          나라사랑포털 이메일로 회원가입하기
+        </AuthSubLink>
       </AuthTemplate>
     </div>
   );

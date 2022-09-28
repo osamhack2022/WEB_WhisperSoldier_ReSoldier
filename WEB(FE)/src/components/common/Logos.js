@@ -8,7 +8,7 @@ export const AuthLogo = styled.div`
   color: #1a7541;
   font-weight: 700;
   height: fit-content;
-  width: 279px;
+  width: fit-content;
 `;
 
 export const SubLogo = styled.div`

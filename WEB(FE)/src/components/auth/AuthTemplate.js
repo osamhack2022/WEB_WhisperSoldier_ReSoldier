@@ -5,8 +5,8 @@ export const AuthBlock = styled.div`
   position: absolute;
   flex-direction: column;
   justify-content: center;
-  align-item: center;
   display: flex;
+  align-items: space-between;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
