@@ -2,7 +2,10 @@
 // import InputBox from "../components/InputBox";
 // import styled from "styled-components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { authService } from "../lib/fbase";
+import LoginForm from "../components/auth/LoginForm";
 
 // const StyledInputBox = styled.input`
 //     box-sizing: border-box;
@@ -22,40 +25,52 @@ import { Link } from "react-router-dom";
 //     padding : 20px 20px;
 // `;
 
-const LoginPage = ()=> {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const onChange = (e)=>{
-        const {
-            target : {name, value}
-        } = e;
-        if(name === "email"){
-            setEmail(value);
-        }
-        else if(name === "password"){
-            setPassword(value);
-        }
+const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [notFoundErr, setNotFoundErr] = useState(false);
+  const onChange = (e) => {
+    const {
+      target: { name, value },
+    } = e;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
     }
-    const onSubmit = (e) =>{
-        e.preventDefault();
-        /*
-        firebase 연동 부분
-        */
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    /*firebase 연동 부분*/
+    try {
+      //const auth = getAuth();
+      const data = await signInWithEmailAndPassword(
+        authService,
+        email,
+        password
+      );
+      console.log(data);
+    } catch (e) {
+      if (e.code === "auth/user-not-found") {
+        setNotFoundErr(true);
+      }
+      console.log(e.code);
+      console.log(e.message);
     }
+  };
 
-    return (
+  return (
     <div>
-        <div>로그인 페이지</div>
-        <form onSubmit={onSubmit}>
-            <input name="email" type="email" placeholder="이메일" value={email} onChange={onChange}/>
-            <br/>
-            <input name="password" type="password" placeholder="비밀번호" value={password} onChange={onChange}/>
-            <br/>
-            <button>로그인하기</button>
-            <br/>
-            <Link to="/">돌아가기</Link>
-        </form>
-    </div>);
+      <div>로그인 페이지</div>
+      <LoginForm
+        onSubmit={onSubmit}
+        onChange={onChange}
+        email={email}
+        password={password}
+        notFoundErr={notFoundErr}
+      ></LoginForm>
+    </div>
+  );
 };
 
 export default LoginPage;

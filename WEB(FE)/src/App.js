@@ -8,10 +8,12 @@ import ProfilePage from "./pages/ProfilePage";
 import WritePage from "./pages/WritePage";
 import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+/*각 페이지 라우트*/
 const App = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {});
   return (
     <>
       {isLogin ? (
