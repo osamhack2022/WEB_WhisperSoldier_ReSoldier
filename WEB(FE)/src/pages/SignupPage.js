@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { authService } from "../lib/fbase";
 import {
     getAuth,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    sendEmailVerification
 } from "firebase/auth"
 
 const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     const [isNarasarang, setIsNarasarang] = useState(false);
     const regex = /\d{13}@narasarang.or.kr/;
     
@@ -31,11 +35,29 @@ const SignupPage = () => {
     const onSubmit = async (e) =>{
         e.preventDefault();
         try {
-            
-            const auth = getAuth();
-            const data = await createUserWithEmailAndPassword(auth, email, password);
+            //const auth = getAuth();
+            const data = await createUserWithEmailAndPassword(authService, email, password);
         } catch (error) {
-            console.log(error);
+            setIsError(true);
+            switch (error.code) {
+                case "auth/weak-password":
+                    // weak password error
+                    setErrorMsg("비밀번호가 너무 약합니다.")
+                    break;
+                
+                case "auth/email-already-in-use":
+                    // already in use error
+                    setErrorMsg("이미 가입된 나라사랑이메일 계정입니다. 다른 계정으로 가입하세요.")
+                    break;
+                
+                default:
+                    // unknown error
+                    setErrorMsg("다시 시도하세요.")
+                    break;
+            }
+            
+            console.log(error.code);
+            console.log(error.message);
         }
         // 이메일 유효성 검사                                   --완료!
         // isNarasarang state와 정규표현식 이용해서
@@ -57,6 +79,9 @@ const SignupPage = () => {
             <input name="password" type="password" placeholder="비밀번호" value={password} onChange={onChange}/>
             <input name="rePassword" type="password" placeholder="비밀번호 재입력" value={rePassword} onChange={onChange}/>
             <button disabled={!isNarasarang}>회원가입 하기</button>
+            <br/>
+                <div hidden={!isError}>{errorMsg}</div>
+            <br/>
             <Link to="/">돌아가기</Link>
         </form>
     </div>);

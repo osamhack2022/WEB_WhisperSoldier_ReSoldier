@@ -3,7 +3,8 @@
 // import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { authService } from "../lib/fbase";
 
 // const StyledInputBox = styled.input`
 //     box-sizing: border-box;
@@ -23,9 +24,10 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 //     padding : 20px 20px;
 // `;
 
-const LoginPage = ()=> {
+const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [notFoundErr, setNotFoundErr] = useState(false);
     const onChange = (e)=>{
         const {
             target : {name, value}
@@ -40,15 +42,20 @@ const LoginPage = ()=> {
     const onSubmit = async (e) =>{
         e.preventDefault();
         try {
-            const auth = getAuth();
-            const data = await signInWithEmailAndPassword(auth, email, password);
-        } catch (error) {
-            console.log(error);
+            //const auth = getAuth();
+            const data = await signInWithEmailAndPassword(authService, email, password);
+        } catch (e) {
+            if (e.code === "auth/user-not-found") {
+                setNotFoundErr(true)
+            }
+            console.log(e.code);
+            console.log(e.message);
         }
         /*
         firebase 연동 부분
         */
     }
+    
 
     return (
     <div>
@@ -59,6 +66,8 @@ const LoginPage = ()=> {
             <input name="password" type="password" placeholder="비밀번호" value={password} onChange={onChange}/>
             <br/>
             <button>로그인하기</button>
+            <br/>
+                <div hidden={!notFoundErr}>아이디 또는 비밀번호가 잘못되었습니다.</div>
             <br/>
             <Link to="/">돌아가기</Link>
         </form>
