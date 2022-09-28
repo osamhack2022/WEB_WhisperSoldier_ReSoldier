@@ -9,6 +9,7 @@ import WritePage from "./pages/WritePage";
 import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
 import { useEffect, useState } from "react";
+import "./styles/App.css";
 
 /*각 페이지 라우트*/
 const App = () => {
