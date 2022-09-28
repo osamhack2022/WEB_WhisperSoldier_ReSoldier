@@ -29,9 +29,8 @@ const App = () => {
       isLogin?
       <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/register'>
-          {navigate('/')}
-        </Route>
+        <Route path='/register' element={<SignupPage/>}/>
+        <Route path='/login' element={<LoginPage/>}/>
         <Route path='/post' element={<PostPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
         <Route path='/write' element={<WritePage/>}/>
