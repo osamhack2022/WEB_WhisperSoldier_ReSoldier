@@ -15,7 +15,7 @@ const SignupPage = () => {
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [isNarasarang, setIsNarasarang] = useState(false);
-    const regex = /\d{13}@narasarang.or.kr/;
+    const regex = /^\d{13}@narasarang.or.kr$/;
     const navigate = useNavigate();
     
     const onChange = (e)=>{

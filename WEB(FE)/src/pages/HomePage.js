@@ -49,7 +49,7 @@ const HomePage = () => {
         </h2>
         <div>
             {worryPosts.map(post => <div key={post.id}><hr/>
-                <p>{post.text}</p>
+                <a>{post.text}</a>
                 
                 <p>
                 {(Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60)) < 5) ? 
