@@ -1,4 +1,7 @@
 import { Route, Routes } from "react-router-dom";
+//import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { UserInfo } from "./store/AuthStore";
 import HomePage from "./pages/HomePage";
 import FirstPage from "./pages/FirstPage";
 import LoginPage from "./pages/LoginPage";
@@ -8,17 +11,16 @@ import ProfilePage from "./pages/ProfilePage";
 import WritePage from "./pages/WritePage";
 import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
-import { useEffect, useState } from "react";
-import "./styles/App.css";
 import ResetPage from "./pages/ResetPage";
+import "./styles/App.css";
 
 /*각 페이지 라우트*/
 const App = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  useEffect(() => {});
+  const userInfo = useRecoilValue(UserInfo);
+  //const [isLogin, setIsLogin] = useState(false);
   return (
     <>
-      {isLogin ? (
+      {userInfo.isLogin ? (
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/post" element={<PostPage />} />

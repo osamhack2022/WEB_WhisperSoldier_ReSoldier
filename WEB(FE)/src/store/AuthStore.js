@@ -1,6 +1,17 @@
 import { atom } from "recoil";
 
-const UserInfo = atom({
+export const UserInfo = atom({
   key: "textState", // unique ID (with respect to other atoms/selectors)
-  default: "", // default value (aka initial value)
+  default: {
+    emailChecked: false,
+    isLogin: false,
+  }, // default value (aka initial value)
+});
+
+export const ErrorInfo = atom({
+  key: "errorInfo",
+  default: {
+    isErr: false,
+    errMsg: "",
+  },
 });

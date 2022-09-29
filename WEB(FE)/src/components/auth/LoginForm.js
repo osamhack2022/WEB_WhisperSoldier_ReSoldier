@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import AuthTemplate from "./AuthTemplate";
 import { AuthInputBox } from "../common/InputBox";
 import {
@@ -17,7 +16,6 @@ const LoginForm = ({
   email,
   password,
   onChange,
-  notFoundErr,
   isError,
   errorMsg,
 }) => {
