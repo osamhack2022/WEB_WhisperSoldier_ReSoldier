@@ -1,18 +1,23 @@
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth, signOut } from "firebase/auth";
 import { authService } from "../lib/fbase";
 import LoginForm from "../components/auth/LoginForm";
 import useForm from "../modules/useForm";
-import { useRecoilState } from "recoil";
-import { ErrorInfo, UserInfo } from "../store/AuthStore";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {UserInfo } from "../store/AuthStore";
+import { useState } from "react";
 
 const LoginPage = () => {
   const [state, onChange] = useForm({
     email: "",
     password: "",
   });
-  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const [errorInfo, setErrorInfo] = useRecoilState(ErrorInfo);
+  //const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const setUserInfo = useSetRecoilState(UserInfo);
+  const [loginErrorInfo, setLoginErrorInfo] = useState({
+    isErr: false,
+    errMsg: "",
+  });
 
   const navigate = useNavigate();
 
@@ -27,12 +32,12 @@ const LoginPage = () => {
       );
       console.log(data);
       if (authService.currentUser.emailVerified === false) {
-        setErrorInfo((prev) => ({
+        setLoginErrorInfo((prev) => ({
           ...prev,
           isErr: true,
           errMsg: "이메일 인증이 안된 계정입니다",
         }));
-        authService.signOut();
+        await signOut(authService);
       } else {
         console.log("[LoginPage.js] : 로그인 정상]");
         setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
@@ -41,21 +46,21 @@ const LoginPage = () => {
     } catch (e) {
       switch (e.code) {
         case "auth/wrong-password":
-          setErrorInfo((prev) => ({
+          setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
             errMsg: "아이디 또는 비밀번호가 잘못되었습니다",
           }));
           break;
         case "auth/user-not-found":
-          setErrorInfo((prev) => ({
+          setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
             errMsg: "계정이 존재하지 않습니다",
           }));
           break;
         default:
-          setErrorInfo((prev) => ({
+          setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
             errMsg: "잠시후에 다시 시도해주세요",
@@ -63,6 +68,10 @@ const LoginPage = () => {
       }
       console.log(e.code);
       console.log(e.message);
+
+      setTimeout(() => {
+        setLoginErrorInfo((prev)=>({...prev, isErr :false}));
+      }, 3000);
     }
   };
 
@@ -74,8 +83,7 @@ const LoginPage = () => {
         onChange={onChange}
         email={state.email}
         password={state.password}
-        isError={errorInfo.isErr}
-        errorMsg={errorInfo.errMsg}
+        loginErrorInfo = {loginErrorInfo}
       ></LoginForm>
     </div>
   );

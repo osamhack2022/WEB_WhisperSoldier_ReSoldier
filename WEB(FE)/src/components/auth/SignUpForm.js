@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   AuthButton,
@@ -19,8 +18,7 @@ const SignUpForm = ({
   password,
   rePassword,
   onChange,
-  isErr,
-  errMsg,
+  signUpErrorInfo,
 }) => {
   return (
     <AuthTemplate>
@@ -51,8 +49,8 @@ const SignUpForm = ({
           onChange={onChange}
           required
         ></AuthInputBox>
-        {isErr ? (
-          <AuthErrorButton>{errMsg}</AuthErrorButton>
+        {signUpErrorInfo.isErr ? (
+          <AuthErrorButton>{signUpErrorInfo.errMsg}</AuthErrorButton>
         ) : (
           <AuthButton>회원가입 하기</AuthButton>
         )}

@@ -2,6 +2,7 @@ import AuthTemplate from "./AuthTemplate";
 import { AuthInputBox } from "../common/InputBox";
 import {
   AuthButton,
+  AuthErrorButton,
   FindPasswordButton,
   FindPasswordButtonsContainer,
 } from "../common/Buttons";
@@ -16,8 +17,7 @@ const LoginForm = ({
   email,
   password,
   onChange,
-  isError,
-  errorMsg,
+  loginErrorInfo
 }) => {
   return (
     <AuthTemplate>
@@ -30,6 +30,7 @@ const LoginForm = ({
           value={email}
           onChange={onChange}
           required
+          error = {loginErrorInfo.isErr}
           autoFocus
         ></AuthInputBox>
         <AuthInputBox
@@ -40,8 +41,7 @@ const LoginForm = ({
           onChange={onChange}
           required
         ></AuthInputBox>
-        <AuthButton>로그인하기</AuthButton>
-        <div hidden={!isError}>{errorMsg}</div>
+        {loginErrorInfo.isErr?<AuthErrorButton>{loginErrorInfo.errMsg}</AuthErrorButton>:<AuthButton>로그인하기</AuthButton>}
         <FindPasswordButtonsContainer>
           <FindPasswordButton toLink="/">처음으로</FindPasswordButton>
           <FindPasswordButton toLink="/reset">

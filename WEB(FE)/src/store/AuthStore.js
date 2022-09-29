@@ -8,10 +8,3 @@ export const UserInfo = atom({
   }, // default value (aka initial value)
 });
 
-export const ErrorInfo = atom({
-  key: "errorInfo",
-  default: {
-    isErr: false,
-    errMsg: "",
-  },
-});

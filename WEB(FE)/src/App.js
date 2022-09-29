@@ -19,7 +19,7 @@ const App = () => {
   const userInfo = useRecoilValue(UserInfo);
   //const [isLogin, setIsLogin] = useState(false);
   return (
-    <>
+    <>{/*
       {userInfo.isLogin ? (
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -36,7 +36,13 @@ const App = () => {
           <Route path="/register" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPage />} />
         </Routes>
-      )}
+      )}*/}
+      <Routes>
+          <Route path="/" element={<FirstPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<SignupPage />} />
+          <Route path="/reset" element={<ResetPage />} />
+        </Routes>
     </>
   );
 };

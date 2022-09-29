@@ -2,6 +2,7 @@ import styled from "styled-components";
 import AuthTemplate from "../components/auth/AuthTemplate";
 import { AuthMainLink, AuthSubLink } from "../components/common/Buttons";
 import { FirstComment } from "../components/common/Logos";
+import EmailImage from "../asset/email.png";
 
 const Block1 = styled.div`
   margin: 85px 0px 84px 0px;
