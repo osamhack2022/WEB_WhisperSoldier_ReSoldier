@@ -45,6 +45,7 @@ const LoginPage = () => {
       } else {
         setEmailChecked(true);
         console.log("이메일 인증 완료된 계정입니다.");
+
         navigate("/");
       }
     } catch (e) {

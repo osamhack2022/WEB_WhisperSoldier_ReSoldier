@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   AuthButton,
+  AuthErrorButton,
   FindPasswordButton,
   FindPasswordButtonContainer,
 } from "../common/Buttons";
@@ -50,9 +51,11 @@ const SignUpForm = ({
           onChange={onChange}
           required
         ></AuthInputBox>
-        <AuthButton>회원가입 하기</AuthButton>
-        <br />
-        <div hidden={!isErr}>{errMsg}</div>
+        {isErr ? (
+          <AuthErrorButton>{errMsg}</AuthErrorButton>
+        ) : (
+          <AuthButton>회원가입 하기</AuthButton>
+        )}
         <FindPasswordButtonContainer>
           <FindPasswordButton toLink="/">처음으로</FindPasswordButton>
         </FindPasswordButtonContainer>

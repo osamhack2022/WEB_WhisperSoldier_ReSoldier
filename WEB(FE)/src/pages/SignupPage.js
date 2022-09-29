@@ -16,7 +16,7 @@ const SignupPage = () => {
   const [isErr, setIsErr] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [isNarasarang, setIsNarasarang] = useState(false);
-  const regex = /\d{13}@narasarang.or.kr/;
+  const regex = new RegExp("d{13}@narasarang.or.kr");
 
   const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ const SignupPage = () => {
     } = e;
     if (name === "email") {
       setEmail(value);
+      setIsNarasarang(regex.test(email));
       console.log(isNarasarang);
     } else if (name === "password") {
       setPassword(value);
@@ -38,8 +39,11 @@ const SignupPage = () => {
 
     setIsNarasarang(regex.test(email));
     if (isNarasarang === false) {
-      setErrMsg("이메일 형식이 옳지 않습니다.");
+      setErrMsg("이메일 형식이 옳지 않습니다");
       setIsErr(true);
+      setTimeout(() => {
+        setIsErr(false);
+      }, 3000);
     } else {
       /*firebase 연동 부분*/
       try {
@@ -75,22 +79,25 @@ const SignupPage = () => {
         switch (error.code) {
           case "auth/weak-password":
             // weak password error
-            setErrMsg("비밀번호가 보안이 약합니다.");
+            setErrMsg("비밀번호가 보안이 약합니다");
             break;
 
           case "auth/email-already-in-use":
             // already in use error
-            setErrMsg("이미 가입된 계정입니다. 다른 계정으로 가입하세요.");
+            setErrMsg("이미 가입된 계정입니다");
             break;
 
           default:
             // unknown error
-            setErrMsg("다시 시도하세요.");
+            setErrMsg("알 수 없는 오류 입니다. 다시 시도하세요");
             break;
         }
 
         console.log(error.code);
         console.log(error.message);
+        setTimeout(() => {
+          setIsErr(false);
+        }, 3000);
       }
       // 이메일 유효성 검사                                   --완료!
       // isNarasarang state와 정규표현식 이용해서

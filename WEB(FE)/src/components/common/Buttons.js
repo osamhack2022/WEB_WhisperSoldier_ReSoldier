@@ -39,6 +39,31 @@ export const AuthMainLink = styled(Link)`
   }
 `;
 
+export const AuthErrorButton = styled.div`
+  height: 48px;
+  width: 320px;
+  background-color: #a65646;
+  border-radius: 25px;
+  border: 2px solid rgb(166, 86, 70);
+  margin: 10px 0 10px;
+  font-size: 14px;
+  line-height: 48px;
+  text-align: center;
+  letter-spacing: 0.56px;
+  color: #ffffff;
+  font-weight: 600;
+  animation: vibration 0.1s 5;
+
+  @keyframes vibration {
+    from {
+      transform: rotate(0.5deg);
+    }
+    to {
+      transform: rotate(-0.5deg);
+    }
+  }
+`;
+
 export const AuthSubLink = styled(Link)`
   height: 48px;
   width: 320px;
