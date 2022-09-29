@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../lib/fbase";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signOut,
 } from "firebase/auth";
 import SignUpForm from "../components/auth/SignUpForm";
 
@@ -16,6 +17,9 @@ const SignupPage = () => {
   const [errMsg, setErrMsg] = useState("");
   const [isNarasarang, setIsNarasarang] = useState(false);
   const regex = /\d{13}@narasarang.or.kr/;
+
+  const navigate = useNavigate();
+
   const onChange = (e) => {
     const {
       target: { name, value },
@@ -45,6 +49,27 @@ const SignupPage = () => {
           email,
           password
         );
+        if (authService.currentUser.emailVerified === false) {
+          navigate("/register");
+          alert(
+            "다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.\n이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."
+          );
+          sendEmailVerification(authService.currentUser)
+            .then(
+              console.log(
+                "이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."
+              )
+            )
+            .catch((error) => console.log(error));
+          await signOut(authService)
+            .then(() => {
+              console.log("로그아웃 성공");
+            })
+            .catch((e) => console.log(e));
+          navigate("/");
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         setIsErr(true);
         switch (error.code) {
@@ -77,6 +102,23 @@ const SignupPage = () => {
     }
   };
 
+  const naraOnClick = () => {
+    if (authService.currentUser.emailVerified === false) {
+      navigate("/register");
+      alert("다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.");
+      sendEmailVerification(authService.currentUser)
+        .then(
+          console.log(
+            "이메일 인증이 끝나면 로그인으로 돌아가서 로그인해보세요."
+          )
+        )
+        .catch((error) => console.log(error));
+    } else {
+      console.log("이미 인증된 계정입니다.");
+      navigate("/");
+    }
+  };
+
   return (
     <div>
       <div>회원 가입 페이지</div>
@@ -89,6 +131,9 @@ const SignupPage = () => {
         isErr={isErr}
         errMsg={errMsg}
       ></SignUpForm>
+      <button hidden={!authService.currentUser} onClick={naraOnClick}>
+        나라사랑메일 인증
+      </button>
     </div>
   );
 };

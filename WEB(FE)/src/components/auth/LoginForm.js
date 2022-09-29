@@ -8,7 +8,15 @@ const Block1 = styled.div`
   margin: 35px 0px 35px 0px;
 `;
 
-const LoginForm = ({ onSubmit, email, password, onChange, notFoundErr }) => {
+const LoginForm = ({
+  onSubmit,
+  email,
+  password,
+  onChange,
+  notFoundErr,
+  isError,
+  errorMsg,
+}) => {
   return (
     <AuthTemplate>
       <Block1></Block1>
@@ -33,7 +41,7 @@ const LoginForm = ({ onSubmit, email, password, onChange, notFoundErr }) => {
         <br />
         <AuthButton>로그인하기</AuthButton>
         <br />
-        <div hidden={!notFoundErr}>아이디 또는 비밀번호가 잘못되었습니다.</div>
+        <div hidden={!isError}>{errorMsg}</div>
         <br />
         <Link to="/">돌아가기</Link>
       </form>
