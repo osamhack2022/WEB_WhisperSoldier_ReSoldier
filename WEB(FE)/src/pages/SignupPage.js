@@ -41,13 +41,15 @@ const SignupPage = () => {
             const data = await createUserWithEmailAndPassword(authService, email, password);
             if (authService.currentUser.emailVerified === false) {
                 navigate('/register')
-                alert("다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.\n이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요.")
+                alert("다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.\n이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요.");
+
                 sendEmailVerification(authService.currentUser)
                     .then(console.log("이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."))
                     .catch(error => console.log(error));
+                
                 await signOut(authService).then(() => {
                     console.log("로그아웃 성공");
-                }).catch(e => console.log(e))
+                }).catch(e => console.log(e));
                 navigate('/')
             } else {
                 navigate('/');

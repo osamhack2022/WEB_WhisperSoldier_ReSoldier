@@ -50,7 +50,7 @@ const LoginPage = () => {
             if (authService.currentUser.emailVerified === false) {
                 setEmailChecked(false);
                 setIsError(true);
-                setErrorMsg("이메일이 인증되지 않았습니다. 회원가입 페이지에서 이메일을 인증하시고 다시 찾아오세요.")
+                setErrorMsg("이메일이 인증되지 않았습니다. 보내드렸던 인증 이메일의 링크를 클릭하시고 다시 찾아오세요.")
                 // SignupPage로 가도록 한 후 거기서 인증 수행 (아직 로그아웃되지 않음)
             } else {
                 setEmailChecked(true);
