@@ -8,7 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import WritePage from './pages/WritePage';
 import SearchPage from './pages/SearchPage';
 import { useEffect, useState } from 'react';
-import { authService } from "./lib/fbase";
+import { authService } from "./lib/FAuth";
 import { onAuthStateChanged } from 'firebase/auth';
 
 const App = () => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../lib/fbase";
+import { authService } from "../lib/FAuth";
 import {
     getAuth,
     createUserWithEmailAndPassword,

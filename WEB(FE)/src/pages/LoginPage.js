@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth, signOut } from "firebase/auth";
-import { authService } from "../lib/fbase";
+import { authService } from "../lib/FAuth";
 
 // const StyledInputBox = styled.input`
 //     box-sizing: border-box;

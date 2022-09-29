@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () =>{
     const [searchWord, setSearchWord] = useState("");
@@ -16,7 +17,14 @@ const HomePage = () =>{
         <p>
             Home
         </p>
-        <input name="search" type="search" placeholder="검색어를 입력하세요" value={searchWord} onChange={onChange} />
+        <p>
+            <input name="search" type="search" placeholder="검색어를 입력하세요" value={searchWord} onChange={onChange} />
+            <Link to="/write">고민 작성하기</Link>
+        </p>
+        <p>
+            고민 목록
+        </p>
+        
     </div>
     );
 };
