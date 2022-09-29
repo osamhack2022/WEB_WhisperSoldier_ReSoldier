@@ -3,7 +3,7 @@
 // import styled from "styled-components";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth, signOut } from "firebase/auth";
 import { authService } from "../lib/fbase";
 
 // const StyledInputBox = styled.input`
@@ -52,6 +52,9 @@ const LoginPage = () => {
                 setIsError(true);
                 setErrorMsg("이메일이 인증되지 않았습니다. 보내드렸던 인증 이메일의 링크를 클릭하시고 다시 찾아오세요.")
                 // SignupPage로 가도록 한 후 거기서 인증 수행 (아직 로그아웃되지 않음)
+                await signOut(authService).then(() => {
+                    console.log("로그아웃 성공");
+                }).catch(e => console.log(e));
             } else {
                 setEmailChecked(true);
                 console.log("이메일 인증 완료된 계정입니다.")
