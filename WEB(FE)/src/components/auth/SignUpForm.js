@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
-import { AuthButton } from "../common/Buttons";
+import styled from "styled-components";
+import {
+  AuthButton,
+  FindPasswordButton,
+  FindPasswordButtonContainer,
+} from "../common/Buttons";
 import { AuthInputBox } from "../common/InputBox";
 import AuthTemplate from "./AuthTemplate";
+
+const Block1 = styled.div`
+  margin: 15px 0px 15px 0px;
+`;
 
 const SignUpForm = ({
   onSubmit,
@@ -14,6 +23,7 @@ const SignUpForm = ({
 }) => {
   return (
     <AuthTemplate>
+      <Block1></Block1>
       <form onSubmit={onSubmit}>
         <AuthInputBox
           name="email"
@@ -22,6 +32,7 @@ const SignUpForm = ({
           value={email}
           onChange={onChange}
           required
+          autoFocus
         ></AuthInputBox>
         <AuthInputBox
           name="password"
@@ -42,8 +53,9 @@ const SignUpForm = ({
         <AuthButton>회원가입 하기</AuthButton>
         <br />
         <div hidden={!isErr}>{errMsg}</div>
-        <br />
-        <Link to="/">돌아가기</Link>
+        <FindPasswordButtonContainer>
+          <FindPasswordButton toLink="/">처음으로</FindPasswordButton>
+        </FindPasswordButtonContainer>
       </form>
     </AuthTemplate>
   );

@@ -10,6 +10,7 @@ import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
 import { useEffect, useState } from "react";
 import "./styles/App.css";
+import ResetPage from "./pages/ResetPage";
 
 /*각 페이지 라우트*/
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/" element={<FirstPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
+          <Route path="/reset" element={<ResetPage />} />
         </Routes>
       )}
     </>

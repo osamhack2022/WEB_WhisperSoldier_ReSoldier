@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import AuthTemplate from "./AuthTemplate";
 import { AuthInputBox } from "../common/InputBox";
-import { AuthButton } from "../common/Buttons";
+import {
+  AuthButton,
+  FindPasswordButton,
+  FindPasswordButtonsContainer,
+} from "../common/Buttons";
 import styled from "styled-components";
 
 const Block1 = styled.div`
@@ -28,8 +32,8 @@ const LoginForm = ({
           value={email}
           onChange={onChange}
           required
+          autoFocus
         ></AuthInputBox>
-        <br />
         <AuthInputBox
           name="password"
           type="password"
@@ -38,12 +42,14 @@ const LoginForm = ({
           onChange={onChange}
           required
         ></AuthInputBox>
-        <br />
         <AuthButton>로그인하기</AuthButton>
-        <br />
         <div hidden={!isError}>{errorMsg}</div>
-        <br />
-        <Link to="/">돌아가기</Link>
+        <FindPasswordButtonsContainer>
+          <FindPasswordButton toLink="/">처음으로</FindPasswordButton>
+          <FindPasswordButton toLink="/reset">
+            비밀번호 재설정
+          </FindPasswordButton>
+        </FindPasswordButtonsContainer>
       </form>
     </AuthTemplate>
   );

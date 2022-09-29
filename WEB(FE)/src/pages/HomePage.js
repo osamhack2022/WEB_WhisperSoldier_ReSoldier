@@ -5,7 +5,7 @@ const HomePage = () => {
   const [searchWord, setSearchWord] = useState("");
   const onChange = (e) => {
     const {
-      target: [name, value],
+      target: { name, value },
     } = e;
 
     if (name === "search") {

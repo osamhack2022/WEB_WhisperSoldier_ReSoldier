@@ -3,10 +3,10 @@ import { AuthLogo, SubLogo } from "../common/Logos";
 
 export const AuthBlock = styled.div`
   position: absolute;
-  flex-direction: column;
-  justify-content: center;
   display: flex;
-  align-items: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
