@@ -30,7 +30,16 @@ const SignupPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (emailFormat.test(state.email) === false) {
+    if (state.password !== state.rePassword) {
+      setSignUpErrorInfo((prev) => ({
+        ...prev,
+        isErr: true,
+        errMsg: "입력한 비빌번호가 서로 다릅니다",
+      }));
+      setTimeout(() => {
+        setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
+      }, 3000);
+    } else if (emailFormat.test(state.email) === false) {
       setSignUpErrorInfo((prev) => ({
         ...prev,
         isErr: true,
