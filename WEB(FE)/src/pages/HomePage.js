@@ -53,7 +53,7 @@ const HomePage = () => {
                 
                 <p>
                 {(Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60)) < 5) ? 
-                <p>방금 전.</p>
+                <p>방금 전</p>
                     : (Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60 * 60)) < 1) ? 
                     <p>{Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60))}분 전</p>
                         : (Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60 * 60)) < 24) ?
