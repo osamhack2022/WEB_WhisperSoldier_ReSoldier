@@ -14,14 +14,7 @@ const Block1 = styled.div`
   margin: 15px 0px 15px 0px;
 `;
 
-const SignUpForm = ({
-  onSubmit,
-  email,
-  password,
-  rePassword,
-  onChange,
-  signUpErrorInfo,
-}) => {
+const SignUpForm = ({ onSubmit, state, onChange, signUpErrorInfo }) => {
   return (
     <AuthTemplate>
       <FirstComment>환영합니다!</FirstComment>
@@ -31,8 +24,9 @@ const SignUpForm = ({
           name="email"
           type="email"
           placeholder="이메일"
-          value={email}
+          value={state.email}
           onChange={onChange}
+          error={signUpErrorInfo.isErr || signUpErrorInfo.isEmailError}
           required
           autoFocus
         ></AuthInputBox>
@@ -40,19 +34,23 @@ const SignUpForm = ({
           name="password"
           type="password"
           placeholder="비밀번호"
-          value={password}
+          value={state.password}
           onChange={onChange}
+          error={signUpErrorInfo.isErr || signUpErrorInfo.isPwError}
           required
         ></AuthInputBox>
         <AuthInputBox
           name="rePassword"
           type="password"
           placeholder="비밀번호 재입력"
-          value={rePassword}
+          value={state.rePassword}
           onChange={onChange}
+          error={signUpErrorInfo.isErr || signUpErrorInfo.isPwError}
           required
         ></AuthInputBox>
-        {signUpErrorInfo.isErr ? (
+        {signUpErrorInfo.isErr ||
+        signUpErrorInfo.isEmailError ||
+        signUpErrorInfo.isPwError ? (
           <AuthErrorButton>{signUpErrorInfo.errMsg}</AuthErrorButton>
         ) : signUpErrorInfo.isLoading ? (
           <AuthLoadingButton>잠시만 기다려주세요</AuthLoadingButton>

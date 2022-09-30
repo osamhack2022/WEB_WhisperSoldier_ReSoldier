@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { authService } from "../lib/fbase";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signOut,
@@ -22,6 +21,8 @@ const SignupPage = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const [signUpErrorInfo, setSignUpErrorInfo] = useState({
     isErr: false,
+    isEmailError: false,
+    isPwError: false,
     isSuccess: false,
     errMsg: "",
     isLoading: false,
@@ -30,23 +31,23 @@ const SignupPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (state.password !== state.rePassword) {
+    if (emailFormat.test(state.email) === false) {
       setSignUpErrorInfo((prev) => ({
         ...prev,
-        isErr: true,
-        errMsg: "입력한 비빌번호가 서로 다릅니다",
-      }));
-      setTimeout(() => {
-        setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
-      }, 3000);
-    } else if (emailFormat.test(state.email) === false) {
-      setSignUpErrorInfo((prev) => ({
-        ...prev,
-        isErr: true,
+        isEmailError: true,
         errMsg: "이메일 형식이 옳지 않습니다",
       }));
       setTimeout(() => {
-        setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
+        setSignUpErrorInfo((prev) => ({ ...prev, isEmailError: false }));
+      }, 3000);
+    } else if (state.password !== state.rePassword) {
+      setSignUpErrorInfo((prev) => ({
+        ...prev,
+        errMsg: "입력한 비빌번호가 서로 다릅니다",
+        isPwError: true,
+      }));
+      setTimeout(() => {
+        setSignUpErrorInfo((prev) => ({ ...prev, isPwError: false }));
       }, 3000);
     } else {
       /*firebase 연동 부분*/
@@ -94,7 +95,7 @@ const SignupPage = () => {
             setSignUpErrorInfo((prev) => ({
               ...prev,
               isLoading: false,
-              isErr: true,
+              isPwError: true,
               errMsg: "비밀번호가 보안이 약합니다",
             }));
             break;
@@ -102,7 +103,7 @@ const SignupPage = () => {
             setSignUpErrorInfo((prev) => ({
               ...prev,
               isLoading: false,
-              isErr: true,
+              isEmailError: true,
               errMsg: "이미 가입된 계정입니다",
             }));
             break;
@@ -122,7 +123,12 @@ const SignupPage = () => {
         console.log(error.message);
 
         setTimeout(() => {
-          setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
+          setSignUpErrorInfo((prev) => ({
+            ...prev,
+            isErr: false,
+            isEmailError: false,
+            isPwError: false,
+          }));
         }, 3000);
       }
     }
@@ -136,9 +142,7 @@ const SignupPage = () => {
       ) : (
         <SignUpForm
           onSubmit={onSubmit}
-          email={state.email}
-          password={state.password}
-          rePassword={state.rePassword}
+          state={state}
           onChange={onChange}
           signUpErrorInfo={signUpErrorInfo}
         ></SignUpForm>

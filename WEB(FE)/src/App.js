@@ -13,19 +13,43 @@ import ChatPage from "./pages/ChatPage";
 import ResetPage from "./pages/ResetPage";
 import "./styles/App.css";
 import { useEffect } from "react";
-import { getAuth } from "firebase/auth";
+import { authService } from "./lib/fbase";
+import { onAuthStateChanged } from "firebase/auth";
 
 /*각 페이지 라우트*/
 const App = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const auth = getAuth().currentUser;
+  const auth = authService.currentUser;
   console.log(userInfo);
+  /*
   useEffect(() => {
     console.log(auth);
     if (auth) {
       setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
     }
   }, [auth]);
+  */
+  useEffect(() => {
+    onAuthStateChanged(authService, (u) => {
+      if (u) {
+        if (authService.currentUser.emailVerified) {
+          setUserInfo((prev) => ({
+            ...prev,
+            emailChecked: true,
+            isLogin: true,
+          }));
+        } else {
+          setUserInfo((prev) => ({
+            ...prev,
+            emailChecked: false,
+            isLogin: true,
+          }));
+        }
+      } else {
+        setUserInfo((prev) => ({ ...prev, isLogin: false }));
+      }
+    });
+  }, []);
   return (
     <>
       {userInfo.isLogin ? (

@@ -27,7 +27,7 @@ const LoginForm = ({ onSubmit, email, password, onChange, loginErrorInfo }) => {
           value={email}
           onChange={onChange}
           required
-          error={loginErrorInfo.isErr}
+          error={loginErrorInfo.isErr || loginErrorInfo.isEmailError}
           autoFocus
         ></AuthInputBox>
         <AuthInputBox
@@ -36,9 +36,10 @@ const LoginForm = ({ onSubmit, email, password, onChange, loginErrorInfo }) => {
           placeholder="비밀번호"
           value={password}
           onChange={onChange}
+          error={loginErrorInfo.isErr}
           required
         ></AuthInputBox>
-        {loginErrorInfo.isErr ? (
+        {loginErrorInfo.isErr || loginErrorInfo.isEmailError ? (
           <AuthErrorButton>{loginErrorInfo.errMsg}</AuthErrorButton>
         ) : loginErrorInfo.isLoading ? (
           <AuthLoadingButton>잠시만 기다려주세요</AuthLoadingButton>

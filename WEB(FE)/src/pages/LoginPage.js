@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { authService } from "../lib/fbase";
 import LoginForm from "../components/auth/LoginForm";
 import useForm from "../modules/useForm";
@@ -16,6 +16,7 @@ const LoginPage = () => {
   const setUserInfo = useSetRecoilState(UserInfo);
   const [loginErrorInfo, setLoginErrorInfo] = useState({
     isErr: false,
+    isEmailError: false,
     errMsg: "",
     isLoading: false,
   });
@@ -27,7 +28,7 @@ const LoginPage = () => {
     setLoginErrorInfo((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const auth = getAuth();
+      const auth = authService;
       const data = await signInWithEmailAndPassword(
         authService,
         state.email,
@@ -37,7 +38,7 @@ const LoginPage = () => {
       if (authService.currentUser.emailVerified === false) {
         setLoginErrorInfo((prev) => ({
           ...prev,
-          isErr: true,
+          isEmailError: true,
           errMsg: "이메일 인증이 안된 계정입니다",
         }));
         await signOut(authService);
@@ -45,7 +46,7 @@ const LoginPage = () => {
           setLoginErrorInfo((prev) => ({
             ...prev,
             isLoading: false,
-            isErr: false,
+            isEmailError: false,
           }));
         }, 3000);
       } else {
@@ -66,7 +67,7 @@ const LoginPage = () => {
         case "auth/user-not-found":
           setLoginErrorInfo((prev) => ({
             ...prev,
-            isErr: true,
+            isEmailError: true,
             isLoading: false,
             errMsg: "존재하지 않은 계정입니다",
           }));
@@ -83,7 +84,11 @@ const LoginPage = () => {
       console.log(e.message);
 
       setTimeout(() => {
-        setLoginErrorInfo((prev) => ({ ...prev, isErr: false }));
+        setLoginErrorInfo((prev) => ({
+          ...prev,
+          isEmailError: false,
+          isErr: false,
+        }));
       }, 3000);
     }
   };
