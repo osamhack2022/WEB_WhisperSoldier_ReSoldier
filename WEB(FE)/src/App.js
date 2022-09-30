@@ -31,7 +31,7 @@ const App = () => {
         <Route path='/' element={<HomePage />} />
         <Route path='/register' element={<SignupPage/>}/>
         <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/post' element={<PostPage/>}/>
+        <Route path='/post/:id' element={<PostPage/>}/>
         <Route path='/profile' element={<ProfilePage/>}/>
         <Route path='/write' element={<WritePage/>}/>
         <Route path='/search' element={<SearchPage/>}/>

@@ -27,7 +27,7 @@ const HomePage = () => {
     }, [])
     const onChange = (e) => {
         const {
-            target : [name, value]
+            target : {name, value}
         } = e;
 
         if(name === "search"){
@@ -49,7 +49,7 @@ const HomePage = () => {
         </h2>
         <div>
             {worryPosts.map(post => <div key={post.id}><hr/>
-                <a>{post.text}</a>
+                <Link to={`/post/${post.id}`}>{post.text}</Link>
                 
                 <p>
                 {(Math.floor((new Date() - post.created_timestamp.toDate()) / (1000 * 60)) < 5) ? 
