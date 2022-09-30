@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 
 const WritePage = () => {
+    const navigate = useNavigate();
     const [writeContent, setWriteContent] = useState("");
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -17,6 +19,8 @@ const WritePage = () => {
                 text: writeContent
             })
             console.log("Document written with ID: ", docRef.id);
+            alert("고민이 정상적으로 업로드되었습니다.");
+            navigate('/');
         } catch (error) {
             console.log("Error adding document: ", error);
         }
