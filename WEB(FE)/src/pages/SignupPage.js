@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { authService } from "../lib/fbase";
 import {
   getAuth,
@@ -12,6 +11,7 @@ import useForm from "../modules/useForm";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../store/AuthStore";
 import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";
+import { regex } from "../lib/Const";
 
 const SignupPage = () => {
   const [state, onChange] = useForm({
@@ -22,21 +22,15 @@ const SignupPage = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const [signUpErrorInfo, setSignUpErrorInfo] = useState({
     isErr: false,
+    isSuccess: false,
     errMsg: "",
     isLoading: false,
   });
-
-  //const [isErr, setIsErr] = useState(false);
-  //const [errMsg, setErrMsg] = useState("");
-  //const regex = new RegExp("d{13}@narasarang.or.kr");
-  const regex = /^\d{13}@narasarang.or.kr$/;
-
-  const navigate = useNavigate();
+  const emailFormat = regex;
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (regex.test(state.email) === false) {
-      //if (regex.test(state.email) !== false) {
+    if (emailFormat.test(state.email) === false) {
       setSignUpErrorInfo((prev) => ({
         ...prev,
         isErr: true,
@@ -49,29 +43,32 @@ const SignupPage = () => {
       /*firebase 연동 부분*/
       setSignUpErrorInfo((prev) => ({ ...prev, isLoading: true }));
       try {
-        //const auth = getAuth();
-        const data = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           authService,
           state.email,
           state.password
         );
 
         if (authService.currentUser.emailVerified === false) {
-          //navigate("/register");
+          setSignUpErrorInfo((prev) => ({
+            ...prev,
+            isLoading: false,
+            isSuccess: true,
+          }));
           sendEmailVerification(authService.currentUser)
-            .then(
-              console.log(
-                "이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."
-              )
-            )
+            .then(console.log("이메일 인증 메일 발송!"))
             .catch((error) => {
               console.log(error);
               console.log(authService.currentUser);
             });
+          await signOut(authService).then(() => {
+            console.log("로그아웃 성공");
+          });
           console.log(authService.currentUser);
+          /*
           if (authService.currentUser) {
             setUserInfo((prev) => ({ ...prev, isLogin: true }));
-          }
+          }*/
           /*await signOut(authService)
             .then(() => {
               console.log("로그아웃 성공");
@@ -85,7 +82,6 @@ const SignupPage = () => {
       } catch (error) {
         switch (error.code) {
           case "auth/weak-password":
-            // weak password error
             setSignUpErrorInfo((prev) => ({
               ...prev,
               isLoading: false,
@@ -94,7 +90,6 @@ const SignupPage = () => {
             }));
             break;
           case "auth/email-already-in-use":
-            // already in use error
             setSignUpErrorInfo((prev) => ({
               ...prev,
               isLoading: false,
@@ -121,21 +116,14 @@ const SignupPage = () => {
           setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
         }, 3000);
       }
-      // 이메일 유효성 검사                                   --완료!
-      // isNarasarang state와 정규표현식 이용해서
-      // {숫자 13자리 } + narasarang.or.kr로 검사하도록 하였음
-      // /\d{13}@narasarang.co.kr/;
-      // 아닐 시 회원가입 버튼 비활성화
-
-      // 이메일 인증 절차
     }
   };
 
   return (
     <div>
       <div>회원 가입 페이지</div>
-      {userInfo.isLogin ? (
-        <EmailVerifiInfoForm></EmailVerifiInfoForm>
+      {signUpErrorInfo.isSuccess ? (
+        <EmailVerifiInfoForm>환영합니다!</EmailVerifiInfoForm>
       ) : (
         <SignUpForm
           onSubmit={onSubmit}

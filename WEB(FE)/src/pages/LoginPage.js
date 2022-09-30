@@ -25,8 +25,9 @@ const LoginPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoginErrorInfo((prev) => ({ ...prev, isLoading: true }));
+
     try {
-      //const auth = getAuth();
+      const auth = getAuth();
       const data = await signInWithEmailAndPassword(
         authService,
         state.email,
@@ -58,6 +59,7 @@ const LoginPage = () => {
           setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
+            isLoading: false,
             errMsg: "아이디 또는 비밀번호가 잘못되었습니다",
           }));
           break;
@@ -65,13 +67,15 @@ const LoginPage = () => {
           setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
-            errMsg: "계정이 존재하지 않습니다",
+            isLoading: false,
+            errMsg: "존재하지 않은 계정입니다",
           }));
           break;
         default:
           setLoginErrorInfo((prev) => ({
             ...prev,
             isErr: true,
+            isLoading: false,
             errMsg: "잠시후에 다시 시도해주세요",
           }));
       }

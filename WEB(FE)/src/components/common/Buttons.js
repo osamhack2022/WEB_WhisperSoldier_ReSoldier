@@ -105,6 +105,12 @@ export const FindPasswordButtonBlock = styled.div`
   height: 30px;
   width: fit-content;
   align-items: center;
+  border-bottom: #4f4f4f solid 2px;
+  transition: all 0.2s;
+  &:hover {
+    color: #003000;
+    border-bottom: #003000 solid 3px;
+  }
 `;
 
 export const FindPasswordButtonLink = styled(Link)`
@@ -114,6 +120,9 @@ export const FindPasswordButtonLink = styled(Link)`
   text-decoration: none;
   color: #4f4f4f;
   font-weight: 600;
+  &:hover {
+    color: #003000;
+  }
 `;
 
 export const FindPasswordButtonLine = styled.div`
@@ -125,7 +134,7 @@ export const FindPasswordButton = ({ toLink, children }) => {
   return (
     <FindPasswordButtonBlock>
       <FindPasswordButtonLink to={toLink}>{children}</FindPasswordButtonLink>
-      <FindPasswordButtonLine></FindPasswordButtonLine>
+      {/* <FindPasswordButtonLine></FindPasswordButtonLine> */}
     </FindPasswordButtonBlock>
   );
 };
