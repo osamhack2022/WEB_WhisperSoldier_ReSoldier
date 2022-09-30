@@ -2,10 +2,12 @@ import styled from "styled-components";
 import {
   AuthButton,
   AuthErrorButton,
+  AuthLoadingButton,
   FindPasswordButton,
   FindPasswordButtonContainer,
 } from "../common/Buttons";
 import { AuthInputBox } from "../common/InputBox";
+import { FirstComment } from "../common/Logos";
 import AuthTemplate from "./AuthTemplate";
 
 const Block1 = styled.div`
@@ -22,6 +24,7 @@ const SignUpForm = ({
 }) => {
   return (
     <AuthTemplate>
+      <FirstComment>환영합니다!</FirstComment>
       <Block1></Block1>
       <form onSubmit={onSubmit}>
         <AuthInputBox
@@ -51,6 +54,8 @@ const SignUpForm = ({
         ></AuthInputBox>
         {signUpErrorInfo.isErr ? (
           <AuthErrorButton>{signUpErrorInfo.errMsg}</AuthErrorButton>
+        ) : signUpErrorInfo.isLoading ? (
+          <AuthLoadingButton>잠시만 기다려주세요</AuthLoadingButton>
         ) : (
           <AuthButton>회원가입 하기</AuthButton>
         )}

@@ -4,7 +4,7 @@ import { authService } from "../lib/fbase";
 import LoginForm from "../components/auth/LoginForm";
 import useForm from "../modules/useForm";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {UserInfo } from "../store/AuthStore";
+import { UserInfo } from "../store/AuthStore";
 import { useState } from "react";
 
 const LoginPage = () => {
@@ -17,12 +17,14 @@ const LoginPage = () => {
   const [loginErrorInfo, setLoginErrorInfo] = useState({
     isErr: false,
     errMsg: "",
+    isLoading: false,
   });
 
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoginErrorInfo((prev) => ({ ...prev, isLoading: true }));
     try {
       //const auth = getAuth();
       const data = await signInWithEmailAndPassword(
@@ -38,6 +40,13 @@ const LoginPage = () => {
           errMsg: "이메일 인증이 안된 계정입니다",
         }));
         await signOut(authService);
+        setTimeout(() => {
+          setLoginErrorInfo((prev) => ({
+            ...prev,
+            isLoading: false,
+            isErr: false,
+          }));
+        }, 3000);
       } else {
         console.log("[LoginPage.js] : 로그인 정상]");
         setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
@@ -70,7 +79,7 @@ const LoginPage = () => {
       console.log(e.message);
 
       setTimeout(() => {
-        setLoginErrorInfo((prev)=>({...prev, isErr :false}));
+        setLoginErrorInfo((prev) => ({ ...prev, isErr: false }));
       }, 3000);
     }
   };
@@ -83,7 +92,7 @@ const LoginPage = () => {
         onChange={onChange}
         email={state.email}
         password={state.password}
-        loginErrorInfo = {loginErrorInfo}
+        loginErrorInfo={loginErrorInfo}
       ></LoginForm>
     </div>
   );

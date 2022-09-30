@@ -15,32 +15,39 @@ import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";
 
 const SignupPage = () => {
   const [state, onChange] = useForm({
-    email : "",
-    password : "",
-    rePassword : ""
-  })
+    email: "",
+    password: "",
+    rePassword: "",
+  });
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const [signUpErrorInfo, setSignUpErrorInfo] = useState({
-    isErr : false,
-    errMsg : "",
+    isErr: false,
+    errMsg: "",
+    isLoading: false,
   });
 
   //const [isErr, setIsErr] = useState(false);
   //const [errMsg, setErrMsg] = useState("");
-  const regex = new RegExp("d{13}@narasarang.or.kr");
+  //const regex = new RegExp("d{13}@narasarang.or.kr");
+  const regex = /^\d{13}@narasarang.or.kr$/;
 
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    //if (regex.test(state.email) === false) {
-    if (regex.test(state.email) !== false) {
-      setSignUpErrorInfo((prev)=>({...prev, isErr :true, errMsg : "이메일 형식이 옳지 않습니다"}));
+    if (regex.test(state.email) === false) {
+      //if (regex.test(state.email) !== false) {
+      setSignUpErrorInfo((prev) => ({
+        ...prev,
+        isErr: true,
+        errMsg: "이메일 형식이 옳지 않습니다",
+      }));
       setTimeout(() => {
-        setSignUpErrorInfo((prev)=>({...prev, isErr :false}));
+        setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
       }, 3000);
     } else {
       /*firebase 연동 부분*/
+      setSignUpErrorInfo((prev) => ({ ...prev, isLoading: true }));
       try {
         //const auth = getAuth();
         const data = await createUserWithEmailAndPassword(
@@ -48,9 +55,8 @@ const SignupPage = () => {
           state.email,
           state.password
         );
-        
-        if (authService.currentUser.emailVerified === false) {
 
+        if (authService.currentUser.emailVerified === false) {
           //navigate("/register");
           sendEmailVerification(authService.currentUser)
             .then(
@@ -58,11 +64,13 @@ const SignupPage = () => {
                 "이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."
               )
             )
-            .catch((error) => {console.log(error);
-              console.log(authService.currentUser);});
+            .catch((error) => {
+              console.log(error);
+              console.log(authService.currentUser);
+            });
           console.log(authService.currentUser);
-          if(authService.currentUser){
-            setUserInfo(prev=>({...prev, isLogin:true}));
+          if (authService.currentUser) {
+            setUserInfo((prev) => ({ ...prev, isLogin: true }));
           }
           /*await signOut(authService)
             .then(() => {
@@ -70,23 +78,39 @@ const SignupPage = () => {
             })*/
           //navigate("/");
         } else {
-          console.log("이미 인증된 계정입니다. 로그인으로 가서 로그인 해보세요");
-
+          console.log(
+            "이미 인증된 계정입니다. 로그인으로 가서 로그인 해보세요"
+          );
         }
       } catch (error) {
         switch (error.code) {
           case "auth/weak-password":
             // weak password error
-            setSignUpErrorInfo((prev)=>({...prev, isErr :true, errMsg : "비밀번호가 보안이 약합니다"}));
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isErr: true,
+              errMsg: "비밀번호가 보안이 약합니다",
+            }));
             break;
           case "auth/email-already-in-use":
             // already in use error
-            setSignUpErrorInfo((prev)=>({...prev, isErr :true, errMsg : "이미 가입된 계정입니다"}));
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isErr: true,
+              errMsg: "이미 가입된 계정입니다",
+            }));
             break;
 
           default:
             // unknown error
-            setSignUpErrorInfo((prev)=>({...prev, isErr :true, errMsg : "알 수 없는 오류 입니다. 다시 시도하세요"}));
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isErr: true,
+              errMsg: "알 수 없는 오류 입니다. 다시 시도하세요",
+            }));
             break;
         }
 
@@ -94,7 +118,7 @@ const SignupPage = () => {
         console.log(error.message);
 
         setTimeout(() => {
-          setSignUpErrorInfo((prev)=>({...prev, isErr :false}));
+          setSignUpErrorInfo((prev) => ({ ...prev, isErr: false }));
         }, 3000);
       }
       // 이메일 유효성 검사                                   --완료!
@@ -107,18 +131,21 @@ const SignupPage = () => {
     }
   };
 
-
   return (
     <div>
       <div>회원 가입 페이지</div>
-      {userInfo.isLogin ? <EmailVerifiInfoForm></EmailVerifiInfoForm>:<SignUpForm
-        onSubmit={onSubmit}
-        email={state.email}
-        password={state.password}
-        rePassword={state.rePassword}
-        onChange={onChange}
-        signUpErrorInfo={signUpErrorInfo}
-      ></SignUpForm>}
+      {userInfo.isLogin ? (
+        <EmailVerifiInfoForm></EmailVerifiInfoForm>
+      ) : (
+        <SignUpForm
+          onSubmit={onSubmit}
+          email={state.email}
+          password={state.password}
+          rePassword={state.rePassword}
+          onChange={onChange}
+          signUpErrorInfo={signUpErrorInfo}
+        ></SignUpForm>
+      )}
     </div>
   );
 };

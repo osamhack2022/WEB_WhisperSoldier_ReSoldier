@@ -3,24 +3,21 @@ import { AuthInputBox } from "../common/InputBox";
 import {
   AuthButton,
   AuthErrorButton,
+  AuthLoadingButton,
   FindPasswordButton,
   FindPasswordButtonsContainer,
 } from "../common/Buttons";
 import styled from "styled-components";
+import { FirstComment } from "../common/Logos";
 
 const Block1 = styled.div`
   margin: 35px 0px 35px 0px;
 `;
 
-const LoginForm = ({
-  onSubmit,
-  email,
-  password,
-  onChange,
-  loginErrorInfo
-}) => {
+const LoginForm = ({ onSubmit, email, password, onChange, loginErrorInfo }) => {
   return (
     <AuthTemplate>
+      <FirstComment>어서와요!</FirstComment>
       <Block1></Block1>
       <form onSubmit={onSubmit}>
         <AuthInputBox
@@ -30,7 +27,7 @@ const LoginForm = ({
           value={email}
           onChange={onChange}
           required
-          error = {loginErrorInfo.isErr}
+          error={loginErrorInfo.isErr}
           autoFocus
         ></AuthInputBox>
         <AuthInputBox
@@ -41,7 +38,13 @@ const LoginForm = ({
           onChange={onChange}
           required
         ></AuthInputBox>
-        {loginErrorInfo.isErr?<AuthErrorButton>{loginErrorInfo.errMsg}</AuthErrorButton>:<AuthButton>로그인하기</AuthButton>}
+        {loginErrorInfo.isErr ? (
+          <AuthErrorButton>{loginErrorInfo.errMsg}</AuthErrorButton>
+        ) : loginErrorInfo.isLoading ? (
+          <AuthLoadingButton>잠시만 기다려주세요</AuthLoadingButton>
+        ) : (
+          <AuthButton>로그인하기</AuthButton>
+        )}
         <FindPasswordButtonsContainer>
           <FindPasswordButton toLink="/">처음으로</FindPasswordButton>
           <FindPasswordButton toLink="/reset">

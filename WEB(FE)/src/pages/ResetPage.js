@@ -1,7 +1,9 @@
+import ResetForm from "../components/auth/ResetForm";
+
 const ResetPage = () => {
   return (
     <>
-      <div>비밀번호 초기화 페이지</div>
+      <ResetForm></ResetForm>
     </>
   );
 };

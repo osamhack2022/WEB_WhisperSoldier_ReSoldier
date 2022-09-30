@@ -39,6 +39,21 @@ export const AuthMainLink = styled(Link)`
   }
 `;
 
+export const AuthLoadingButton = styled.div`
+  height: 48px;
+  width: 320px;
+  background-color: #c8c8c8;
+  border-radius: 25px;
+  border: 2px solid #003000;
+  margin: 10px 0 10px;
+  font-size: 14px;
+  line-height: 48px;
+  text-align: center;
+  letter-spacing: 0.56px;
+  color: #003000;
+  font-weight: 600;
+`;
+
 export const AuthErrorButton = styled.div`
   height: 48px;
   width: 320px;
