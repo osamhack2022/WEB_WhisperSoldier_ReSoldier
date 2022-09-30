@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 // 추후에 편집, 삭제 구현 시 authService.currentUser.uid === contentObj.creator_id 비교 목적
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
@@ -7,6 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 
 const PostPage = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [content, setContent] = useState({});
     const [isContentError, setIsContentError] = useState(false);
@@ -43,17 +44,42 @@ const PostPage = () => {
             console.log("No such Document!");
         }
     }
-
+    
     useEffect(() => {
         getContent();
     }, [])
     
     return (
         <>
+        {
+        // 만약 문서를 불러올 수 없더라도 뒤로가기는 유효해야 하므로 ternary 바깥에 두었음.
+        // "글 본문", "댓글", "현재 태그와 같은 태그를 가진 새로운 고민" 부분은 문서를 불러올 수 없으면 에러가 나므로 ternary 안에 있음.
+        }
+        
         {isContentError ? 
             (<b>존재하지 않는 포스트입니다.</b>
             ) : (
                 <>
+                    {
+                        //삼항연산자
+                        //if 사용자가 작성자라면 글삭제 또는 수정 가능
+                        //else: 좋아요, 채팅, 신고하기 가능
+                    }
+                    {(authService.currentUser.uid === content.creator_id) ? 
+                        (
+                            <div class="deleteOrEdit">
+                                
+                            </div>
+                        ) : (
+                            <div class="likeOrChatOrReport">
+                                <button>공감하기</button>
+                                <br />
+                                <button>채팅하기</button>
+                                <br />
+                                <button>신고하기</button>
+                                <br />
+                            </div>
+                        )}
                     <div>포스트 페이지 for 문서 ID: {id}</div>
                     <hr />
                     <div class="postInfo">

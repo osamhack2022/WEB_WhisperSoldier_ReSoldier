@@ -10,7 +10,7 @@ const HomePage = () => {
         const q = await query(
             collection(dbService, "WorryPost"),
             limit(5),
-            orderBy("created_timestamp", "asc")
+            orderBy("created_timestamp", "desc")
         );
         const querySnapShot = await getDocs(q);
         querySnapShot.forEach((doc) => {
@@ -18,7 +18,7 @@ const HomePage = () => {
                 ...doc.data(),
                 id: doc.id,
             }
-            setWorryPosts(prev => [postObj, ...prev]);
+            setWorryPosts(prev => [...prev, postObj]);
             // console.log(doc.id, " => " , doc.data())
         });
     };
