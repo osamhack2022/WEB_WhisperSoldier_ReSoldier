@@ -1,7 +1,17 @@
+import styled from "styled-components";
+
+const FooterBox = styled.footer`
+  width: 100%;
+  height: 90px;
+  padding: 20px 10vw;
+  display: flex;
+  align-items: center;
+`;
+
 const Footer = () => {
   return (
     <>
-      <div>푸터</div>
+      <FooterBox>푸터</FooterBox>
     </>
   );
 };

@@ -4,6 +4,10 @@
   margin: 0;
   padding: 0;
   font-family: "IBM Plex Sans KR", sans-serif;
-  background-color: #f6f6f6;
   box-sizing: border-box;
+}
+
+body {
+  background-color: #f6f6f6;
+  overflow-y: scroll;
 }

@@ -17,6 +17,11 @@ import { authService } from "./lib/FAuth";
 import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import styled from "styled-components";
+
+const Body = styled.div`
+  position: relative;
+`;
 
 /*각 페이지 라우트*/
 const App = () => {
@@ -55,18 +60,18 @@ const App = () => {
   return (
     <>
       {userInfo.isLogin ? (
-        <>
+        <Body>
           <Header></Header>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/post" element={<PostPage />} />
+            <Route path="/post/:id" element={<PostPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/write" element={<WritePage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/message" element={<ChatPage />} />
           </Routes>
           <Footer></Footer>
-        </>
+        </Body>
       ) : (
         <Routes>
           <Route path="/" element={<FirstPage />} />
