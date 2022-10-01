@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { dbService } from "../lib/FStore";
+import { authService } from "../lib/FAuth";
 import { query, collection, getDocs, limit, orderBy } from "firebase/firestore"
 
 const HomePage = () => {
@@ -22,6 +23,17 @@ const HomePage = () => {
             // console.log(doc.id, " => " , doc.data())
         });
     };
+
+    const onClick = (e) => {
+        const {
+            target: { name }
+        } = e;
+        
+        if (name === "logout") {
+            authService.signOut();
+        }
+    }
+
     useEffect(() => {
         getPosts();
     }, [])
@@ -40,6 +52,7 @@ const HomePage = () => {
         <p>
             Home
         </p>
+        <button name="logout" onClick={onClick}>로그아웃</button>
         <p>
             <input name="search" type="search" placeholder="검색어를 입력하세요" value={searchWord} onChange={onChange} />
             <Link to="/write">고민 작성하기</Link>

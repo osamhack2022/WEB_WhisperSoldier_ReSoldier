@@ -16,6 +16,9 @@ const PostPage = () => {
     // 추후 댓글 구현을 위한 포석
     const [postComment, setPostComment] = useState("");
     
+    // FireStore에서 WorryPost의 Document를 받아온 뒤, content 라는 이름의 state에 저장하는 함수
+    // content 상태를 사용하는 모든 함수들(onDeleteClick, toggleEditing, onSubmit)보다 먼저 선언되어야 함.
+
     const getContent = async () => {
         const docRef = doc(dbService, "WorryPost", id);
         const docSnapShot = await getDoc(docRef);
@@ -75,8 +78,9 @@ const PostPage = () => {
                 await updateDoc(doc(dbService, 'WorryPost', content.id), {
                     text: newWorryText,
                 })
-                .then(alert("수정되었습니다."))
-                .then(setEditing(false));
+                    .then(alert("수정되었습니다."))
+                    .then(setEditing(false))
+                await getContent();
             }
             
         }
