@@ -48,7 +48,7 @@ export const SubTitle = styled.span`
   margin: 0px;
   padding: 0px;
   position: relative;
-  top: -10px;
+  top: -8px;
   font-size: 14px;
   text-align: right;
   letter-spacing: 0.72px;

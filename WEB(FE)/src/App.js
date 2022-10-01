@@ -15,6 +15,8 @@ import "./styles/App.css";
 import { useEffect } from "react";
 import { authService } from "./lib/FAuth";
 import { onAuthStateChanged } from "firebase/auth";
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
 
 /*각 페이지 라우트*/
 const App = () => {
@@ -53,14 +55,18 @@ const App = () => {
   return (
     <>
       {userInfo.isLogin ? (
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/post" element={<PostPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/write" element={<WritePage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/message" element={<ChatPage />} />
-        </Routes>
+        <>
+          <Header></Header>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/post" element={<PostPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/write" element={<WritePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/message" element={<ChatPage />} />
+          </Routes>
+          <Footer></Footer>
+        </>
       ) : (
         <Routes>
           <Route path="/" element={<FirstPage />} />

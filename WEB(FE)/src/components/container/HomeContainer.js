@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
-import Footer from "../common/Footer";
-import Header from "../common/Header";
 
-const HomeContainer = ({ state, onChange }) => {
+const HomeContainer = () => {
   return (
     <>
-      <Header state={state} onChange={onChange}></Header>
       <br />
       <Link to="/write">고민 작성하기</Link>
       <br />
@@ -20,7 +17,6 @@ const HomeContainer = ({ state, onChange }) => {
         <div className="newestBoard"></div>
         <div className="popularBoard"></div>
       </div>
-      <Footer></Footer>
     </>
   );
 };

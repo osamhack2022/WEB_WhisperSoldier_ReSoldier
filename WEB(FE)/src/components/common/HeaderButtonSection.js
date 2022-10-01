@@ -1,4 +1,5 @@
 import { useMediaQuery } from "react-responsive";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import {
   ChatButton,
@@ -16,18 +17,21 @@ const ButtonSection = styled.div`
 `;
 
 export const HeaderButtonSectionForDesktop = () => {
-  const isDesktop = useMediaQuery({ minDeviceWidth: 1100 });
-  const isSmaillDesktop = useMediaQuery({ minDeviceWidth: 900 });
-  const isTablet = useMediaQuery({ minDeviceWidth: 400 });
+  const location = useLocation();
+  const isDesktop = useMediaQuery({ query: "(min-width:1100px)" });
+  const isSmaillDesktop = useMediaQuery({ query: "(min-width:900px)" });
+  const isTablet = useMediaQuery({ query: "(min-width:400px)" });
+  console.log(location);
   return (
     <ButtonSection>
-      {isDesktop ? (
-        <WritePostButton></WritePostButton>
-      ) : isSmaillDesktop ? (
-        <WritePostSmallButton></WritePostSmallButton>
-      ) : (
-        isTablet && <></>
-      )}
+      {location.pathname !== "/write" &&
+        (isDesktop ? (
+          <WritePostButton></WritePostButton>
+        ) : isSmaillDesktop ? (
+          <WritePostSmallButton></WritePostSmallButton>
+        ) : (
+          isTablet && <></>
+        ))}
 
       <ChatButton></ChatButton>
       <UserProfileButton></UserProfileButton>

@@ -26,9 +26,9 @@ const SearchSmallBox = styled.div`
 
 const SearchSection = () => {
   const [state, onChange] = useForm({ searchWord: "" });
-  const isDesktop = useMediaQuery({ minDeviceWidth: 1100 });
-  const isSmaillDesktop = useMediaQuery({ minDeviceWidth: 900 });
-  const isTablet = useMediaQuery({ minDeviceWidth: 400 });
+  const isDesktop = useMediaQuery({ query: "(min-width:1100px)" });
+  const isSmaillDesktop = useMediaQuery({ query: "(min-width:900px)" });
+  const isTablet = useMediaQuery({ query: "(min-width:400px)" });
   return (
     <>
       {isDesktop ? (

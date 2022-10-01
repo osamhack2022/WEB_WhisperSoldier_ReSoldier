@@ -176,15 +176,17 @@ export const SearchIcon = styled(FaSearch)`
   color: #ffffff;
 `;
 
-const WritePostButtonShape = styled.button`
+const WritePostButtonShape = styled(Link)`
   position: relative;
-  padding: 0px 15px;
+  padding: 7px 15px;
   color: #ffffff;
   height: 40px;
   width: 140px;
   background-color: #1a7541;
   font-weight: 500;
+  font-size: 14px;
   text-align: right;
+  text-decoration: none;
   border-radius: 25px;
   border: 2px solid rgb(26, 117, 65);
   transition: all 0.5s;
@@ -204,7 +206,7 @@ const WritPostIcon = styled(BsPencilSquare)`
 
 export const WritePostButton = () => {
   return (
-    <WritePostButtonShape>
+    <WritePostButtonShape to="/write">
       <WritPostIcon></WritPostIcon> 고민 작성하기
     </WritePostButtonShape>
   );
@@ -223,7 +225,7 @@ const WriteIcon = styled(BsPencilSquare)`
   color: #ffffff;
 `;
 
-const WriteButtonShape = styled.button`
+const WriteButtonShape = styled(Link)`
   position: relative;
   background-color: #1a7541;
   height: 40px;
@@ -238,7 +240,7 @@ const WriteButtonShape = styled.button`
 
 export const WritePostSmallButton = () => {
   return (
-    <WriteButtonShape>
+    <WriteButtonShape to="/write">
       <WriteIcon></WriteIcon>
     </WriteButtonShape>
   );
@@ -261,7 +263,7 @@ const UserProfileIcon = styled(RiUser3Line)`
   }
 `;
 
-const UserProfileButtonShape = styled.button`
+const UserProfileButtonShape = styled(Link)`
   position: relative;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 10px;
@@ -277,7 +279,7 @@ const UserProfileButtonShape = styled.button`
 
 export const UserProfileButton = () => {
   return (
-    <UserProfileButtonShape>
+    <UserProfileButtonShape to="/profile">
       <UserProfileIcon></UserProfileIcon>
     </UserProfileButtonShape>
   );
@@ -300,7 +302,7 @@ const ChatIcon = styled(BsChatDots)`
   }
 `;
 
-const ChatButtonShape = styled.button`
+const ChatButtonShape = styled(Link)`
   position: relative;
   background-color: rgba(0, 0, 0, 0);
   height: 40px;
@@ -316,7 +318,7 @@ const ChatButtonShape = styled.button`
 
 export const ChatButton = () => {
   return (
-    <ChatButtonShape>
+    <ChatButtonShape to="/message">
       <ChatIcon></ChatIcon>
     </ChatButtonShape>
   );
