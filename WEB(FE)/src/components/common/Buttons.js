@@ -104,7 +104,7 @@ export const AuthSubLink = styled(Link)`
   }
 `;
 
-export const FindPasswordButtonBlock = styled.div`
+const FindPasswordButtonBlock = styled.div`
   margin: 5px 0px;
   height: 30px;
   width: fit-content;
@@ -117,7 +117,7 @@ export const FindPasswordButtonBlock = styled.div`
   }
 `;
 
-export const FindPasswordButtonLink = styled(Link)`
+const FindPasswordButtonLink = styled(Link)`
   font-size: 12px;
   text-align: center;
   letter-spacing: 0.48px;
@@ -129,16 +129,10 @@ export const FindPasswordButtonLink = styled(Link)`
   }
 `;
 
-export const FindPasswordButtonLine = styled.div`
-  height: 3px;
-  background-color: #4f4f4f;
-`;
-
 export const FindPasswordButton = ({ toLink, children }) => {
   return (
     <FindPasswordButtonBlock>
       <FindPasswordButtonLink to={toLink}>{children}</FindPasswordButtonLink>
-      {/* <FindPasswordButtonLine></FindPasswordButtonLine> */}
     </FindPasswordButtonBlock>
   );
 };

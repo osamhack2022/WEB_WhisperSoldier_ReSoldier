@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import calTimeToString from "../../modules/CalTime";
+import { PostInfo } from "../../store/PostStore";
 
 const PostElementBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
@@ -27,9 +29,14 @@ const PostElementTime = styled.div`
 `;
 
 const PostElement = ({ post }) => {
+  const [postInfo, setPostInfo] = useRecoilState(PostInfo);
+
+  const onClick = (post) =>{
+    setPostInfo((prev)=>({...prev, creator_id : post.creator_id, id : post.id, postContent : post.text}))
+  };
   return (
     <PostElementBox>
-      <PostElementTitle to={`/post/${post.id}`}>{post.text}</PostElementTitle>
+      <PostElementTitle to={`/post/${post.id}`} onClick={()=>onClick(post)}>{post.text}</PostElementTitle>
       <PostElementTime>
         {calTimeToString(post.created_timestamp)}
       </PostElementTime>

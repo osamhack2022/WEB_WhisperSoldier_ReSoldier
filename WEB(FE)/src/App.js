@@ -34,8 +34,9 @@ const App = () => {
     if (auth) {
       setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
     }
-  }, [auth]);
-  */
+  }, [auth]);*/
+  
+ 
   useEffect(() => {
     onAuthStateChanged(authService, (u) => {
       if (u) {
