@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { authService } from "../lib/fbase";
+import { authService } from "../lib/FAuth";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,

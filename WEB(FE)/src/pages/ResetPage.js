@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { authService } from "../lib/FAuth";
 import ResetForm from "../components/auth/ResetForm";
 import useForm from "../modules/useForm";
 import { regex } from "../lib/Const";
@@ -30,7 +31,7 @@ const ResetPage = () => {
         setResetErrorInfo((prev) => ({ ...prev, isErr: false }));
       }, 3000);
     } else {
-      const auth = getAuth();
+      const auth = authService;
       setResetErrorInfo((prev) => ({ ...prev, isLoading: true }));
       sendPasswordResetEmail(auth, state.email)
         .then(() => {

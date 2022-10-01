@@ -1,3 +1,4 @@
+/* 아직 사용안함.. 추후 코드 정리하면서 적용할 예정
 import styled from "styled-components";
 import AuthTemplate from "../auth/AuthTemplate";
 import { AuthMainLink, AuthSubLink } from "../common/Buttons";
@@ -20,3 +21,4 @@ const FirstContainer = () => {
 };
 
 export default FirstContainer;
+*/

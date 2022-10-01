@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { authService } from "../lib/fbase";
+import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
 import useForm from "../modules/useForm";
 import { useRecoilState, useSetRecoilState } from "recoil";

@@ -6,10 +6,10 @@ export const AuthInputBox = styled.input`
   margin: 10px 0 10px;
   padding: 16px 27px 16px 27px;
   border-radius: 25px;
-  border: ${props => props.error ? "solid 2px #CD5C5c" : "solid 2px #000"};
+  border: ${(props) => (props.error ? "solid 2px #CD5C5c" : "solid 2px #000")};
   background-color: #fff;
   transition: all 0.5s;
-  animation: ${props => props.error ? "vibration 0.1s 5" : "none"};
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
 
   @keyframes vibration {
     from {
@@ -19,4 +19,13 @@ export const AuthInputBox = styled.input`
       transform: rotate(-0.5deg);
     }
   }
+`;
+
+export const SearchBar = styled.input`
+  padding: 16px 27px 16px 27px;
+  border-radius: 25px;
+  height: 40px;
+  width: 300px;
+  background-color: #fbfbfb;
+  border: 2px solid rgb(0, 0, 0);
 `;

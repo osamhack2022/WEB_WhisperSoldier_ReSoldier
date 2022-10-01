@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FaSearch } from "react-icons/fa";
+import { BsPencilSquare } from "react-icons/bs";
+import { RiUser3Line } from "react-icons/ri";
+import { BsChatDots } from "react-icons/bs";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -149,3 +153,171 @@ export const FindPasswordButtonContainer = styled.div`
   display: flex;
   justify-content: space-around;
 `;
+
+export const SearchButtonShape = styled.button`
+  position: relative;
+  margin-left: 10px;
+  background-color: #1a7541;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  transition: all 0.5s;
+  border: 2px solid rgb(26, 117, 65);
+  &:hover {
+    background: #0d552c;
+  }
+`;
+
+export const SearchIcon = styled(FaSearch)`
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+`;
+
+const WritePostButtonShape = styled.button`
+  position: relative;
+  padding: 0px 15px;
+  color: #ffffff;
+  height: 40px;
+  width: 140px;
+  background-color: #1a7541;
+  font-weight: 500;
+  text-align: right;
+  border-radius: 25px;
+  border: 2px solid rgb(26, 117, 65);
+  transition: all 0.5s;
+  &:hover {
+    background: #0d552c;
+  }
+`;
+
+const WritPostIcon = styled(BsPencilSquare)`
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(0%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+`;
+
+export const WritePostButton = () => {
+  return (
+    <WritePostButtonShape>
+      <WritPostIcon></WritPostIcon> 고민 작성하기
+    </WritePostButtonShape>
+  );
+};
+
+const WriteIcon = styled(BsPencilSquare)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 40px;
+  width: 40px;
+  padding: 12px;
+  font-weight: 100;
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+`;
+
+const WriteButtonShape = styled.button`
+  position: relative;
+  background-color: #1a7541;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  transition: all 0.5s;
+  border: 2px solid rgb(26, 117, 65);
+  &:hover {
+    background: #0d552c;
+  }
+`;
+
+export const WritePostSmallButton = () => {
+  return (
+    <WriteButtonShape>
+      <WriteIcon></WriteIcon>
+    </WriteButtonShape>
+  );
+};
+
+const UserProfileIcon = styled(RiUser3Line)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 40px;
+  width: 40px;
+  padding: 12px;
+  font-weight: 100;
+  color: #0d552c;
+  transition: all 0.5s;
+  background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
+const UserProfileButtonShape = styled.button`
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  transition: all 0.5s;
+  border: 2px solid rgb(26, 117, 65);
+  &:hover {
+    background: #0d552c;
+  }
+`;
+
+export const UserProfileButton = () => {
+  return (
+    <UserProfileButtonShape>
+      <UserProfileIcon></UserProfileIcon>
+    </UserProfileButtonShape>
+  );
+};
+
+const ChatIcon = styled(BsChatDots)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 40px;
+  width: 40px;
+  padding: 12px;
+  font-weight: 100;
+  color: #0d552c;
+  transition: all 0.5s;
+  background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
+const ChatButtonShape = styled.button`
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  height: 40px;
+  width: 40px;
+  margin-left: 10px;
+  border-radius: 50%;
+  transition: all 0.5s;
+  border: 2px solid rgb(26, 117, 65);
+  &:hover {
+    background: #0d552c;
+  }
+`;
+
+export const ChatButton = () => {
+  return (
+    <ChatButtonShape>
+      <ChatIcon></ChatIcon>
+    </ChatButtonShape>
+  );
+};

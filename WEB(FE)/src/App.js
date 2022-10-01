@@ -13,7 +13,7 @@ import ChatPage from "./pages/ChatPage";
 import ResetPage from "./pages/ResetPage";
 import "./styles/App.css";
 import { useEffect } from "react";
-import { authService } from "./lib/fbase";
+import { authService } from "./lib/FAuth";
 import { onAuthStateChanged } from "firebase/auth";
 
 /*각 페이지 라우트*/

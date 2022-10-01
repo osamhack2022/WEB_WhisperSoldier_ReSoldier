@@ -30,3 +30,28 @@ export const FirstComment = styled.div`
   background-color: #f6f6f6;
   font-weight: 700;
 `;
+
+export const MainTitle = styled.span`
+  margin: 0px;
+  padding: 0px;
+  font-size: 24px;
+
+  font-weight: 700;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.12px;
+  text-align: center;
+  color: #1a7541;
+`;
+
+export const SubTitle = styled.span`
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  top: -10px;
+  font-size: 14px;
+  text-align: right;
+  letter-spacing: 0.72px;
+  color: #0d552c;
+  font-weight: 600;
+`;
