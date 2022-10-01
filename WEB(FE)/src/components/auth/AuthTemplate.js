@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { AuthLogo, SubLogo } from "../common/Logos";
 
-export const AuthBlock = styled.div`
+const AuthBlock = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
