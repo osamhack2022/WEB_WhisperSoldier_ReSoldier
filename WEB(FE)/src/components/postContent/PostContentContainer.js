@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { authService } from "../../lib/FAuth";
 import { FindPasswordButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
+import RecommandTagContainer from "../container/RecommandTagContainer";
+import InputTagContainer from "./InputTageContainer";
 import PostCommentContainer from "./PostCommentContainer";
 import PostCommentForm from "./PostCommentForm";
 import PostContentBody from "./PostContentBody";
@@ -25,6 +27,13 @@ const SideButtonContainer = styled.div`
 const PostContentBodyContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const SideOptionContainer = styled.div`
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const PostContentContainer = ({
@@ -58,7 +67,7 @@ const PostContentContainer = ({
         </SideButtonBox>
       </SideButtonContainer>
       <PostContentBodyContainer>
-        <PostContentTitle></PostContentTitle>
+        <PostContentTitle postInfo={postInfo}></PostContentTitle>
         <PostContentBody
           postInfo={postInfo}
           state={state}
@@ -77,6 +86,10 @@ const PostContentContainer = ({
           </>
         )}
       </PostContentBodyContainer>
+      <SideOptionContainer>
+        <InputTagContainer></InputTagContainer>
+        <RecommandTagContainer></RecommandTagContainer>
+      </SideOptionContainer>
     </PostContentContainerBox>
   );
 };

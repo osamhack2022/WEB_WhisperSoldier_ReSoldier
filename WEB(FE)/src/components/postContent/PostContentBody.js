@@ -16,6 +16,7 @@ const PostContentText = styled.div`
   text-align: left;
   letter-spacing: 0.56px;
   color: #1d1d1d;
+  white-space: pre-wrap;
   font-weight: 400;
 `;
 
@@ -54,7 +55,9 @@ const PostContentBody = ({ postInfo, state, onChange, editing, onClick }) => {
           <BottonLine></BottonLine>
         </>
       ) : (
-        <PostContentText>{postInfo.postContent}</PostContentText>
+        <>
+          <PostContentText>{postInfo.postContent}</PostContentText>
+        </>
       )}
     </PostContentBox>
   );

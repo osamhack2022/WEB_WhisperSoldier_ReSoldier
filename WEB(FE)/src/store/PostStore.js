@@ -4,7 +4,8 @@ export const PostInfo = atom({
   key: "postInfo", // unique ID (with respect to other atoms/selectors)
   default: {
     creator_id: "",
-    id : "",
-    postContent : "",
+    created_timestamp: null,
+    id: "",
+    postContent: "",
   }, // default value (aka initial value)
 });

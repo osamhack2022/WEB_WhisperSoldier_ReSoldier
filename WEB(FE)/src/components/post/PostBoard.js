@@ -6,10 +6,17 @@ import PostBoardTitleContainer from "./PostBoardTilteContainer";
 import styled from "styled-components";
 import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
+import SideOptionForm from "../common/SideOptionForm";
 
 const PostBoardContainer = styled.div`
   height: fit-content;
   width: 60vw;
+`;
+
+const SideOptionContainer = styled.div`
+  margin-left: 10px;
+  height: fit-content;
+  flex-grow: 1;
 `;
 
 const PostBoard = () => {
@@ -47,6 +54,9 @@ const PostBoard = () => {
             ))}
           </PostBoardBodyContainer>
         </PostBoardContainer>
+        <SideOptionContainer>
+          <SideOptionForm></SideOptionForm>
+        </SideOptionContainer>
       </>
     );
   } else {

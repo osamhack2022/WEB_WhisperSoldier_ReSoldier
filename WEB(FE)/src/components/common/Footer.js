@@ -25,7 +25,7 @@ const Footer = () => {
     <>
       <FooterBox>
         <FooterText>
-          copyrightⓒ {curDate.getFullYear()} All rights reserved by Resoldier
+          copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
         </FooterText>
       </FooterBox>
     </>

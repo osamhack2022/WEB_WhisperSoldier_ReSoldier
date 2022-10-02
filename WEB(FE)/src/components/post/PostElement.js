@@ -17,7 +17,13 @@ const PostElementTitle = styled(Link)`
   letter-spacing: 0.56px;
   color: #3f3f3f;
   font-weight: 500;
-  height: 28px;
+  height: 44px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
 `;
 
 const PostElementTime = styled.div`
@@ -31,12 +37,20 @@ const PostElementTime = styled.div`
 const PostElement = ({ post }) => {
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
 
-  const onClick = (post) =>{
-    setPostInfo((prev)=>({...prev, creator_id : post.creator_id, id : post.id, postContent : post.text}))
+  const onClick = (post) => {
+    setPostInfo((prev) => ({
+      ...prev,
+      creator_id: post.creator_id,
+      created_timestamp: post.created_timestamp,
+      id: post.id,
+      postContent: post.text,
+    }));
   };
   return (
     <PostElementBox>
-      <PostElementTitle to={`/post/${post.id}`} onClick={()=>onClick(post)}>{post.text}</PostElementTitle>
+      <PostElementTitle to={`/post/${post.id}`} onClick={() => onClick(post)}>
+        {post.text}
+      </PostElementTitle>
       <PostElementTime>
         {calTimeToString(post.created_timestamp)}
       </PostElementTime>

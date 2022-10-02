@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const PostContentBox = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-left: 10px;
   padding: 0px 20px;
@@ -11,6 +12,13 @@ const PostContentBox = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
+`;
+
+const PostUserBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: fit-content;
 `;
 
 const PostContentTiltleText = styled.div`
@@ -52,6 +60,15 @@ const UserProfileIconShape = styled.div`
   }
 `;
 
+const PostContentTime = styled.div`
+  margin-left: 10px;
+  font-size: 12px;
+  text-align: right;
+  letter-spacing: -0.34px;
+  color: #4f4f4f;
+  font-weight: 400;
+`;
+
 const UserProfileImg = () => {
   return (
     <UserProfileIconShape>
@@ -60,11 +77,17 @@ const UserProfileImg = () => {
   );
 };
 
-const PostContentTitle = () => {
+const PostContentTitle = ({ postInfo }) => {
   return (
     <PostContentBox>
-      <UserProfileImg></UserProfileImg>
-      <PostContentTiltleText>익명</PostContentTiltleText>
+      <PostUserBox>
+        <UserProfileImg></UserProfileImg>
+        <PostContentTiltleText>익명</PostContentTiltleText>
+      </PostUserBox>
+
+      <PostContentTime>
+        {postInfo.created_timestamp.toDate().toLocaleString()}
+      </PostContentTime>
     </PostContentBox>
   );
 };
