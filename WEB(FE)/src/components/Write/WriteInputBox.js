@@ -38,6 +38,7 @@ const WritePostBox = ({ state, onChange, onClick }) => {
         type="text"
         value={state.postContent}
         onChange={onChange}
+        required
       ></InputForm>
       <BottonLine></BottonLine>
     </InputBox>

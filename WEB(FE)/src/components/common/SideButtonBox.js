@@ -10,10 +10,11 @@ const ButtonContainer = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
+  margin-top: ${(props) => props.isNotTop && "10px"};
 `;
 
-const SideButtonBox = ({ children }) => {
-  return <ButtonContainer>{children}</ButtonContainer>;
+const SideButtonBox = ({ children, isNotTop }) => {
+  return <ButtonContainer isNotTop={isNotTop}>{children}</ButtonContainer>;
 };
 
 export default SideButtonBox;

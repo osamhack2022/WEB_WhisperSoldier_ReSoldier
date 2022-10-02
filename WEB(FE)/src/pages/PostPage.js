@@ -12,19 +12,13 @@ import PostContentContainer from "../components/postContent/PostContentContainer
 const PostPage = () => {
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   // console.log(postInfo); 전역 상태 관리 테스트
-  const [state, onChange] = useForm({editContent : postInfo.postContent, comment : ""});
+  const [state, onChange] = useForm({
+    editContent: postInfo.postContent,
+    comment: "",
+  });
 
   const navigate = useNavigate();
-  //const { id } = useParams();
-  //const [content, setContent] = useState({});
-  //const [isContentError, setIsContentError] = useState(false);
-  //const [newWorryText, setNewWorryText] = useState("");
   const [editing, setEditing] = useState(false);
-
-
- 
-
- 
 
   const onDeleteClick = async (e) => {
     const check = window.confirm("정말로 삭제 하시겠습니까?");
@@ -40,6 +34,20 @@ const PostPage = () => {
     setEditing((prev) => !prev);
   };
 
+  const onClick = async (e) => {
+    e.preventDefault();
+    const check = window.confirm("정말로 수정하시겠습니까?");
+    if (check) {
+      await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+        text: state.editContent,
+      })
+        .then(
+          setPostInfo((prev) => ({ ...prev, postContent: state.editContent }))
+        )
+        .then(alert("수정되었습니다."))
+        .then(setEditing(false));
+    }
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
     // 추후 댓글 구현 예정
@@ -49,22 +57,20 @@ const PostPage = () => {
     console.log();
     if (name === "submitComment") {
       // 댓글 전송하기
-    } else if (name === "submitEdit") {
-      const check = window.confirm("정말로 수정하시겠습니까?");
-      if (check) {
-        await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-          text: state.editContent,
-        })
-          .then(
-            setPostInfo((prev)=>({...prev, postContent : state.editContent}))).then(alert("수정되었습니다."))
-          .then(setEditing(false));
-          
-      }
     }
   };
 
   return (
-    <PostContentContainer postInfo={postInfo} state={state} onChange={onChange} editing={editing} onSubmit={onSubmit} onDeleteClick={onDeleteClick} toggleEditing={toggleEditing}></PostContentContainer>
+    <PostContentContainer
+      postInfo={postInfo}
+      state={state}
+      onChange={onChange}
+      editing={editing}
+      onSubmit={onSubmit}
+      onClick={onClick}
+      onDeleteClick={onDeleteClick}
+      toggleEditing={toggleEditing}
+    ></PostContentContainer>
   );
 };
 

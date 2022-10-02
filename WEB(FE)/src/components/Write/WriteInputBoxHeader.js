@@ -30,15 +30,15 @@ const WritPostIcon = styled(BsPencilSquare)`
   color: #ffffff;
 `;
 
-export const WritePostButton = ({ onClick }) => {
+export const WritePostButton = ({ onClick, children }) => {
   return (
     <WritePostButtonShape onClick={onClick}>
-      <WritPostIcon></WritPostIcon> 작성완료
+      <WritPostIcon></WritPostIcon> {children}
     </WritePostButtonShape>
   );
 };
 
-const WritePostHeaderBox = styled.div`
+export const WritePostHeaderBox = styled.div`
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 2px solid #bdbdbd;
@@ -53,7 +53,7 @@ const WritePostHeader = ({ onClick }) => {
   return (
     <WritePostHeaderBox>
       <WritePostTitle>고민 작성하기</WritePostTitle>
-      <WritePostButton onClick={onClick}></WritePostButton>
+      <WritePostButton onClick={onClick}>작성완료</WritePostButton>
     </WritePostHeaderBox>
   );
 };
