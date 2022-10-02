@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const FindPasswordButtonBlock = styled.div`
-  margin: 5px 0px;
-  height: 30px;
+  margin: 10px 0px;
+  height: 26px;
   width: fit-content;
   align-items: center;
   border-bottom: #4f4f4f solid 2px;
@@ -13,7 +13,7 @@ export const FindPasswordButtonBlock = styled.div`
   }
 `;
 
-const FindPasswordButtonLink = styled.button`
+const FindPasswordButtonLink = styled.div`
   font-size: 12px;
   text-align: center;
   letter-spacing: 0.48px;
@@ -25,18 +25,22 @@ const FindPasswordButtonLink = styled.button`
   }
 `;
 
-export const EditButton = ({toggleEditing }) => {
+export const EditButton = ({ toggleEditing, editing }) => {
   return (
     <FindPasswordButtonBlock>
-      <FindPasswordButtonLink onClick={toggleEditing}>수정하기</FindPasswordButtonLink>
+      <FindPasswordButtonLink onClick={toggleEditing}>
+        {editing ? "취소하기" : "수정하기"}
+      </FindPasswordButtonLink>
     </FindPasswordButtonBlock>
   );
 };
 
-export const DeleteButton = ({onDeleteClick }) => {
-    return (
-      <FindPasswordButtonBlock>
-        <FindPasswordButtonLink onClick={onDeleteClick}>삭제하기</FindPasswordButtonLink>
-      </FindPasswordButtonBlock>
-    );
-  };
+export const DeleteButton = ({ onDeleteClick }) => {
+  return (
+    <FindPasswordButtonBlock>
+      <FindPasswordButtonLink onClick={onDeleteClick}>
+        삭제하기
+      </FindPasswordButtonLink>
+    </FindPasswordButtonBlock>
+  );
+};

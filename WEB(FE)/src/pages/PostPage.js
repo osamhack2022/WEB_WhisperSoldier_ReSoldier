@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // 추후에 편집, 삭제 구현 시 authService.currentUser.uid === contentObj.creator_id 비교 목적
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
@@ -24,9 +24,10 @@ const PostPage = () => {
     const check = window.confirm("정말로 삭제 하시겠습니까?");
     if (check) {
       console.log(`deleting ${postInfo.id}`);
-      await deleteDoc(doc(dbService, "WorryPost", postInfo.id))
-        .then(alert("삭제 되었습니다."))
-        .then(navigate("/"));
+      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
+        alert("삭제 되었습니다.")
+      );
+      navigate("/");
     }
   };
 

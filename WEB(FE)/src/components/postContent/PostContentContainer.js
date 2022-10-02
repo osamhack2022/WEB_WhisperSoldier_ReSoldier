@@ -48,6 +48,7 @@ const PostContentContainer = ({
         <SideButtonBox isNotTop={true}>
           {authService.currentUser.uid === postInfo.creator_id ? (
             <WriteUserButtonContainer
+              editing={editing}
               onDeleteClick={onDeleteClick}
               toggleEditing={toggleEditing}
             ></WriteUserButtonContainer>
@@ -65,12 +66,16 @@ const PostContentContainer = ({
           editing={editing}
           onClick={onClick}
         ></PostContentBody>
-        <PostCommentForm
-          state={state}
-          onChange={onChange}
-          onSubmit={onSubmit}
-        ></PostCommentForm>
-        <PostCommentContainer></PostCommentContainer>
+        {!editing && (
+          <>
+            <PostCommentForm
+              state={state}
+              onChange={onChange}
+              onSubmit={onSubmit}
+            ></PostCommentForm>
+            <PostCommentContainer></PostCommentContainer>
+          </>
+        )}
       </PostContentBodyContainer>
     </PostContentContainerBox>
   );
