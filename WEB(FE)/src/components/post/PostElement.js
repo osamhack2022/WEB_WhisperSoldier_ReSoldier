@@ -45,6 +45,7 @@ const PostElement = ({ post }) => {
       id: post.id,
       postContent: post.text,
     }));
+    window.scrollTo(0, 0);
   };
   return (
     <PostElementBox>

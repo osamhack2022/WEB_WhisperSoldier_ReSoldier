@@ -4,6 +4,10 @@ import { FaSearch } from "react-icons/fa";
 import { BsPencilSquare } from "react-icons/bs";
 import { RiUser3Line } from "react-icons/ri";
 import { BsChatDots } from "react-icons/bs";
+import { IoMdArrowBack } from "react-icons/io";
+import { FiEdit2 } from "react-icons/fi";
+import { AiOutlineHeart } from "react-icons/ai";
+import { BsEmojiAngry } from "react-icons/bs";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -284,9 +288,9 @@ const ChatIcon = styled(BsChatDots)`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  height: 40px;
-  width: 40px;
-  padding: 12px;
+  height: 42px;
+  width: 42px;
+  padding: 13px;
   font-weight: 100;
   color: #0d552c;
   transition: all 0.5s;
@@ -317,3 +321,168 @@ export const ChatButton = () => {
     </ChatButtonShape>
   );
 };
+
+// 뒤로가기 버튼
+const CommonButtonText = styled.div`
+  font-size: 12px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  text-decoration: none;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  font-weight: 600;
+`;
+
+const BackButtonImg = styled(IoMdArrowBack)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const BackButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${BackButtonImg} {
+    color: #003000;
+    transform: scale(1.1);
+  }
+`;
+
+export const BackButton = ({ toLink, children }) => {
+  return (
+    <BackButtonBlock to={toLink}>
+      <BackButtonImg></BackButtonImg>
+      <CommonButtonText>{children}</CommonButtonText>
+    </BackButtonBlock>
+  );
+};
+
+// 공감하기 버튼
+const LikeButtonImg = styled(AiOutlineHeart)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const LikeButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${LikeButtonImg} {
+    fill: #eb5757;
+  }
+`;
+
+export const LikeButton = ({ toLink, children }) => {
+  return (
+    <LikeButtonBlock to={toLink}>
+      <LikeButtonImg></LikeButtonImg>
+      <CommonButtonText>{children}</CommonButtonText>
+    </LikeButtonBlock>
+  );
+};
+
+// 채팅하기 버튼 BsChatDots
+const PostChatButtonImg = styled(BsChatDots)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const PostChatButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${PostChatButtonImg} {
+    fill: #4181b1;
+  }
+`;
+
+export const PostChatButton = ({ toLink, children }) => {
+  return (
+    <PostChatButtonBlock to={toLink}>
+      <PostChatButtonImg></PostChatButtonImg>
+      <CommonButtonText>{children}</CommonButtonText>
+    </PostChatButtonBlock>
+  );
+};
+
+//신고하기 버튼 BsEmojiAngry
+const ReportButtonImg = styled(BsEmojiAngry)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const ReportButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${ReportButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${ReportButtonImg} {
+    fill: #b78841;
+  }
+`;
+
+export const ReportButton = ({ toLink, children }) => {
+  return (
+    <ReportButtonBlock to={toLink}>
+      <ReportButtonImg></ReportButtonImg>
+      <CommonButtonText>{children}</CommonButtonText>
+    </ReportButtonBlock>
+  );
+};
+
+// 수정하기 버튼 FiEdit2

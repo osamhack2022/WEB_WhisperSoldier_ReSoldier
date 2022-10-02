@@ -1,4 +1,4 @@
-import { FindPasswordButton } from "../common/Buttons";
+import { LikeButton, PostChatButton, ReportButton } from "../common/Buttons";
 import { DeleteButton, EditButton } from "./Test";
 
 export const WriteUserButtonContainer = ({
@@ -17,9 +17,9 @@ export const WriteUserButtonContainer = ({
 export const OtherUserButtonContainer = () => {
   return (
     <>
-      <FindPasswordButton toLink="/">공감하기</FindPasswordButton>
-      <FindPasswordButton toLink="/">채팅하기</FindPasswordButton>
-      <FindPasswordButton toLink="/">신고하기</FindPasswordButton>
+      <LikeButton toLink="/">공감하기</LikeButton>
+      <PostChatButton toLink="/">채팅하기</PostChatButton>
+      <ReportButton toLink="/">신고하기</ReportButton>
     </>
   );
 };

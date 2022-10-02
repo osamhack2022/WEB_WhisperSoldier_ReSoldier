@@ -6,7 +6,7 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: fit-content;
-  width: 135px;
+  width: 110px;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);

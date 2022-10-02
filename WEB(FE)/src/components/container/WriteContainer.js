@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { FindPasswordButton } from "../common/Buttons";
+import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
+import SideOptionForm from "../common/SideOptionForm";
 import WritePostBox from "../Write/WriteInputBox";
 
 const WriteContainerBox = styled.div`
@@ -9,18 +10,27 @@ const WriteContainerBox = styled.div`
   flex-direction: row;
 `;
 
+const SideOptionContainer = styled.div`
+  margin-left: 10px;
+  height: fit-content;
+  flex-grow: 1;
+`;
+
 const WriteContainer = ({ state, onChange, onClick }) => {
   return (
     <>
       <WriteContainerBox>
         <SideButtonBox>
-          <FindPasswordButton toLink="/">뒤로가기</FindPasswordButton>
+          <BackButton toLink="/">뒤로가기</BackButton>
         </SideButtonBox>
         <WritePostBox
           state={state}
           onChange={onChange}
           onClick={onClick}
         ></WritePostBox>
+        <SideOptionContainer>
+          <SideOptionForm></SideOptionForm>
+        </SideOptionContainer>
       </WriteContainerBox>
     </>
   );

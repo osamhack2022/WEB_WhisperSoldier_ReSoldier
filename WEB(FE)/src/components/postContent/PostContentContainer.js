@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { authService } from "../../lib/FAuth";
-import { FindPasswordButton } from "../common/Buttons";
+import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
 import RecommandTagContainer from "../container/RecommandTagContainer";
 import InputTagContainer from "./InputTageContainer";
@@ -52,7 +52,7 @@ const PostContentContainer = ({
     <PostContentContainerBox>
       <SideButtonContainer>
         <SideButtonBox>
-          <FindPasswordButton toLink="/">뒤로가기</FindPasswordButton>
+          <BackButton toLink="/">뒤로가기</BackButton>
         </SideButtonBox>
         <SideButtonBox isNotTop={true}>
           {authService.currentUser ? (
