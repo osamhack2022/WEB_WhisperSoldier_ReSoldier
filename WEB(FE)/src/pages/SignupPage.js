@@ -1,112 +1,154 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
 import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    sendEmailVerification,
-    signOut
-} from "firebase/auth"
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+} from "firebase/auth";
+import SignUpForm from "../components/auth/SignUpForm";
+import useForm from "../modules/useForm";
+import { useRecoilState } from "recoil";
+import { UserInfo } from "../store/AuthStore";
+import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";
+import { regex } from "../lib/Const";
 
 const SignupPage = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [rePassword, setRePassword] = useState("");
-    const [isError, setIsError] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
-    const [isNarasarang, setIsNarasarang] = useState(false);
-    const regex = /^\d{13}@narasarang.or.kr$/;
-    const navigate = useNavigate();
-    
-    const onChange = (e)=>{
-        const {
-            target : {name, value}
-        } = e;
-        if(name === "email"){
-            setEmail(value);
-            setIsNarasarang(regex.test(value));
-            console.log(isNarasarang);
-        }
-        else if(name === "password"){
-            setPassword(value);
-        }
-        else if(name === "rePassword"){
-            setRePassword(value);
-        }
-    }
-    const onSubmit = async (e) =>{
-        e.preventDefault();
-        try {
-            // const auth = getAuth();
-            const data = await createUserWithEmailAndPassword(authService, email, password);
-            if (authService.currentUser.emailVerified === false) {
-                navigate('/register')
-                alert("다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.\n이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요.");
+  const [state, onChange] = useForm({
+    email: "",
+    password: "",
+    rePassword: "",
+  });
+  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const [signUpErrorInfo, setSignUpErrorInfo] = useState({
+    isErr: false,
+    isEmailError: false,
+    isPwError: false,
+    isSuccess: false,
+    errMsg: "",
+    isLoading: false,
+  });
+  const emailFormat = regex;
 
-                sendEmailVerification(authService.currentUser)
-                    .then(console.log("이메일 인증이 끝나면 로그인으로 돌아가서 다시 로그인해보세요."))
-                    .catch(error => console.log(error));
-                
-                await signOut(authService).then(() => {
-                    console.log("로그아웃 성공");
-                }).catch(e => console.log(e));
-                navigate('/')
-            } else {
-                navigate('/');
-            }
-        } catch (error) {
-            setIsError(true);
-            switch (error.code) {
-                case "auth/weak-password":
-                    // weak password error
-                    setErrorMsg("비밀번호가 너무 약합니다.")
-                    break;
-                
-                case "auth/email-already-in-use":
-                    // already in use error
-                    setErrorMsg("이미 가입된 나라사랑포털 계정입니다. 다른 계정으로 가입하세요.")
-                    break;
-                
-                default:
-                    // unknown error
-                    setErrorMsg("잠시 후 다시 시도해주세요.")
-                    break;
-            }
-            
-            console.log(error.code);
-            console.log(error.message);
-        }
-    }
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (emailFormat.test(state.email) === false) {
+      setSignUpErrorInfo((prev) => ({
+        ...prev,
+        isEmailError: true,
+        errMsg: "이메일 형식이 옳지 않습니다",
+      }));
+      setTimeout(() => {
+        setSignUpErrorInfo((prev) => ({ ...prev, isEmailError: false }));
+      }, 3000);
+    } else if (state.password !== state.rePassword) {
+      setSignUpErrorInfo((prev) => ({
+        ...prev,
+        errMsg: "입력한 비빌번호가 서로 다릅니다",
+        isPwError: true,
+      }));
+      setTimeout(() => {
+        setSignUpErrorInfo((prev) => ({ ...prev, isPwError: false }));
+      }, 3000);
+    } else {
+      /*firebase 연동 부분*/
+      setSignUpErrorInfo((prev) => ({ ...prev, isLoading: true }));
+      try {
+        await createUserWithEmailAndPassword(
+          authService,
+          state.email,
+          state.password
+        );
 
-    const naraOnClick = () => {
         if (authService.currentUser.emailVerified === false) {
-            navigate('/register')
-            alert("다음으로 이메일 인증을 수행해야 합니다. 인증 메일을 발송합니다.")
-            sendEmailVerification(authService.currentUser)
-                .then(console.log("이메일 인증이 끝나면 로그인으로 돌아가서 로그인해보세요."))
-                .catch(error => console.log(error));
+          setSignUpErrorInfo((prev) => ({
+            ...prev,
+            isLoading: false,
+            isSuccess: true,
+          }));
+          sendEmailVerification(authService.currentUser)
+            .then(console.log("이메일 인증 메일 발송!"))
+            .catch((error) => {
+              console.log(error);
+              console.log(authService.currentUser);
+            });
+          await signOut(authService).then(() => {
+            console.log("로그아웃 성공");
+          });
+          console.log(authService.currentUser);
+          /*
+          if (authService.currentUser) {
+            setUserInfo((prev) => ({ ...prev, isLogin: true }));
+          }*/
+          /*await signOut(authService)
+            .then(() => {
+              console.log("로그아웃 성공");
+            })*/
+          //navigate("/");
         } else {
-            console.log("이미 인증된 계정입니다.")
-            navigate('/');
+          console.log(
+            "이미 인증된 계정입니다. 로그인으로 가서 로그인 해보세요"
+          );
         }
-    }
+      } catch (error) {
+        switch (error.code) {
+          case "auth/weak-password":
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isPwError: true,
+              errMsg: "비밀번호가 보안이 약합니다",
+            }));
+            break;
+          case "auth/email-already-in-use":
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isEmailError: true,
+              errMsg: "이미 가입된 계정입니다",
+            }));
+            break;
 
-    return (
+          default:
+            // unknown error
+            setSignUpErrorInfo((prev) => ({
+              ...prev,
+              isLoading: false,
+              isErr: true,
+              errMsg: "알 수 없는 오류 입니다. 다시 시도하세요",
+            }));
+            break;
+        }
+
+        console.log(error.code);
+        console.log(error.message);
+
+        setTimeout(() => {
+          setSignUpErrorInfo((prev) => ({
+            ...prev,
+            isErr: false,
+            isEmailError: false,
+            isPwError: false,
+          }));
+        }, 3000);
+      }
+    }
+  };
+
+  return (
     <div>
-        <div>회원 가입 페이지</div>
-        <form onSubmit={onSubmit}>
-            <input name="email" type="email" placeholder="이메일" required value={email} onChange={onChange}/>
-            <input name="password" type="password" placeholder="비밀번호" required value={password} onChange={onChange}/>
-            <input name="rePassword" type="password" placeholder="비밀번호 재입력" required value={rePassword} onChange={onChange}/>
-            <button disabled={!isNarasarang}>회원가입 하기</button>
-            <br/>
-                <div hidden={!isError}>{errorMsg}</div>
-            <br/>
-            <Link to="/">돌아가기</Link>
-        </form>
-        <br />
-        <button hidden={!authService.currentUser} onClick={naraOnClick}>나라사랑메일 인증</button>
-    </div>);
+      <div>회원 가입 페이지</div>
+      {signUpErrorInfo.isSuccess ? (
+        <EmailVerifiInfoForm>환영합니다!</EmailVerifiInfoForm>
+      ) : (
+        <SignUpForm
+          onSubmit={onSubmit}
+          state={state}
+          onChange={onChange}
+          signUpErrorInfo={signUpErrorInfo}
+        ></SignUpForm>
+      )}
+    </div>
+  );
 };
 
 export default SignupPage;

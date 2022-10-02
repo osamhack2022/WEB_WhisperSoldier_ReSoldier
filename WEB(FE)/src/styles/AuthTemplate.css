@@ -1,0 +1,31 @@
+.pageSlider-entering {
+  opacity: 0;
+  /* transform: scale(1.1); */
+  transform: translate3d(100%, 0, 0);
+  -webkit-animation-name: slidein 4s 1s;
+  animation-name: slidein 4s 1s;
+}
+
+.pageSlider-entered {
+  opacity: 1;
+  /* transform: scale(1);
+    transition: opacity 300ms, transform 300ms; */
+  transform: translate3d(0, 0, 0);
+  transition: all 200ms;
+  -webkit-animation-name: slidein 4s 1s;
+  animation-name: slidein 4s 1s;
+}
+
+.pageSlider-exiting {
+  opacity: 1;
+  /* transform: scale(1); */
+  transform: translate3d(0, 0, 0);
+}
+
+.pageSlider-exited {
+  opacity: 0;
+  /* transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+    transform: translate3d(-100%, 0,0); */
+  transition: all 200ms;
+}
