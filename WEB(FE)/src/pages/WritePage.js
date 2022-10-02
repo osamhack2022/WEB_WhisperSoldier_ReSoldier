@@ -42,7 +42,11 @@ const WritePage = () => {
                 포스트 작성 페이지
             </p>
             <form onSubmit={onSubmit}>
-                <input name="write" type="text" placeholder="무엇이 고민이신가요?" value={writeContent} onChange={onChange} maxLength={2000} />
+                <textarea name="write" type="text" placeholder="무엇이 고민이신가요?" value={writeContent} onChange={onChange} maxLength={2000}
+                    style={{
+                        whiteSpace: "pre-wrap"
+                    }}
+                />
                 <button>고민 업로드하기</button>
             </form>
         </div>

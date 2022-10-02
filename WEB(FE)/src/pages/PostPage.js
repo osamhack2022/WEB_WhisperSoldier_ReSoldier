@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 // 추후에 편집, 삭제 구현 시 authService.currentUser.uid === contentObj.creator_id 비교 목적
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
-import { doc, getDoc, updateDoc, deleteDoc, Timestamp, startAfter } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 const PostPage = () => {
@@ -24,7 +24,7 @@ const PostPage = () => {
         const docRef = doc(dbService, "WorryPost", id);
         const docSnapShot = await getDoc(docRef);
         if (docSnapShot.exists()) {
-            //console.log("Doc Data: ", docSnapShot.data());
+            console.log("Doc Data: ", docSnapShot.data().created_timestamp);
             const contentObj = {
                 ...docSnapShot.data(),
                 id
@@ -149,11 +149,11 @@ const PostPage = () => {
                             (
                             <>
                                 <form name="submitEdit" onSubmit={onSubmit}>
-                                    <input name="edit" value={newWorryText} type="text" required onChange={onChange} />
+                                    <textarea name="edit" value={newWorryText} type="text" required onChange={onChange} />
                                     <button>수정하기</button>
                                 </form>
                             </>
-                            ) : (<p>{content.text}</p>)
+                            ) : (<p style={{whiteSpace: "pre-wrap"}}>{content.text}</p>)
                         }
                     </div>
                     <hr />
