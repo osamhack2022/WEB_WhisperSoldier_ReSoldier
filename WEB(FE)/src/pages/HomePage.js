@@ -2,25 +2,33 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { dbService } from "../lib/FStore";
 import { authService } from "../lib/FAuth";
-import { query, collection, getDocs, limit, orderBy } from "firebase/firestore"
+import { query, collection, getDocs, limit, orderBy, where, startAfter, Timestamp } from "firebase/firestore"
 
 const HomePage = () => {
     const [searchWord, setSearchWord] = useState("");
     const [worryPosts, setWorryPosts] = useState([]);
+    const [pageNum, setPageNum] = useState(true);
     const getPosts = async () => {
-        const q = await query(
-            collection(dbService, "WorryPost"),
-            limit(5),
-            orderBy("created_timestamp", "desc")
-        );
-        const querySnapShot = await getDocs(q);
+        
+        const first = query(collection(dbService, "WorryPost"), orderBy("created_timestamp", "desc"), limit(10));
+        const documentSnapshots = await getDocs(first);
+        console.log("snapshot :", documentSnapshots);
+        const lastVisible = await documentSnapshots.docs[documentSnapshots.docs.length - 1];
+        console.log(lastVisible);
+        
+        const next = query(collection(dbService, "WorryPost"),
+        orderBy("created_timestamp", "desc"),
+        startAfter(lastVisible),
+        limit(10));
+        
+        const querySnapShot = await getDocs(first);
+
         querySnapShot.forEach((doc) => {
             const postObj = {
                 ...doc.data(),
                 id: doc.id,
             }
             setWorryPosts(prev => [...prev, postObj]);
-            // console.log(doc.id, " => " , doc.data())
         });
     };
 
