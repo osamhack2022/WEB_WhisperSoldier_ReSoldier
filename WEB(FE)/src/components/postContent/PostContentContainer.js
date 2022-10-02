@@ -46,7 +46,7 @@ const PostContentContainer = ({
   onDeleteClick,
   toggleEditing,
 }) => {
-  console.log(authService.currentUser.uid, postInfo.creator_id);
+  //console.log(authService.currentUser.uid, postInfo.creator_id);
   console.log(postInfo);
   return (
     <PostContentContainerBox>
@@ -55,14 +55,18 @@ const PostContentContainer = ({
           <FindPasswordButton toLink="/">뒤로가기</FindPasswordButton>
         </SideButtonBox>
         <SideButtonBox isNotTop={true}>
-          {authService.currentUser.uid === postInfo.creator_id ? (
-            <WriteUserButtonContainer
-              editing={editing}
-              onDeleteClick={onDeleteClick}
-              toggleEditing={toggleEditing}
-            ></WriteUserButtonContainer>
+          {authService.currentUser ? (
+            authService.currentUser.uid === postInfo.creator_id ? (
+              <WriteUserButtonContainer
+                editing={editing}
+                onDeleteClick={onDeleteClick}
+                toggleEditing={toggleEditing}
+              ></WriteUserButtonContainer>
+            ) : (
+              <OtherUserButtonContainer></OtherUserButtonContainer>
+            )
           ) : (
-            <OtherUserButtonContainer></OtherUserButtonContainer>
+            <></>
           )}
         </SideButtonBox>
       </SideButtonContainer>

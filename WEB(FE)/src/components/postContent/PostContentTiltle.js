@@ -86,7 +86,7 @@ const PostContentTitle = ({ postInfo }) => {
       </PostUserBox>
 
       <PostContentTime>
-        {postInfo.created_timestamp.toDate().toLocaleString()}
+        {postInfo.created_timestamp !== null ? postInfo.created_timestamp : ""}
       </PostContentTime>
     </PostContentBox>
   );

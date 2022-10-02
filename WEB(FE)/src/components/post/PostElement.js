@@ -41,7 +41,7 @@ const PostElement = ({ post }) => {
     setPostInfo((prev) => ({
       ...prev,
       creator_id: post.creator_id,
-      created_timestamp: post.created_timestamp,
+      created_timestamp: post.created_timestamp.toDate().toLocaleString(),
       id: post.id,
       postContent: post.text,
     }));

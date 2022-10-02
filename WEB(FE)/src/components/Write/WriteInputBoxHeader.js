@@ -14,7 +14,7 @@ const WritePostButtonShape = styled.button`
   text-align: right;
   text-decoration: none;
   border-radius: 25px;
-  border: 2px solid rgb(26, 117, 65);
+  border: 1px solid rgb(26, 117, 65);
   transition: all 0.5s;
   &:hover {
     background: #0d552c;
@@ -41,7 +41,7 @@ export const WritePostButton = ({ onClick, children }) => {
 export const WritePostHeaderBox = styled.div`
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 2px solid #bdbdbd;
+  border-bottom: 1px solid #bdbdbd;
   background-color: #fbfbfb;
   display: flex;
   flex-direction: row;

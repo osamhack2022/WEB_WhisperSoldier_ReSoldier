@@ -26,45 +26,51 @@ const PostCommentTextarea = styled.textarea`
 
 const BottonLine = styled.div`
   margin: 1px 0px;
-  border-top: 2px solid #bdbdbd;
+  border-top: 1px solid #bdbdbd;
 `;
 
-const WritePostButtonShape = styled.button`
+const WriteCommentButtonShape = styled.button`
   margin-top: 5px;
   position: relative;
   padding: 0px 10px;
-  color: #ffffff;
+  color: #0d552c;
   height: 28px;
-  width: 110px;
-  background-color: #1a7541;
+  width: 90px;
+  background-color: rgba(0, 0, 0, 0);
   font-weight: 500;
   font-size: 11px;
-  text-align: right;
+  text-align: center;
   text-decoration: none;
-  border-radius: 25px;
+  border-radius: 5px;
   border: 2px solid rgb(26, 117, 65);
   transition: all 0.5s;
   &:hover {
     background: #0d552c;
+    color: #ffffff;
   }
 `;
 
-const WritPostIcon = styled(TbSend)`
+const WritCommentIcon = styled(TbSend)`
   position: absolute;
   top: 50%;
   left: 15%;
   transform: translate(0%, -50%);
   background-color: rgba(0, 0, 0, 0);
-  color: #ffffff;
+  color: #0d552c;
+  &:hover {
+    color: #ffffff;
+  }
 `;
 
 export const WriteCommentButton = ({ onClick, children }) => {
   return (
-    <WritePostButtonShape onClick={onClick}>
-      <WritPostIcon></WritPostIcon> {children}
-    </WritePostButtonShape>
+    <WriteCommentButtonShape onClick={onClick}>
+      {children}
+    </WriteCommentButtonShape>
   );
 };
+
+//<WritCommentIcon></WritCommentIcon>
 
 const PostCommentForm = ({ state, onChange, onSubmit }) => {
   const autoResizeTextarea = useCallback(() => {

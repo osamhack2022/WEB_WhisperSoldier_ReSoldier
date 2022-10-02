@@ -12,8 +12,8 @@ import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
 import ResetPage from "./pages/ResetPage";
 import "./styles/App.css";
-import { useEffect } from "react";
-import { authService } from "./lib/FAuth";
+import { useEffect, useState } from "react";
+import { authService, FApiKey } from "./lib/FAuth";
 import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
@@ -26,8 +26,15 @@ const Body = styled.div`
 /*각 페이지 라우트*/
 const App = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const [sessionInfo, setSessionInfo] = useState(
+    sessionStorage.getItem(`firebase:authUser:${FApiKey}:[DEFAULT]`)
+  );
   const auth = authService.currentUser;
   console.log(userInfo);
+
+  const _session_key = `firebase:authUser:${FApiKey}:[DEFAULT]`;
+  const is_login = sessionStorage.getItem(_session_key);
+
   /*
   useEffect(() => {
     console.log(auth);
@@ -45,6 +52,7 @@ const App = () => {
             emailChecked: true,
             isLogin: true,
           }));
+          setSessionInfo(sessionStorage.getItem(_session_key));
         } else {
           setUserInfo((prev) => ({
             ...prev,
@@ -54,12 +62,17 @@ const App = () => {
         }
       } else {
         setUserInfo((prev) => ({ ...prev, isLogin: false }));
+        setSessionInfo(null);
       }
     });
   }, []);
+
+  useEffect(() => {
+    setSessionInfo(sessionStorage.getItem(_session_key));
+  }, []);
   return (
     <>
-      {userInfo.isLogin ? (
+      {sessionInfo ? (
         <Body>
           <Header></Header>
           <Routes>

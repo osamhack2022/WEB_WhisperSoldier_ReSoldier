@@ -25,7 +25,7 @@ const InputForm = styled.textarea`
 
 const BottonLine = styled.div`
   margin: 5px 0px;
-  border-top: 2px solid #bdbdbd;
+  border-top: 1px solid #bdbdbd;
 `;
 
 const WritePostBox = ({ state, onChange, onClick }) => {

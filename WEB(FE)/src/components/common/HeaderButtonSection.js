@@ -16,7 +16,7 @@ const ButtonSection = styled.div`
   align-items: center;
 `;
 
-export const HeaderButtonSectionForDesktop = () => {
+export const HeaderButtonSection = () => {
   const location = useLocation();
   const isDesktop = useMediaQuery({ query: "(min-width:1100px)" });
   const isSmaillDesktop = useMediaQuery({ query: "(min-width:900px)" });
@@ -33,15 +33,6 @@ export const HeaderButtonSectionForDesktop = () => {
           isTablet && <></>
         ))}
 
-      <ChatButton></ChatButton>
-      <UserProfileButton></UserProfileButton>
-    </ButtonSection>
-  );
-};
-
-export const HeaderButtonSectionForSmallDesktop = () => {
-  return (
-    <ButtonSection>
       <ChatButton></ChatButton>
       <UserProfileButton></UserProfileButton>
     </ButtonSection>

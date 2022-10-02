@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  browserSessionPersistence,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
 import useForm from "../modules/useForm";
@@ -29,12 +34,38 @@ const LoginPage = () => {
 
     try {
       const auth = authService;
+      auth.setPersistence(browserSessionPersistence).then((res) => {});
+      //.then(() => {});
+      /*
+      setPersistence(auth, browserSessionPersistence)
+        .then(() => {
+          // Existing and future Auth states are now persisted in the current
+          // session only. Closing the window would clear any existing state even
+          // if a user forgets to sign out.
+          // ...
+          // New sign-in will be persisted with session persistence.
+          return signInWithEmailAndPassword(auth, state.email, state.password);
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });*/
+
       const data = await signInWithEmailAndPassword(
-        authService,
+        auth,
         state.email,
         state.password
       );
-      console.log(data);
+
+      //console.log(data);
+      console.log(authService);
+      console.log(authService.currentUser);
+      console.log(authService.currentUser.emailVerified);
+      const {
+        currentUser: { emailVerified },
+      } = authService;
+      console.log(emailVerified);
       if (authService.currentUser.emailVerified === false) {
         setLoginErrorInfo((prev) => ({
           ...prev,
@@ -51,6 +82,7 @@ const LoginPage = () => {
         }, 3000);
       } else {
         console.log("[LoginPage.js] : 로그인 정상]");
+        console.log(auth);
         setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
         navigate("/");
       }

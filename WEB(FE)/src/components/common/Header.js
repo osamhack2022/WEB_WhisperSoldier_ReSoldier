@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { HeaderTitleContainer } from "../container/HeaderTitleContainer";
-import { HeaderButtonSectionForDesktop } from "./HeaderButtonSection";
+import { HeaderButtonSection } from "./HeaderButtonSection";
 import SearchSection from "./SearchSection";
 
 const HeaderBox = styled.header`
@@ -17,7 +17,7 @@ const Header = () => {
     <HeaderBox>
       <HeaderTitleContainer></HeaderTitleContainer>
       <SearchSection></SearchSection>
-      <HeaderButtonSectionForDesktop></HeaderButtonSectionForDesktop>
+      <HeaderButtonSection></HeaderButtonSection>
     </HeaderBox>
   );
 };
