@@ -12,6 +12,7 @@ const PostContentBox = styled.div`
 `;
 
 const PostContentText = styled.div`
+  white-space: pre-wrap;
   font-size: 14px;
   text-align: left;
   letter-spacing: 0.56px;
