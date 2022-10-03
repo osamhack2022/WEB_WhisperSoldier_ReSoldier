@@ -3,10 +3,23 @@ import { useNavigate } from "react-router-dom";
 // 추후에 편집, 삭제 구현 시 authService.currentUser.uid === contentObj.creator_id 비교 목적
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
-import { doc, getDoc, updateDoc, deleteDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { 
+  doc, 
+  updateDoc, 
+  deleteDoc, 
+  addDoc, 
+  collection, 
+  serverTimestamp,
+  getDocs, 
+  orderBy, 
+  query, 
+  where,
+  limit,
+  endBefore
+} from "firebase/firestore";
 import { useRecoilState } from "recoil";
 import { PostInfo } from "../store/PostStore";
-import useForm, { useAndSetForm } from "../modules/useForm.js";
+import { useAndSetForm } from "../modules/useForm.js";
 
 import PostContentContainer from "../components/postContent/PostContentContainer";
 
@@ -20,8 +33,47 @@ const PostPage = () => {
 
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [latestVisibleComment, setLatestVisibleComment] = useState({});
+  
+  const [postComments, setPostComments] = useState([]);
+  const getPostCommentQuery = (isAdd) => {
+    if (!isAdd) {
+      return(query(collection(dbService, "Comment"),
+      where("associated_post_id", "==", postInfo.id),
+      orderBy("created_timestamp", "desc")
+    ))} else {
+      return(query(collection(dbService, "Comment"),
+      where("associated_post_id", "==", postInfo.id),
+      orderBy("created_timestamp", "desc"),
+      endBefore(latestVisibleComment)
+    ))
+    }
+  }
+  const getPostComments = async (isAdd=false) => {
+    const querySnapshot = await getDocs(getPostCommentQuery(isAdd));
+    setLatestVisibleComment(querySnapshot.docs.length === 0 ? null : querySnapshot.docs[0])
+    
+    querySnapshot.forEach((comment) => {
+      const postCommentObj = {
+        ...comment.data(),
+        id: comment.id,
+      }
+      if (isAdd) {
+        setPostComments(prev => [...prev, postCommentObj])
+      } else {
+        setPostComments(prev => [postCommentObj, ...prev])
+      }
+      
+    })
+
+    console.log("comments :", querySnapshot.docs);
+  };
+
 
   const onDeleteClick = async (e) => {
+    const {
+      target: { name },
+    } = e;
     const check = window.confirm("정말로 삭제 하시겠습니까?");
     if (check) {
       console.log(`deleting ${postInfo.id}`);
@@ -37,6 +89,9 @@ const PostPage = () => {
   };
 
   const onClick = async (e) => {
+    const {
+      target: { name },
+    } = e;
     e.preventDefault();
     const check = window.confirm("정말로 수정하시겠습니까?");
     if (check) {
@@ -52,12 +107,10 @@ const PostPage = () => {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("event :", e)
     const {
       target: { name },
     } = e;
-    console.log("NAME: ", name);
-    if (true) {
+    if (name === "submitComment") {
       try {
         const docRef = await addDoc(collection(dbService, "Comment"), {
           commentor_id: authService.currentUser.uid,
@@ -71,6 +124,8 @@ const PostPage = () => {
         console.log("Comment written with ID:", docRef.id);
         alert("댓글이 정상적으로 업로드되었습니다.");
         setState((prev) => ({ ...prev, comment: "" }));
+        //setPostComments([]);
+        getPostComments(true);
       } catch (error) {
         console.log("Error adding comment: ", error);
       }
@@ -83,10 +138,12 @@ const PostPage = () => {
       state={state}
       onChange={onChange}
       editing={editing}
+      postComments={postComments}
       onSubmit={onSubmit}
       onClick={onClick}
       onDeleteClick={onDeleteClick}
       toggleEditing={toggleEditing}
+      getPostComments={getPostComments}
     ></PostContentContainer>
   );
 };

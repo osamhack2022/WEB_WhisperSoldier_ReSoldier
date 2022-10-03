@@ -1,13 +1,6 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { dbService } from "../../lib/FStore";
-import { 
-  collection, 
-  getDocs, 
-  orderBy, 
-  query, 
-  where
-  } from "firebase/firestore";
+import { useEffect } from "react";
+
 
 const PostCommentBox = styled.div`
   margin: 10px 0px 0px 10px;
@@ -25,24 +18,10 @@ const PostCommentElement = styled.div`
 `;
 
 const PostCommentContainer = ({
-  postInfo
+  postComments,
+  getPostComments,
 }) => {
-  const [postComments, setPostComments] = useState([]);
-  const getPostComments = async () => {
-    const postCommentQuery = query(collection(dbService, "Comment"),
-      where("associated_post_id", "==", postInfo.id),
-      orderBy("created_timestamp")
-    )
-    const querySnapshot = await getDocs(postCommentQuery);
-    querySnapshot.forEach((comment) => {
-      const postCommentObj = {
-        ...comment.data(),
-        id: comment.id,
-      }
-      setPostComments(prev => [...prev, postCommentObj])
-    })
-    console.log("comments :", querySnapshot.docs);
-  };
+  
   useEffect(() => {
     getPostComments();
   }, []);

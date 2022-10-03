@@ -32,10 +32,12 @@ const PostContentContainer = ({
   state,
   onChange,
   editing,
+  postComments,
   onClick,
   onSubmit,
   onDeleteClick,
   toggleEditing,
+  getPostComments,
 }) => {
   console.log(authService.currentUser.uid, postInfo.creator_id);
   console.log(postInfo);
@@ -75,6 +77,8 @@ const PostContentContainer = ({
             ></PostCommentForm>
             <PostCommentContainer
               postInfo={postInfo}
+              postComments={postComments}
+              getPostComments={getPostComments}
             ></PostCommentContainer>
           </>
         )}
