@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { authService } from "../../lib/FAuth";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
+import PopularPostContainer from "../container/PopularPostContainer";
 import RecommandTagContainer from "../container/RecommandTagContainer";
 import InputTagContainer from "./InputTageContainer";
 import PostCommentContainer from "./PostCommentContainer";
@@ -41,6 +42,7 @@ const PostContentContainer = ({
   state,
   onChange,
   editing,
+  errorPostInfo,
   onClick,
   onSubmit,
   onDeleteClick,
@@ -54,7 +56,8 @@ const PostContentContainer = ({
         <SideButtonBox>
           <BackButton toLink="/">뒤로가기</BackButton>
         </SideButtonBox>
-        <SideButtonBox isNotTop={true}>
+        {postInfo.created_timestamp ?(
+          <SideButtonBox isNotTop={true}>
           {authService.currentUser ? (
             authService.currentUser.uid === postInfo.creator_id ? (
               <WriteUserButtonContainer
@@ -69,17 +72,20 @@ const PostContentContainer = ({
             <></>
           )}
         </SideButtonBox>
+        ):<></>}
+        
       </SideButtonContainer>
       <PostContentBodyContainer>
-        <PostContentTitle postInfo={postInfo}></PostContentTitle>
+        <PostContentTitle postInfo={postInfo} errorPostInfo={errorPostInfo}></PostContentTitle>
         <PostContentBody
           postInfo={postInfo}
           state={state}
           onChange={onChange}
           editing={editing}
+          errorPostInfo ={errorPostInfo}
           onClick={onClick}
         ></PostContentBody>
-        {!editing && (
+        {postInfo.created_timestamp && !editing && (
           <>
             <PostCommentForm
               state={state}
@@ -91,8 +97,11 @@ const PostContentContainer = ({
         )}
       </PostContentBodyContainer>
       <SideOptionContainer>
+      {postInfo.created_timestamp ? (editing?
+      <>
         <InputTagContainer></InputTagContainer>
         <RecommandTagContainer></RecommandTagContainer>
+        </>:<PopularPostContainer></PopularPostContainer>):<></>}
       </SideOptionContainer>
     </PostContentContainerBox>
   );

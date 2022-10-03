@@ -1,5 +1,5 @@
-import { LikeButton, PostChatButton, ReportButton } from "../common/Buttons";
-import { DeleteButton, EditButton } from "./Test";
+import { DeletePostButton, EditPostButton, LikeButton, PostChatButton, ReportButton } from "../common/Buttons";
+
 
 export const WriteUserButtonContainer = ({
   onDeleteClick,
@@ -8,8 +8,8 @@ export const WriteUserButtonContainer = ({
 }) => {
   return (
     <>
-      <EditButton toggleEditing={toggleEditing} editing={editing}></EditButton>
-      {!editing && <DeleteButton onDeleteClick={onDeleteClick}></DeleteButton>}
+      <EditPostButton toggleEditing={toggleEditing} editing={editing}></EditPostButton>
+      {!editing && <DeletePostButton onDeleteClick={onDeleteClick}></DeletePostButton>}
     </>
   );
 };

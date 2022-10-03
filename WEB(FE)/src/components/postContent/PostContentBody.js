@@ -37,7 +37,7 @@ const BottonLine = styled.div`
   border-top: 2px solid #bdbdbd;
 `;
 
-const PostContentBody = ({ postInfo, state, onChange, editing, onClick }) => {
+const PostContentBody = ({ postInfo, state, onChange, editing, onClick, errorPostInfo }) => {
   return (
     <PostContentBox>
       {editing ? (
@@ -54,10 +54,9 @@ const PostContentBody = ({ postInfo, state, onChange, editing, onClick }) => {
           ></InputForm>
           <BottonLine></BottonLine>
         </>
-      ) : (
-        <>
-          <PostContentText>{postInfo.postContent}</PostContentText>
-        </>
+      ) : (!errorPostInfo ?
+          <PostContentText>{postInfo.postContent}</PostContentText> :
+          <PostContentText>찾으려는 포스트가 존재하지 않습니다.</PostContentText>
       )}
     </PostContentBox>
   );

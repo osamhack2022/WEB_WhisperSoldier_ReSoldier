@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
-import useForm from "../modules/useForm";
+import {useForm} from "../modules/useForm";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { UserInfo } from "../store/AuthStore";
 import { useState } from "react";

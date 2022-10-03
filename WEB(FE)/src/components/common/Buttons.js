@@ -8,6 +8,8 @@ import { IoMdArrowBack } from "react-icons/io";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BsEmojiAngry } from "react-icons/bs";
+import {MdOutlineCancel} from "react-icons/md"
+import {HiOutlineTrash} from "react-icons/hi";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -485,4 +487,95 @@ export const ReportButton = ({ toLink, children }) => {
   );
 };
 
-// 수정하기 버튼 FiEdit2
+// 수정하기 버튼 
+const EditButtonImg = styled(FiEdit2)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const CancelButtonImg = styled(MdOutlineCancel)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+const EditButtonBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${EditButtonImg} &:hover ${CancelButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${EditButtonImg} {
+    /*fill: #1A7541;*/
+    color: #1A7541;
+  }
+  &:hover ${CancelButtonImg} {
+    /*fill: #1A7541;*/
+    color: #A65646;
+  }
+`;
+
+export const EditPostButton = ({ toggleEditing, editing }) => {
+  return (
+    <EditButtonBlock onClick={toggleEditing}>
+      {editing ? <CancelButtonImg></CancelButtonImg> : <EditButtonImg></EditButtonImg>}
+      <CommonButtonText>{editing ? "취소하기" : "수정하기"}</CommonButtonText>
+    </EditButtonBlock>
+  );
+};
+
+// 삭제하기 버튼 HiOutlineTrash
+const DeletePostButtonImg = styled(HiOutlineTrash)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 10px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+const DeletePostButtonBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${DeletePostButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+
+  &:hover ${DeletePostButtonImg} {
+    /*fill: #1A7541;*/
+    color: #A65646;
+  }
+`;
+
+export const DeletePostButton = ({ onDeleteClick }) => {
+  return (
+    <DeletePostButtonBlock onClick={onDeleteClick}>
+      <DeletePostButtonImg></DeletePostButtonImg>
+      <CommonButtonText>삭제하기</CommonButtonText>
+    </DeletePostButtonBlock>
+  );
+};

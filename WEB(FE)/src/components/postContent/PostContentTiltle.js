@@ -30,6 +30,14 @@ const PostContentTiltleText = styled.div`
   font-weight: 600;
 `;
 
+const LoadingText = styled.div`
+  font-size: 14px;
+  text-align: left;
+  letter-spacing: -0.34px;
+  color: #000000;
+  font-weight: 600;
+`;
+
 const UserProfileIcon = styled(RiUser3Line)`
   position: absolute;
   left: 50%;
@@ -77,12 +85,12 @@ const UserProfileImg = () => {
   );
 };
 
-const PostContentTitle = ({ postInfo }) => {
+const PostContentTitle = ({ postInfo, errorPostInfo }) => {
   return (
     <PostContentBox>
       <PostUserBox>
-        <UserProfileImg></UserProfileImg>
-        <PostContentTiltleText>익명</PostContentTiltleText>
+        {postInfo.created_timestamp ?(<><UserProfileImg></UserProfileImg>
+        <PostContentTiltleText>익명</PostContentTiltleText></>):(!errorPostInfo &&<LoadingText>잠시만 기다려주세요</LoadingText>)}
       </PostUserBox>
 
       <PostContentTime>

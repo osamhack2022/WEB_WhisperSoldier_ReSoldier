@@ -58,5 +58,5 @@ const PostElement = ({ post }) => {
     </PostElementBox>
   );
 };
-
 export default PostElement;
+

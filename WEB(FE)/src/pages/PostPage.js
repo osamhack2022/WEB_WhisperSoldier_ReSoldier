@@ -6,13 +6,13 @@ import { dbService } from "../lib/FStore";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useRecoilState } from "recoil";
 import { PostInfo } from "../store/PostStore";
-import useForm from "../modules/useForm.js";
+import {useAndSetForm} from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
 
 const PostPage = () => {
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   // console.log(postInfo); 전역 상태 관리 테스트
-  const [state, onChange] = useForm({
+  const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
   });
@@ -72,7 +72,6 @@ const PostPage = () => {
         ...docSnapShot.data(),
         id,
       };
-      //setContent(contentObj);
       setPostInfo((prev) => ({
         ...prev,
         creator_id: contentObj.creator_id,
@@ -82,16 +81,10 @@ const PostPage = () => {
         id: contentObj.id,
         postContent: contentObj.text,
       }));
-      // conetneObj의 timestamp를 Date로 바꾼 뒤 한국 날짜 형식으로 바꿔준다.
-      // timestamp가 state에 올라간 뒤로부터는 더 이상 timestamp로 인식되지 않는다.
-      // 따라서 state에 올라가기 전에 미리 우리가 원하는 문자열로 변환해준 뒤 올렸다.
-      // 아마 댓글의 시각 표시도 이런 식으로 진행해야 할 것이다.
-      //const postTime = contentObj.created_timestamp.toDate().toLocaleString();
-      /*setPostTimeStr(
-            String((test.getMonth() + 1) + "월 "
-            + test.getDate() + "일 " 
-            + ("0" + test.getHours()).slice(-2) + ":" + ("0" + test.getMinutes()).slice(-2))
-        )*/
+      setState((prev)=>({
+        ...prev,
+        editContent: contentObj.text
+    }));
     } else {
       setErrorPostInfo(true);
       console.log("No such Document!");
@@ -101,7 +94,7 @@ const PostPage = () => {
   useEffect(() => {
     console.log("[PostPage.js]");
     console.log(postInfo);
-    if (postInfo.created_timestamp === null) {
+    if (postInfo.created_timestamp === null) { // 상태 관리 객체가 비어 있을 때를 TimeStamp 값 유무로 관리한다.
       getContent();
     }
     console.log("[PostPage.js]");
@@ -114,6 +107,7 @@ const PostPage = () => {
       state={state}
       onChange={onChange}
       editing={editing}
+      errorPostInfo ={errorPostInfo}
       onSubmit={onSubmit}
       onClick={onClick}
       onDeleteClick={onDeleteClick}

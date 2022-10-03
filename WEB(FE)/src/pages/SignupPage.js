@@ -6,7 +6,7 @@ import {
   signOut,
 } from "firebase/auth";
 import SignUpForm from "../components/auth/SignUpForm";
-import useForm from "../modules/useForm";
+import {useForm} from "../modules/useForm";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../store/AuthStore";
 import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";

@@ -3,7 +3,7 @@ import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import WriteContainer from "../components/container/WriteContainer";
-import useForm from "../modules/useForm";
+import {useForm} from "../modules/useForm";
 
 const WritePage = () => {
   const [state, onChange] = useForm({ postContent: "" });

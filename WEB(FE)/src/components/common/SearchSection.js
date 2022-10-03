@@ -1,6 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
-import useForm from "../../modules/useForm";
+import {useForm} from "../../modules/useForm";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar } from "./InputBox";
 
