@@ -39,9 +39,9 @@ const PostCommentContainer = ({
         ...comment.data(),
         id: comment.id,
       }
-      setPostComments(prev => [postCommentObj, ...prev])
+      setPostComments(prev => [...prev, postCommentObj])
     })
-    console.log("documents :", querySnapshot.docs);
+    console.log("comments :", querySnapshot.docs);
   };
   useEffect(() => {
     getPostComments();
@@ -49,7 +49,6 @@ const PostCommentContainer = ({
   
   return (
     <PostCommentBox>
-      <p>여기는 댓글이 추후에 구현될 공간</p>
       <div>
         {postComments.map(comment => 
           <PostCommentElement key={comment.id}>
@@ -57,7 +56,6 @@ const PostCommentContainer = ({
           </PostCommentElement>
         )}
       </div>
-      <PostCommentElement>{postInfo.id}</PostCommentElement>
     </PostCommentBox>
   );
 };

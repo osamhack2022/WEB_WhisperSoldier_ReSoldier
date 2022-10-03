@@ -52,12 +52,12 @@ const PostPage = () => {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    // 추후 댓글 구현 예정
+    console.log("event :", e)
     const {
       target: { name },
     } = e;
-    console.log();
-    if (name === "submitComment") {
+    console.log("NAME: ", name);
+    if (true) {
       try {
         const docRef = await addDoc(collection(dbService, "Comment"), {
           commentor_id: authService.currentUser.uid,

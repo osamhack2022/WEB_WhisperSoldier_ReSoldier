@@ -60,7 +60,7 @@ const WritPostIcon = styled(TbSend)`
 
 export const WriteCommentButton = ({ onClick, children }) => {
   return (
-    <WritePostButtonShape onClick={onClick}>
+    <WritePostButtonShape name="submitComment" onClick={onClick}>
       <WritPostIcon></WritPostIcon> {children}
     </WritePostButtonShape>
   );
