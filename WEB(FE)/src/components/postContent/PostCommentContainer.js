@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 const PostCommentBox = styled.div`
@@ -32,6 +32,8 @@ const PostCommentContainer = ({
         {postComments.map(comment => 
           <PostCommentElement key={comment.id}>
             {comment.comment_text}
+          <button>수정하기</button>
+          <button>삭제하기</button>
           </PostCommentElement>
         )}
       </div>

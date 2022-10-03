@@ -88,10 +88,10 @@ const PostPage = () => {
   };
 
   const onClick = async (e) => {
+    e.preventDefault();
     const {
       target: { name },
     } = e;
-    e.preventDefault();
     const check = window.confirm("정말로 수정하시겠습니까?");
     if (check) {
       await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
