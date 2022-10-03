@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { dbService } from "../../lib/FStore";
-import { query, collection, getDocs, limit, orderBy, startAfter } from "firebase/firestore";
+import { query, collection, getDocs, limit, orderBy, startAfter, endBefore } from "firebase/firestore";
 import PostBoardTitleContainer from "./PostBoardTilteContainer";
 import styled from "styled-components";
 import PostBoardBodyContainer from "./PostBoardBodyContainer";
@@ -25,7 +25,7 @@ const PostBoard = () => {
   
   const snapshotToPosts = (snapshot, reverse=false) => {
     if (snapshot) {
-      setWorryPosts([]);
+      // 무한스크롤 할 시 주석처리 setWorryPosts([]);
       snapshot.forEach((doc) => {
         const postObj = {
           ...doc.data(),
@@ -84,28 +84,40 @@ const PostBoard = () => {
       limit(10)
     );
     const querySnapshot = await getDocs(next)
-    setTimeout(() => {
-      console.log("earliest visible before: ", lastVisible);
-      console.log("latest visible before: ", firstVisible);
-    }, 2000)
+    
+    console.log("earliest visible before: ", lastVisible);
+    console.log("latest visible before: ", firstVisible);
+    
     setTimeout(() => {
       console.log("this should be earliest visible after :", querySnapshot.docs[querySnapshot.docs.length - 1])
     }, 2000)
     setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
     setFirstVisible(querySnapshot.docs[0]);
     // 만약에 lastVisible 뒤에 문서가 없으면 setIsNoNext(true)
-    setTimeout(() => {
-      console.log("earliest visible after: ", lastVisible);
-      console.log("latest visible after: ", firstVisible);
-      console.log("earliest entirely: ", earliestDoc);
-      console.log("latest entirely: ", latestDoc);
-    }, 2000)
+  
+    console.log("earliest visible after: ", lastVisible);
+    console.log("latest visible after: ", firstVisible);
+    console.log("earliest entirely: ", earliestDoc);
+    console.log("latest entirely: ", latestDoc);
+    
     if (lastVisible === earliestDoc) {
       setIsNoNext(true)
     } else { 
       setIsNoNext(false) 
     }
-    // 아니면 setIsNoNext(false)
+    const afterq = query(collection(dbService, "WorryPost"), 
+    orderBy("created_timestamp", "desc"), 
+    startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]), 
+    limit(1)
+    ); 
+    const afterSnapshot = await getDocs(afterq);
+    console.log("afterq: ", afterq)
+    console.log("snapshot: ", afterSnapshot)
+    if (afterSnapshot.docs.length === 0) {
+      console.log("No More Posts!")
+    } else {
+      console.log("THERE ARE MORE POSTS")
+    }
     snapshotToPosts(querySnapshot);
   }
 
@@ -120,8 +132,8 @@ const PostBoard = () => {
       console.log("earliest visible before: ", lastVisible);
       console.log("latest visible before: ", firstVisible);
     }, 2000)
-    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-    setFirstVisible(querySnapshot.docs[0]);
+    setLastVisible(querySnapshot.docs[0]);
+    setFirstVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
     // 만약에 firstVisible 앞에 문서가 없으면 setIsNoPrev(true)
     setTimeout(() => {
       console.log("earliest visible after: ", lastVisible);
@@ -177,6 +189,9 @@ const PostBoard = () => {
     getDocsLatestOrEarliest(false);
     getFirst();
   }, []);
+  useEffect(() => {
+    console.log(firstVisible);
+  }, [firstVisible]);
   console.log(worryPosts);
   if (worryPosts) {
     return (
