@@ -14,8 +14,7 @@ import {
   orderBy, 
   query, 
   where,
-  limit,
-  endBefore
+  startAfter
 } from "firebase/firestore";
 import { useRecoilState } from "recoil";
 import { PostInfo } from "../store/PostStore";
@@ -44,8 +43,8 @@ const PostPage = () => {
     ))} else {
       return(query(collection(dbService, "Comment"),
       where("associated_post_id", "==", postInfo.id),
-      orderBy("created_timestamp", "desc"),
-      endBefore(latestVisibleComment)
+      orderBy("created_timestamp", "asc"),
+      startAfter(latestVisibleComment)
     ))
     }
   }

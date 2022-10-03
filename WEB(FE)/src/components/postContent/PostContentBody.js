@@ -55,7 +55,7 @@ const PostContentBody = ({ postInfo, state, onChange, editing, onClick }) => {
           <BottonLine></BottonLine>
         </>
       ) : (
-        <PostContentText>{postInfo.postContent}</PostContentText>
+        <PostContentText>{postInfo.postContent}{postInfo.id}</PostContentText>
       )}
     </PostContentBox>
   );
