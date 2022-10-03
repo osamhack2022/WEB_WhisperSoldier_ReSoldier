@@ -55,10 +55,33 @@ export const SubTitle = styled.span`
   font-weight: 600;
 `;
 
+export const MainTitleForTablet = styled.span`
+  margin: 0px;
+  padding: 0px;
+  font-size: 20px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.12px;
+  text-align: center;
+  color: #1a7541;
+`;
+
+export const SubTitleForTablet = styled.span`
+  margin-left: 10px;
+  position: relative;
+  top: -5px;
+  font-size: 14px;
+  text-align: right;
+  letter-spacing: 0.72px;
+  color: #0d552c;
+  font-weight: 600;
+`;
+
 export const MainTitleForMobile = styled.span`
   margin: 0px;
   padding: 0px;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   font-style: normal;
   line-height: normal;
@@ -68,11 +91,9 @@ export const MainTitleForMobile = styled.span`
 `;
 
 export const SubTitleForMobile = styled.span`
-  margin: 0px;
-  padding: 0px;
+  margin-left: 10px;
   position: relative;
-  top: -8px;
-  font-size: 10px;
+  font-size: 13px;
   text-align: right;
   letter-spacing: 0.72px;
   color: #0d552c;

@@ -27,7 +27,7 @@ export const SearchBar = styled.input`
   height: 40px;
   width: 300px;
   background-color: #fbfbfb;
-  border: 2px solid rgb(0, 0, 0);
+  border: 1.5px solid rgb(0, 0, 0);
 `;
 
 export const SearchBarTablet = styled.input`
@@ -36,5 +36,5 @@ export const SearchBarTablet = styled.input`
   height: 40px;
   width: 200px;
   background-color: #fbfbfb;
-  border: 2px solid rgb(0, 0, 0);
+  border: 1.5px solid rgb(0, 0, 0);
 `;

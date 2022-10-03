@@ -23,14 +23,6 @@ const ButtonSectionForTablet = styled.div`
   align-items: center;
 `;
 
-const ButtonSectionForMobile = styled.div`
-  position: absolute;
-  right: 10vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
 export const HeaderButtonSection = ({
   isDesktop,
   isSmaillDesktop,
@@ -48,18 +40,16 @@ export const HeaderButtonSection = ({
           <ChatButton></ChatButton>
           <UserProfileButton></UserProfileButton>
         </ButtonSectionForDesktop>
-      ) : isTablet ? (
-        <ButtonSectionForTablet>
-          {location.pathname !== "/write" && (
-            <WritePostSmallButton></WritePostSmallButton>
-          )}
-          <ChatButton></ChatButton>
-          <UserProfileButton></UserProfileButton>
-        </ButtonSectionForTablet>
       ) : (
-        <ButtonSectionForMobile>
-          <WritePostSmallButton></WritePostSmallButton>
-        </ButtonSectionForMobile>
+        isTablet && (
+          <ButtonSectionForTablet>
+            {location.pathname !== "/write" && (
+              <WritePostSmallButton></WritePostSmallButton>
+            )}
+            <ChatButton></ChatButton>
+            <UserProfileButton></UserProfileButton>
+          </ButtonSectionForTablet>
+        )
       )}
     </>
   );

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
+import { GoSearch } from "react-icons/go";
 import { BsPencilSquare } from "react-icons/bs";
 import { RiUser3Line } from "react-icons/ri";
 import { BsChatDots } from "react-icons/bs";
@@ -8,8 +8,8 @@ import { IoMdArrowBack } from "react-icons/io";
 import { FiEdit2 } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BsEmojiAngry } from "react-icons/bs";
-import {MdOutlineCancel} from "react-icons/md"
-import {HiOutlineTrash} from "react-icons/hi";
+import { MdOutlineCancel } from "react-icons/md";
+import { HiOutlineTrash } from "react-icons/hi";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -168,7 +168,7 @@ export const SearchButtonShape = styled.button`
   }
 `;
 
-export const SearchIcon = styled(FaSearch)`
+export const SearchIcon = styled(GoSearch)`
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -178,13 +178,13 @@ export const SearchIcon = styled(FaSearch)`
 
 const WritePostButtonShape = styled(Link)`
   position: relative;
-  padding: 7px 15px;
+  padding: 8px 15px;
   color: #ffffff;
   height: 40px;
   width: 140px;
   background-color: #1a7541;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   text-align: right;
   text-decoration: none;
   border-radius: 25px;
@@ -232,7 +232,7 @@ const WriteButtonShape = styled(Link)`
   width: 40px;
   border-radius: 50%;
   transition: all 0.5s;
-  border: 2px solid rgb(26, 117, 65);
+  border: 1.5px solid rgb(26, 117, 65);
   &:hover {
     background: #0d552c;
   }
@@ -271,7 +271,7 @@ const UserProfileButtonShape = styled(Link)`
   width: 40px;
   border-radius: 50%;
   transition: all 0.5s;
-  border: 2px solid rgb(26, 117, 65);
+  border: 1.5px solid rgb(26, 117, 65);
   &:hover {
     background: #0d552c;
   }
@@ -310,7 +310,7 @@ const ChatButtonShape = styled(Link)`
   margin-left: 10px;
   border-radius: 50%;
   transition: all 0.5s;
-  border: 2px solid rgb(26, 117, 65);
+  border: 1.5px solid rgb(26, 117, 65);
   &:hover {
     background: #0d552c;
   }
@@ -487,7 +487,7 @@ export const ReportButton = ({ toLink, children }) => {
   );
 };
 
-// 수정하기 버튼 
+// 수정하기 버튼
 const EditButtonImg = styled(FiEdit2)`
   height: 18px;
   width: 18px;
@@ -517,24 +517,33 @@ const EditButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  &:hover ${CommonButtonText}, &:hover ${EditButtonImg} &:hover ${CancelButtonImg} {
+  &:hover
+    ${CommonButtonText},
+    &:hover
+    ${EditButtonImg}
+    &:hover
+    ${CancelButtonImg} {
     color: #000000;
     transform: scale(1.1);
   }
   &:hover ${EditButtonImg} {
     /*fill: #1A7541;*/
-    color: #1A7541;
+    color: #1a7541;
   }
   &:hover ${CancelButtonImg} {
     /*fill: #1A7541;*/
-    color: #A65646;
+    color: #a65646;
   }
 `;
 
 export const EditPostButton = ({ toggleEditing, editing }) => {
   return (
     <EditButtonBlock onClick={toggleEditing}>
-      {editing ? <CancelButtonImg></CancelButtonImg> : <EditButtonImg></EditButtonImg>}
+      {editing ? (
+        <CancelButtonImg></CancelButtonImg>
+      ) : (
+        <EditButtonImg></EditButtonImg>
+      )}
       <CommonButtonText>{editing ? "취소하기" : "수정하기"}</CommonButtonText>
     </EditButtonBlock>
   );
@@ -567,7 +576,7 @@ const DeletePostButtonBlock = styled.div`
 
   &:hover ${DeletePostButtonImg} {
     /*fill: #1A7541;*/
-    color: #A65646;
+    color: #a65646;
   }
 `;
 
@@ -577,5 +586,150 @@ export const DeletePostButton = ({ onDeleteClick }) => {
       <DeletePostButtonImg></DeletePostButtonImg>
       <CommonButtonText>삭제하기</CommonButtonText>
     </DeletePostButtonBlock>
+  );
+};
+
+// 모바일용 네비게이션 바 버튼
+const SearchIconForNav = styled(GoSearch)`
+  margin-top: 5px;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #4f4f4f;
+  transition: all 0.3s;
+`;
+
+const CommonTextForNav = styled.div`
+  margin-top: 10px;
+  font-size: 10px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  text-decoration: none;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  font-weight: 600;
+`;
+
+const SearchNavButtonBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 60px;
+  width: 25%;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${SearchIconForNav}, &:hover ${CommonTextForNav} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+`;
+
+export const SearchNavButton = () => {
+  return (
+    <SearchNavButtonBox>
+      <SearchIconForNav></SearchIconForNav>
+      <CommonTextForNav>검색</CommonTextForNav>
+    </SearchNavButtonBox>
+  );
+};
+
+const WriteIconForNav = styled(BsPencilSquare)`
+  margin-top: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #4f4f4f;
+  transition: all 0.3s;
+`;
+
+const WriteNavButtonBox = styled(Link)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 60px;
+  width: 25%;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${WriteIconForNav}, &:hover ${CommonTextForNav} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+`;
+
+export const WriteNavButton = () => {
+  return (
+    <WriteNavButtonBox to="/write">
+      <WriteIconForNav></WriteIconForNav>
+      <CommonTextForNav>고민 작성</CommonTextForNav>
+    </WriteNavButtonBox>
+  );
+};
+
+const ChatIconForNav = styled(BsChatDots)`
+  margin-top: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #4f4f4f;
+  transition: all 0.3s;
+`;
+
+const ChatNavButtonBox = styled(Link)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 60px;
+  width: 25%;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${ChatIconForNav}, &:hover ${CommonTextForNav} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+`;
+
+export const ChatNavButton = () => {
+  return (
+    <ChatNavButtonBox to="/message">
+      <ChatIconForNav></ChatIconForNav>
+      <CommonTextForNav>채팅</CommonTextForNav>
+    </ChatNavButtonBox>
+  );
+};
+
+const ProfileIconForNav = styled(RiUser3Line)`
+  margin-top: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #4f4f4f;
+  transition: all 0.3s;
+`;
+
+const ProfileNavButtonBox = styled(Link)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  margin: 5px 0px;
+  text-decoration: none;
+  height: 60px;
+  width: 25%;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${ProfileIconForNav}, &:hover ${CommonTextForNav} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+`;
+
+export const ProfileNavButton = () => {
+  return (
+    <ProfileNavButtonBox to="/profile">
+      <ProfileIconForNav></ProfileIconForNav>
+      <CommonTextForNav>프로필</CommonTextForNav>
+    </ProfileNavButtonBox>
   );
 };

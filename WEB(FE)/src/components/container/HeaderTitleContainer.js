@@ -1,9 +1,25 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { MainTitle, MainTitleForMobile, SubTitle } from "../common/Logos";
+import {
+  MainTitle,
+  MainTitleForMobile,
+  MainTitleForTablet,
+  SubTitle,
+  SubTitleForMobile,
+  SubTitleForTablet,
+} from "../common/Logos";
 
 const TitleBox = styled(Link)`
   width: 190px;
+  border: none;
+  text-align: right;
+  height: fit-content;
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const TitleBoxForTablet = styled(Link)`
+  width: 170px;
   border: none;
   text-align: right;
   height: fit-content;
@@ -18,7 +34,8 @@ const TitleBoxForMobile = styled(Link)`
   height: fit-content;
   text-decoration: none;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
 `;
@@ -32,11 +49,20 @@ export const HeaderTitleContainer = () => {
   );
 };
 
+export const HeaderTitleContainerForTablet = () => {
+  return (
+    <TitleBoxForTablet to="/">
+      <MainTitleForTablet>Whisper Solider</MainTitleForTablet>
+      <SubTitleForTablet>익명 군 상담소</SubTitleForTablet>
+    </TitleBoxForTablet>
+  );
+};
+
 export const HeaderTitleContainerForMobile = () => {
   return (
     <TitleBoxForMobile to="/">
       <MainTitleForMobile>Whisper Solider</MainTitleForMobile>
-      <SubTitle>익명 군 상담소</SubTitle>
+      <SubTitleForMobile>익명 군 상담소</SubTitleForMobile>
     </TitleBoxForMobile>
   );
 };

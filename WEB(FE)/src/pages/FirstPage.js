@@ -11,8 +11,6 @@ const Block1 = styled.div`
 const FirstPage = () => {
   return (
     <div>
-      <div>첫 페이지</div>
-      <div></div>
       <AuthTemplate>
         <FirstComment>고민이 있을땐 언제든지</FirstComment>
         <Block1></Block1>

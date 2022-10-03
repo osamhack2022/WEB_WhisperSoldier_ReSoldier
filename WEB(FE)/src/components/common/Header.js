@@ -2,15 +2,11 @@ import styled from "styled-components";
 import {
   HeaderTitleContainer,
   HeaderTitleContainerForMobile,
+  HeaderTitleContainerForTablet,
 } from "../container/HeaderTitleContainer";
 import { HeaderButtonSection } from "./HeaderButtonSection";
 import SearchSection from "./SearchSection";
-import {
-  BigDesktopQuery,
-  DesktopQuery,
-  SmallDesktopQuery,
-  TabletQuery,
-} from "../../lib/Const";
+
 import { useMediaQuery } from "react-responsive";
 import Navigation from "./Navigation";
 
@@ -26,7 +22,7 @@ const HeaderBoxForDesktop = styled.header`
 const HeaderBoxForTablet = styled.header`
   position: relative;
   width: 100%;
-  height: 90px;
+  height: 72px;
   padding: 20px 10vw;
   display: flex;
   align-items: center;
@@ -35,19 +31,13 @@ const HeaderBoxForTablet = styled.header`
 const HeaderBoxForMobile = styled.header`
   position: relative;
   width: 100%;
-  height: 64px;
+  height: 60px;
   padding: 20px 5vw;
   display: flex;
   align-items: center;
 `;
 
-const Header = () => {
-  const isDesktop = useMediaQuery({ query: DesktopQuery });
-  const isSmallDesktop = useMediaQuery({ query: SmallDesktopQuery });
-  const isTablet = useMediaQuery({ query: TabletQuery });
-  console.log("isDesktop : ", isDesktop);
-  console.log("isSmallDesktop : ", isSmallDesktop);
-  console.log("isTablet : ", isTablet);
+const Header = ({ isDesktop, isSmallDesktop, isTablet }) => {
   return (
     <>
       {isDesktop ? (
@@ -66,7 +56,7 @@ const Header = () => {
         </HeaderBoxForDesktop>
       ) : isTablet ? (
         <HeaderBoxForTablet>
-          <HeaderTitleContainer></HeaderTitleContainer>
+          <HeaderTitleContainerForTablet></HeaderTitleContainerForTablet>
           <SearchSection
             isDesktop={isDesktop}
             isSmallDesktop={isSmallDesktop}
@@ -82,11 +72,6 @@ const Header = () => {
         <>
           <HeaderBoxForMobile>
             <HeaderTitleContainerForMobile></HeaderTitleContainerForMobile>
-            <HeaderButtonSection
-              isDesktop={isDesktop}
-              isSmallDesktop={isSmallDesktop}
-              isTablet={isTablet}
-            ></HeaderButtonSection>
           </HeaderBoxForMobile>
           <Navigation></Navigation>
         </>

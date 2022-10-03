@@ -2,7 +2,7 @@ import { useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { authService } from "../lib/FAuth";
 import ResetForm from "../components/auth/ResetForm";
-import {useForm} from "../modules/useForm";
+import { useForm } from "../modules/useForm";
 import { regex } from "../lib/Const";
 import ResetVerifiInfoForm from "../components/auth/ResetVerificationForm";
 
@@ -77,7 +77,6 @@ const ResetPage = () => {
 
   return (
     <div>
-      <div>비밀번호 재설정 페이지</div>
       {resetErrorInfo.isSucces ? (
         <ResetVerifiInfoForm>비밀번호 초기화</ResetVerifiInfoForm>
       ) : (
