@@ -73,7 +73,9 @@ const PostContentContainer = ({
               onChange={onChange}
               onSubmit={onSubmit}
             ></PostCommentForm>
-            <PostCommentContainer></PostCommentContainer>
+            <PostCommentContainer
+              postInfo={postInfo}
+            ></PostCommentContainer>
           </>
         )}
       </PostContentBodyContainer>

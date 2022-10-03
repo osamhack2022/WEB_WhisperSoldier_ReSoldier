@@ -20,7 +20,7 @@ const WritePage = () => {
         tag_name: "",
         text: state.postContent,
       });
-      console.log("Document written with ID: ", docRef.id);
+      console.log("WorryPost written with ID: ", docRef.id);
       alert("고민이 정상적으로 업로드되었습니다.");
       navigate("/");
     } catch (error) {
