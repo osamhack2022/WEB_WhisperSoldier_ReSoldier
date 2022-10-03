@@ -6,7 +6,7 @@ import { dbService } from "../lib/FStore";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useRecoilState } from "recoil";
 import { PostInfo } from "../store/PostStore";
-import {useAndSetForm} from "../modules/useForm.js";
+import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
 
 const PostPage = () => {
@@ -81,10 +81,10 @@ const PostPage = () => {
         id: contentObj.id,
         postContent: contentObj.text,
       }));
-      setState((prev)=>({
+      setState((prev) => ({
         ...prev,
-        editContent: contentObj.text
-    }));
+        editContent: contentObj.text,
+      }));
     } else {
       setErrorPostInfo(true);
       console.log("No such Document!");
@@ -94,7 +94,8 @@ const PostPage = () => {
   useEffect(() => {
     console.log("[PostPage.js]");
     console.log(postInfo);
-    if (postInfo.created_timestamp === null) { // 상태 관리 객체가 비어 있을 때를 TimeStamp 값 유무로 관리한다.
+    if (postInfo.created_timestamp === null) {
+      // 상태 관리 객체가 비어 있을 때를 TimeStamp 값 유무로 관리한다.
       getContent();
     }
     console.log("[PostPage.js]");
@@ -107,7 +108,7 @@ const PostPage = () => {
       state={state}
       onChange={onChange}
       editing={editing}
-      errorPostInfo ={errorPostInfo}
+      errorPostInfo={errorPostInfo}
       onSubmit={onSubmit}
       onClick={onClick}
       onDeleteClick={onDeleteClick}

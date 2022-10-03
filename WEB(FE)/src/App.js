@@ -90,7 +90,16 @@ const App = () => {
             isTablet={isTablet}
           ></Header>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  isDesktop={isDesktop}
+                  isSmallDesktop={isSmallDesktop}
+                  isTablet={isTablet}
+                />
+              }
+            />
             <Route path="/post/:id" element={<PostPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/write" element={<WritePage />} />

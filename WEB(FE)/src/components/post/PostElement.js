@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import calTimeToString from "../../modules/CalTime";
-import { PostInfo } from "../../store/PostStore";
+import { CurrentScrollPos, PostInfo } from "../../store/PostStore";
 
 const PostElementBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
@@ -36,6 +36,8 @@ const PostElementTime = styled.div`
 
 const PostElement = ({ post }) => {
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
+  const [currentScrollPos, setCurrentScrollPos] =
+    useRecoilState(CurrentScrollPos);
 
   const onClick = (post) => {
     setPostInfo((prev) => ({
@@ -45,6 +47,7 @@ const PostElement = ({ post }) => {
       id: post.id,
       postContent: post.text,
     }));
+    setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);
   };
   return (
@@ -59,4 +62,3 @@ const PostElement = ({ post }) => {
   );
 };
 export default PostElement;
-

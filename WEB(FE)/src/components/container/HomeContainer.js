@@ -1,18 +1,53 @@
 import styled from "styled-components";
 import PostBoard from "../post/PostBoard";
 
-const HomeContainerBox = styled.div`
+const HomeContainerBoxForDesktop = styled.div`
+  margin: 0px auto;
+  display: flex;
+  width: fit-content;
+  flex-direction: row;
+`;
+
+const HomeContainerBoxForTablet = styled.div`
   padding: 0px 10vw;
   display: flex;
   flex-direction: row;
 `;
 
-const HomeContainer = () => {
+const HomeContainerBoxForMobile = styled.div`
+  padding: 0px 5vw;
+  display: flex;
+  flex-direction: column;
+`;
+
+const HomeContainer = ({ isDesktop, isSmallDesktop, isTablet }) => {
   return (
     <>
-      <HomeContainerBox>
-        <PostBoard></PostBoard>
-      </HomeContainerBox>
+      {isDesktop ? (
+        <HomeContainerBoxForDesktop>
+          <PostBoard
+            isDesktop={isDesktop}
+            isSmallDesktop={isSmallDesktop}
+            isTablet={isTablet}
+          ></PostBoard>
+        </HomeContainerBoxForDesktop>
+      ) : isTablet ? (
+        <HomeContainerBoxForTablet>
+          <PostBoard
+            isDesktop={isDesktop}
+            isSmallDesktop={isSmallDesktop}
+            isTablet={isTablet}
+          ></PostBoard>
+        </HomeContainerBoxForTablet>
+      ) : (
+        <HomeContainerBoxForMobile>
+          <PostBoard
+            isDesktop={isDesktop}
+            isSmallDesktop={isSmallDesktop}
+            isTablet={isTablet}
+          ></PostBoard>
+        </HomeContainerBoxForMobile>
+      )}
     </>
   );
 };
