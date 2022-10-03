@@ -1,4 +1,3 @@
-import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -8,7 +7,15 @@ import {
   WritePostSmallButton,
 } from "./Buttons";
 
-const ButtonSection = styled.div`
+const ButtonSectionForDesktop = styled.div`
+  position: absolute;
+  right: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ButtonSectionForTablet = styled.div`
   position: absolute;
   right: 10vw;
   display: flex;
@@ -16,25 +23,44 @@ const ButtonSection = styled.div`
   align-items: center;
 `;
 
-export const HeaderButtonSection = () => {
+const ButtonSectionForMobile = styled.div`
+  position: absolute;
+  right: 10vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const HeaderButtonSection = ({
+  isDesktop,
+  isSmaillDesktop,
+  isTablet,
+}) => {
   const location = useLocation();
-  const isDesktop = useMediaQuery({ query: "(min-width:1100px)" });
-  const isSmaillDesktop = useMediaQuery({ query: "(min-width:900px)" });
-  const isTablet = useMediaQuery({ query: "(min-width:400px)" });
   console.log(location);
   return (
-    <ButtonSection>
-      {location.pathname !== "/write" &&
-        (isDesktop ? (
-          <WritePostButton></WritePostButton>
-        ) : isSmaillDesktop ? (
+    <>
+      {isDesktop ? (
+        <ButtonSectionForDesktop>
+          {location.pathname !== "/write" && (
+            <WritePostButton></WritePostButton>
+          )}
+          <ChatButton></ChatButton>
+          <UserProfileButton></UserProfileButton>
+        </ButtonSectionForDesktop>
+      ) : isTablet ? (
+        <ButtonSectionForTablet>
+          {location.pathname !== "/write" && (
+            <WritePostSmallButton></WritePostSmallButton>
+          )}
+          <ChatButton></ChatButton>
+          <UserProfileButton></UserProfileButton>
+        </ButtonSectionForTablet>
+      ) : (
+        <ButtonSectionForMobile>
           <WritePostSmallButton></WritePostSmallButton>
-        ) : (
-          isTablet && <></>
-        ))}
-
-      <ChatButton></ChatButton>
-      <UserProfileButton></UserProfileButton>
-    </ButtonSection>
+        </ButtonSectionForMobile>
+      )}
+    </>
   );
 };

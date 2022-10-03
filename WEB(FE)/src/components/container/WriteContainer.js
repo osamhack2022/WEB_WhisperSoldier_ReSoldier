@@ -16,7 +16,7 @@ const SideOptionContainer = styled.div`
   flex-grow: 1;
 `;
 
-const WriteContainer = ({ state, onChange, onClick }) => {
+const WriteContainer = ({ state, onChange, onClick, errorWritePostInfo }) => {
   return (
     <>
       <WriteContainerBox>
@@ -27,6 +27,7 @@ const WriteContainer = ({ state, onChange, onClick }) => {
           state={state}
           onChange={onChange}
           onClick={onClick}
+          errorWritePostInfo={errorWritePostInfo}
         ></WritePostBox>
         <SideOptionContainer>
           <SideOptionForm></SideOptionForm>

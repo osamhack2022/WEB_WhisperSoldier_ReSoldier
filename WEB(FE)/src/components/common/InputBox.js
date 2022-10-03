@@ -29,3 +29,12 @@ export const SearchBar = styled.input`
   background-color: #fbfbfb;
   border: 2px solid rgb(0, 0, 0);
 `;
+
+export const SearchBarTablet = styled.input`
+  padding: 16px 27px 16px 27px;
+  border-radius: 25px;
+  height: 40px;
+  width: 200px;
+  background-color: #fbfbfb;
+  border: 2px solid rgb(0, 0, 0);
+`;

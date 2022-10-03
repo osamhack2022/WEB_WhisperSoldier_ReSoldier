@@ -38,6 +38,37 @@ export const WritePostButton = ({ onClick, children }) => {
   );
 };
 
+const ErrorWritePostButtonShape = styled.button`
+  position: relative;
+  padding: 0px 10px;
+  color: #ffffff;
+  height: 28px;
+  width: 120px;
+  background-color: #a65646;
+  font-weight: 500;
+  font-size: 11px;
+  text-align: right;
+  text-decoration: none;
+  border-radius: 25px;
+  border: 1px solid rgb(166, 86, 70);
+  transition: all 0.5s;
+
+  animation: vibration 0.1s 5;
+
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
+  }
+`;
+
+const ErrorWritePostButton = ({ children }) => {
+  return <ErrorWritePostButtonShape>{children}</ErrorWritePostButtonShape>;
+};
+
 export const WritePostHeaderBox = styled.div`
   padding-bottom: 10px;
   margin-bottom: 10px;
@@ -49,11 +80,15 @@ export const WritePostHeaderBox = styled.div`
   justify-content: space-between;
 `;
 
-const WritePostHeader = ({ onClick }) => {
+const WritePostHeader = ({ onClick, errorWritePostInfo }) => {
   return (
     <WritePostHeaderBox>
       <WritePostTitle>고민 작성하기</WritePostTitle>
-      <WritePostButton onClick={onClick}>작성완료</WritePostButton>
+      {errorWritePostInfo.isError ? (
+        <ErrorWritePostButton>내용을 입력해 주세요</ErrorWritePostButton>
+      ) : (
+        <WritePostButton onClick={onClick}>작성완료</WritePostButton>
+      )}
     </WritePostHeaderBox>
   );
 };

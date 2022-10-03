@@ -28,10 +28,13 @@ const BottonLine = styled.div`
   border-top: 1px solid #bdbdbd;
 `;
 
-const WritePostBox = ({ state, onChange, onClick }) => {
+const WritePostBox = ({ state, onChange, onClick, errorWritePostInfo }) => {
   return (
     <InputBox>
-      <WritePostHeader onClick={onClick}></WritePostHeader>
+      <WritePostHeader
+        onClick={onClick}
+        errorWritePostInfo={errorWritePostInfo}
+      ></WritePostHeader>
       <InputForm
         name="postContent"
         placeholder="여기를 클릭하여 고민글을 작성해보세요!"
