@@ -42,18 +42,23 @@ const PostContentContainer = ({
   state,
   onChange,
   editing,
+  postComments,
+  getPostComments,
+  
   errorPostInfo,
   onClick,
   onSubmit,
   onDeleteClick,
   toggleEditing,
+  isDesktop, isTablet,
 }) => {
   //console.log(authService.currentUser.uid, postInfo.creator_id);
   console.log(postInfo);
+  console.log(postComments);
   return (
     <PostContentContainerBox>
       <SideButtonContainer>
-        <SideButtonBox>
+        <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
           <BackButton toLink="/">뒤로가기</BackButton>
         </SideButtonBox>
         {postInfo.created_timestamp ?(
@@ -92,7 +97,10 @@ const PostContentContainer = ({
               onChange={onChange}
               onSubmit={onSubmit}
             ></PostCommentForm>
-            <PostCommentContainer></PostCommentContainer>
+            <PostCommentContainer
+            postInfo={postInfo}
+            postComments={postComments}
+            getPostComments={getPostComments}></PostCommentContainer>
           </>
         )}
       </PostContentBodyContainer>

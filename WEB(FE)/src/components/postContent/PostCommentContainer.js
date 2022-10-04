@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import styled from "styled-components";
+import { authService } from "../../lib/FAuth";
+import PostCommentElement from "./PostCommentElement";
 
 const PostCommentBox = styled.div`
   margin: 10px 0px 0px 10px;
@@ -10,10 +13,28 @@ const PostCommentBox = styled.div`
   border: 1px solid rgb(189, 189, 189);
 `;
 
-const PostCommentContainer = () => {
+const PostCommentContainer = ({
+  postComments, 
+  getPostComments}) => {
+    console.log(postComments);
+    useEffect(() => {
+      getPostComments();
+      console.log(postComments);
+    }, []);
+
   return (
     <PostCommentBox>
-      <p>여기는 댓글이 추후에 구현될 공간</p>
+      <div>
+        {postComments.map(comment =>
+          <PostCommentElement
+            key={comment.id}
+            commentElement={comment}
+            isOwner={comment.commentor_id === authService.currentUser.uid}
+            getPostComments={getPostComments}
+          >
+          </PostCommentElement>
+        )}
+      </div>
     </PostCommentBox>
   );
 };

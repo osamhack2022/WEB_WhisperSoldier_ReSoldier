@@ -19,7 +19,7 @@ const TitleBox = styled(Link)`
 `;
 
 const TitleBoxForTablet = styled(Link)`
-  width: 170px;
+  width: 160px;
   border: none;
   text-align: right;
   height: fit-content;

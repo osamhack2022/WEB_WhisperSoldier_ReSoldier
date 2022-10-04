@@ -7,7 +7,6 @@ import {
 import { HeaderButtonSection } from "./HeaderButtonSection";
 import SearchSection from "./SearchSection";
 
-import { useMediaQuery } from "react-responsive";
 import Navigation from "./Navigation";
 
 const HeaderBoxForDesktop = styled.header`

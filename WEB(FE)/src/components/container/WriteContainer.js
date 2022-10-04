@@ -4,12 +4,7 @@ import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
 import { SideOptionForm } from "../common/SideOptionForm";
 import WritePostBox from "../Write/WriteInputBox";
-
-const SideOptionContainer = styled.div`
-  margin-left: 10px;
-  height: fit-content;
-  flex-grow: 1;
-`;
+import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 
 const WriteContainer = ({
   state,
@@ -40,15 +35,13 @@ const WriteContainer = ({
             <BackButton toLink="/">뒤로가기</BackButton>
           </SideButtonBox>
         )}
+        <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
+          <SideOptionForm></SideOptionForm>
+        </SideOptionContainer>
       </WriteContainerBox>
+      
     </>
   );
 };
 
 export default WriteContainer;
-
-/*
-        <SideOptionContainer>
-          <SideOptionForm></SideOptionForm>
-        </SideOptionContainer>
-*/

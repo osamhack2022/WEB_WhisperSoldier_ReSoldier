@@ -100,7 +100,7 @@ const App = () => {
                 />
               }
             />
-            <Route path="/post/:id" element={<PostPage />} />
+            <Route path="/post/:id" element={<PostPage  isDesktop={isDesktop} isTablet={isTablet}/>} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route
               path="/write"

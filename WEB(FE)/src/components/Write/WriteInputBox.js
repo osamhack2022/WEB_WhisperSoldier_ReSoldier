@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import WritePostHeader from "./WriteInputBoxHeader";
 
-const InputBox = styled.div`
+const InputBoxForDesktop = styled.div`
   margin-left: 10px;
   padding: 20px;
   height: 60vh;
-  width: 50vw;
+  flex-grow: 1;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
@@ -13,7 +13,7 @@ const InputBox = styled.div`
 
 const InputForm = styled.textarea`
   background-color: #fbfbfb;
-  width: 46.6vw;
+  width: 100%;
   height: 47vh;
   white-space: pre-wrap;
   border: none;
@@ -26,6 +26,29 @@ const InputForm = styled.textarea`
 const BottonLine = styled.div`
   margin: 5px 0px;
   border-top: 1px solid #bdbdbd;
+`;
+
+const InputBoxForTablet = styled.div`
+margin-left: 10px;
+  padding: 20px;
+  height: 60vh;
+  flex-grow: 1;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
+`;
+
+const InputFormForTablet = styled.textarea`
+  background-color: #fbfbfb;
+  width: inherit;
+  height: 47vh;
+  white-space: pre-wrap;
+  border: none;
+  resize: none;
+  &:focus {
+    outline: none;
+  }
+
 `;
 
 const InputBoxForMobile = styled.div`
@@ -49,6 +72,13 @@ const InputFormForMobile = styled.textarea`
   }
 `;
 
+const InputBox = ({isDesktop,
+  isTablet,children}) => {
+    return (<>{isDesktop?(<InputBoxForDesktop>{children}</InputBoxForDesktop>):(isTablet?<InputBoxForTablet>{children}</InputBoxForTablet>:<InputBoxForMobile>{children}</InputBoxForMobile>)}</>)
+
+}
+
+
 const WritePostBox = ({
   state,
   onChange,
@@ -60,7 +90,7 @@ const WritePostBox = ({
   return (
     <>
       {isTablet ? (
-        <InputBox>
+        <InputBox isDesktop={isDesktop} isTablet={isTablet}>
           <WritePostHeader
             onClick={onClick}
             errorWritePostInfo={errorWritePostInfo}

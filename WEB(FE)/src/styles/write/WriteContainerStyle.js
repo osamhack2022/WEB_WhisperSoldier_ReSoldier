@@ -33,3 +33,40 @@ export const WriteContainerBox = ({ isDesktop, isTablet, children }) => {
     </>
   );
 };
+const SideOptionContainerForDesktop = styled.div`
+  margin-left: 10px;
+  height: fit-content;
+  width: 200px;
+  /*flex-grow: 1;*/
+`;
+
+const SideOptionContainerForTablet = styled.div`
+  margin-left: 10px;
+  height: fit-content;
+  width: 200px;
+  /*flex-grow: 1;*/
+`;
+
+const SideOptionContainerForMobile = styled.div`
+  margin-top: 10px;
+  height: fit-content;
+  width: 100%;
+  position: relative;
+  /*flex-grow: 1;*/
+`;
+
+export const SideOptionContainer = ({ isDesktop, isTablet, children }) => {
+  return (
+    <>
+      {isDesktop ? (
+        <SideOptionContainerForDesktop>
+          {children}
+        </SideOptionContainerForDesktop>
+      ) : isTablet ? (
+        <SideOptionContainerForTablet>{children}</SideOptionContainerForTablet>
+      ) : (
+        <SideOptionContainerForMobile>{children}</SideOptionContainerForMobile>
+      )}
+    </>
+  );
+};
