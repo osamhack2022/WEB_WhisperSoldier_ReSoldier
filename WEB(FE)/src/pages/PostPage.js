@@ -33,7 +33,6 @@ const PostPage = () => {
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [latestVisibleComment, setLatestVisibleComment] = useState({});
-  
   const [postComments, setPostComments] = useState([]);
   const getPostCommentQuery = (isAddingComments) => {
     if (!isAddingComments) {
@@ -48,10 +47,10 @@ const PostPage = () => {
     ))
     }
   }
-  const getPostComments = async (isAddingComments=false, isDeletingComments=false) => {
+  const getPostComments = async (isAddingComments=false, isDeletingOrEditing=false) => {
     const querySnapshot = await getDocs(getPostCommentQuery(isAddingComments));
     setLatestVisibleComment(querySnapshot.docs.length === 0 ? null : querySnapshot.docs[0])
-    if (isDeletingComments) {
+    if (isDeletingOrEditing) {
       setPostComments([]);
     }
     querySnapshot.forEach((comment) => {
@@ -72,14 +71,17 @@ const PostPage = () => {
 
 
   const onDeleteClick = async (e) => {
-    
-      const check = window.confirm("정말로 글을 삭제하시겠습니까?");
-      if (check) {
-        console.log(`deleting ${postInfo.id}`);
-        await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-          alert("글이 삭제되었습니다.")
-        );
-        navigate("/");
+    const check = window.confirm("정말로 글을 삭제하시겠습니까?");
+    if (check) {
+      console.log(`deleting ${postInfo.id}`);
+      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
+        alert("글이 삭제되었습니다.")
+      );
+      const querySnapshot = await getDocs(getPostCommentQuery());
+      querySnapshot.forEach((comment) => {
+        deleteDoc(doc(dbService, "Comment", comment.id))
+      })
+      navigate("/");
     }
   };
 
