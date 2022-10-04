@@ -1,3 +1,4 @@
+import { FiArrowDown } from "react-icons/fi";
 import styled from "styled-components";
 
 const MoreLoadPostButtonText = styled.div`
@@ -9,10 +10,18 @@ const MoreLoadPostButtonText = styled.div`
   font-weight: 400;
 `;
 
+const DownIcon = styled(FiArrowDown)`
+  margin-left: 10px;
+  font-size: 16px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+`;
+
 const MoreLoadPostButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 10px;
-  position: relative;
-  padding: 10px 0px 0px 20px;
   height: 48px;
   width: inherit;
   background-color: #fbfbfb;
@@ -21,14 +30,15 @@ const MoreLoadPostButtonBox = styled.div`
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    background-color: beige;
+    background-color: #dcdcdc;
   }
 `;
 
 const MoreLoadPostButton = ({ updatePostList }) => {
   return (
     <MoreLoadPostButtonBox onClick={updatePostList}>
-      <MoreLoadPostButtonText>10개 더 보기</MoreLoadPostButtonText>
+      <MoreLoadPostButtonText>포스트 10개 더 보기</MoreLoadPostButtonText>
+      <DownIcon></DownIcon>
     </MoreLoadPostButtonBox>
   );
 };

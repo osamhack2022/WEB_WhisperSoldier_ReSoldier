@@ -1,17 +1,36 @@
 import styled from "styled-components";
-
-const SideOptionFormBox = styled.div`
-  position: relative;
-  padding: 10px 0px 0px 20px;
-  height: 200px;
-  width: inherit;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-`;
+import {
+  OptionBox,
+  OptionContent,
+  OptionContentBox,
+  OptionTitle,
+  SideOptionFormBox,
+  SideOptionTitleBox,
+} from "../../styles/common/SideOptionFormStyle";
 
 const SideOptionForm = () => {
-  return <SideOptionFormBox></SideOptionFormBox>;
+  return (
+    <SideOptionFormBox>
+      <SideOptionTitleBox>검색 설정</SideOptionTitleBox>
+      <OptionBox>
+        <OptionTitle>정렬</OptionTitle>
+        <OptionContentBox>
+          <OptionContent>오래된 순</OptionContent>
+          <OptionContent selected={true}>최신 순</OptionContent>
+        </OptionContentBox>
+      </OptionBox>
+      <OptionBox>
+        <OptionTitle>기간</OptionTitle>
+        <OptionContentBox>
+          <OptionContent>1주</OptionContent>
+          <OptionContent>1개월</OptionContent>
+          <OptionContent>6개월</OptionContent>
+          <OptionContent>1년</OptionContent>
+          <OptionContent selected={true}>전체</OptionContent>
+        </OptionContentBox>
+      </OptionBox>
+    </SideOptionFormBox>
+  );
 };
 
 export default SideOptionForm;

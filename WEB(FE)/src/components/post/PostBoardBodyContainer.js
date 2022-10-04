@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const PostBoardBodyBox = styled.div`
@@ -14,4 +15,4 @@ const PostBoardBodyContainer = ({ children }) => {
   return <PostBoardBodyBox>{children}</PostBoardBodyBox>;
 };
 
-export default PostBoardBodyContainer;
+export default React.memo(PostBoardBodyContainer);

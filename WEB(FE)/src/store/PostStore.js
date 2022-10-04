@@ -1,27 +1,27 @@
 import { atom } from "recoil";
 
 export const PostInfo = atom({
-  key: "postInfo", // unique ID (with respect to other atoms/selectors)
+  key: "postInfo",
   default: {
     creator_id: "",
     created_timestamp: null,
     id: "",
     postContent: "",
-  }, // default value (aka initial value)
+  },
 });
 
-export const PostsList = atom({
-  key: "postsList",
+export const PostsRecoil = atom({
+  key: "postsRecoil",
   default: [],
 });
 
-export const CountPost = atom({
-  key: "countPost",
+export const CountCurrentPost = atom({
+  key: "countCurrentPost",
   default: 10,
 });
 
-export const IsLastPost = atom({
-  key: "isLastPost",
+export const IsNextPostExistRecoil = atom({
+  key: "isNextPostExistRecoil",
   default: false,
 });
 
