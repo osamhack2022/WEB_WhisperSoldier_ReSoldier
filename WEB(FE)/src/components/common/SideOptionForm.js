@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import {
   OptionBox,
   OptionContent,
@@ -8,7 +7,13 @@ import {
   SideOptionTitleBox,
 } from "../../styles/common/SideOptionFormStyle";
 
-const SideOptionForm = () => {
+export const SideOptionForm = () => {
+  return (
+    <SideOptionFormBox>태그 입력 및 태그 추천 넣을 공간</SideOptionFormBox>
+  );
+};
+
+export const SideOptionFormForPostBoard = () => {
   return (
     <SideOptionFormBox>
       <SideOptionTitleBox>검색 설정</SideOptionTitleBox>
@@ -32,5 +37,3 @@ const SideOptionForm = () => {
     </SideOptionFormBox>
   );
 };
-
-export default SideOptionForm;

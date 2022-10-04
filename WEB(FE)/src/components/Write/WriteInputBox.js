@@ -28,23 +28,71 @@ const BottonLine = styled.div`
   border-top: 1px solid #bdbdbd;
 `;
 
-const WritePostBox = ({ state, onChange, onClick, errorWritePostInfo }) => {
+const InputBoxForMobile = styled.div`
+  padding: 20px;
+  height: 60vh;
+  width: inherit;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
+`;
+
+const InputFormForMobile = styled.textarea`
+  background-color: #fbfbfb;
+  width: 100%;
+  height: 47vh;
+  white-space: pre-wrap;
+  border: none;
+  resize: none;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const WritePostBox = ({
+  state,
+  onChange,
+  onClick,
+  errorWritePostInfo,
+  isDesktop,
+  isTablet,
+}) => {
   return (
-    <InputBox>
-      <WritePostHeader
-        onClick={onClick}
-        errorWritePostInfo={errorWritePostInfo}
-      ></WritePostHeader>
-      <InputForm
-        name="postContent"
-        placeholder="여기를 클릭하여 고민글을 작성해보세요!"
-        type="text"
-        value={state.postContent}
-        onChange={onChange}
-        required
-      ></InputForm>
-      <BottonLine></BottonLine>
-    </InputBox>
+    <>
+      {isTablet ? (
+        <InputBox>
+          <WritePostHeader
+            onClick={onClick}
+            errorWritePostInfo={errorWritePostInfo}
+          ></WritePostHeader>
+          <InputForm
+            name="postContent"
+            placeholder="여기를 클릭하여 고민글을 작성해보세요!"
+            type="text"
+            value={state.postContent}
+            onChange={onChange}
+            required
+          ></InputForm>
+          <BottonLine></BottonLine>
+        </InputBox>
+      ) : (
+        <InputBoxForMobile>
+          <WritePostHeader
+            onClick={onClick}
+            errorWritePostInfo={errorWritePostInfo}
+          ></WritePostHeader>
+          <InputFormForMobile
+            name="postContent"
+            placeholder="여기를 클릭하여 고민글을 작성해보세요!"
+            type="text"
+            value={state.postContent}
+            onChange={onChange}
+            required
+          ></InputFormForMobile>
+          <BottonLine></BottonLine>
+        </InputBoxForMobile>
+      )}
+    </>
   );
 };
 

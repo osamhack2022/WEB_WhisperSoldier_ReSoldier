@@ -4,7 +4,7 @@ import PostBoard from "../post/PostBoard";
 const HomeContainerBoxForDesktop = styled.div`
   margin: 0px auto;
   display: flex;
-  width: fit-content;
+  width: 960px;
   flex-direction: row;
 `;
 

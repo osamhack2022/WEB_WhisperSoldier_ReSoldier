@@ -1,14 +1,9 @@
 import styled from "styled-components";
+import { WriteContainerBox } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
-import SideOptionForm from "../common/SideOptionForm";
+import { SideOptionForm } from "../common/SideOptionForm";
 import WritePostBox from "../Write/WriteInputBox";
-
-const WriteContainerBox = styled.div`
-  padding: 0px 10vw;
-  display: flex;
-  flex-direction: row;
-`;
 
 const SideOptionContainer = styled.div`
   margin-left: 10px;
@@ -16,25 +11,44 @@ const SideOptionContainer = styled.div`
   flex-grow: 1;
 `;
 
-const WriteContainer = ({ state, onChange, onClick, errorWritePostInfo }) => {
+const WriteContainer = ({
+  state,
+  onChange,
+  onClick,
+  errorWritePostInfo,
+  isDesktop,
+  isTablet,
+}) => {
   return (
     <>
-      <WriteContainerBox>
-        <SideButtonBox>
-          <BackButton toLink="/">뒤로가기</BackButton>
-        </SideButtonBox>
+      <WriteContainerBox isDesktop={isDesktop} isTablet={isTablet}>
+        {isTablet && (
+          <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
+            <BackButton toLink="/">뒤로가기</BackButton>
+          </SideButtonBox>
+        )}
         <WritePostBox
           state={state}
           onChange={onChange}
           onClick={onClick}
           errorWritePostInfo={errorWritePostInfo}
+          isDesktop={isDesktop}
+          isTablet={isTablet}
         ></WritePostBox>
-        <SideOptionContainer>
-          <SideOptionForm></SideOptionForm>
-        </SideOptionContainer>
+        {!isTablet && (
+          <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
+            <BackButton toLink="/">뒤로가기</BackButton>
+          </SideButtonBox>
+        )}
       </WriteContainerBox>
     </>
   );
 };
 
 export default WriteContainer;
+
+/*
+        <SideOptionContainer>
+          <SideOptionForm></SideOptionForm>
+        </SideOptionContainer>
+*/

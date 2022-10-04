@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const PostBoardContainerForDesktop = styled.div`
   height: fit-content;
-  width: 720px;
+  flex-grow: 1;
 `;
 
 const PostBoardContainerForTablet = styled.div`

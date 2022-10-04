@@ -6,7 +6,7 @@ import WriteContainer from "../components/container/WriteContainer";
 import { useForm } from "../modules/useForm";
 import { useState } from "react";
 
-const WritePage = () => {
+const WritePage = ({ isDesktop, isTablet }) => {
   const [state, onChange] = useForm({ postContent: "" });
   const [errorWritePostInfo, setErrorWritePostInfo] = useState({
     isError: false,
@@ -45,6 +45,8 @@ const WritePage = () => {
         onChange={onChange}
         errorWritePostInfo={errorWritePostInfo}
         onClick={onClick}
+        isDesktop={isDesktop}
+        isTablet={isTablet}
       ></WriteContainer>
     </>
   );

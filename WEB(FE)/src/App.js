@@ -102,7 +102,10 @@ const App = () => {
             />
             <Route path="/post/:id" element={<PostPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/write" element={<WritePage />} />
+            <Route
+              path="/write"
+              element={<WritePage isDesktop={isDesktop} isTablet={isTablet} />}
+            />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/message" element={<ChatPage />} />
           </Routes>

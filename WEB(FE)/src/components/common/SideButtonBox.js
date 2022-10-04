@@ -14,8 +14,29 @@ const ButtonContainer = styled.div`
   transition: all 0.5s;
 `;
 
-const SideButtonBox = ({ children, isNotTop }) => {
-  return <ButtonContainer isNotTop={isNotTop}>{children}</ButtonContainer>;
+const ButtonContainerForMobile = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  width: 110px;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
+  margin-top: ${(props) => props.isNotTop && "10px"};
+  transition: all 0.5s;
+`;
+
+const SideButtonBox = ({ isDesktop, isTablet, children, isNotTop }) => {
+  return isTablet ? (
+    <ButtonContainer isNotTop={isNotTop}>{children}</ButtonContainer>
+  ) : (
+    <ButtonContainerForMobile isNotTop={isNotTop}>
+      {children}
+    </ButtonContainerForMobile>
+  );
 };
 
 export default SideButtonBox;

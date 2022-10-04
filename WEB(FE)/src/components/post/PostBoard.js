@@ -3,7 +3,7 @@ import { dbService, dbFunction } from "../../lib/FStore";
 import PostBoardTitleContainer from "./PostBoardTilteContainer";
 import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
-import SideOptionForm from "../common/SideOptionForm";
+import { SideOptionFormForPostBoard } from "../common/SideOptionForm";
 import MoreLoadPostButton from "./MoreLoadPostButton";
 import { useRecoilState } from "recoil";
 import {
@@ -155,7 +155,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
           </PostBoardTitleContainer>
           {!isTablet && isShowContainer && (
             <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-              <SideOptionForm></SideOptionForm>
+              <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
             </SideOptionContainer>
           )}
           <PostBoardBodyContainer>
@@ -173,7 +173,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
         </PostBoardContainer>
         {isTablet && (
           <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-            <SideOptionForm></SideOptionForm>
+            <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}
       </>
