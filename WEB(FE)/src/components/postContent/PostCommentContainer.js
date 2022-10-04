@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-
+import PostCommentElement from "./PostCommentElement";
+import { authService } from "../../lib/FAuth";
 
 const PostCommentBox = styled.div`
   margin: 10px 0px 0px 10px;
@@ -12,12 +13,8 @@ const PostCommentBox = styled.div`
   border: 1px solid rgb(189, 189, 189);
 `;
 
-const PostCommentElement = styled.div`
-  white-space : pre-wrap;
-
-`;
-
 const PostCommentContainer = ({
+  postInfo,
   postComments,
   getPostComments,
 }) => {
@@ -29,11 +26,14 @@ const PostCommentContainer = ({
   return (
     <PostCommentBox>
       <div>
-        {postComments.map(comment => 
-          <PostCommentElement key={comment.id}>
-            {comment.comment_text}
-          <button>수정하기</button>
-          <button>삭제하기</button>
+        {postComments.map(comment =>
+          <PostCommentElement
+            key={comment.id}
+            commentElement={comment}
+            isOwner={comment.commentor_id === authService.currentUser.uid}
+            getPostComments={getPostComments}
+            postInfo={postInfo}
+          >
           </PostCommentElement>
         )}
       </div>

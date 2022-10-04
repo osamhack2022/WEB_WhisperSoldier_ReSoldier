@@ -35,8 +35,8 @@ const PostPage = () => {
   const [latestVisibleComment, setLatestVisibleComment] = useState({});
   
   const [postComments, setPostComments] = useState([]);
-  const getPostCommentQuery = (isAdd) => {
-    if (!isAdd) {
+  const getPostCommentQuery = (isAddingComments) => {
+    if (!isAddingComments) {
       return(query(collection(dbService, "Comment"),
       where("associated_post_id", "==", postInfo.id),
       orderBy("created_timestamp", "desc")
@@ -48,19 +48,21 @@ const PostPage = () => {
     ))
     }
   }
-  const getPostComments = async (isAdd=false) => {
-    const querySnapshot = await getDocs(getPostCommentQuery(isAdd));
+  const getPostComments = async (isAddingComments=false, isDeletingComments=false) => {
+    const querySnapshot = await getDocs(getPostCommentQuery(isAddingComments));
     setLatestVisibleComment(querySnapshot.docs.length === 0 ? null : querySnapshot.docs[0])
-    
+    if (isDeletingComments) {
+      setPostComments([]);
+    }
     querySnapshot.forEach((comment) => {
       const postCommentObj = {
         ...comment.data(),
         id: comment.id,
       }
-      if (isAdd) {
-        setPostComments(prev => [...prev, postCommentObj])
+      if (isAddingComments) {
+        setPostComments(prev => [...prev, postCommentObj]);
       } else {
-        setPostComments(prev => [postCommentObj, ...prev])
+        setPostComments(prev => [postCommentObj, ...prev]);
       }
       
     })
@@ -70,16 +72,14 @@ const PostPage = () => {
 
 
   const onDeleteClick = async (e) => {
-    const {
-      target: { name },
-    } = e;
-    const check = window.confirm("정말로 삭제 하시겠습니까?");
-    if (check) {
-      console.log(`deleting ${postInfo.id}`);
-      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-        alert("삭제 되었습니다.")
-      );
-      navigate("/");
+    
+      const check = window.confirm("정말로 글을 삭제하시겠습니까?");
+      if (check) {
+        console.log(`deleting ${postInfo.id}`);
+        await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
+          alert("글이 삭제되었습니다.")
+        );
+        navigate("/");
     }
   };
 
