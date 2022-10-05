@@ -44,7 +44,6 @@ const PostContentContainer = ({
   editing,
   postComments,
   getPostComments,
-  
   errorPostInfo,
   onClick,
   onSubmit,
@@ -60,8 +59,18 @@ const PostContentContainer = ({
       <SideButtonContainer>
         <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
           <BackButton toLink="/">뒤로가기</BackButton>
+          {!isTablet && postInfo.created_timestamp && (authService.currentUser && (
+            authService.currentUser.uid === postInfo.creator_id ? (
+              <WriteUserButtonContainer
+                editing={editing}
+                onDeleteClick={onDeleteClick}
+                toggleEditing={toggleEditing}
+              ></WriteUserButtonContainer>
+            ) : (
+              <OtherUserButtonContainer></OtherUserButtonContainer>
+            )))}
         </SideButtonBox>
-        {postInfo.created_timestamp ?(
+        {isTablet && postInfo.created_timestamp ?(
           <SideButtonBox isNotTop={true}>
           {authService.currentUser ? (
             authService.currentUser.uid === postInfo.creator_id ? (

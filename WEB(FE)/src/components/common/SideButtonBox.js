@@ -18,10 +18,10 @@ const ButtonContainerForMobile = styled.div`
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+padding : 0px 20px;
   height: fit-content;
-  width: 110px;
+  width: 100%;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);

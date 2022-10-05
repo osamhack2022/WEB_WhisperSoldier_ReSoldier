@@ -17,11 +17,11 @@ const WriteContainer = ({
   return (
     <>
       <WriteContainerBox isDesktop={isDesktop} isTablet={isTablet}>
-        {isTablet && (
+
           <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
             <BackButton toLink="/">뒤로가기</BackButton>
           </SideButtonBox>
-        )}
+
         <WritePostBox
           state={state}
           onChange={onChange}
@@ -30,11 +30,6 @@ const WriteContainer = ({
           isDesktop={isDesktop}
           isTablet={isTablet}
         ></WritePostBox>
-        {!isTablet && (
-          <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
-            <BackButton toLink="/">뒤로가기</BackButton>
-          </SideButtonBox>
-        )}
         <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
           <SideOptionForm></SideOptionForm>
         </SideOptionContainer>

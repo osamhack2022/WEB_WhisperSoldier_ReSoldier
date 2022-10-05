@@ -52,6 +52,7 @@ const InputFormForTablet = styled.textarea`
 `;
 
 const InputBoxForMobile = styled.div`
+margin-top: 10px;
   padding: 20px;
   height: 60vh;
   width: inherit;
