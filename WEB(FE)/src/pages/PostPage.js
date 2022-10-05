@@ -26,7 +26,7 @@ const PostPage = ({ isDesktop, isTablet}) => {
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   // console.log(postInfo); 전역 상태 관리 테스트
-  const [state, setState, setState, onChange] = useAndSetAndSetForm({
+  const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
   });
