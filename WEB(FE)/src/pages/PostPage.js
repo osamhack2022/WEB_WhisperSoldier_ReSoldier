@@ -26,7 +26,7 @@ const PostPage = ({ isDesktop, isTablet}) => {
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   // console.log(postInfo); 전역 상태 관리 테스트
-  const [state, setState, onChange] = useAndSetForm({
+  const [state, setState, setState, onChange] = useAndSetAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
   });
@@ -76,11 +76,11 @@ const PostPage = ({ isDesktop, isTablet}) => {
 
 
   const onDeleteClick = async (e) => {
-    const check = window.confirm("정말로 삭제 하시겠습니까?");
+    const check = window.confirm("정말로 글을 삭제하시겠습니까?");
     if (check) {
       console.log(`deleting ${postInfo.id}`);
       await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-        alert("삭제 되었습니다.")
+        alert("글이 삭제되었습니다.")
       );
       const querySnapshot = await getDocs(getPostCommentQuery());
       querySnapshot.forEach((comment) => {
@@ -96,6 +96,7 @@ const PostPage = ({ isDesktop, isTablet}) => {
 
   const onClick = async (e) => {
     e.preventDefault();
+    
     const check = window.confirm("정말로 수정하시겠습니까?");
     if (check) {
       await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
@@ -110,7 +111,6 @@ const PostPage = ({ isDesktop, isTablet}) => {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    // 추후 댓글 구현 예정
     const {
       target: { name },
     } = e;

@@ -107,9 +107,10 @@ const PostContentContainer = ({
               onSubmit={onSubmit}
             ></PostCommentForm>
             <PostCommentContainer
-            postInfo={postInfo}
-            postComments={postComments}
-            getPostComments={getPostComments}></PostCommentContainer>
+              postInfo={postInfo}
+              postComments={postComments}
+              getPostComments={getPostComments}
+            ></PostCommentContainer>
           </>
         )}
       </PostContentBodyContainer>
