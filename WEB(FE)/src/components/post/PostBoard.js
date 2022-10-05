@@ -10,6 +10,7 @@ import {
   CountCurrentPost,
   CurrentScrollPos,
   IsNextPostExistRecoil,
+  IsUpdatePostList,
   PostsRecoil,
 } from "../../store/PostStore";
 import {
@@ -33,6 +34,8 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   );
   const [currentScrollPos, setCurrentScrollPos] =
     useRecoilState(CurrentScrollPos);
+  const [isUpdatePostList, setIsUpdatePostList] =
+    useRecoilState(IsUpdatePostList);
 
   const snapshotToPosts = useCallback((snapshot) => {
     if (snapshot) {
@@ -127,7 +130,18 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   };
 
   useEffect(() => {
-    if (postsRecoil.length === 0) {
+    console.log("[PostBoard.js]", isUpdatePostList);
+    if (postsRecoil.length === 0 || isUpdatePostList) {
+      if (isUpdatePostList) {
+        setPosts([]);
+        setNextPostSnapShot({});
+        setIsNextPostExist(false);
+        setPostsRecoil([]);
+        setCountCurrentPost(10);
+        setIsNextPostExist(false);
+        setIsUpdatePostList(false);
+        setCurrentScrollPos(0);
+      }
       getFirst();
     } else {
       setPosts(postsRecoil);

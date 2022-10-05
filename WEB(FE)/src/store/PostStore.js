@@ -29,3 +29,8 @@ export const CurrentScrollPos = atom({
   key: "currentScrollPos",
   default: 0,
 });
+
+export const IsUpdatePostList = atom({
+  key: "isUpdatePostList",
+  default: false,
+});

@@ -5,12 +5,15 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import WriteContainer from "../components/container/WriteContainer";
 import { useForm } from "../modules/useForm";
 import { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { IsUpdatePostList } from "../store/PostStore";
 
 const WritePage = ({ isDesktop, isTablet }) => {
   const [state, onChange] = useForm({ postContent: "" });
   const [errorWritePostInfo, setErrorWritePostInfo] = useState({
     isError: false,
   });
+  const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const navigate = useNavigate();
 
   const onClick = async (e) => {
@@ -32,6 +35,7 @@ const WritePage = ({ isDesktop, isTablet }) => {
         });
         console.log("Document written with ID: ", docRef.id);
         alert("고민이 정상적으로 업로드되었습니다.");
+        setIsUpdatePostList(true);
         navigate("/");
       } catch (error) {
         console.log("Error adding document: ", error);
