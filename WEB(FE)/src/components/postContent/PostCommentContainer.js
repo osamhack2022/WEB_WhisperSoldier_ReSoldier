@@ -30,6 +30,7 @@ const PostCommentContainer = ({
             key={comment.id}
             commentElement={comment}
             isOwner={comment.commentor_id === authService.currentUser.uid}
+            created_timestamp = {comment.created_timestamp}
             getPostComments={getPostComments}
           >
           </PostCommentElement>

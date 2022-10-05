@@ -6,6 +6,7 @@ const PostCommentElement = ({
 	commentElement,
 	isOwner,
 	getPostComments,
+	created_timestamp,
 }) => {
 
 	const [isEditingComment, setIsEditingComment] = useState(false);
@@ -63,6 +64,7 @@ const PostCommentElement = ({
 			) : (
 				<div style={{ whiteSpace: "pre-wrap" }}>
 					{commentElement.comment_text}
+					<div>{created_timestamp}</div>
 					{isOwner && (
 						<>
 							<button onClick={toggleCommentEditing}>수정하기</button>

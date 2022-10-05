@@ -43,6 +43,7 @@ const PostContentContainer = ({
   onChange,
   editing,
   postComments,
+  commentList,
   getPostComments,
   errorPostInfo,
   onClick,
@@ -54,6 +55,7 @@ const PostContentContainer = ({
   //console.log(authService.currentUser.uid, postInfo.creator_id);
   console.log(postInfo);
   console.log(postComments);
+  console.log(commentList);
   return (
     <PostContentContainerBox>
       <SideButtonContainer>
@@ -109,6 +111,7 @@ const PostContentContainer = ({
             <PostCommentContainer
               postInfo={postInfo}
               postComments={postComments}
+              commentList={commentList}
               getPostComments={getPostComments}
             ></PostCommentContainer>
           </>

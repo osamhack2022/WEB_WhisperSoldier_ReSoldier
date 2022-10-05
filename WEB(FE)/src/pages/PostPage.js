@@ -9,6 +9,8 @@ import { useRecoilState } from "recoil";
 import { PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
+import { CommentList } from "../store/Comment";
+import { TimeStampToStr } from "../modules/TimeStampToStr";
 
 const PostPage = ({ isDesktop, isTablet}) => {
   const {doc, 
@@ -25,7 +27,8 @@ const PostPage = ({ isDesktop, isTablet}) => {
   startAfter} = dbFunction;
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
-  // console.log(postInfo); 전역 상태 관리 테스트
+  const [commentList, setCommentList] = useRecoilState(CommentList);
+
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
@@ -59,19 +62,25 @@ const PostPage = ({ isDesktop, isTablet}) => {
     }
   
     querySnapshot.forEach((comment) => {
+      //console.log("[PostPage.js - comment.data()]",comment.data());
+      //console.log("[PostPage.js - comment]",comment);
       const postCommentObj = {
         ...comment.data(),
         id: comment.id,
+        created_timestamp : TimeStampToStr(comment.data().created_timestamp)
       }
+      
       if (isAddingComments) {
         setPostComments(prev => [...prev, postCommentObj]);
+        setCommentList(prev => [...prev, postCommentObj]);
       } else {
         setPostComments(prev => [postCommentObj, ...prev]);
+        setCommentList(prev => [...prev, postCommentObj]);
       }
       
     })
-
     console.log("comments :", querySnapshot.docs);
+
   };
 
 
@@ -181,6 +190,7 @@ const PostPage = ({ isDesktop, isTablet}) => {
       onChange={onChange}
       editing={editing}
       postComments={postComments}
+      commentList={commentList}
       getPostComments={getPostComments}
       errorPostInfo={errorPostInfo}
       onSubmit={onSubmit}
