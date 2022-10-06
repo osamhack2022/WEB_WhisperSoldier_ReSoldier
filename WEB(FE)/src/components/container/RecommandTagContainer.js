@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const RecommandTagBox = styled.div`
   margin-top: 10px;
-  position: relative;
   padding: 10px 0px 0px 20px;
   height: 100px;
   width: inherit;

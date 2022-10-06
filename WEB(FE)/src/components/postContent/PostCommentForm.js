@@ -3,10 +3,9 @@ import { TbSend } from "react-icons/tb";
 import styled from "styled-components";
 
 const PostCommentFormBox = styled.div`
-  margin: 10px 0px 0px 10px;
+  margin: 10px 0px 0px 0px;
   padding: 10px 20px;
   height: fit-content;
-  width: 45vw;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
@@ -14,7 +13,7 @@ const PostCommentFormBox = styled.div`
 
 const PostCommentTextarea = styled.textarea`
   background-color: #fbfbfb;
-  width: 42vw;
+  width: 100%;
   max-height: 30vh;
   white-space: pre-wrap;
   border: none;
@@ -56,7 +55,7 @@ const ErrorCommentButtonShape = styled.button`
   padding: 0px 10px;
   color: #ffffff;
   height: 28px;
-  width:fit-content;
+  width: 100%;
   background-color: #a65646;
   font-weight: 500;
   font-size: 11px;
@@ -75,7 +74,6 @@ const ErrorCommentButtonShape = styled.button`
       transform: rotate(-1deg);
     }
   }
-
 `;
 
 const WritCommentIcon = styled(TbSend)`
@@ -100,7 +98,12 @@ export const WriteCommentButton = ({ onClick, children }) => {
 
 //<WritCommentIcon></WritCommentIcon>
 
-const PostCommentForm = ({ state, onChange, onCommentSubmit, errorCommentInfo }) => {
+const PostCommentForm = ({
+  state,
+  onChange,
+  onCommentSubmit,
+  errorCommentInfo,
+}) => {
   const autoResizeTextarea = useCallback(() => {
     let textarea = document.querySelector(".autoTextarea");
 
@@ -123,7 +126,13 @@ const PostCommentForm = ({ state, onChange, onCommentSubmit, errorCommentInfo })
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
       <BottonLine></BottonLine>
-      {errorCommentInfo?<ErrorCommentButtonShape>내용을 입력해주세요</ErrorCommentButtonShape>:<WriteCommentButton onClick={onCommentSubmit}>댓글 작성하기</WriteCommentButton>}
+      {errorCommentInfo ? (
+        <ErrorCommentButtonShape>내용을 입력해주세요</ErrorCommentButtonShape>
+      ) : (
+        <WriteCommentButton onClick={onCommentSubmit}>
+          댓글 작성하기
+        </WriteCommentButton>
+      )}
     </PostCommentFormBox>
   );
 };

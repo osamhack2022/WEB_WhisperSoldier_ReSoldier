@@ -20,7 +20,6 @@ const WriteContainerBoxForMobile = styled.div`
 `;
 
 export const WriteContainerBox = ({ isDesktop, isTablet, children }) => {
-  console.log(isDesktop, isTablet);
   return (
     <>
       {isDesktop ? (

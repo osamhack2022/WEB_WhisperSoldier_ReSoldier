@@ -2,10 +2,9 @@ import styled from "styled-components";
 import PostContentBodyEditHeader from "./PostContentBodyEditHeader";
 
 const PostContentBox = styled.div`
-  margin: 10px 0px 0px 10px;
+  margin: 10px 0px 0px 0px;
   padding: 20px 20px;
   height: fit-content;
-  width: 45vw;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
@@ -38,7 +37,15 @@ const BottonLine = styled.div`
   border-top: 2px solid #bdbdbd;
 `;
 
-const PostContentBody = ({ postInfo, state, onChange, editing, onClick, errorPostInfo, errorEditInfo }) => {
+const PostContentBody = ({
+  postInfo,
+  state,
+  onChange,
+  editing,
+  onClick,
+  errorPostInfo,
+  errorEditInfo,
+}) => {
   return (
     <PostContentBox>
       {editing ? (
@@ -56,9 +63,10 @@ const PostContentBody = ({ postInfo, state, onChange, editing, onClick, errorPos
           ></InputForm>
           <BottonLine></BottonLine>
         </>
-      ) : (!errorPostInfo ?
-          <PostContentText>{postInfo.postContent}</PostContentText> :
-          <PostContentText>찾으려는 포스트가 존재하지 않습니다.</PostContentText>
+      ) : !errorPostInfo ? (
+        <PostContentText>{postInfo.postContent}</PostContentText>
+      ) : (
+        <PostContentText>찾으려는 포스트가 존재하지 않습니다.</PostContentText>
       )}
     </PostContentBox>
   );

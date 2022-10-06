@@ -63,11 +63,12 @@ const PostPage = ({ isDesktop, isTablet }) => {
 
   const onClick = async (e) => {
     e.preventDefault();
-    if(state.editContent.length === 0){
-      setErrorEditInfo(true); 
-      setTimeout(()=>{setErrorEditInfo(false)}, 3000);
-    }
-    else{
+    if (state.editContent.length === 0) {
+      setErrorEditInfo(true);
+      setTimeout(() => {
+        setErrorEditInfo(false);
+      }, 3000);
+    } else {
       const check = window.confirm("정말로 수정하시겠습니까?");
       if (check) {
         await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
@@ -81,9 +82,9 @@ const PostPage = ({ isDesktop, isTablet }) => {
         setIsUpdatePostList(true);
       }
     }
-    
   };
 
+  /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
   const getContent = async () => {
     const docRef = doc(dbService, "WorryPost", id);
     const docSnapShot = await getDoc(docRef);

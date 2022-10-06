@@ -6,6 +6,10 @@ import { RiUser3Line } from "react-icons/ri";
 import { useCallback } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { IoWarningOutline } from "react-icons/io5";
+import { AiOutlineHeart } from "react-icons/ai";
+import { BsEmojiAngry } from "react-icons/bs";
+import { BsChatDots } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 export const CommentBox = styled.div`
   position: relative;
@@ -111,7 +115,7 @@ export const CommentButtonBox = styled.div`
 `;
 
 const CommonButtonText = styled.div`
-  font-size: 11px;
+  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -168,7 +172,7 @@ const EditButtonBlock = styled.div`
   }
 `;
 
-export const EditCommentButton = ({ toggleEditing, editing }) => {
+export const EditCommentButton = ({ toggleEditing, editing, isMobile }) => {
   return (
     <EditButtonBlock onClick={toggleEditing}>
       {editing ? (
@@ -176,7 +180,9 @@ export const EditCommentButton = ({ toggleEditing, editing }) => {
       ) : (
         <EditButtonImg></EditButtonImg>
       )}
-      <CommonButtonText>{editing ? "취소하기" : "수정하기"}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>
+        {editing ? "취소하기" : "수정하기"}
+      </CommonButtonText>
     </EditButtonBlock>
   );
 };
@@ -212,12 +218,128 @@ const DeletePostButtonBlock = styled.div`
   }
 `;
 
-export const DeleteCommentButton = ({ onDeleteClick }) => {
+export const DeleteCommentButton = ({ onDeleteClick, isMobile }) => {
   return (
     <DeletePostButtonBlock onClick={onDeleteClick}>
       <DeletePostButtonImg></DeletePostButtonImg>
-      <CommonButtonText>삭제하기</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>삭제하기</CommonButtonText>
     </DeletePostButtonBlock>
+  );
+};
+
+// 공감하기 버튼
+const LikeButtonImg = styled(AiOutlineHeart)`
+  height: 14px;
+  width: 14px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const LikeButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
+  &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${LikeButtonImg} {
+    fill: #eb5757;
+  }
+`;
+
+export const LikeCommentButton = ({ toLink, children, isMobile }) => {
+  return (
+    <LikeButtonBlock to={toLink} isMobile={isMobile}>
+      <LikeButtonImg></LikeButtonImg>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+    </LikeButtonBlock>
+  );
+};
+
+// 채팅하기 버튼 BsChatDots
+const PostChatButtonImg = styled(BsChatDots)`
+  height: 14px;
+  width: 14px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const PostChatButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
+  &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${PostChatButtonImg} {
+    fill: #4181b1;
+  }
+`;
+
+export const PostChatCommentButton = ({ toLink, children, isMobile }) => {
+  return (
+    <PostChatButtonBlock to={toLink} isMobile={isMobile}>
+      <PostChatButtonImg></PostChatButtonImg>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+    </PostChatButtonBlock>
+  );
+};
+
+//신고하기 버튼 BsEmojiAngry
+const ReportButtonImg = styled(BsEmojiAngry)`
+  height: 14px;
+  width: 14px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const ReportButtonBlock = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  height: 30px;
+  width: fit-content;
+  align-items: center;
+  transition: all 0.2s;
+  &:hover ${CommonButtonText}, &:hover ${ReportButtonImg} {
+    color: #000000;
+    transform: scale(1.1);
+  }
+  &:hover ${ReportButtonImg} {
+    fill: #b78841;
+  }
+`;
+
+export const ReportCommentButton = ({ toLink, children, isMobile }) => {
+  return (
+    <ReportButtonBlock to={toLink} isMobile={isMobile}>
+      <ReportButtonImg></ReportButtonImg>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+    </ReportButtonBlock>
   );
 };
 
@@ -263,7 +385,7 @@ const EditErrorButtonIcon = styled(IoWarningOutline)`
 `;
 
 const EditErrorButtonText = styled.div`
-  font-size: 11px;
+  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -297,24 +419,27 @@ const EditErrorButtonBlock = styled.div`
 export const EditComfirmButton = ({
   onCommentChange,
   editCommentErrorInfo,
+  isMobile,
 }) => {
   console.log(editCommentErrorInfo);
   return editCommentErrorInfo ? (
     <EditErrorButtonBlock>
       <EditErrorButtonIcon></EditErrorButtonIcon>
-      <EditErrorButtonText>내용을 입력해주세요</EditErrorButtonText>
+      <EditErrorButtonText isMobile={isMobile}>
+        내용을 입력해주세요
+      </EditErrorButtonText>
     </EditErrorButtonBlock>
   ) : (
     <EditComfirmButtonBlock onClick={onCommentChange}>
       <EditComfirmButtonImg></EditComfirmButtonImg>
-      <CommonButtonText>수정완료</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>수정완료</CommonButtonText>
     </EditComfirmButtonBlock>
   );
 };
 
 const CommentElementTextArea = styled.textarea`
   background-color: #fbfbfb;
-  width: 42vw;
+  width: 100%;
   max-height: 30vh;
   white-space: pre-wrap;
   border: none;

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const PopularPostBox = styled.div`
-  position: relative;
   padding: 10px 0px 0px 20px;
   height: 100px;
   width: inherit;

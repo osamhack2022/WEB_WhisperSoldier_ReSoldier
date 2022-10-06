@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { WriteContainerBox } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
@@ -17,10 +16,9 @@ const WriteContainer = ({
   return (
     <>
       <WriteContainerBox isDesktop={isDesktop} isTablet={isTablet}>
-
-          <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
-            <BackButton toLink="/">뒤로가기</BackButton>
-          </SideButtonBox>
+        <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
+          <BackButton toLink="/">뒤로가기</BackButton>
+        </SideButtonBox>
 
         <WritePostBox
           state={state}
@@ -30,11 +28,11 @@ const WriteContainer = ({
           isDesktop={isDesktop}
           isTablet={isTablet}
         ></WritePostBox>
+
         <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
           <SideOptionForm></SideOptionForm>
         </SideOptionContainer>
       </WriteContainerBox>
-      
     </>
   );
 };

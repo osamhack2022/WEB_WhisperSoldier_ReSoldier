@@ -14,6 +14,9 @@ import {
   DeleteCommentButton,
   EditComfirmButton,
   EditCommentButton,
+  LikeCommentButton,
+  PostChatCommentButton,
+  ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
 
 const PostCommentElement = ({
@@ -21,6 +24,7 @@ const PostCommentElement = ({
   isOwner,
   getPostComments,
   created_timestamp,
+  isTablet,
 }) => {
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
@@ -88,22 +92,37 @@ const PostCommentElement = ({
           onCommentChange={onCommentChange}
         ></CommentELementEditBox>
       )}
-      {isOwner && (
+      {isOwner ? (
         <CommentButtonBox>
           <EditCommentButton
             toggleEditing={toggleCommentEditing}
             editing={isEditingComment}
+            isMobile={!isTablet}
           ></EditCommentButton>
           {isEditingComment ? (
             <EditComfirmButton
               onCommentChange={onCommentEditAndSubmit}
               editCommentErrorInfo={editCommentErrorInfo}
+              isMobile={!isTablet}
             ></EditComfirmButton>
           ) : (
             <DeleteCommentButton
               onDeleteClick={onDeleteCommentClick}
+              isMobile={!isTablet}
             ></DeleteCommentButton>
           )}
+        </CommentButtonBox>
+      ) : (
+        <CommentButtonBox>
+          <LikeCommentButton toLink="/" isMobile={!isTablet}>
+            공감하기
+          </LikeCommentButton>
+          <PostChatCommentButton toLink="/" isMobile={!isTablet}>
+            채팅하기
+          </PostChatCommentButton>
+          <ReportCommentButton toLink="/" isMobile={!isTablet}>
+            신고하기
+          </ReportCommentButton>
         </CommentButtonBox>
       )}
     </CommentBox>

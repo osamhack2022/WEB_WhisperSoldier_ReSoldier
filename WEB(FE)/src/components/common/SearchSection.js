@@ -5,32 +5,28 @@ import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar, SearchBarTablet } from "./InputBox";
 
 const SearchBoxForDesktop = styled.div`
-  position: absolute;
-  left: 200px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 5vw;
+  margin-left: 100px;
 `;
 
 const SearchSmallBox = styled.div`
   position: absolute;
-  left: 47vw;
+  left: 50vw;
   transform: translate(-50%, 0%);
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 5vw;
 `;
 
 const SearchTabletBox = styled.div`
   position: absolute;
-  left: 47vw;
+  left: 50vw;
   transform: translate(-50%, 0%);
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 5vw;
 `;
 
 const SearchSection = ({ isDesktop, isSmallDesktop, isTablet }) => {

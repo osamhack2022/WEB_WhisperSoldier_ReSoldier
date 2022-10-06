@@ -18,6 +18,7 @@ const NavigationBox = styled.div`
   border-top: 1px solid rgb(26, 117, 65);
   border-top: 1px solid #dcdcdc;
   background-color: #fbfbfb;
+  z-index: 1;
 `;
 
 const Navigation = () => {

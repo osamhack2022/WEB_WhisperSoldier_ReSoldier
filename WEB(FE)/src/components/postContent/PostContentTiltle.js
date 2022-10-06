@@ -5,10 +5,9 @@ const PostContentBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 10px;
   padding: 0px 20px;
+  width: 100%;
   height: 42px;
-  width: 45vw;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
@@ -89,8 +88,14 @@ const PostContentTitle = ({ postInfo, errorPostInfo }) => {
   return (
     <PostContentBox>
       <PostUserBox>
-        {postInfo.created_timestamp ?(<><UserProfileImg></UserProfileImg>
-        <PostContentTiltleText>익명</PostContentTiltleText></>):(!errorPostInfo &&<LoadingText>잠시만 기다려주세요</LoadingText>)}
+        {postInfo.created_timestamp ? (
+          <>
+            <UserProfileImg></UserProfileImg>
+            <PostContentTiltleText>익명</PostContentTiltleText>
+          </>
+        ) : (
+          !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>
+        )}
       </PostUserBox>
 
       <PostContentTime>

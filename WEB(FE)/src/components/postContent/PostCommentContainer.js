@@ -5,7 +5,13 @@ import { dbService, dbFunction } from "../../lib/FStore";
 import PostCommentContent from "./PostCommentContent";
 import PostCommentForm from "./PostCommentForm";
 
-const PostCommentContainer = ({ postInfo, state, setState, onChange }) => {
+const PostCommentContainer = ({
+  postInfo,
+  state,
+  setState,
+  onChange,
+  isTablet,
+}) => {
   const {
     addDoc,
     collection,
@@ -108,6 +114,7 @@ const PostCommentContainer = ({ postInfo, state, setState, onChange }) => {
       <PostCommentContent
         postComments={postComments}
         getPostComments={getPostComments}
+        isTablet={isTablet}
       ></PostCommentContent>
     </>
   );

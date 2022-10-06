@@ -326,7 +326,7 @@ export const ChatButton = () => {
 
 // 뒤로가기 버튼
 const CommonButtonText = styled.div`
-  font-size: 12px;
+  font-size: ${(props) => (props.isMobile ? "10px" : "12px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -339,7 +339,7 @@ const BackButtonImg = styled(IoMdArrowBack)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -350,6 +350,9 @@ const BackButtonBlock = styled(Link)`
   justify-content: space-between;
   align-items: center;
   margin: 5px 0px;
+  padding-right: ${(props) => props.isMobile && "10px"};
+  margin-right: ${(props) => props.isMobile && "10px"};
+  border-right: ${(props) => props.isMobile && "1px solid #dcdcdc"};
   text-decoration: none;
   height: 30px;
   width: fit-content;
@@ -361,11 +364,11 @@ const BackButtonBlock = styled(Link)`
   }
 `;
 
-export const BackButton = ({ toLink, children }) => {
+export const BackButton = ({ toLink, children, isMobile }) => {
   return (
-    <BackButtonBlock to={toLink}>
+    <BackButtonBlock to={toLink} isMobile={isMobile}>
       <BackButtonImg></BackButtonImg>
-      <CommonButtonText>{children}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </BackButtonBlock>
   );
 };
@@ -375,7 +378,7 @@ const LikeButtonImg = styled(AiOutlineHeart)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -391,6 +394,7 @@ const LikeButtonBlock = styled(Link)`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
   &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -400,11 +404,11 @@ const LikeButtonBlock = styled(Link)`
   }
 `;
 
-export const LikeButton = ({ toLink, children }) => {
+export const LikeButton = ({ toLink, children, isMobile }) => {
   return (
-    <LikeButtonBlock to={toLink}>
+    <LikeButtonBlock to={toLink} isMobile={isMobile}>
       <LikeButtonImg></LikeButtonImg>
-      <CommonButtonText>{children}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </LikeButtonBlock>
   );
 };
@@ -414,7 +418,7 @@ const PostChatButtonImg = styled(BsChatDots)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -430,6 +434,7 @@ const PostChatButtonBlock = styled(Link)`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
   &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -439,11 +444,11 @@ const PostChatButtonBlock = styled(Link)`
   }
 `;
 
-export const PostChatButton = ({ toLink, children }) => {
+export const PostChatButton = ({ toLink, children, isMobile }) => {
   return (
-    <PostChatButtonBlock to={toLink}>
+    <PostChatButtonBlock to={toLink} isMobile={isMobile}>
       <PostChatButtonImg></PostChatButtonImg>
-      <CommonButtonText>{children}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </PostChatButtonBlock>
   );
 };
@@ -453,7 +458,7 @@ const ReportButtonImg = styled(BsEmojiAngry)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -478,11 +483,11 @@ const ReportButtonBlock = styled(Link)`
   }
 `;
 
-export const ReportButton = ({ toLink, children }) => {
+export const ReportButton = ({ toLink, children, isMobile }) => {
   return (
-    <ReportButtonBlock to={toLink}>
+    <ReportButtonBlock to={toLink} isMobile={isMobile}>
       <ReportButtonImg></ReportButtonImg>
-      <CommonButtonText>{children}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </ReportButtonBlock>
   );
 };
@@ -492,7 +497,7 @@ const EditButtonImg = styled(FiEdit2)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -502,7 +507,7 @@ const CancelButtonImg = styled(MdOutlineCancel)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -517,6 +522,7 @@ const EditButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
   &:hover
     ${CommonButtonText},
     &:hover
@@ -536,15 +542,17 @@ const EditButtonBlock = styled.div`
   }
 `;
 
-export const EditPostButton = ({ toggleEditing, editing }) => {
+export const EditPostButton = ({ toggleEditing, editing, isMobile }) => {
   return (
-    <EditButtonBlock onClick={toggleEditing}>
+    <EditButtonBlock onClick={toggleEditing} isMobile={isMobile}>
       {editing ? (
         <CancelButtonImg></CancelButtonImg>
       ) : (
         <EditButtonImg></EditButtonImg>
       )}
-      <CommonButtonText>{editing ? "취소하기" : "수정하기"}</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>
+        {editing ? "취소하기" : "수정하기"}
+      </CommonButtonText>
     </EditButtonBlock>
   );
 };
@@ -554,7 +562,7 @@ const DeletePostButtonImg = styled(HiOutlineTrash)`
   height: 18px;
   width: 18px;
   font-weight: 100;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #4f4f4f;
   transition: all 0.3s;
   background-color: rgba(0, 0, 0, 0);
@@ -569,6 +577,7 @@ const DeletePostButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  margin-right: ${(props) => props.isMobile && "10px"};
   &:hover ${CommonButtonText}, &:hover ${DeletePostButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -580,11 +589,11 @@ const DeletePostButtonBlock = styled.div`
   }
 `;
 
-export const DeletePostButton = ({ onDeleteClick }) => {
+export const DeletePostButton = ({ onDeleteClick, isMobile }) => {
   return (
-    <DeletePostButtonBlock onClick={onDeleteClick}>
+    <DeletePostButtonBlock onClick={onDeleteClick} isMobile={isMobile}>
       <DeletePostButtonImg></DeletePostButtonImg>
-      <CommonButtonText>삭제하기</CommonButtonText>
+      <CommonButtonText isMobile={isMobile}>삭제하기</CommonButtonText>
     </DeletePostButtonBlock>
   );
 };

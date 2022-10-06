@@ -1,5 +1,11 @@
 import styled from "styled-components";
 import { authService } from "../../lib/FAuth";
+import {
+  PostContentBodyContainer,
+  PostContentContainerBox,
+  SideButtonContainer,
+} from "../../styles/PostContent/PostContentContainerStyle";
+import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
 import PopularPostContainer from "../container/PopularPostContainer";
@@ -12,29 +18,6 @@ import {
   OtherUserButtonContainer,
   WriteUserButtonContainer,
 } from "./SideButtonContainer";
-
-const PostContentContainerBox = styled.div`
-  padding: 0px 10vw;
-  display: flex;
-  flex-direction: row;
-`;
-
-const SideButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PostContentBodyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SideOptionContainer = styled.div`
-  margin-left: 10px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
 
 const PostContentContainer = ({
   postInfo,
@@ -51,10 +34,12 @@ const PostContentContainer = ({
   isTablet,
 }) => {
   return (
-    <PostContentContainerBox>
-      <SideButtonContainer>
+    <PostContentContainerBox isDesktop={isDesktop} isTablet={isTablet}>
+      <SideButtonContainer isDesktop={isDesktop} isTablet={isTablet}>
         <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
-          <BackButton toLink="/">뒤로가기</BackButton>
+          <BackButton toLink="/" isMobile={!isTablet}>
+            뒤로가기
+          </BackButton>
           {!isTablet &&
             postInfo.created_timestamp &&
             authService.currentUser &&
@@ -63,13 +48,21 @@ const PostContentContainer = ({
                 editing={editing}
                 onDeleteClick={onDeleteClick}
                 toggleEditing={toggleEditing}
+                isMobile={!isTablet}
               ></WriteUserButtonContainer>
             ) : (
-              <OtherUserButtonContainer></OtherUserButtonContainer>
+              <OtherUserButtonContainer
+                isMobile={!isTablet}
+              ></OtherUserButtonContainer>
             ))}
         </SideButtonBox>
+
         {isTablet && postInfo.created_timestamp ? (
-          <SideButtonBox isNotTop={true}>
+          <SideButtonBox
+            isNotTop={true}
+            isDesktop={isDesktop}
+            isTablet={isTablet}
+          >
             {authService.currentUser ? (
               authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer
@@ -88,7 +81,7 @@ const PostContentContainer = ({
           <></>
         )}
       </SideButtonContainer>
-      <PostContentBodyContainer>
+      <PostContentBodyContainer isDesktop={isDesktop} isTablet={isTablet}>
         <PostContentTitle
           postInfo={postInfo}
           errorPostInfo={errorPostInfo}
@@ -108,10 +101,11 @@ const PostContentContainer = ({
             state={state}
             setState={setState}
             onChange={onChange}
+            isTablet={isTablet}
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>
-      <SideOptionContainer>
+      <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
         {postInfo.created_timestamp ? (
           editing ? (
             <>
