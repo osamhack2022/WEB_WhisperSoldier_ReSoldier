@@ -1,4 +1,5 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where, Timestamp } from "firebase/firestore";
+import { SideOptionFormForPostBoard } from "../components/common/SideOptionForm";
 import { useState } from "react";
 import { dbService } from "../lib/FStore";
 import { Link } from "react-router-dom";
@@ -8,6 +9,26 @@ const SearchPage = () => {
 	const [searchInput, setSearchInput] = useState("");
 	const [isSearching, setIsSearching] = useState(false);
 	var visibleResultRange = 10;
+	const now = new Date();
+	const getTimeDepth = (critera) => {
+		switch(critera) {
+			case 'week':
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)))
+			
+			case 'month':
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())))
+
+			case 'halfyear':
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 6, now.getDate())))
+
+			case 'fullyear':
+				return(Timestamp.fromDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7)))
+
+			default:
+				return(-8640000000000000)
+		}
+	}
+	console.log("Timestamp : ", getTimeDepth())
 
 	const onSearchSubmit = async (e) => {
 		e.preventDefault();
@@ -15,15 +36,31 @@ const SearchPage = () => {
 		setIsSearching(true);
 	}
 
-	const getSearchResultsQuery = (isOrderByLikes=false) => {
+	const getSearchResultsQuery = (isOrderByLikes=false, orderByDesc=false, searchTimeDepth) => {
 		if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
-			return (query(collection(dbService, "WorryPost"),
-			orderBy("like_count", "desc"),
-			))
+			if (orderByDesc) {
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("like_count", "desc"),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
+			} else {
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("like_count", "asc"),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
+			}
 		} else {
-			return (query(collection(dbService, "WorryPost"),
-			orderBy("created_timestamp", "desc"),
-			))
+			if (orderByDesc) {
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", "desc"),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
+			} else {
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", "asc"),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
+			}
 		} 
 	}
 
@@ -59,7 +96,7 @@ const SearchPage = () => {
 	}
 
 	const getSearchResults = async (extendingVisibleRange=false, visibleResultRange=10) => {
-    const querySnapshot = await getDocs(getSearchResultsQuery());
+    const querySnapshot = await getDocs(getSearchResultsQuery(false, false));
     if (extendingVisibleRange) {
       setSearchResults([]);
     }
@@ -78,6 +115,7 @@ const SearchPage = () => {
 			<input type="text" value={searchInput} onChange={onSearchInputChange} limit={50}></input>
 			<button type="submit">검색하기</button>
 		</form>
+		<SideOptionFormForPostBoard></SideOptionFormForPostBoard>
 		<div>{(isSearching) && `"${searchInput}"을 키워드로 한 검색 결과`}</div>
 		<div>검색 설정</div>
 		<div>검색 결과 중 {searchResults.length}개 고민 표시
