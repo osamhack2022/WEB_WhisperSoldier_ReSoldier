@@ -618,7 +618,7 @@ const CommonTextForNav = styled.div`
   font-weight: 600;
 `;
 
-const SearchNavButtonBox = styled.div`
+const SearchNavButtonBox = styled(Link)`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -635,9 +635,9 @@ const SearchNavButtonBox = styled.div`
   }
 `;
 
-export const SearchNavButton = () => {
+export const SearchNavButton = ({toLink}) => {
   return (
-    <SearchNavButtonBox>
+    <SearchNavButtonBox to={toLink}>
       <SearchIconForNav></SearchIconForNav>
       <CommonTextForNav>검색</CommonTextForNav>
     </SearchNavButtonBox>

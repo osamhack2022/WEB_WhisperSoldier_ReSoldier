@@ -247,7 +247,7 @@ const LikeButtonBlock = styled(Link)`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right: 10px;
   &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -286,7 +286,7 @@ const PostChatButtonBlock = styled(Link)`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right:10px;
   &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
     color: #000000;
     transform: scale(1.1);

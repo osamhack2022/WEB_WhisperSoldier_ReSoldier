@@ -24,7 +24,7 @@ const NavigationBox = styled.div`
 const Navigation = () => {
   return (
     <NavigationBox>
-      <SearchNavButton></SearchNavButton>
+      <SearchNavButton toLink="/search"></SearchNavButton>
       <WriteNavButton></WriteNavButton>
       <ChatNavButton></ChatNavButton>
       <ProfileNavButton></ProfileNavButton>
