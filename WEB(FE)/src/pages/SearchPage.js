@@ -74,6 +74,7 @@ const SearchPage = () => {
 						totalCount+=1;
 					}
 					else if(count === countSearchPost){
+						count+=1;
 						totalCount+=1;
 						setNextPostSnapShot(snapshot.docs[i-1]);
 					}
@@ -83,6 +84,7 @@ const SearchPage = () => {
 					}
 				}
 			}
+			count-=1;
 			if(totalCount<=countSearchPost){
 				setIsNextResultExist(false);
 			}
@@ -99,8 +101,7 @@ const SearchPage = () => {
 		const snapshot = await getDocs(query(
 			collection(dbService, "WorryPost"),
 			orderBy("created_timestamp", "desc"),
-			startAfter(nextResultSnapshot),
-			limit(countSearchPost)));
+			startAfter(nextResultSnapshot)));
 		console.log(snapshot);
 		if (snapshot) {
 			let count = 0;
@@ -118,6 +119,7 @@ const SearchPage = () => {
 						totalCount+=1;
 					}
 					else if(count === countSearchPost){
+						count+=1;
 						totalCount+=1;
 						setNextPostSnapShot(snapshot.docs[i-1]);
 					}
@@ -127,6 +129,7 @@ const SearchPage = () => {
 					}
 				}
 			}
+			count-=1;
 			if(totalCount<=countSearchPost){
 				setIsNextResultExist(false);
 			}
@@ -157,7 +160,7 @@ const SearchPage = () => {
 		<div>검색 결과 {countResult}개 중 {searchResults.length}개 고민 표시
 			<br />
 			{(searchResults.length > visibleResultRange) && "전부 검색했습니다!"}
-			{!isNextResultExist && "더이상 찾는 결과가 없습니다." }
+			
 			<br />
 			{searchResults.map(result => 
 				<div key={result.id}>
@@ -166,9 +169,10 @@ const SearchPage = () => {
 					<hr />
 				</div>)
 			}
+			{!isNextResultExist && "더이상 찾는 결과가 없습니다." }
 			{(searchResults.length === 0 && isSearching) && "검색결과가 없습니다."}
-			{!isNextResultExist && "검색 결과가 없습니다." }
 		</div>
+		{isNextResultExist&&<button type="button" onClick={onClick}>10개 더보기</button>}
 		{(searchResults.length > 9 && (searchResults.length <= visibleResultRange) && searchResults.length !== 0) && <button type="button" onClick={onClick}>10개 더</button>}
 		</>
 	)
