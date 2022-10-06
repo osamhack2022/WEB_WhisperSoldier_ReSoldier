@@ -1,6 +1,7 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useState } from "react";
 import { dbService } from "../lib/FStore";
+import { Link } from "react-router-dom";
 
 const SearchPage = () => {
 	const [searchResults, setSearchResults] = useState([]);
@@ -12,11 +13,10 @@ const SearchPage = () => {
 		e.preventDefault();
 		getSearchResults(true);
 		setIsSearching(true);
-		console.log("SearchResFromSubmit:", searchResults);
 	}
 
-	const getSearchResultsQuery = (isOrderByLike=false) => {
-		if (isOrderByLike) { // 추후에 "공감하기" 구현되면 사용될 예정
+	const getSearchResultsQuery = (isOrderByLikes=false) => {
+		if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
 			return (query(collection(dbService, "WorryPost"),
 			orderBy("like_count", "desc"),
 			))
@@ -86,11 +86,14 @@ const SearchPage = () => {
 			<br />
 			{searchResults.map(result => 
 				<div key={result.id}>
-					{result.text}
+					
+					<Link to={`../post/${result.id}`}>{result.text}</Link>
 					<hr />
-				</div>)}
+				</div>)
+			}
+			{(searchResults.length === 0 && isSearching) && "검색결과가 없습니다."}
 		</div>
-		{(searchResults.length <= visibleResultRange) && <button type="button" onClick={onClick}>10개 더</button>}
+		{(searchResults.length > 9 && (searchResults.length <= visibleResultRange) && searchResults.length !== 0) && <button type="button" onClick={onClick}>10개 더</button>}
 		</>
 	)
 }
