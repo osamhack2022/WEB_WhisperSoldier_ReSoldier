@@ -42,12 +42,40 @@ const WriteCommentButtonShape = styled.button`
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
-  border: 2px solid rgb(26, 117, 65);
+  border: 1px solid rgb(26, 117, 65);
   transition: all 0.5s;
   &:hover {
     background: #0d552c;
     color: #ffffff;
   }
+`;
+
+const ErrorCommentButtonShape = styled.button`
+  margin-top: 5px;
+  position: relative;
+  padding: 0px 10px;
+  color: #ffffff;
+  height: 28px;
+  width:fit-content;
+  background-color: #a65646;
+  font-weight: 500;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid rgb(166, 86, 70);
+  transition: all 0.5s;
+  animation: vibration 0.1s 5;
+
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
+  }
+
 `;
 
 const WritCommentIcon = styled(TbSend)`
@@ -72,7 +100,7 @@ export const WriteCommentButton = ({ onClick, children }) => {
 
 //<WritCommentIcon></WritCommentIcon>
 
-const PostCommentForm = ({ state, onChange, onSubmit }) => {
+const PostCommentForm = ({ state, onChange, onCommentSubmit, errorCommentInfo }) => {
   const autoResizeTextarea = useCallback(() => {
     let textarea = document.querySelector(".autoTextarea");
 
@@ -95,7 +123,7 @@ const PostCommentForm = ({ state, onChange, onSubmit }) => {
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
       <BottonLine></BottonLine>
-      <WriteCommentButton onClick={onSubmit}>댓글 작성하기</WriteCommentButton>
+      {errorCommentInfo?<ErrorCommentButtonShape>내용을 입력해주세요</ErrorCommentButtonShape>:<WriteCommentButton onClick={onCommentSubmit}>댓글 작성하기</WriteCommentButton>}
     </PostCommentFormBox>
   );
 };

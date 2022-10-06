@@ -65,7 +65,7 @@ const ErrorWritePostButtonShape = styled.button`
   }
 `;
 
-const ErrorWritePostButton = ({ children }) => {
+export const ErrorWritePostButton = ({ children }) => {
   return <ErrorWritePostButtonShape>{children}</ErrorWritePostButtonShape>;
 };
 

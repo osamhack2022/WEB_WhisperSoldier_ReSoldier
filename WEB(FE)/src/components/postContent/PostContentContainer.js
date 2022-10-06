@@ -41,22 +41,15 @@ const PostContentContainer = ({
   state,
   onChange,
   editing,
-  postComments,
-  commentList,
-  getPostComments,
   errorPostInfo,
+  errorEditInfo,
   onClick,
-  onSubmit,
   setState,
   onDeleteClick,
   toggleEditing,
   isDesktop,
   isTablet,
 }) => {
-  //console.log(authService.currentUser.uid, postInfo.creator_id);
-  console.log(postInfo);
-  console.log(postComments);
-  console.log(commentList);
   return (
     <PostContentContainerBox>
       <SideButtonContainer>
@@ -107,6 +100,7 @@ const PostContentContainer = ({
           editing={editing}
           errorPostInfo={errorPostInfo}
           onClick={onClick}
+          errorEditInfo={errorEditInfo}
         ></PostContentBody>
         {postInfo.created_timestamp && !editing && (
           <PostCommentContainer

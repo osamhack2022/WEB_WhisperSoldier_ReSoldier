@@ -38,13 +38,14 @@ const BottonLine = styled.div`
   border-top: 2px solid #bdbdbd;
 `;
 
-const PostContentBody = ({ postInfo, state, onChange, editing, onClick, errorPostInfo }) => {
+const PostContentBody = ({ postInfo, state, onChange, editing, onClick, errorPostInfo, errorEditInfo }) => {
   return (
     <PostContentBox>
       {editing ? (
         <>
           <PostContentBodyEditHeader
             onClick={onClick}
+            errorEditInfo={errorEditInfo}
           ></PostContentBodyEditHeader>
           <InputForm
             name="editContent"

@@ -32,6 +32,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
   const { id } = useParams();
   const [editing, setEditing] = useState(false);
   const [errorPostInfo, setErrorPostInfo] = useState(false);
+  const [errorEditInfo, setErrorEditInfo] = useState(false);
 
   const onDeleteClick = async (e) => {
     const check = window.confirm("정말로 글을 삭제하시겠습니까?");
@@ -62,19 +63,25 @@ const PostPage = ({ isDesktop, isTablet }) => {
 
   const onClick = async (e) => {
     e.preventDefault();
-
-    const check = window.confirm("정말로 수정하시겠습니까?");
-    if (check) {
-      await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-        text: state.editContent,
-      })
-        .then(
-          setPostInfo((prev) => ({ ...prev, postContent: state.editContent }))
-        )
-        .then(alert("수정되었습니다."))
-        .then(setEditing(false));
-      setIsUpdatePostList(true);
+    if(state.editContent.length === 0){
+      setErrorEditInfo(true); 
+      setTimeout(()=>{setErrorEditInfo(false)}, 3000);
     }
+    else{
+      const check = window.confirm("정말로 수정하시겠습니까?");
+      if (check) {
+        await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+          text: state.editContent,
+        })
+          .then(
+            setPostInfo((prev) => ({ ...prev, postContent: state.editContent }))
+          )
+          .then(alert("수정되었습니다."))
+          .then(setEditing(false));
+        setIsUpdatePostList(true);
+      }
+    }
+    
   };
 
   const getContent = async () => {
@@ -119,6 +126,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
       editing={editing}
       setState={setState}
       errorPostInfo={errorPostInfo}
+      errorEditInfo={errorEditInfo}
       onClick={onClick}
       onDeleteClick={onDeleteClick}
       toggleEditing={toggleEditing}

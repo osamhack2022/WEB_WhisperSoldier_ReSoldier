@@ -20,15 +20,29 @@ const FooterText = styled.div`
   height: 14px;
 `;
 
-const Footer = () => {
+const FooterBoxForMobile = styled.footer`
+  width: 100%;
+  height: 90px;
+  margin: 20px 0px 50px 0px;
+  /*margin-bottom: 50px;*/
+  padding: 20px 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+
+const Footer = ({isTablet}) => {
   const curDate = new Date();
   return (
     <>
-      <FooterBox>
+      {isTablet?<FooterBox>
         <FooterText>
           copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
         </FooterText>
-      </FooterBox>
+      </FooterBox>:<FooterBoxForMobile><FooterText>
+          copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
+        </FooterText></FooterBoxForMobile>}
     </>
   );
 };

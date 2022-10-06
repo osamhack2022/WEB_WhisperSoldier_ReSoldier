@@ -1,14 +1,15 @@
 import { WritePostTitle } from "../Write/WriteComponent";
 import {
+  ErrorWritePostButton,
   WritePostButton,
   WritePostHeaderBox,
 } from "../Write/WriteInputBoxHeader";
 
-const PostContentBodyEditHeader = ({ onClick }) => {
+const PostContentBodyEditHeader = ({ onClick, errorEditInfo }) => {
   return (
     <WritePostHeaderBox>
       <WritePostTitle>고민 수정하기</WritePostTitle>
-      <WritePostButton onClick={onClick}>수정 완료</WritePostButton>
+      {errorEditInfo?<ErrorWritePostButton>내용을 입력해 주세요</ErrorWritePostButton>:<WritePostButton onClick={onClick}>수정 완료</WritePostButton>}
     </WritePostHeaderBox>
   );
 };

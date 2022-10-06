@@ -19,6 +19,8 @@ const PostCommentContainer = ({ postInfo, state, setState, onChange }) => {
 
   const [latestVisibleComment, setLatestVisibleComment] = useState({});
   const [postComments, setPostComments] = useState([]);
+  const [errorCommentInfo, setCommentInfo] = useState(false);
+
   const getPostCommentQuery = (isAddingComments) => {
     if (!isAddingComments) {
       return query(
@@ -67,25 +69,31 @@ const PostCommentContainer = ({ postInfo, state, setState, onChange }) => {
 
   console.log(postComments);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const docRef = await addDoc(collection(dbService, "Comment"), {
-        commentor_id: authService.currentUser.uid,
-        associated_post_id: postInfo.id,
-        comment_text: state.comment,
-        comment_report: false,
-        comment_rep_accept: false,
-        like_count: 0,
-        created_timestamp: serverTimestamp(),
-      });
-      console.log("Comment written with ID:", docRef.id);
-      alert("댓글이 정상적으로 업로드되었습니다.");
-      setState((prev) => ({ ...prev, comment: "" }));
-      setPostComments([]);
-      getPostComments(true);
-    } catch (error) {
-      console.log("Error adding comment: ", error);
+  const onCommentSubmit = async () => {
+    if (state.comment.length === 0) {
+      setCommentInfo(true);
+      setTimeout(() => {
+        setCommentInfo(false);
+      }, 3000);
+    } else {
+      try {
+        const docRef = await addDoc(collection(dbService, "Comment"), {
+          commentor_id: authService.currentUser.uid,
+          associated_post_id: postInfo.id,
+          comment_text: state.comment,
+          comment_report: false,
+          comment_rep_accept: false,
+          like_count: 0,
+          created_timestamp: serverTimestamp(),
+        });
+        console.log("Comment written with ID:", docRef.id);
+        alert("댓글이 정상적으로 업로드되었습니다.");
+        setState((prev) => ({ ...prev, comment: "" }));
+        //setPostComments([]);
+        getPostComments(true);
+      } catch (error) {
+        console.log("Error adding comment: ", error);
+      }
     }
   };
 
@@ -94,7 +102,8 @@ const PostCommentContainer = ({ postInfo, state, setState, onChange }) => {
       <PostCommentForm
         state={state}
         onChange={onChange}
-        onSubmit={onSubmit}
+        onCommentSubmit={onCommentSubmit}
+        errorCommentInfo={errorCommentInfo}
       ></PostCommentForm>
       <PostCommentContent
         postComments={postComments}
