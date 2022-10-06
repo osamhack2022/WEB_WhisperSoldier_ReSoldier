@@ -1,17 +1,17 @@
-import { collection, endAt, getDocs, limit, orderBy, query, startAfter, startAt, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { useState } from "react";
 import { dbService } from "../lib/FStore";
 
 const SearchPage = () => {
 	const [searchResults, setSearchResults] = useState([]);
-	const [visibleRange, setVisibleRange] = useState(10);
-	var visibleResultRange = 10;
 	const [searchInput, setSearchInput] = useState("");
-	const [nextPostSnapShot, setNextPostSnapShot] = useState({});
-	const [isNoNext, setIsNoNext] = useState(false);
+	const [isSearching, setIsSearching] = useState(false);
+	var visibleResultRange = 10;
+
 	const onSearchSubmit = async (e) => {
 		e.preventDefault();
 		getSearchResults(true);
+		setIsSearching(true);
 		console.log("SearchResFromSubmit:", searchResults);
 	}
 
@@ -30,6 +30,7 @@ const SearchPage = () => {
 	const onSearchInputChange = (e) => {
 		const { target: { value } } = e;
 		setSearchInput(value);
+		setIsSearching(false)
 	}
 	
 	const snapshotToPosts = (snapshot, visibleResultRange=0) => {
@@ -47,12 +48,9 @@ const SearchPage = () => {
 				
 				if (postTextToBeChecked.includes(searchInput) && (count < Number(visibleResultRange))){
 					setSearchResults((prev) => [...prev, postObj])
-					console.log("searchresults length:", Number(visibleResultRange))
-					console.log("true or false:", (count < Number(visibleResultRange)))
 					count++;
-					console.log("count: ", count)
 				} else if (postTextToBeChecked.includes(searchInput)) {
-					//console.log("searchFalse")
+					console.log("searchFalse")
 				}
 				
 			});
@@ -60,44 +58,19 @@ const SearchPage = () => {
 		}
 	}
 
-	const getSearchResults = async (isDeletingOrEditing=false, visibleResultRange=10) => {
+	const getSearchResults = async (extendingVisibleRange=false, visibleResultRange=10) => {
     const querySnapshot = await getDocs(getSearchResultsQuery());
-    setNextPostSnapShot(querySnapshot.docs.length === 0 ? null : querySnapshot.docs[0])
-    if (isDeletingOrEditing) {
+    if (extendingVisibleRange) {
       setSearchResults([]);
     }
 		snapshotToPosts(querySnapshot, visibleResultRange);
-
-    //console.log("comments :", querySnapshot.docs);
   };
-
-	const moveNext = async () => {
-		const next = getSearchResultsQuery(nextPostSnapShot)
-		const querySnapshot = await getDocs(next)
-		setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-		const afterq = getSearchResultsQuery(querySnapshot.docs[querySnapshot.docs.length - 1])
-		const afterSnapshot = await getDocs(afterq);
-		(afterSnapshot.docs.length === 0 ? setIsNoNext(true) : setIsNoNext(false))
-		snapshotToPosts(querySnapshot);
-	}
 
 	const onClick = async (e) => {
 		e.preventDefault();
-		
-		const { name } = e.target
-		if (name === "nextTen") {
-			console.log("Showing Next Ten");
-			moveNext();
-		}
-		//setSearchResults([]);
 		visibleResultRange = visibleResultRange + 10;
 		await getSearchResults(true, visibleResultRange);
-		setVisibleRange(prev => prev + 10)
 	}
-
-	useEffect(() => {
-		//getFirstSearch();
-	}, []);
 	
 	return (
 		<>
@@ -105,9 +78,11 @@ const SearchPage = () => {
 			<input type="text" value={searchInput} onChange={onSearchInputChange} limit={50}></input>
 			<button type="submit">검색하기</button>
 		</form>
-		<div>검색 키워드 표시</div>
+		<div>{(isSearching) && `"${searchInput}"을 키워드로 한 검색 결과`}</div>
 		<div>검색 설정</div>
-		<div>검색 결과 {searchResults.length}개
+		<div>검색 결과 중 {searchResults.length}개 고민 표시
+			<br />
+			{(searchResults.length > visibleResultRange) && "전부 검색했습니다!"}
 			<br />
 			{searchResults.map(result => 
 				<div key={result.id}>
@@ -115,7 +90,7 @@ const SearchPage = () => {
 					<hr />
 				</div>)}
 		</div>
-		<button type="button" onClick={onClick}>10개 더</button>
+		{(searchResults.length <= visibleResultRange) && <button type="button" onClick={onClick}>10개 더</button>}
 		</>
 	)
 }
