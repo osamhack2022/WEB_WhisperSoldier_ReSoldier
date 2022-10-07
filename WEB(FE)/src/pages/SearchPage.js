@@ -26,6 +26,7 @@ const SearchPage = ({ isDesktop, isTablet }) => {
 	})
 
 	const [isResultDesc, setIsResultDesc] = useState(true);
+  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 
   const [currentSearchCount, setCurrentSearchCount] = useState(0);
   const [countResult, setCountResult] = useState(0);

@@ -17,6 +17,7 @@ import {
   PostBoardContainer,
   SideOptionContainer,
 } from "../../styles/post/PostBoardStyle";
+import { Timestamp } from "firebase/firestore";
 
 const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   const { query, collection, getDocs, limit, orderBy, startAfter } = dbFunction;
@@ -36,6 +37,36 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
     useRecoilState(CurrentScrollPos);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
+    
+  const [timeDepthValue, setTimeDepthValue] = useState("week")
+  const [timeDepthSelect, setTimeDepthSelect] = useState({
+    week: true,
+    month: false,
+    halfYear: false,
+    fullYear: false,
+    allTime: false,
+  })
+  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
+	const [isResultDesc, setIsResultDesc] = useState(true);
+
+  const now = new Date();
+  const getTimeDepth = (critera) => {
+    switch(critera) {
+      case 'week':
+        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)));
+      case 'month':
+        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())));
+      case 'halfYear':
+        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 6, now.getDate())));
+      case 'fullYear':
+        return(Timestamp.fromDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7)));
+      case 'allTime':
+        return(Timestamp.fromDate(new Date(0)));
+      default:
+        return(Timestamp.fromDate(new Date(0)));
+    }
+  }
+  console.log("Timestamp : ", getTimeDepth());
 
   const snapshotToPosts = useCallback((snapshot) => {
     if (snapshot) {
@@ -51,18 +82,18 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   }, []);
 
   const getQueryWithDescendingTime = useCallback(
-    (limitDocs, startAfterPoint) => {
+    (limitDocs, startAfterPoint, descOrAsc, searchTimeDepth=getTimeDepth(), limitWithCount) => {
       if (startAfterPoint) {
         return query(
           collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", "desc"),
+          orderBy("created_timestamp", descOrAsc),
           startAfter(startAfterPoint),
           limit(limitDocs)
         );
       } else {
         return query(
           collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", "desc"),
+          orderBy("created_timestamp", descOrAsc),
           limit(limitDocs)
         );
       }
