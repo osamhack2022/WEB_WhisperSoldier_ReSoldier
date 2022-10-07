@@ -13,25 +13,36 @@ export const SideOptionForm = () => {
   );
 };
 
-export const SideOptionFormForPostBoard = () => {
+export const SideOptionFormForPostBoard = ({
+  onSelectWeek,
+  onSelectMonth,
+  onSelectHalfYear,
+  onSelectFullYear,
+  onSelectAllTime,
+  timeDepthSelect,
+  onSelectDesc,
+  onSelectAsc,
+  isResultDesc,
+}) => {
+
   return (
     <SideOptionFormBox>
       <SideOptionTitleBox>검색 설정</SideOptionTitleBox>
       <OptionBox>
         <OptionTitle>정렬</OptionTitle>
         <OptionContentBox>
-          <OptionContent>오래된 순</OptionContent>
-          <OptionContent selected={true}>최신 순</OptionContent>
+          <OptionContent selected={!isResultDesc} onClick={onSelectAsc}>오래된 순</OptionContent>
+          <OptionContent selected={isResultDesc} onClick={onSelectDesc}>최신 순</OptionContent>
         </OptionContentBox>
       </OptionBox>
       <OptionBox>
         <OptionTitle>기간</OptionTitle>
         <OptionContentBox>
-          <OptionContent>1주</OptionContent>
-          <OptionContent>1개월</OptionContent>
-          <OptionContent>6개월</OptionContent>
-          <OptionContent>1년</OptionContent>
-          <OptionContent selected={true}>전체</OptionContent>
+          <OptionContent selected={timeDepthSelect.week} onClick={onSelectWeek}>1주</OptionContent>
+          <OptionContent selected={timeDepthSelect.month} onClick={onSelectMonth}>1개월</OptionContent>
+          <OptionContent selected={timeDepthSelect.halfYear} onClick={onSelectHalfYear}>6개월</OptionContent>
+          <OptionContent selected={timeDepthSelect.fullYear} onClick={onSelectFullYear}>1년</OptionContent>
+          <OptionContent selected={timeDepthSelect.allTime} onClick={onSelectAllTime}>전체</OptionContent>
         </OptionContentBox>
       </OptionBox>
     </SideOptionFormBox>

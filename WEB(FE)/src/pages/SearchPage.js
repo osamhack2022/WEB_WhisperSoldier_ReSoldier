@@ -14,7 +14,18 @@ import SearchContainer from "../components/search/SearchContainer";
 const SearchPage = ({ isDesktop, isTablet }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
+	const [isSearching, setIsSearching] = useState(false);
+	
+	const [timeDepthValue, setTimeDepthValue] = useState("week")
+	const [timeDepthSelect, setTimeDepthSelect] = useState({
+		week: true,
+		month: false,
+		halfYear: false,
+		fullYear: false,
+		allTime: false,
+	})
+
+	const [isResultDesc, setIsResultDesc] = useState(true);
 
   const [currentSearchCount, setCurrentSearchCount] = useState(0);
   const [countResult, setCountResult] = useState(0);
@@ -26,54 +37,85 @@ const SearchPage = ({ isDesktop, isTablet }) => {
 	const getTimeDepth = (critera) => {
 		switch(critera) {
 			case 'week':
-				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)))
-			
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)));
 			case 'month':
-				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())))
-
-			case 'halfyear':
-				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 6, now.getDate())))
-
-			case 'fullyear':
-				return(Timestamp.fromDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7)))
-
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())));
+			case 'halfYear':
+				return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 6, now.getDate())));
+			case 'fullYear':
+				return(Timestamp.fromDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7)));
+			case 'allTime':
+				return(Timestamp.fromDate(new Date(0)));
 			default:
-				return(-8640000000000000)
+				return(Timestamp.fromDate(new Date(0)));
 		}
 	}
 	console.log("Timestamp : ", getTimeDepth());
 
-  const getSearchResultsQuery = (isOrderByLikes=false, orderByDesc=false, searchTimeDepth) => {
-		if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
-			if (orderByDesc) {
-				return (query(collection(dbService, "WorryPost"),
-				orderBy("like_count", "desc"),
-				where("created_timestamp", ">=", searchTimeDepth),
-				))
+  const getSearchResultsQuery = (isOrderByLikes=false, orderByDesc=true, searchTimeDepth=getTimeDepth(), startAfterPoint) => {
+		if (startAfterPoint) {
+			if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
+				if (orderByDesc) {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("like_count", "desc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					startAfter(startAfterPoint),
+					))
+				} else {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("like_count", "asc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					startAfter(startAfterPoint),
+					))
+				}
 			} else {
-				return (query(collection(dbService, "WorryPost"),
-				orderBy("like_count", "asc"),
-				where("created_timestamp", ">=", searchTimeDepth),
-				))
-			}
+				if (orderByDesc) {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "desc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					startAfter(startAfterPoint),
+					))
+				} else {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "asc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					startAfter(startAfterPoint),
+					))
+				}
+			} 
 		} else {
-			if (orderByDesc) {
-				return (query(collection(dbService, "WorryPost"),
-				orderBy("created_timestamp", "desc"),
-				where("created_timestamp", ">=", searchTimeDepth),
-				))
+			if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
+				if (orderByDesc) {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("like_count", "desc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					))
+				} else {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("like_count", "asc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					))
+				}
 			} else {
-				return (query(collection(dbService, "WorryPost"),
-				orderBy("created_timestamp", "asc"),
-				where("created_timestamp", ">=", searchTimeDepth),
-				))
-			}
-		} 
+				if (orderByDesc) {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "desc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					))
+				} else {
+					return (query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "asc"),
+					where("created_timestamp", ">=", searchTimeDepth),
+					))
+				}
+			} 
+		}
+		
 	}
 
 
   const onSearchSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     setSearchResults([]);
     firstSearchResult(10);
 
@@ -90,11 +132,12 @@ const SearchPage = ({ isDesktop, isTablet }) => {
 
   const firstSearchResult = async (countSearchPost) => {
     /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
-    const snapshot = await getDocs(
-      query(
+		const snapshot = await getDocs(
+			getSearchResultsQuery(false, isResultDesc, getTimeDepth(timeDepthValue))
+      /* query(
         collection(dbService, "WorryPost"),
         orderBy("created_timestamp", "desc")
-      )
+      ) */
     );
     if (snapshot) {
       let count = 0;
@@ -119,7 +162,8 @@ const SearchPage = ({ isDesktop, isTablet }) => {
           }
         }
       }
-      count -= 1;
+			count -= 1;
+			console.log("TotalCount: ", totalCount);
       if (totalCount <= countSearchPost) {
         setIsNextResultExist(false);
       } else {
@@ -133,11 +177,12 @@ const SearchPage = ({ isDesktop, isTablet }) => {
   const searchResult = async (countSearchPost) => {
     /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
     const snapshot = await getDocs(
-      query(
+			getSearchResultsQuery(false, isResultDesc, getTimeDepth(timeDepthValue), nextResultSnapshot)
+      /* query(
         collection(dbService, "WorryPost"),
         orderBy("created_timestamp", "desc"),
         startAfter(nextResultSnapshot)
-      )
+      ) */
     );
     console.log(snapshot);
     if (snapshot) {
@@ -177,25 +222,101 @@ const SearchPage = ({ isDesktop, isTablet }) => {
   const onClick = async (e) => {
     e.preventDefault();
     await searchResult(10);
-  };
+	};
+	
 
+const onSelectWeek = async () => {
+	setTimeDepthValue('week');
+	setTimeDepthSelect({
+		week: true,
+		month: false,
+		halfYear: false,
+		fullYear: false,
+		allTime: false,
+	});
+	await firstSearchResult();
+}
+const onSelectMonth = async () => {
+	setTimeDepthValue('month');
+	setTimeDepthSelect({
+		week: false,
+		month: true,
+		halfYear: false,
+		fullYear: false,
+		allTime: false,
+	});
+	await firstSearchResult();
+}
+const onSelectHalfYear = async () => {
+	setTimeDepthValue('halfYear');
+	setTimeDepthSelect({
+		week: false,
+		month: false,
+		halfYear: true,
+		fullYear: false,
+		allTime: false,
+	});
+	await firstSearchResult();
+}
+const onSelectFullYear = async () => {
+	setTimeDepthValue('fullYear');
+	setTimeDepthSelect({
+		week: false,
+		month: false,
+		halfYear: false,
+		fullYear: true,
+		allTime: false,
+	});
+	await firstSearchResult();
+}
+const onSelectAllTime = async () => {
+	setTimeDepthValue('allTime');
+	setTimeDepthSelect({
+		week: false,
+		month: false,
+		halfYear: false,
+		fullYear: false,
+		allTime: true,
+	});
+	await firstSearchResult();
+}
+
+	const onSelectDesc = async () => {
+		setIsResultDesc(true);
+		await firstSearchResult();
+	}
+	const onSelectAsc = async () => {
+		setIsResultDesc(false);
+		await firstSearchResult();
+	}
+
+	
   useEffect(() => {
     console.log(searchResults);
   }, [searchResults]);
 
   return (
     <SearchContainer
-      onSearchSubmit={onSearchSubmit}
-      searchInput={searchInput}
-      onSearchInputChange={onSearchInputChange}
-      isSearching={isSearching}
-      countResult={countResult}
-      searchResults={searchResults}
-      isNextResultExist={isNextResultExist}
-      onClick={onClick}
-      isDesktop={isDesktop}
-      isTablet={isTablet}
-    ></SearchContainer>
+			onSearchSubmit={onSearchSubmit}
+			searchInput={searchInput}
+			onSearchInputChange={onSearchInputChange}
+			isSearching={isSearching}
+			countResult={countResult}
+			searchResults={searchResults}
+			isNextResultExist={isNextResultExist}
+			onClick={onClick}
+			isDesktop={isDesktop}
+			isTablet={isTablet}
+			onSelectWeek={onSelectWeek}
+			onSelectMonth={onSelectMonth}
+			onSelectHalfYear={onSelectHalfYear}
+			onSelectFullYear={onSelectFullYear}
+			onSelectAllTime={onSelectAllTime}
+			timeDepthSelect={timeDepthSelect}
+			onSelectDesc={onSelectDesc}
+			onSelectAsc={onSelectAsc}
+			isResultDesc={isResultDesc}
+			></SearchContainer>
   );
 };
 

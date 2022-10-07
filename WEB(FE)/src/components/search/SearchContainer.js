@@ -23,6 +23,15 @@ const SearchContainer = ({
   onClick,
   isDesktop,
   isTablet,
+  onSelectWeek,
+  onSelectMonth,
+  onSelectHalfYear,
+  onSelectFullYear,
+  onSelectAllTime,
+  timeDepthSelect,
+  onSelectDesc,
+  onSelectAsc,
+  isResultDesc,
 }) => {
   return (
     <SearchContainerBox isDesktop={isDesktop} isTablet={isTablet}>
@@ -45,14 +54,24 @@ const SearchContainer = ({
           {searchResults.length === 0 && isSearching && "검색결과가 없습니다."}
         </PostBoardBodyContainer>
         {isNextResultExist && (
-          <MoreLoadPostButton updatePostList={onClick}>
+          <MoreLoadPostButton name="moreLoadPostButton" updatePostList={onClick}>
             10개 더보기
           </MoreLoadPostButton>
         )}
       </SearchContentBox>
       {isTablet && (
         <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-          <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+          <SideOptionFormForPostBoard 
+            onSelectWeek={onSelectWeek}
+            onSelectMonth={onSelectMonth}
+            onSelectHalfYear={onSelectHalfYear}
+            onSelectFullYear={onSelectFullYear}
+            onSelectAllTime={onSelectAllTime}
+            timeDepthSelect={timeDepthSelect}
+            onSelectDesc={onSelectDesc}
+            onSelectAsc={onSelectAsc}
+            isResultDesc={isResultDesc}
+          ></SideOptionFormForPostBoard>
         </SideOptionContainer>
       )}
     </SearchContainerBox>
