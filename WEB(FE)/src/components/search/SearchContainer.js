@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import { useMediaQuery } from "react-responsive";
+import { TabletQuery } from "../../lib/Const";
 import { SideOptionContainer } from "../../styles/post/PostBoardStyle";
 import {
   SearchBarInSearchPage,
@@ -21,16 +21,19 @@ const SearchContainer = ({
   searchResults,
   isNextResultExist,
   onClick,
-  isDesktop,
-  isTablet,
+  onKeyUp,
 }) => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
   return (
-    <SearchContainerBox isDesktop={isDesktop} isTablet={isTablet}>
-      <SearchBarInSearchPage  isDesktop={isDesktop} isTablet={isTablet} searchInput={searchInput} onSearchInputChange={onSearchInputChange} onSearchSubmit={onSearchSubmit}>
-
-</SearchBarInSearchPage>
+    <SearchContainerBox>
+      <SearchBarInSearchPage
+        searchInput={searchInput}
+        onSearchInputChange={onSearchInputChange}
+        onSearchSubmit={onSearchSubmit}
+        onKeyUp={onKeyUp}
+      ></SearchBarInSearchPage>
       <SearchContentBox>
-        <PostBoardTitleContainer isDesktop={isDesktop} isTablet={isTablet}>
+        <PostBoardTitleContainer>
           <div>
             "{searchInput}" 검색 결과 {countResult}개 중 {searchResults.length}
             개 고민 표시
@@ -51,7 +54,7 @@ const SearchContainer = ({
         )}
       </SearchContentBox>
       {isTablet && (
-        <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
+        <SideOptionContainer>
           <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
         </SideOptionContainer>
       )}

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
 const PostBoardContainerForDesktop = styled.div`
   height: fit-content;
@@ -30,40 +31,14 @@ export const PostBoardContainer = ({ isDesktop, isTablet, children }) => {
   );
 };
 
-const SideOptionContainerForDesktop = styled.div`
+export const SideOptionContainer = styled.div`
   margin-left: 10px;
   height: fit-content;
   width: 260px;
-  /*flex-grow: 1;*/
+  ${media.mobile`
+    margin-left: inherit;
+    margin-top: 10px;
+    width: 100%;
+    position: relative;
+  `}
 `;
-
-const SideOptionContainerForTablet = styled.div`
-  margin-left: 10px;
-  height: fit-content;
-  width: 260px;
-  /*flex-grow: 1;*/
-`;
-
-const SideOptionContainerForMobile = styled.div`
-  margin-top: 10px;
-  height: fit-content;
-  width: 100%;
-  position: relative;
-  /*flex-grow: 1;*/
-`;
-
-export const SideOptionContainer = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <SideOptionContainerForDesktop>
-          {children}
-        </SideOptionContainerForDesktop>
-      ) : isTablet ? (
-        <SideOptionContainerForTablet>{children}</SideOptionContainerForTablet>
-      ) : (
-        <SideOptionContainerForMobile>{children}</SideOptionContainerForMobile>
-      )}
-    </>
-  );
-};

@@ -9,8 +9,9 @@ const SearchBoxForDesktop = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
+  text-decoration: none;
   margin-left: 100px;
-  cursor : default;
+  cursor: default;
 `;
 
 const SearchSmallBox = styled(Link)`
@@ -18,9 +19,10 @@ const SearchSmallBox = styled(Link)`
   left: 50vw;
   transform: translate(-50%, 0%);
   display: flex;
+  text-decoration: none;
   flex-direction: row;
   align-items: center;
-  cursor :default;
+  cursor: default;
 `;
 
 const SearchTabletBox = styled(Link)`
@@ -28,26 +30,26 @@ const SearchTabletBox = styled(Link)`
   left: 50vw;
   transform: translate(-50%, 0%);
   display: flex;
+  text-decoration: none;
   flex-direction: row;
   align-items: center;
-  cursor : default;
- 
+  cursor: default;
 `;
 
 const SearchSection = ({ isDesktop, isSmallDesktop, isTablet, toLink }) => {
-
   const [state, onChange] = useForm({ searchWord: "" });
   return (
     <>
-    {isDesktop ? (
+      {isDesktop ? (
         <SearchBoxForDesktop to={toLink}>
           <SearchBar
             name="searchWord"
             type="search"
-            placeholder="검색어를 입력하세요"
+            placeholder="검색어를 입력해서 고민을 탐색해보세요!"
             value={state.searchWord}
             onChange={onChange}
             required
+            disabled
           ></SearchBar>
           <SearchButtonShape>
             <SearchIcon></SearchIcon>
@@ -58,7 +60,7 @@ const SearchSection = ({ isDesktop, isSmallDesktop, isTablet, toLink }) => {
           <SearchBar
             name="searchWord"
             type="search"
-            placeholder="검색어를 입력하세요"
+            placeholder="검색어를 입력해서 고민을 탐색해보세요!"
             value={state.searchWord}
             onChange={onChange}
             required
@@ -67,22 +69,23 @@ const SearchSection = ({ isDesktop, isSmallDesktop, isTablet, toLink }) => {
             <SearchIcon></SearchIcon>
           </SearchButtonShape>
         </SearchSmallBox>
-      ) : isTablet && (
-        <SearchTabletBox to={toLink}>
-          <SearchBarTablet
-            name="searchWord"
-            type="search"
-            placeholder="검색어를 입력하세요"
-            value={state.searchWord}
-            onChange={onChange}
-            required
-          ></SearchBarTablet>
-          <SearchButtonShape>
-            <SearchIcon></SearchIcon>
-          </SearchButtonShape>
-        </SearchTabletBox>
+      ) : (
+        isTablet && (
+          <SearchTabletBox to={toLink}>
+            <SearchBarTablet
+              name="searchWord"
+              type="search"
+              placeholder="고민을 검색하세요!"
+              value={state.searchWord}
+              onChange={onChange}
+              required
+            ></SearchBarTablet>
+            <SearchButtonShape>
+              <SearchIcon></SearchIcon>
+            </SearchButtonShape>
+          </SearchTabletBox>
+        )
       )}
-      
     </>
   );
 };

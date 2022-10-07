@@ -20,17 +20,17 @@ export const SideOptionFormForPostBoard = () => {
       <OptionBox>
         <OptionTitle>정렬</OptionTitle>
         <OptionContentBox>
-          <OptionContent>오래된 순</OptionContent>
-          <OptionContent selected={true}>최신 순</OptionContent>
+          <OptionContent selected={true}>오래된 순</OptionContent>
+          <OptionContent selected={false}>최신 순</OptionContent>
         </OptionContentBox>
       </OptionBox>
       <OptionBox>
         <OptionTitle>기간</OptionTitle>
         <OptionContentBox>
-          <OptionContent>1주</OptionContent>
-          <OptionContent>1개월</OptionContent>
-          <OptionContent>6개월</OptionContent>
-          <OptionContent>1년</OptionContent>
+          <OptionContent selected={false}>1주</OptionContent>
+          <OptionContent selected={false}>1개월</OptionContent>
+          <OptionContent selected={false}>6개월</OptionContent>
+          <OptionContent selected={false}>1년</OptionContent>
           <OptionContent selected={true}>전체</OptionContent>
         </OptionContentBox>
       </OptionBox>

@@ -1,110 +1,59 @@
 import styled from "styled-components";
-import { useMediaQuery } from "react-responsive";
-import { Link, useLocation } from "react-router-dom";
-import { useForm } from "../../modules/useForm";
 import { SearchButtonShape, SearchIcon } from "../../components/common/Buttons";
+import media from "../../modules/MediaQuery";
 
-const SearchContainerBoxForDesktop = styled.div`
-position : relative;
+export const SearchContainerBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
   margin: 0px auto;
-  display: flex;
   width: 960px;
-  flex-direction: row;
+
+  ${media.smallDesktop`
+    margin: inherit;
+    width: inherit;
+    padding: 0px 10vw;
+  `}
+  ${media.mobile`
+    position: inherit;
+    flex-direction: column;
+    margin: inherit;
+    width: inherit;
+    padding: 0px 5vw;
+  `}
 `;
 
-const SearchContainerBoxForTablet = styled.div`
-  padding: 0px 10vw;
-  display: flex;
-  flex-direction: row;
-`;
-
-const SearchContainerBoxForMobile = styled.div`
-  padding: 0px 5vw;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const SearchContainerBox = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <SearchContainerBoxForDesktop>{children}</SearchContainerBoxForDesktop>
-      ) : isTablet ? (
-        <SearchContainerBoxForTablet>{children}</SearchContainerBoxForTablet>
-      ) : (
-        <SearchContainerBoxForMobile>{children}</SearchContainerBoxForMobile>
-      )}
-    </>
-  );
-};
-
-const SearchContentBoxForDesktop = styled.div`
+export const SearchContentBox = styled.div`
   height: fit-content;
   flex-grow: 1;
+  ${media.mobile`
+    flex-grow:inherit;
+    width: 100%;
+  `}
 `;
 
-const SearchContentBoxForTablet = styled.div`
-  height: fit-content;
-  /*width: 60vw;*/
-  flex-grow: 1;
-`;
-
-const SearchContentBoxForMobile = styled.div`
-  height: fit-content;
-  width: 100%;
-`;
-
-export const SearchContentBox = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <SearchContentBoxForDesktop>{children}</SearchContentBoxForDesktop>
-      ) : isTablet ? (
-        <SearchContentBoxForTablet>{children}</SearchContentBoxForTablet>
-      ) : (
-        <SearchContentBoxForMobile>{children}</SearchContentBoxForMobile>
-      )}
-    </>
-  );
-};
-
-
-
-
-const SearchBoxForDesktop = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 300px;
-  margin-right: 300px;
-  cursor : default;
-  position :absolute;
-  top : -65px;
-`;
-
-const SearchSmallBox = styled.div`
+const SearchBox = styled.div`
   position: absolute;
-  left: 50vw;
-  transform: translate(-50%, 0%);
   display: flex;
   flex-direction: row;
   align-items: center;
-  cursor :default;
-  position :absolute;
-  top : -100px;
-`;
-
-const SearchTabletBox = styled.div`
-  position: absolute;
-  left: 50vw;
-  transform: translate(-50%, 0%);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor : default;
-  position :absolute;
-  top : -100px;
- 
+  margin-left: 290px;
+  top: -65px;
+  ${media.smallDesktop`
+    margin-left: inherit;
+    left: 50vw;
+    transform: translate(-50%, 0%);
+    top: -56px;
+  `}
+  ${media.mobile`
+    position: relative;
+    margin-left: inherit;
+    left:inherit;
+    top:inherit;
+    transform: inherit;
+    width: 100%;
+    margin-bottom: 10px;
+  `}
 `;
 
 const SearchBar = styled.input`
@@ -114,78 +63,42 @@ const SearchBar = styled.input`
   width: 300px;
   background-color: #fbfbfb;
   border: 1.5px solid rgb(0, 0, 0);
-  transition: all 0.5s;
-  cursor : pointer;
+  transition: background 0.5s, width 0.5s;
+  ${media.tablet`
+    padding: 16px 5px 16px 15px;
+    width: 200px;
+  `}
+  ${media.mobile`
+    width: 100%;
+  `}
+
   &:hover {
-    background: #F6F6F6;
+    background: #f6f6f6;
   }
 `;
 
-const SearchBarTablet = styled.input`
-  padding: 16px 27px 16px 27px;
-  border-radius: 25px;
-  height: 40px;
-  width: 200px;
-  background-color: #fbfbfb;
-  border: 1.5px solid rgb(0, 0, 0);
-  transition: all 0.5s;
-  cursor : pointer;
-  &:hover {
-    background: #F6F6F6;
-  }
-`;
-
-export const SearchBarInSearchPage = ({ isDesktop, isSmallDesktop, isTablet, searchInput, onSearchInputChange,onSearchSubmit}) => {
-  //const [state, onChange] = useForm({ searchWord: "" });
+export const SearchBarInSearchPage = ({
+  searchInput,
+  onSearchInputChange,
+  onSearchSubmit,
+  onKeyUp,
+}) => {
   return (
-    <>
-    {isDesktop ? (
-        <SearchBoxForDesktop>
-          <SearchBar
-            name="text"
-            type="search"
-            placeholder="검색어를 입력하세요"
-            value={searchInput}
-            onChange={onSearchInputChange}
-            limit={50}
-            required
-          ></SearchBar>
-          <SearchButtonShape onClick={onSearchSubmit}>
-            <SearchIcon></SearchIcon>
-          </SearchButtonShape>
-        </SearchBoxForDesktop>
-      ) : isSmallDesktop ? (
-        <SearchSmallBox>
-          <SearchBar
-            name="text"
-            type="search"
-            placeholder="검색어를 입력하세요"
-            value={searchInput}
-            onChange={onSearchInputChange}
-            limit={50}
-            required
-          ></SearchBar>
-          <SearchButtonShape onClick={onSearchSubmit}>
-            <SearchIcon></SearchIcon>
-          </SearchButtonShape>
-        </SearchSmallBox>
-      ) : isTablet && (
-        <SearchTabletBox>
-          <SearchBarTablet
-            name="text"
-            type="search"
-            placeholder="검색어를 입력하세요"
-            value={searchInput}
-            onChange={onSearchInputChange}
-            limit={50}
-            required
-          ></SearchBarTablet>
-          <SearchButtonShape onClick={onSearchSubmit}>
-            <SearchIcon></SearchIcon>
-          </SearchButtonShape>
-        </SearchTabletBox>
-      )}
-      
-    </>
+    <SearchBox>
+      <SearchBar
+        name="text"
+        type="search"
+        placeholder="검색해서 고민을 탐색해보세요!"
+        value={searchInput}
+        onChange={onSearchInputChange}
+        limit={50}
+        required
+        autoFocus
+        onKeyUp={onKeyUp}
+      ></SearchBar>
+      <SearchButtonShape onClick={onSearchSubmit}>
+        <SearchIcon></SearchIcon>
+      </SearchButtonShape>
+    </SearchBox>
   );
 };

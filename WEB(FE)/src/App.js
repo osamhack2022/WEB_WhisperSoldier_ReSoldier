@@ -109,10 +109,7 @@ const App = () => {
               path="/write"
               element={<WritePage isDesktop={isDesktop} isTablet={isTablet} />}
             />
-            <Route
-              path="/search"
-              element={<SearchPage isDesktop={isDesktop} isTablet={isTablet} />}
-            />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/message" element={<ChatPage />} />
           </Routes>
           <Footer></Footer>

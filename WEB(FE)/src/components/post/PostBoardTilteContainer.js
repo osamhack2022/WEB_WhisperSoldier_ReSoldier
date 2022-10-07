@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FiArrowDown, FiArrowUp } from "react-icons/fi";
+import media from "../../modules/MediaQuery";
 
 const PostBoardTitle = styled.span`
   font-size: 16px;
@@ -47,30 +48,31 @@ const PostBoardMoreButtonText = styled.span`
 `;
 
 const PostBoardMoreButtonBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 5px 0px;
-  text-decoration: none;
-  height: 48px;
-  align-items: center;
-  transition: all 0.3s;
-  cursor: pointer;
-  &:hover
-    ${PostBoardMoreButton},
+  display: none;
+  ${media.mobile`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0px;
+    text-decoration: none;
+    height: 48px;
+    align-items: center;
+    transition: all 0.3s;
+    cursor: pointer;
     &:hover
-    ${PostBoardMoreButtonText},
-    &:hover
-    ${PostBoardMoreUpButton} {
-    color: #000000;
-    transform: scale(1.05);
-  }
+      ${PostBoardMoreButton},
+      &:hover
+      ${PostBoardMoreButtonText},
+      &:hover
+      ${PostBoardMoreUpButton} {
+      color: #000000;
+      transform: scale(1.05);
+    }
+  `}
 `;
 
 const PostBoardTitleContainer = ({
-  isDesktop,
-  isTablet,
   children,
   onShowSideContainer,
   isShowContainer,
@@ -78,16 +80,14 @@ const PostBoardTitleContainer = ({
   return (
     <PostBoardTitleBox>
       <PostBoardTitle>{children}</PostBoardTitle>
-      {!isTablet && (
-        <PostBoardMoreButtonBox onClick={onShowSideContainer}>
-          <PostBoardMoreButtonText>검색 설정</PostBoardMoreButtonText>
-          {!isShowContainer ? (
-            <PostBoardMoreButton></PostBoardMoreButton>
-          ) : (
-            <PostBoardMoreUpButton></PostBoardMoreUpButton>
-          )}
-        </PostBoardMoreButtonBox>
-      )}
+      <PostBoardMoreButtonBox onClick={onShowSideContainer}>
+        <PostBoardMoreButtonText>검색 설정</PostBoardMoreButtonText>
+        {!isShowContainer ? (
+          <PostBoardMoreButton></PostBoardMoreButton>
+        ) : (
+          <PostBoardMoreUpButton></PostBoardMoreUpButton>
+        )}
+      </PostBoardMoreButtonBox>
     </PostBoardTitleBox>
   );
 };
