@@ -32,6 +32,7 @@ const SearchContainer = ({
   onSelectDesc,
   onSelectAsc,
   isResultDesc,
+  firstSearchResult,
 }) => {
   return (
     <SearchContainerBox isDesktop={isDesktop} isTablet={isTablet}>
@@ -71,6 +72,8 @@ const SearchContainer = ({
             onSelectDesc={onSelectDesc}
             onSelectAsc={onSelectAsc}
             isResultDesc={isResultDesc}
+            firstSearchResult={firstSearchResult}
+            onSearchSubmit={onSearchSubmit}
           ></SideOptionFormForPostBoard>
         </SideOptionContainer>
       )}

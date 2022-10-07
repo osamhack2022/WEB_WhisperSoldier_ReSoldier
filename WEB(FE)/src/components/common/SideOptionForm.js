@@ -23,6 +23,8 @@ export const SideOptionFormForPostBoard = ({
   onSelectDesc,
   onSelectAsc,
   isResultDesc,
+  firstSearchResult,
+  onSearchSubmit,
 }) => {
 
   return (
@@ -44,6 +46,9 @@ export const SideOptionFormForPostBoard = ({
           <OptionContent selected={timeDepthSelect.fullYear} onClick={onSelectFullYear}>1년</OptionContent>
           <OptionContent selected={timeDepthSelect.allTime} onClick={onSelectAllTime}>전체</OptionContent>
         </OptionContentBox>
+      </OptionBox>
+      <OptionBox>
+        <button onClick={onSearchSubmit}>설정 적용해서 검색하기</button>
       </OptionBox>
     </SideOptionFormBox>
   );

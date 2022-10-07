@@ -225,7 +225,7 @@ const SearchPage = ({ isDesktop, isTablet }) => {
 	};
 	
 
-const onSelectWeek = async () => {
+const onSelectWeek = () => {
 	setTimeDepthValue('week');
 	setTimeDepthSelect({
 		week: true,
@@ -234,9 +234,8 @@ const onSelectWeek = async () => {
 		fullYear: false,
 		allTime: false,
 	});
-	await firstSearchResult();
 }
-const onSelectMonth = async () => {
+const onSelectMonth = () => {
 	setTimeDepthValue('month');
 	setTimeDepthSelect({
 		week: false,
@@ -245,9 +244,8 @@ const onSelectMonth = async () => {
 		fullYear: false,
 		allTime: false,
 	});
-	await firstSearchResult();
 }
-const onSelectHalfYear = async () => {
+const onSelectHalfYear = () => {
 	setTimeDepthValue('halfYear');
 	setTimeDepthSelect({
 		week: false,
@@ -256,9 +254,8 @@ const onSelectHalfYear = async () => {
 		fullYear: false,
 		allTime: false,
 	});
-	await firstSearchResult();
 }
-const onSelectFullYear = async () => {
+const onSelectFullYear = () => {
 	setTimeDepthValue('fullYear');
 	setTimeDepthSelect({
 		week: false,
@@ -267,9 +264,8 @@ const onSelectFullYear = async () => {
 		fullYear: true,
 		allTime: false,
 	});
-	await firstSearchResult();
 }
-const onSelectAllTime = async () => {
+const onSelectAllTime = () => {
 	setTimeDepthValue('allTime');
 	setTimeDepthSelect({
 		week: false,
@@ -278,16 +274,13 @@ const onSelectAllTime = async () => {
 		fullYear: false,
 		allTime: true,
 	});
-	await firstSearchResult();
 }
 
-	const onSelectDesc = async () => {
+	const onSelectDesc = () => {
 		setIsResultDesc(true);
-		await firstSearchResult();
 	}
-	const onSelectAsc = async () => {
+	const onSelectAsc = () => {
 		setIsResultDesc(false);
-		await firstSearchResult();
 	}
 
 	
