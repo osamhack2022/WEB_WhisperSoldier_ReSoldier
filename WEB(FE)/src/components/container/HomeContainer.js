@@ -1,54 +1,28 @@
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 import PostBoard from "../post/PostBoard";
 
-const HomeContainerBoxForDesktop = styled.div`
+const HomeContainerBox = styled.div`
   margin: 0px auto;
-  display: flex;
   width: 960px;
+  display: flex;
   flex-direction: row;
-`;
-
-const HomeContainerBoxForTablet = styled.div`
+  ${media.smallDesktop`
+  margin: inherit;
+  width: inherit;
   padding: 0px 10vw;
-  display: flex;
-  flex-direction: row;
-`;
-
-const HomeContainerBoxForMobile = styled.div`
+  `}
+  ${media.mobile`
   padding: 0px 5vw;
-  display: flex;
   flex-direction: column;
+  `}
 `;
 
-const HomeContainer = ({ isDesktop, isSmallDesktop, isTablet }) => {
+const HomeContainer = () => {
   return (
-    <>
-      {isDesktop ? (
-        <HomeContainerBoxForDesktop>
-          <PostBoard
-            isDesktop={isDesktop}
-            isSmallDesktop={isSmallDesktop}
-            isTablet={isTablet}
-          ></PostBoard>
-        </HomeContainerBoxForDesktop>
-      ) : isTablet ? (
-        <HomeContainerBoxForTablet>
-          <PostBoard
-            isDesktop={isDesktop}
-            isSmallDesktop={isSmallDesktop}
-            isTablet={isTablet}
-          ></PostBoard>
-        </HomeContainerBoxForTablet>
-      ) : (
-        <HomeContainerBoxForMobile>
-          <PostBoard
-            isDesktop={isDesktop}
-            isSmallDesktop={isSmallDesktop}
-            isTablet={isTablet}
-          ></PostBoard>
-        </HomeContainerBoxForMobile>
-      )}
-    </>
+    <HomeContainerBox>
+      <PostBoard></PostBoard>
+    </HomeContainerBox>
   );
 };
 

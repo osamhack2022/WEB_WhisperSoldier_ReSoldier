@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 import { SideOptionContainer } from "../../styles/post/PostBoardStyle";
@@ -24,6 +25,12 @@ const SearchContainer = ({
   onKeyUp,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
+
+  const [isShowContainer, setIsShowContainer] = useState(false);
+  const onShowSideContainer = useCallback(() => {
+    setIsShowContainer((prev) => !prev);
+  }, []);
+
   return (
     <SearchContainerBox>
       <SearchBarInSearchPage
@@ -33,12 +40,20 @@ const SearchContainer = ({
         onKeyUp={onKeyUp}
       ></SearchBarInSearchPage>
       <SearchContentBox>
-        <PostBoardTitleContainer>
+        <PostBoardTitleContainer
+          onShowSideContainer={onShowSideContainer}
+          isShowContainer={isShowContainer}
+        >
           <div>
             "{searchInput}" 검색 결과 {countResult}개 중 {searchResults.length}
             개 고민 표시
           </div>
         </PostBoardTitleContainer>
+        {!isTablet && isShowContainer && (
+          <SideOptionContainer>
+            <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+          </SideOptionContainer>
+        )}
 
         <PostBoardBodyContainer>
           {searchResults.map((result) => (

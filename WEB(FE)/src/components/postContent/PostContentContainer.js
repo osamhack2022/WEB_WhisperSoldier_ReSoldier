@@ -34,8 +34,8 @@ const PostContentContainer = ({
   isTablet,
 }) => {
   return (
-    <PostContentContainerBox isDesktop={isDesktop} isTablet={isTablet}>
-      <SideButtonContainer isDesktop={isDesktop} isTablet={isTablet}>
+    <PostContentContainerBox>
+      <SideButtonContainer>
         <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
           <BackButton toLink="/" isMobile={!isTablet}>
             뒤로가기
@@ -81,7 +81,7 @@ const PostContentContainer = ({
           <></>
         )}
       </SideButtonContainer>
-      <PostContentBodyContainer isDesktop={isDesktop} isTablet={isTablet}>
+      <PostContentBodyContainer>
         <PostContentTitle
           postInfo={postInfo}
           errorPostInfo={errorPostInfo}
@@ -91,8 +91,8 @@ const PostContentContainer = ({
           state={state}
           onChange={onChange}
           editing={editing}
-          errorPostInfo={errorPostInfo}
           onClick={onClick}
+          errorPostInfo={errorPostInfo}
           errorEditInfo={errorEditInfo}
         ></PostContentBody>
         {postInfo.created_timestamp && !editing && (
@@ -105,7 +105,7 @@ const PostContentContainer = ({
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>
-      <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
+      <SideOptionContainer>
         {postInfo.created_timestamp ? (
           editing ? (
             <>

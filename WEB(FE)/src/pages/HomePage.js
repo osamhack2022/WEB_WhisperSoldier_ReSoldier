@@ -1,13 +1,9 @@
 import HomeContainer from "../components/container/HomeContainer";
 
-const HomePage = ({ isDesktop, isSmallDesktop, isTablet }) => {
+const HomePage = () => {
   return (
     <div>
-      <HomeContainer
-        isDesktop={isDesktop}
-        isSmallDesktop={isSmallDesktop}
-        isTablet={isTablet}
-      ></HomeContainer>
+      <HomeContainer></HomeContainer>
     </div>
   );
 };

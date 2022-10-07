@@ -1,71 +1,32 @@
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
-const WriteContainerBoxForDesktop = styled.div`
-  margin: 0px auto;
+export const WriteContainerBox = styled.div`
   display: flex;
+  margin: 0px auto;
   width: 960px;
   flex-direction: row;
+  ${media.smallDesktop`
+    margin: inherit;
+    width: inherit;
+    padding: 0px 10vw;
+  `}
+  ${media.mobile`
+    margin: inherit;
+    width: inherit;
+    padding: 0px 5vw;
+    flex-direction: column;
+  `}
 `;
 
-const WriteContainerBoxForTablet = styled.div`
-  padding: 0px 10vw;
-  display: flex;
-  flex-direction: row;
-`;
-
-const WriteContainerBoxForMobile = styled.div`
-  padding: 0px 5vw;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const WriteContainerBox = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <WriteContainerBoxForDesktop>{children}</WriteContainerBoxForDesktop>
-      ) : isTablet ? (
-        <WriteContainerBoxForTablet>{children}</WriteContainerBoxForTablet>
-      ) : (
-        <WriteContainerBoxForMobile>{children}</WriteContainerBoxForMobile>
-      )}
-    </>
-  );
-};
-const SideOptionContainerForDesktop = styled.div`
+export const SideOptionContainer = styled.div`
   margin-left: 10px;
   height: fit-content;
   width: 200px;
-  /*flex-grow: 1;*/
+  ${media.mobile`
+    margin-left: inherit;
+    margin-top: 10px;
+    width: 100%;
+    position: relative;
+  `}
 `;
-
-const SideOptionContainerForTablet = styled.div`
-  margin-left: 10px;
-  height: fit-content;
-  width: 200px;
-  /*flex-grow: 1;*/
-`;
-
-const SideOptionContainerForMobile = styled.div`
-  margin-top: 10px;
-  height: fit-content;
-  width: 100%;
-  position: relative;
-  /*flex-grow: 1;*/
-`;
-
-export const SideOptionContainer = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <SideOptionContainerForDesktop>
-          {children}
-        </SideOptionContainerForDesktop>
-      ) : isTablet ? (
-        <SideOptionContainerForTablet>{children}</SideOptionContainerForTablet>
-      ) : (
-        <SideOptionContainerForMobile>{children}</SideOptionContainerForMobile>
-      )}
-    </>
-  );
-};

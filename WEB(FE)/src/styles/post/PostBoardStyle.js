@@ -1,35 +1,14 @@
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 
-const PostBoardContainerForDesktop = styled.div`
+export const PostBoardContainer = styled.div`
   height: fit-content;
   flex-grow: 1;
-`;
-
-const PostBoardContainerForTablet = styled.div`
-  height: fit-content;
-  /*width: 60vw;*/
-  flex-grow: 1;
-`;
-
-const PostBoardContainerForMobile = styled.div`
-  height: fit-content;
+  ${media.mobile`
+  flex-grow: inherit;
   width: 100%;
+  `}
 `;
-
-export const PostBoardContainer = ({ isDesktop, isTablet, children }) => {
-  return (
-    <>
-      {isDesktop ? (
-        <PostBoardContainerForDesktop>{children}</PostBoardContainerForDesktop>
-      ) : isTablet ? (
-        <PostBoardContainerForTablet>{children}</PostBoardContainerForTablet>
-      ) : (
-        <PostBoardContainerForMobile>{children}</PostBoardContainerForMobile>
-      )}
-    </>
-  );
-};
 
 export const SideOptionContainer = styled.div`
   margin-left: 10px;

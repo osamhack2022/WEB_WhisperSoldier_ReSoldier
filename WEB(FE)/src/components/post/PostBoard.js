@@ -17,8 +17,11 @@ import {
   PostBoardContainer,
   SideOptionContainer,
 } from "../../styles/post/PostBoardStyle";
+import { useMediaQuery } from "react-responsive";
+import { TabletQuery } from "../../lib/Const";
 
-const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
+const PostBoard = () => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
   const { query, collection, getDocs, limit, orderBy, startAfter } = dbFunction;
 
   const [posts, setPosts] = useState([]);
@@ -158,17 +161,15 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   if (posts) {
     return (
       <>
-        <PostBoardContainer isDesktop={isDesktop} isTablet={isTablet}>
+        <PostBoardContainer>
           <PostBoardTitleContainer
-            isDesktop={isDesktop}
-            isTablet={isTablet}
             onShowSideContainer={onShowSideContainer}
             isShowContainer={isShowContainer}
           >
             고민 게시판
           </PostBoardTitleContainer>
           {!isTablet && isShowContainer && (
-            <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
+            <SideOptionContainer>
               <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
             </SideOptionContainer>
           )}
@@ -186,7 +187,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
           )}
         </PostBoardContainer>
         {isTablet && (
-          <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
+          <SideOptionContainer>
             <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}

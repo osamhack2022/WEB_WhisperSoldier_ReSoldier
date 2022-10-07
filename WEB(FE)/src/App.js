@@ -18,12 +18,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
-import {
-  BigDesktopQuery,
-  DesktopQuery,
-  SmallDesktopQuery,
-  TabletQuery,
-} from "./lib/Const";
+import { DesktopQuery, SmallDesktopQuery, TabletQuery } from "./lib/Const";
 import { useMediaQuery } from "react-responsive";
 
 const Body = styled.div`
@@ -90,25 +85,13 @@ const App = () => {
             isTablet={isTablet}
           ></Header>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <HomePage
-                  isDesktop={isDesktop}
-                  isSmallDesktop={isSmallDesktop}
-                  isTablet={isTablet}
-                />
-              }
-            />
+            <Route path="/" element={<HomePage />} />
             <Route
               path="/post/:id"
               element={<PostPage isDesktop={isDesktop} isTablet={isTablet} />}
             />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route
-              path="/write"
-              element={<WritePage isDesktop={isDesktop} isTablet={isTablet} />}
-            />
+            <Route path="/write" element={<WritePage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/message" element={<ChatPage />} />
           </Routes>

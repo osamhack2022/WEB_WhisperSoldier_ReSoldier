@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import WriteContainer from "../components/container/WriteContainer";
+import WriteContainer from "../components/Write/WriteContainer";
 import { useForm } from "../modules/useForm";
 import { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../store/PostStore";
 
-const WritePage = ({ isDesktop, isTablet }) => {
+const WritePage = () => {
   const [state, onChange] = useForm({ postContent: "" });
   const [errorWritePostInfo, setErrorWritePostInfo] = useState({
     isError: false,
@@ -49,8 +49,6 @@ const WritePage = ({ isDesktop, isTablet }) => {
         onChange={onChange}
         errorWritePostInfo={errorWritePostInfo}
         onClick={onClick}
-        isDesktop={isDesktop}
-        isTablet={isTablet}
       ></WriteContainer>
     </>
   );

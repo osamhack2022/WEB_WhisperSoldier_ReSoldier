@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { dbService } from "../lib/FStore";
 import SearchContainer from "../components/search/SearchContainer";
 
-const SearchPage = ({ isTablet }) => {
+const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -220,7 +220,6 @@ const SearchPage = ({ isTablet }) => {
       searchResults={searchResults}
       isNextResultExist={isNextResultExist}
       onClick={onClick}
-      isTablet={isTablet}
     ></SearchContainer>
   );
 };
