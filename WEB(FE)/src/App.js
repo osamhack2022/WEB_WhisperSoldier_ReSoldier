@@ -100,13 +100,19 @@ const App = () => {
                 />
               }
             />
-            <Route path="/post/:id" element={<PostPage  isDesktop={isDesktop} isTablet={isTablet}/>} />
+            <Route
+              path="/post/:id"
+              element={<PostPage isDesktop={isDesktop} isTablet={isTablet} />}
+            />
             <Route path="/profile" element={<ProfilePage />} />
             <Route
               path="/write"
               element={<WritePage isDesktop={isDesktop} isTablet={isTablet} />}
             />
-            <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/search"
+              element={<SearchPage isDesktop={isDesktop} isTablet={isTablet} />}
+            />
             <Route path="/message" element={<ChatPage />} />
           </Routes>
           <Footer></Footer>

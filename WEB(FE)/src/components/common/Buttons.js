@@ -162,6 +162,7 @@ export const SearchButtonShape = styled.button`
   width: 40px;
   border-radius: 50%;
   transition: all 0.5s;
+  cursor : pointer;
   border: 2px solid rgb(26, 117, 65);
   &:hover {
     background: #0d552c;

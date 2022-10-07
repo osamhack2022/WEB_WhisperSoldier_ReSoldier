@@ -21,13 +21,18 @@ export const AuthInputBox = styled.input`
   }
 `;
 
-export const SearchBar = styled.input`
+export const SearchBar = styled.div`
   padding: 16px 27px 16px 27px;
   border-radius: 25px;
   height: 40px;
   width: 300px;
   background-color: #fbfbfb;
   border: 1.5px solid rgb(0, 0, 0);
+  transition: all 0.5s;
+  cursor : pointer;
+  &:hover {
+    background: #F6F6F6;
+  }
 `;
 
 export const SearchBarTablet = styled.input`
@@ -37,4 +42,9 @@ export const SearchBarTablet = styled.input`
   width: 200px;
   background-color: #fbfbfb;
   border: 1.5px solid rgb(0, 0, 0);
+  transition: all 0.5s;
+  cursor : pointer;
+  &:hover {
+    background: #F6F6F6;
+  }
 `;

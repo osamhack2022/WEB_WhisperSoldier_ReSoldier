@@ -8,6 +8,7 @@ import { HeaderButtonSection } from "./HeaderButtonSection";
 import SearchSection from "./SearchSection";
 
 import Navigation from "./Navigation";
+import { useLocation } from "react-router-dom";
 
 const HeaderBoxForDesktop = styled.header`
   position: relative;
@@ -37,16 +38,18 @@ const HeaderBoxForMobile = styled.header`
 `;
 
 const Header = ({ isDesktop, isSmallDesktop, isTablet }) => {
+  const location = useLocation();
   return (
     <>
       {isDesktop ? (
         <HeaderBoxForDesktop>
           <HeaderTitleContainer></HeaderTitleContainer>
-          <SearchSection
+          {location.pathname !=="/search"&&<SearchSection
             isDesktop={isDesktop}
             isSmallDesktop={isSmallDesktop}
             isTablet={isTablet}
-          ></SearchSection>
+            toLink="/search"
+          ></SearchSection>}
           <HeaderButtonSection
             isDesktop={isDesktop}
             isSmallDesktop={isSmallDesktop}
@@ -56,11 +59,12 @@ const Header = ({ isDesktop, isSmallDesktop, isTablet }) => {
       ) : isTablet ? (
         <HeaderBoxForTablet>
           <HeaderTitleContainerForTablet></HeaderTitleContainerForTablet>
-          <SearchSection
+          {location.pathname !=="/search"&&<SearchSection
             isDesktop={isDesktop}
             isSmallDesktop={isSmallDesktop}
             isTablet={isTablet}
-          ></SearchSection>
+            toLink="/search"
+          ></SearchSection>}
           <HeaderButtonSection
             isDesktop={isDesktop}
             isSmallDesktop={isSmallDesktop}
