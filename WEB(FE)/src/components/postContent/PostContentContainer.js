@@ -32,6 +32,8 @@ const PostContentContainer = ({
   toggleEditing,
   isDesktop,
   isTablet,
+  toggleLike,
+  isLikedByMe,
 }) => {
   return (
     <PostContentContainerBox isDesktop={isDesktop} isTablet={isTablet}>
@@ -53,6 +55,7 @@ const PostContentContainer = ({
             ) : (
               <OtherUserButtonContainer
                 isMobile={!isTablet}
+                toggleLike={toggleLike}
               ></OtherUserButtonContainer>
             ))}
         </SideButtonBox>
@@ -71,7 +74,10 @@ const PostContentContainer = ({
                   toggleEditing={toggleEditing}
                 ></WriteUserButtonContainer>
               ) : (
-                <OtherUserButtonContainer></OtherUserButtonContainer>
+                <OtherUserButtonContainer
+                isLikedByMe={isLikedByMe}
+                toggleLike={toggleLike}
+                ></OtherUserButtonContainer>
               )
             ) : (
               <></>

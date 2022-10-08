@@ -405,9 +405,9 @@ const LikeButtonBlock = styled(Link)`
   }
 `;
 
-export const LikeButton = ({ toLink, children, isMobile }) => {
+export const LikeButton = ({ toLink, children, isMobile, toggleLike }) => {
   return (
-    <LikeButtonBlock to={toLink} isMobile={isMobile}>
+    <LikeButtonBlock onClick={toggleLike} to={toLink} isMobile={isMobile}>
       <LikeButtonImg></LikeButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </LikeButtonBlock>

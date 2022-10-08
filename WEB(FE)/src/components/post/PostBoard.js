@@ -5,7 +5,8 @@ import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
 import { SideOptionFormForPostBoard } from "../common/SideOptionForm";
 import MoreLoadPostButton from "./MoreLoadPostButton";
-import { useRecoilState } from "recoil";import {
+import { useRecoilState } from "recoil";
+import {
   CountCurrentPost,
   CurrentScrollPos,
   IsNextPostExistRecoil,
@@ -64,7 +65,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
     }
   }, []);
 
-  const getQueryWithDescendingTime = useCallback(
+  const getQueryFunction = useCallback(
     (limitDocs, order, searchTimeDepth=getTimeDepth(), startAfterPoint) => {
       
         if (startAfterPoint) {
@@ -89,7 +90,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   );
 
   const getFirst = async () => {
-    const first = getQueryWithDescendingTime(10, orderDescOrAsc, getTimeDepth(timeDepthValue));
+    const first = getQueryFunction(10, orderDescOrAsc, getTimeDepth(timeDepthValue));
     const firstSnapshot = await getDocs(first);
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
@@ -97,10 +98,10 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   };
 
   const moveNext = async () => {
-    const next = getQueryWithDescendingTime(10, orderDescOrAsc, getTimeDepth(timeDepthValue), nextPostSnapShot);
+    const next = getQueryFunction(10, orderDescOrAsc, getTimeDepth(timeDepthValue), nextPostSnapShot);
     const querySnapshot = await getDocs(next);
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-    const afterQuery = getQueryWithDescendingTime(
+    const afterQuery = getQueryFunction(
       1,
       orderDescOrAsc,
       getTimeDepth(timeDepthValue),
@@ -128,14 +129,14 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   }, []);
 
   const recoverPost = async () => {
-    const recoverQuery = getQueryWithDescendingTime(
+    const recoverQuery = getQueryFunction(
       countCurrentPost,
       orderDescOrAsc,
       getTimeDepth(timeDepthValue)
     )
     const recoverSnapshot = await getDocs(recoverQuery);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
-    const afterQuery = getQueryWithDescendingTime(
+    const afterQuery = getQueryFunction(
       1,
       orderDescOrAsc,
       getTimeDepth(timeDepthValue),
