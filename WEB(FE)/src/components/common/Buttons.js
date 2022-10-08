@@ -10,6 +10,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BsEmojiAngry } from "react-icons/bs";
 import { MdOutlineCancel } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
+import media from "../../modules/MediaQuery";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -162,7 +163,7 @@ export const SearchButtonShape = styled.button`
   width: 40px;
   border-radius: 50%;
   transition: all 0.5s;
-  cursor : pointer;
+  cursor: pointer;
   border: 2px solid rgb(26, 117, 65);
   &:hover {
     background: #0d552c;
@@ -190,10 +191,21 @@ const WritePostButtonShape = styled(Link)`
   text-decoration: none;
   border-radius: 25px;
   border: 2px solid rgb(26, 117, 65);
-  transition: all 0.5s;
+  transition: all 0.5s, font-size 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
   &:hover {
     background: #0d552c;
   }
+  ${media.smallDesktop`
+  
+    padding: inherit;
+    width: 40px;
+    font-weight : inherit;
+    font-size : 0px;
+    
+    border-radius: 50%;
+  `}
 `;
 
 const WritPostIcon = styled(BsPencilSquare)`
@@ -203,6 +215,14 @@ const WritPostIcon = styled(BsPencilSquare)`
   transform: translate(0%, -50%);
   background-color: rgba(0, 0, 0, 0);
   color: #ffffff;
+  ${media.smallDesktop`
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 40px;
+    width: 40px;
+    padding: 12px;
+    font-weight: 100;
+  `}
 `;
 
 export const WritePostButton = () => {
@@ -210,40 +230,6 @@ export const WritePostButton = () => {
     <WritePostButtonShape to="/write">
       <WritPostIcon></WritPostIcon> 고민 작성하기
     </WritePostButtonShape>
-  );
-};
-
-const WriteIcon = styled(BsPencilSquare)`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  height: 40px;
-  width: 40px;
-  padding: 12px;
-  font-weight: 100;
-  background-color: rgba(0, 0, 0, 0);
-  color: #ffffff;
-`;
-
-const WriteButtonShape = styled(Link)`
-  position: relative;
-  background-color: #1a7541;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  transition: all 0.5s;
-  border: 1.5px solid rgb(26, 117, 65);
-  &:hover {
-    background: #0d552c;
-  }
-`;
-
-export const WritePostSmallButton = () => {
-  return (
-    <WriteButtonShape to="/write">
-      <WriteIcon></WriteIcon>
-    </WriteButtonShape>
   );
 };
 
@@ -636,7 +622,7 @@ const SearchNavButtonBox = styled(Link)`
   }
 `;
 
-export const SearchNavButton = ({toLink}) => {
+export const SearchNavButton = ({ toLink }) => {
   return (
     <SearchNavButtonBox to={toLink}>
       <SearchIconForNav></SearchIconForNav>

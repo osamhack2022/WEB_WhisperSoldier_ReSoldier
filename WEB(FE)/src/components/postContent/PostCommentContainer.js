@@ -23,8 +23,9 @@ const PostCommentContainer = ({
     startAfter,
   } = dbFunction;
 
-  const [latestVisibleComment, setLatestVisibleComment] = useState({});
+  const [nextCommentSnapshot, setNextCommentSnapshot] = useState({});
   const [postComments, setPostComments] = useState([]);
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
   const [errorCommentInfo, setCommentInfo] = useState(false);
 
   const getPostCommentQuery = (isAddingComments) => {
@@ -39,7 +40,7 @@ const PostCommentContainer = ({
         collection(dbService, "Comment"),
         where("associated_post_id", "==", postInfo.id),
         orderBy("created_timestamp", "asc"),
-        startAfter(latestVisibleComment)
+        startAfter(nextCommentSnapshot)
       );
     }
   };
@@ -48,7 +49,7 @@ const PostCommentContainer = ({
     isDeletingOrEditing = false
   ) => {
     const querySnapshot = await getDocs(getPostCommentQuery(isAddingComments));
-    setLatestVisibleComment(
+    setNextCommentSnapshot(
       querySnapshot.docs.length === 0 ? null : querySnapshot.docs[0]
     );
     if (isDeletingOrEditing) {
@@ -56,8 +57,6 @@ const PostCommentContainer = ({
     }
 
     querySnapshot.forEach((comment) => {
-      //console.log("[PostPage.js - comment.data()]",comment.data());
-      //console.log("[PostPage.js - comment]",comment);
       const postCommentObj = {
         ...comment.data(),
         id: comment.id,
@@ -70,10 +69,8 @@ const PostCommentContainer = ({
         setPostComments((prev) => [postCommentObj, ...prev]);
       }
     });
-    console.log("comments :", querySnapshot.docs);
+    setIsLoadingComments(false);
   };
-
-  console.log(postComments);
 
   const onCommentSubmit = async () => {
     if (state.comment.length === 0) {
@@ -83,7 +80,7 @@ const PostCommentContainer = ({
       }, 3000);
     } else {
       try {
-        const docRef = await addDoc(collection(dbService, "Comment"), {
+        await addDoc(collection(dbService, "Comment"), {
           commentor_id: authService.currentUser.uid,
           associated_post_id: postInfo.id,
           comment_text: state.comment,
@@ -92,10 +89,8 @@ const PostCommentContainer = ({
           like_count: 0,
           created_timestamp: serverTimestamp(),
         });
-        console.log("Comment written with ID:", docRef.id);
         alert("댓글이 정상적으로 업로드되었습니다.");
         setState((prev) => ({ ...prev, comment: "" }));
-        //setPostComments([]);
         getPostComments(true);
       } catch (error) {
         console.log("Error adding comment: ", error);
@@ -115,6 +110,8 @@ const PostCommentContainer = ({
         postComments={postComments}
         getPostComments={getPostComments}
         isTablet={isTablet}
+        setIsLoadingComments={setIsLoadingComments}
+        isLoadingComments={isLoadingComments}
       ></PostCommentContent>
     </>
   );

@@ -6,7 +6,6 @@ export const PostContentContainerBox = styled.div`
   display: flex;
   width: 960px;
   flex-direction: row;
-  transition: all 0.5s;
   ${media.smallDesktop`
   margin: inherit;
   width: inherit;

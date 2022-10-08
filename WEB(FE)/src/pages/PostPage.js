@@ -7,7 +7,7 @@ import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
 
-const PostPage = ({ isDesktop, isTablet }) => {
+const PostPage = () => {
   const {
     doc,
     updateDoc,
@@ -131,8 +131,6 @@ const PostPage = ({ isDesktop, isTablet }) => {
       onClick={onClick}
       onDeleteClick={onDeleteClick}
       toggleEditing={toggleEditing}
-      isDesktop={isDesktop}
-      isTablet={isTablet}
     ></PostContentContainer>
   );
 };

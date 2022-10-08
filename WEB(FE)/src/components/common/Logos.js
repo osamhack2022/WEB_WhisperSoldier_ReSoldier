@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
 export const AuthLogo = styled.div`
   font-size: 32px;
@@ -41,9 +42,15 @@ export const MainTitle = styled.span`
   letter-spacing: 1.12px;
   text-align: center;
   color: #1a7541;
+  ${media.smallDesktop`
+    font-size : 20px;
+  `}
+  ${media.mobile`
+    font-size: 19px;
+  `}
 `;
 
-export const SubTitle = styled.span`
+export const SubTitle = styled.div`
   margin: 0px;
   padding: 0px;
   position: relative;
@@ -53,49 +60,14 @@ export const SubTitle = styled.span`
   letter-spacing: 0.72px;
   color: #0d552c;
   font-weight: 600;
-`;
-
-export const MainTitleForTablet = styled.span`
-  margin: 0px;
-  padding: 0px;
-  font-size: 20px;
-  font-weight: 700;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.12px;
-  text-align: center;
-  color: #1a7541;
-`;
-
-export const SubTitleForTablet = styled.span`
-  margin-left: 10px;
-  position: relative;
-  top: -5px;
-  font-size: 14px;
-  text-align: right;
-  letter-spacing: 0.72px;
-  color: #0d552c;
-  font-weight: 600;
-`;
-
-export const MainTitleForMobile = styled.span`
-  margin: 0px;
-  padding: 0px;
-  font-size: 19px;
-  font-weight: 700;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.12px;
-  text-align: center;
-  color: #1a7541;
-`;
-
-export const SubTitleForMobile = styled.span`
-  margin-left: 10px;
-  position: relative;
-  font-size: 13px;
-  text-align: right;
-  letter-spacing: 0.72px;
-  color: #0d552c;
-  font-weight: 600;
+  ${media.smallDesktop`
+    margin: inherit;
+    margin-left : 10px;
+    padding : inherit;
+    top : -5px;
+  `}
+  ${media.mobile`
+    top: inherit;
+    font-size : 13px;
+  `}
 `;

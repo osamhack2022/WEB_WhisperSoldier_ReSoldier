@@ -20,6 +20,16 @@ const PostContentText = styled.div`
   font-weight: 400;
 `;
 
+const PostContentErrorText = styled.div`
+  white-space: pre-wrap;
+  font-size: 14px;
+  text-align: center;
+  letter-spacing: 0.56px;
+  color: #1d1d1d;
+  white-space: pre-wrap;
+  font-weight: 400;
+`;
+
 const InputForm = styled.textarea`
   background-color: #fbfbfb;
   width: 41vw;
@@ -66,7 +76,9 @@ const PostContentBody = ({
       ) : !errorPostInfo ? (
         <PostContentText>{postInfo.postContent}</PostContentText>
       ) : (
-        <PostContentText>찾으려는 포스트가 존재하지 않습니다.</PostContentText>
+        <PostContentErrorText>
+          찾으려는 포스트가 존재하지 않습니다.
+        </PostContentErrorText>
       )}
     </PostContentBox>
   );

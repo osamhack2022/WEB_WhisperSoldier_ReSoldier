@@ -1,4 +1,6 @@
+import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
+import { TabletQuery } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import {
   PostContentBodyContainer,
@@ -30,13 +32,12 @@ const PostContentContainer = ({
   setState,
   onDeleteClick,
   toggleEditing,
-  isDesktop,
-  isTablet,
 }) => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
   return (
     <PostContentContainerBox>
       <SideButtonContainer>
-        <SideButtonBox isDesktop={isDesktop} isTablet={isTablet}>
+        <SideButtonBox>
           <BackButton toLink="/" isMobile={!isTablet}>
             뒤로가기
           </BackButton>
@@ -58,11 +59,7 @@ const PostContentContainer = ({
         </SideButtonBox>
 
         {isTablet && postInfo.created_timestamp ? (
-          <SideButtonBox
-            isNotTop={true}
-            isDesktop={isDesktop}
-            isTablet={isTablet}
-          >
+          <SideButtonBox isNotTop={true}>
             {authService.currentUser ? (
               authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer

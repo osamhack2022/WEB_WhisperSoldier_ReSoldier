@@ -18,8 +18,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
-import { DesktopQuery, SmallDesktopQuery, TabletQuery } from "./lib/Const";
-import { useMediaQuery } from "react-responsive";
 
 const Body = styled.div`
   position: relative;
@@ -27,9 +25,6 @@ const Body = styled.div`
 
 /*각 페이지 라우트*/
 const App = () => {
-  const isDesktop = useMediaQuery({ query: DesktopQuery });
-  const isSmallDesktop = useMediaQuery({ query: SmallDesktopQuery });
-  const isTablet = useMediaQuery({ query: TabletQuery });
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const [sessionInfo, setSessionInfo] = useState(
     sessionStorage.getItem(`firebase:authUser:${FApiKey}:[DEFAULT]`)
@@ -79,17 +74,10 @@ const App = () => {
     <>
       {sessionInfo ? (
         <Body>
-          <Header
-            isDesktop={isDesktop}
-            isSmallDesktop={isSmallDesktop}
-            isTablet={isTablet}
-          ></Header>
+          <Header></Header>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route
-              path="/post/:id"
-              element={<PostPage isDesktop={isDesktop} isTablet={isTablet} />}
-            />
+            <Route path="/post/:id" element={<PostPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/write" element={<WritePage />} />
             <Route path="/search" element={<SearchPage />} />

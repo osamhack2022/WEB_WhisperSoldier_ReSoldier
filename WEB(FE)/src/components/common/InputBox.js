@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
 export const AuthInputBox = styled.input`
   width: 320px;
@@ -34,18 +35,8 @@ export const SearchBar = styled.input`
   &:hover {
     background: #f6f6f6;
   }
-`;
-
-export const SearchBarTablet = styled.input`
-  padding: 16px 27px 16px 27px;
-  border-radius: 25px;
-  height: 40px;
-  width: 200px;
-  background-color: #fbfbfb;
-  border: 1.5px solid rgb(0, 0, 0);
-  transition: all 0.5s;
-  cursor: pointer;
-  &:hover {
-    background: #f6f6f6;
-  }
+  ${media.tablet`
+    padding: 16px 5px 16px 15px;
+    width: 200px;
+  `}
 `;

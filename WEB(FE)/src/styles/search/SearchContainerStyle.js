@@ -69,7 +69,7 @@ const SearchBar = styled.input`
     width: 200px;
   `}
   ${media.mobile`
-    width: 100%;
+    width: 90%;
   `}
 
   &:hover {

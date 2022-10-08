@@ -1,56 +1,27 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import {
-  ChatButton,
-  UserProfileButton,
-  WritePostButton,
-  WritePostSmallButton,
-} from "./Buttons";
+import media from "../../modules/MediaQuery";
+import { ChatButton, UserProfileButton, WritePostButton } from "./Buttons";
 
-const ButtonSectionForDesktop = styled.div`
+const ButtonSection = styled.div`
   position: absolute;
   right: 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  ${media.smallDesktop`
+    right: 10vw;
+  `}
 `;
 
-const ButtonSectionForTablet = styled.div`
-  position: absolute;
-  right: 10vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-export const HeaderButtonSection = ({
-  isDesktop,
-  isSmaillDesktop,
-  isTablet,
-}) => {
+export const HeaderButtonSection = () => {
   const location = useLocation();
   console.log(location);
   return (
-    <>
-      {isDesktop ? (
-        <ButtonSectionForDesktop>
-          {location.pathname !== "/write" && (
-            <WritePostButton></WritePostButton>
-          )}
-          <ChatButton></ChatButton>
-          <UserProfileButton></UserProfileButton>
-        </ButtonSectionForDesktop>
-      ) : (
-        isTablet && (
-          <ButtonSectionForTablet>
-            {location.pathname !== "/write" && (
-              <WritePostSmallButton></WritePostSmallButton>
-            )}
-            <ChatButton></ChatButton>
-            <UserProfileButton></UserProfileButton>
-          </ButtonSectionForTablet>
-        )
-      )}
-    </>
+    <ButtonSection>
+      {location.pathname !== "/write" && <WritePostButton></WritePostButton>}
+      <ChatButton></ChatButton>
+      <UserProfileButton></UserProfileButton>
+    </ButtonSection>
   );
 };

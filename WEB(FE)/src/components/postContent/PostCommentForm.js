@@ -55,7 +55,7 @@ const ErrorCommentButtonShape = styled.button`
   padding: 0px 10px;
   color: #ffffff;
   height: 28px;
-  width: 100%;
+  width: 140px;
   background-color: #a65646;
   font-weight: 500;
   font-size: 11px;

@@ -16,6 +16,7 @@ import PostElement from "../post/PostElement";
 const SearchContainer = ({
   onSearchSubmit,
   searchInput,
+  currentSearchKeyword,
   onSearchInputChange,
   isSearching,
   countResult,
@@ -45,8 +46,8 @@ const SearchContainer = ({
           isShowContainer={isShowContainer}
         >
           <div>
-            "{searchInput}" 검색 결과 {countResult}개 중 {searchResults.length}
-            개 고민 표시
+            "{currentSearchKeyword}" 검색 결과 {countResult}개 중{" "}
+            {searchResults.length}개 고민 포스트 표시
           </div>
         </PostBoardTitleContainer>
         {!isTablet && isShowContainer && (

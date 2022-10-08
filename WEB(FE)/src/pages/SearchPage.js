@@ -15,6 +15,7 @@ import SearchContainer from "../components/search/SearchContainer";
 const SearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [currentSearchKeyword, setCurrentSearchKeyword] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
   const [currentSearchCount, setCurrentSearchCount] = useState(0);
@@ -125,7 +126,6 @@ const SearchPage = () => {
     if (snapshot) {
       let count = 0;
       let totalCount = 0;
-      console.log(snapshot.docs);
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
         const postTextToBeChecked = String(postObj.text);
@@ -165,11 +165,9 @@ const SearchPage = () => {
         startAfter(nextResultSnapshot)
       )
     );
-    console.log(snapshot);
     if (snapshot) {
       let count = 0;
       let totalCount = 0;
-      console.log(snapshot.docs);
 
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
@@ -202,6 +200,7 @@ const SearchPage = () => {
 
   const onClick = async (e) => {
     e.preventDefault();
+    setCurrentSearchKeyword(searchInput);
     await searchResult(10);
   };
 
@@ -214,6 +213,7 @@ const SearchPage = () => {
       onSearchSubmit={onSearchSubmit}
       onKeyUp={onKeyUp}
       searchInput={searchInput}
+      currentSearchKeyword={currentSearchKeyword}
       onSearchInputChange={onSearchInputChange}
       isSearching={isSearching}
       countResult={countResult}
