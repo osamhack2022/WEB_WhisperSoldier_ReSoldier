@@ -1,5 +1,6 @@
-import { deleteDoc, updateDoc, doc } from "firebase/firestore";
-import { useState } from "react";
+import { deleteDoc, updateDoc, doc, query, collection, where, getDocs, addDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { authService } from "../../lib/FAuth";
 import { dbService } from "../../lib/FStore";
 import {
   CommentBox,
@@ -29,6 +30,52 @@ const PostCommentElement = ({
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
   const [editCommentErrorInfo, setEditCommentErrorInfo] = useState(false);
+  
+  var nowUserId = authService.currentUser.uid;
+  const [isLikedByMe, setIsLikedByMe] = useState(false);
+  const likeCheckQuery = query(collection(dbService, "CommentLike"),
+    where("associated_comment_id", "==", commentElement.id),
+    where("user_id", "==", nowUserId)
+  );
+  const getIsLiked = async () => {
+    const querySnapshot = await getDocs(likeCheckQuery);
+    if (querySnapshot.docs.length === 0) {
+      setIsLikedByMe(false)
+    } else {
+      setIsLikedByMe(true)
+    };
+    const afterLikeActionSnapshot = await getDocs(likeCheckQuery);
+      await updateDoc(doc(dbService, "Comment", commentElement.id), {
+        like_count: (afterLikeActionSnapshot.docs.length),
+      })
+  };
+
+  const toggleLike = async () => {  
+    const commentDocRef = doc(dbService, "Comment", commentElement.id);
+    if (isLikedByMe) {
+      const querySnapshot = await getDocs(likeCheckQuery);
+      if (querySnapshot.docs.length === 0) {
+        console.log("you have not liked this yet.")
+      } else {
+        querySnapshot.forEach((like) => {
+          deleteDoc(doc(dbService, "CommentLike", like.id))
+        })
+      };
+      setIsLikedByMe(false);
+    } else {
+      await addDoc(collection(dbService, "CommentLike"), {
+        associated_comment_id: commentElement.id,
+        user_id: nowUserId,
+      })
+      setIsLikedByMe(true);
+      console.log("Liked");
+    };
+    const afterLikeActionSnapshot = await getDocs(likeCheckQuery);
+    await updateDoc(commentDocRef, {
+      like_count: (afterLikeActionSnapshot.docs.length),
+    })
+  }
+
   const onDeleteCommentClick = async () => {
     const check = window.confirm("정말로 댓글을 삭제하시겠습니까?");
     if (check) {
@@ -75,6 +122,10 @@ const PostCommentElement = ({
     setNewComment(value);
   };
 
+  useEffect(() => {
+    getIsLiked();
+  }, []);
+
   return (
     <CommentBox>
       <CommentTitle>
@@ -83,6 +134,9 @@ const PostCommentElement = ({
           <CommentUserText>익명</CommentUserText>
         </CommentUserBox>
         <CommentTimeText>{created_timestamp}</CommentTimeText>
+        <div>
+          공감 수: {commentElement.like_count}
+        </div>
       </CommentTitle>
       {!isEditingComment ? (
         <CommentText>{commentElement.comment_text}</CommentText>
@@ -114,9 +168,15 @@ const PostCommentElement = ({
         </CommentButtonBox>
       ) : (
         <CommentButtonBox>
-          <LikeCommentButton toLink="/" isMobile={!isTablet}>
-            공감하기
-          </LikeCommentButton>
+          {isLikedByMe ? (
+            <LikeCommentButton toggleLike={toggleLike} isMobile={!isTablet}>
+              공감 취소하기
+            </LikeCommentButton>
+          ) : (
+            <LikeCommentButton toggleLike={toggleLike} isMobile={!isTablet}>
+              공감하기
+            </LikeCommentButton>
+          )}
           <PostChatCommentButton toLink="/" isMobile={!isTablet}>
             채팅하기
           </PostChatCommentButton>

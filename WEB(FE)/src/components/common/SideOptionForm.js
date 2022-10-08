@@ -25,7 +25,6 @@ export const SideOptionFormForPostBoard = ({
   isResultDesc,
   onSearchSubmit,
 }) => {
-  console.log("TIMEDEPTHSELECT PB:, ", timeDepthSelect);
   return (
     <SideOptionFormBox>
       <SideOptionTitleBox>검색 설정</SideOptionTitleBox>

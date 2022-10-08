@@ -47,8 +47,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
   const getIsLiked = async () => {
-    console.log("GETISLIKED DO YOUR STUFF")
-    const likeCheckQuery = query(collection(dbService, "Like"),
+    const likeCheckQuery = query(collection(dbService, "PostLike"),
       where("associated_post_id", "==", postInfo.id),
       where("user_id", "==", nowUserId)
     );
@@ -56,10 +55,8 @@ const PostPage = ({ isDesktop, isTablet }) => {
     const querySnapshot = await getDocs(likeCheckQuery);
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false)
-      return false;
     } else {
       setIsLikedByMe(true)
-      return true;
     };
 
   };
@@ -122,7 +119,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
     if (isLikedByMe) {
       //firebase db에 like_count 업데이트
       var unLikeCount = 0;
-      const likeCheckQuery = query(collection(dbService, "Like"),
+      const likeCheckQuery = query(collection(dbService, "PostLike"),
         where("associated_post_id", "==", postInfo.id),
         where("user_id", "==", nowUserId)
       );
@@ -131,7 +128,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
         console.log("you have not liked this yet.")
       } else {
         querySnapshot.forEach((like) => {
-          deleteDoc(doc(dbService, 'Like', like.id))
+          deleteDoc(doc(dbService, 'PostLike', like.id))
           unLikeCount = unLikeCount + 1
         })
       };
@@ -148,7 +145,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
         like_count: (postInfo.like_count + 1),
       })
       .then(setPostInfo((prev) => ({ ...prev, like_count: (postInfo.like_count + 1) })))
-      await addDoc(collection(dbService, "Like"), {
+      await addDoc(collection(dbService, "PostLike"), {
         associated_post_id: postInfo.id,
         user_id: nowUserId,
       })
@@ -195,14 +192,8 @@ const PostPage = ({ isDesktop, isTablet }) => {
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
-      
     }
-    //setCurrentUserId((prev) => authService.currentUser.uid);
-    //console.log(authService.currentUser.uid)
-    //nowUserId = authService.currentUser.uid;
-    //console.log(nowUserId);
     getIsLiked();
-    //console.log("지금 유저의 아이디: ", currentUserId);
   }, []);
 
   return (
