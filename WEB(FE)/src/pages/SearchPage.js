@@ -53,62 +53,32 @@ const SearchPage = ({ isDesktop, isTablet }) => {
 	}
 	console.log("Timestamp : ", getTimeDepth());
 
-  const getSearchResultsQuery = (isOrderByLikes=false, orderByDesc=true, searchTimeDepth=getTimeDepth(), startAfterPoint) => {
+  const getSearchResultsQuery = (isOrderByLikes=false, orderDescOrAsc="desc", searchTimeDepth=getTimeDepth(), startAfterPoint) => {
 		if (startAfterPoint) {
 			if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
-				if (orderByDesc) {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("like_count", "desc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					startAfter(startAfterPoint),
-					))
-				} else {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("like_count", "asc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					startAfter(startAfterPoint),
-					))
-				}
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("like_count", orderDescOrAsc),
+				where("created_timestamp", ">=", searchTimeDepth),
+				startAfter(startAfterPoint),
+				))
 			} else {
-				if (orderByDesc) {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "desc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					startAfter(startAfterPoint),
-					))
-				} else {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "asc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					startAfter(startAfterPoint),
-					))
-				}
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", orderDescOrAsc),
+				where("created_timestamp", ">=", searchTimeDepth),
+				startAfter(startAfterPoint),
+				))
 			} 
 		} else {
 			if (isOrderByLikes) { // 추후에 "공감하기" 구현되면 사용될 예정
-				if (orderByDesc) {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("like_count", "desc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					))
-				} else {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("like_count", "asc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					))
-				}
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("like_count", orderDescOrAsc),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
 			} else {
-				if (orderByDesc) {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "desc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					))
-				} else {
-					return (query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "asc"),
-					where("created_timestamp", ">=", searchTimeDepth),
-					))
-				}
+				return (query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", orderDescOrAsc),
+				where("created_timestamp", ">=", searchTimeDepth),
+				))
 			} 
 		}
 		
@@ -119,7 +89,6 @@ const SearchPage = ({ isDesktop, isTablet }) => {
     //e.preventDefault();
     setSearchResults([]);
     firstSearchResult(10);
-
     setIsSearching(true);
   };
 
@@ -134,11 +103,11 @@ const SearchPage = ({ isDesktop, isTablet }) => {
   const firstSearchResult = async (countSearchPost) => {
     /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
 		const snapshot = await getDocs(
-			getSearchResultsQuery(false, isResultDesc, getTimeDepth(timeDepthValue))
-      /* query(
-        collection(dbService, "WorryPost"),
-        orderBy("created_timestamp", "desc")
-      ) */
+			getSearchResultsQuery(
+				false,
+				orderDescOrAsc,
+				getTimeDepth(timeDepthValue)
+			)
     );
     if (snapshot) {
       let count = 0;
@@ -178,12 +147,12 @@ const SearchPage = ({ isDesktop, isTablet }) => {
   const searchResult = async (countSearchPost) => {
     /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
     const snapshot = await getDocs(
-			getSearchResultsQuery(false, isResultDesc, getTimeDepth(timeDepthValue), nextResultSnapshot)
-      /* query(
-        collection(dbService, "WorryPost"),
-        orderBy("created_timestamp", "desc"),
-        startAfter(nextResultSnapshot)
-      ) */
+			getSearchResultsQuery(
+				false,
+				orderDescOrAsc,
+				getTimeDepth(timeDepthValue),
+				nextResultSnapshot
+			)
     );
     console.log(snapshot);
     if (snapshot) {
@@ -279,9 +248,11 @@ const onSelectAllTime = () => {
 
 	const onSelectDesc = () => {
 		setIsResultDesc(true);
+		setOrderDescOrAsc("desc")
 	}
 	const onSelectAsc = () => {
 		setIsResultDesc(false);
+		setOrderDescOrAsc("asc")
 	}
 
 	

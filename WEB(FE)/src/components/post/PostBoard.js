@@ -17,7 +17,7 @@ import {
   PostBoardContainer,
   SideOptionContainer,
 } from "../../styles/post/PostBoardStyle";
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, where } from "firebase/firestore";
 
 const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   const { query, collection, getDocs, limit, orderBy, startAfter } = dbFunction;
@@ -39,7 +39,7 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
     useRecoilState(IsUpdatePostList);
     
   const [timeDepthValue, setTimeDepthValue] = useState("week")
-  const [timeDepthSelect, setTimeDepthSelect] = useState({
+  const [timeDepthSelectObj, setTimeDepthSelectObj] = useState({
     week: true,
     month: false,
     halfYear: false,
@@ -82,27 +82,31 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   }, []);
 
   const getQueryWithDescendingTime = useCallback(
-    (limitDocs, startAfterPoint, descOrAsc, searchTimeDepth=getTimeDepth(), limitWithCount) => {
-      if (startAfterPoint) {
-        return query(
-          collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", descOrAsc),
-          startAfter(startAfterPoint),
-          limit(limitDocs)
-        );
-      } else {
-        return query(
-          collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", descOrAsc),
-          limit(limitDocs)
-        );
-      }
+    (limitDocs, order, searchTimeDepth=getTimeDepth(), startAfterPoint) => {
+      
+        if (startAfterPoint) {
+          return query(
+            collection(dbService, "WorryPost"),
+            orderBy("created_timestamp", order),
+            where("created_timestamp", ">=", searchTimeDepth),
+            startAfter(startAfterPoint),
+            limit(limitDocs)
+          );
+        } else {
+          return query(
+            collection(dbService, "WorryPost"),
+            orderBy("created_timestamp", order),
+            where("created_timestamp", ">=", searchTimeDepth),
+            limit(limitDocs)
+          );
+        }
+      
     },
     [dbService]
   );
 
   const getFirst = async () => {
-    const first = getQueryWithDescendingTime(10);
+    const first = getQueryWithDescendingTime(10, orderDescOrAsc, getTimeDepth(timeDepthValue));
     const firstSnapshot = await getDocs(first);
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
@@ -110,11 +114,13 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   };
 
   const moveNext = async () => {
-    const next = getQueryWithDescendingTime(10, nextPostSnapShot);
+    const next = getQueryWithDescendingTime(10, orderDescOrAsc, getTimeDepth(timeDepthValue), nextPostSnapShot);
     const querySnapshot = await getDocs(next);
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
     const afterQuery = getQueryWithDescendingTime(
       1,
+      orderDescOrAsc,
+      getTimeDepth(timeDepthValue),
       querySnapshot.docs[querySnapshot.docs.length - 1]
     );
     const afterSnapshot = await getDocs(afterQuery);
@@ -139,15 +145,17 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   }, []);
 
   const recoverPost = async () => {
-    const recoverQuery = query(
-      collection(dbService, "WorryPost"),
-      orderBy("created_timestamp", "desc"),
-      limit(countCurrentPost)
-    );
+    const recoverQuery = getQueryWithDescendingTime(
+      countCurrentPost,
+      orderDescOrAsc,
+      getTimeDepth(timeDepthValue)
+    )
     const recoverSnapshot = await getDocs(recoverQuery);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
     const afterQuery = getQueryWithDescendingTime(
       1,
+      orderDescOrAsc,
+      getTimeDepth(timeDepthValue),
       recoverSnapshot.docs[recoverSnapshot.docs.length - 1]
     );
     const afterSnapshot = await getDocs(afterQuery);
@@ -159,6 +167,72 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
       setIsNextPostExistRecoil(true);
     }
   };
+
+  
+const onSelectWeek = () => {
+	setTimeDepthValue('week');
+	setTimeDepthSelectObj({
+		week: true,
+		month: false,
+		halfYear: false,
+		fullYear: false,
+		allTime: false,
+	});
+}
+const onSelectMonth = () => {
+	setTimeDepthValue('month');
+	setTimeDepthSelectObj({
+		week: false,
+		month: true,
+		halfYear: false,
+		fullYear: false,
+		allTime: false,
+	});
+}
+const onSelectHalfYear = () => {
+	setTimeDepthValue('halfYear');
+	setTimeDepthSelectObj({
+		week: false,
+		month: false,
+		halfYear: true,
+		fullYear: false,
+		allTime: false,
+	});
+}
+const onSelectFullYear = () => {
+	setTimeDepthValue('fullYear');
+	setTimeDepthSelectObj({
+		week: false,
+		month: false,
+		halfYear: false,
+		fullYear: true,
+		allTime: false,
+	});
+}
+const onSelectAllTime = () => {
+	setTimeDepthValue('allTime');
+	setTimeDepthSelectObj({
+		week: false,
+		month: false,
+		halfYear: false,
+		fullYear: false,
+		allTime: true,
+	});
+}
+
+	const onSelectDesc = () => {
+    setIsResultDesc(true);
+    setOrderDescOrAsc("desc");
+	}
+	const onSelectAsc = () => {
+    setIsResultDesc(false);
+    setOrderDescOrAsc("asc");
+	}
+
+  const firstAction = () => {
+    setPosts([]);
+    getFirst();
+  }
 
   useEffect(() => {
     console.log("[PostBoard.js]", isUpdatePostList);
@@ -200,7 +274,18 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
           </PostBoardTitleContainer>
           {!isTablet && isShowContainer && (
             <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-              <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+              <SideOptionFormForPostBoard
+              onSelectWeek={onSelectWeek}
+              onSelectMonth={onSelectMonth}
+              onSelectHalfYear={onSelectHalfYear}
+              onSelectFullYear={onSelectFullYear}
+              onSelectAllTime={onSelectAllTime}
+              timeDepthSelect={timeDepthSelectObj}
+              onSelectDesc={onSelectDesc}
+              onSelectAsc={onSelectAsc}
+              isResultDesc={isResultDesc}
+              onSearchSubmit={firstAction}
+              ></SideOptionFormForPostBoard>
             </SideOptionContainer>
           )}
           <PostBoardBodyContainer>
@@ -218,7 +303,18 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
         </PostBoardContainer>
         {isTablet && (
           <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-            <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+            <SideOptionFormForPostBoard
+            onSelectWeek={onSelectWeek}
+            onSelectMonth={onSelectMonth}
+            onSelectHalfYear={onSelectHalfYear}
+            onSelectFullYear={onSelectFullYear}
+            onSelectAllTime={onSelectAllTime}
+            timeDepthSelect={timeDepthSelectObj}
+            onSelectDesc={onSelectDesc}
+            onSelectAsc={onSelectAsc}
+            isResultDesc={isResultDesc}
+            onSearchSubmit={firstAction}
+            ></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}
       </>

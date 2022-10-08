@@ -62,7 +62,7 @@ const SearchContainer = ({
       </SearchContentBox>
       {isTablet && (
         <SideOptionContainer isDesktop={isDesktop} isTablet={isTablet}>
-          <SideOptionFormForPostBoard 
+          <SideOptionFormForPostBoard
             onSelectWeek={onSelectWeek}
             onSelectMonth={onSelectMonth}
             onSelectHalfYear={onSelectHalfYear}

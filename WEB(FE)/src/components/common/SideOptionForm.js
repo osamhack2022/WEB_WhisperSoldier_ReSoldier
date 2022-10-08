@@ -23,10 +23,9 @@ export const SideOptionFormForPostBoard = ({
   onSelectDesc,
   onSelectAsc,
   isResultDesc,
-  firstSearchResult,
   onSearchSubmit,
 }) => {
-
+  console.log("TIMEDEPTHSELECT PB:, ", timeDepthSelect);
   return (
     <SideOptionFormBox>
       <SideOptionTitleBox>검색 설정</SideOptionTitleBox>
@@ -48,7 +47,7 @@ export const SideOptionFormForPostBoard = ({
         </OptionContentBox>
       </OptionBox>
       <OptionBox>
-        <button onClick={onSearchSubmit}>설정 적용해서 검색하기</button>
+      <button onClick={onSearchSubmit}>설정 적용해서 조회하기</button>
       </OptionBox>
     </SideOptionFormBox>
   );
