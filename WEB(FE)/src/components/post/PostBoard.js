@@ -5,8 +5,7 @@ import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
 import { SideOptionFormForPostBoard } from "../common/SideOptionForm";
 import MoreLoadPostButton from "./MoreLoadPostButton";
-import { useRecoilState } from "recoil";
-import {
+import { useRecoilState } from "recoil";import {
   CountCurrentPost,
   CurrentScrollPos,
   IsNextPostExistRecoil,
@@ -17,7 +16,8 @@ import {
   PostBoardContainer,
   SideOptionContainer,
 } from "../../styles/post/PostBoardStyle";
-import { Timestamp, where } from "firebase/firestore";
+import { where } from "firebase/firestore";
+import getTimeDepth from "../../modules/GetTimeDepth";
 
 const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   const { query, collection, getDocs, limit, orderBy, startAfter } = dbFunction;
@@ -49,23 +49,6 @@ const PostBoard = ({ isDesktop, isSmallDesktop, isTablet }) => {
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 	const [isResultDesc, setIsResultDesc] = useState(true);
 
-  const now = new Date();
-  const getTimeDepth = (critera) => {
-    switch(critera) {
-      case 'week':
-        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)));
-      case 'month':
-        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 1, now.getDate())));
-      case 'halfYear':
-        return(Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth() - 6, now.getDate())));
-      case 'fullYear':
-        return(Timestamp.fromDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7)));
-      case 'allTime':
-        return(Timestamp.fromDate(new Date(0)));
-      default:
-        return(Timestamp.fromDate(new Date(0)));
-    }
-  }
   console.log("Timestamp : ", getTimeDepth());
 
   const snapshotToPosts = useCallback((snapshot) => {
