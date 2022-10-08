@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import {
   browserSessionPersistence,
-  setPersistence,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
 import { useForm } from "../modules/useForm";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { UserInfo } from "../store/AuthStore";
 import { useState } from "react";
 
@@ -52,16 +51,8 @@ const LoginPage = () => {
           const errorMessage = error.message;
         });*/
 
-      const data = await signInWithEmailAndPassword(
-        auth,
-        state.email,
-        state.password
-      );
+      await signInWithEmailAndPassword(auth, state.email, state.password);
 
-      //console.log(data);
-      console.log(authService);
-      console.log(authService.currentUser);
-      console.log(authService.currentUser.emailVerified);
       const {
         currentUser: { emailVerified },
       } = authService;

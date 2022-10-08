@@ -89,7 +89,6 @@ const PostPage = () => {
     const docRef = doc(dbService, "WorryPost", id);
     const docSnapShot = await getDoc(docRef);
     if (docSnapShot.exists()) {
-      console.log("Doc Data: ", docSnapShot.data().created_timestamp);
       const contentObj = {
         ...docSnapShot.data(),
         id,
@@ -134,12 +133,5 @@ const PostPage = () => {
     ></PostContentContainer>
   );
 };
-
-/**
- *       postComments={postComments}
-      commentList={commentList}
-      getPostComments={getPostComments}
-            onSubmit={onSubmit}
- */
 
 export default PostPage;

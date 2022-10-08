@@ -30,7 +30,6 @@ const App = () => {
     sessionStorage.getItem(`firebase:authUser:${FApiKey}:[DEFAULT]`)
   );
   const auth = authService.currentUser;
-  console.log(userInfo);
 
   const _session_key = `firebase:authUser:${FApiKey}:[DEFAULT]`;
   const is_login = sessionStorage.getItem(_session_key);

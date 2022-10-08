@@ -16,6 +16,7 @@ import PostElement from "../post/PostElement";
 const SearchContainer = ({
   onSearchSubmit,
   searchInput,
+  isInputError,
   currentSearchKeyword,
   onSearchInputChange,
   isSearching,
@@ -24,6 +25,12 @@ const SearchContainer = ({
   isNextResultExist,
   onClick,
   onKeyUp,
+  setTimeDepthValue,
+  timeDepthSelect,
+  setTimeDepthSelect,
+  isResultDesc,
+  setIsResultDesc,
+  setOrderDescOrAsc,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
 
@@ -32,6 +39,8 @@ const SearchContainer = ({
     setIsShowContainer((prev) => !prev);
   }, []);
 
+  console.log("[SearchContainer.js]", timeDepthSelect, isResultDesc);
+
   return (
     <SearchContainerBox>
       <SearchBarInSearchPage
@@ -39,6 +48,7 @@ const SearchContainer = ({
         onSearchInputChange={onSearchInputChange}
         onSearchSubmit={onSearchSubmit}
         onKeyUp={onKeyUp}
+        isInputError={isInputError}
       ></SearchBarInSearchPage>
       <SearchContentBox>
         <PostBoardTitleContainer
@@ -71,7 +81,15 @@ const SearchContainer = ({
       </SearchContentBox>
       {isTablet && (
         <SideOptionContainer>
-          <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+          <SideOptionFormForPostBoard
+            onSearchSubmit={onSearchSubmit}
+            setTimeDepthValue={setTimeDepthValue}
+            timeDepthSelect={timeDepthSelect}
+            setTimeDepthSelect={setTimeDepthSelect}
+            isResultDesc={isResultDesc}
+            setIsResultDesc={setIsResultDesc}
+            setOrderDescOrAsc={setOrderDescOrAsc}
+          ></SideOptionFormForPostBoard>
         </SideOptionContainer>
       )}
     </SearchContainerBox>

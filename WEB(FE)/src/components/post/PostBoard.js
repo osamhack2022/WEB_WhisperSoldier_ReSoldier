@@ -19,6 +19,8 @@ import {
 } from "../../styles/post/PostBoardStyle";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
+import { getSearchQuery } from "../../modules/GetSearchQuery";
+import getTimeDepth from "../../modules/GetTimeDepth";
 
 const PostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
@@ -39,6 +41,17 @@ const PostBoard = () => {
     useRecoilState(CurrentScrollPos);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
+
+  const [timeDepthValue, setTimeDepthValue] = useState("week");
+  const [timeDepthSelect, setTimeDepthSelect] = useState({
+    week: true,
+    month: false,
+    halfYear: false,
+    fullYear: false,
+    allTime: false,
+  });
+  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
+  const [isResultDesc, setIsResultDesc] = useState(true);
 
   const snapshotToPosts = useCallback((snapshot) => {
     if (snapshot) {
@@ -74,16 +87,32 @@ const PostBoard = () => {
   );
 
   const getFirst = async () => {
-    const first = getQueryWithDescendingTime(10);
-    const firstSnapshot = await getDocs(first);
+    //const first = getQueryWithDescendingTime(10);
+    const firstSnapshot = await getDocs(
+      getSearchQuery(
+        false,
+        orderDescOrAsc,
+        getTimeDepth(timeDepthValue),
+        null,
+        10
+      )
+    );
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
     setIsNextPostExist(true);
   };
 
   const moveNext = async () => {
-    const next = getQueryWithDescendingTime(10, nextPostSnapShot);
-    const querySnapshot = await getDocs(next);
+    //const next = getQueryWithDescendingTime(10, nextPostSnapShot);
+    const querySnapshot = await getDocs(
+      getSearchQuery(
+        false,
+        orderDescOrAsc,
+        getTimeDepth(timeDepthValue),
+        nextPostSnapShot,
+        10
+      )
+    );
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
     const afterQuery = getQueryWithDescendingTime(
       1,
@@ -111,18 +140,36 @@ const PostBoard = () => {
   }, []);
 
   const recoverPost = async () => {
+    /*
     const recoverQuery = query(
       collection(dbService, "WorryPost"),
       orderBy("created_timestamp", "desc"),
       limit(countCurrentPost)
+    );*/
+
+    const recoverSnapshot = await getDocs(
+      getSearchQuery(
+        false,
+        orderDescOrAsc,
+        getTimeDepth(timeDepthValue),
+        null,
+        countCurrentPost
+      )
     );
-    const recoverSnapshot = await getDocs(recoverQuery);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
-    const afterQuery = getQueryWithDescendingTime(
+    /*const afterQuery = getQueryWithDescendingTime(
       1,
       recoverSnapshot.docs[recoverSnapshot.docs.length - 1]
+    );*/
+    const afterSnapshot = await getDocs(
+      getSearchQuery(
+        false,
+        orderDescOrAsc,
+        getTimeDepth(timeDepthValue),
+        recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
+        1
+      )
     );
-    const afterSnapshot = await getDocs(afterQuery);
     if (afterSnapshot.docs.length === 0) {
       setIsNextPostExist(false);
       setIsNextPostExistRecoil(false);
@@ -130,6 +177,18 @@ const PostBoard = () => {
       setIsNextPostExist(true);
       setIsNextPostExistRecoil(true);
     }
+  };
+
+  const onSearchSubmit = () => {
+    setPosts([]);
+    setNextPostSnapShot({});
+    setIsNextPostExist(false);
+    setPostsRecoil([]);
+    setCountCurrentPost(10);
+    setIsNextPostExist(false);
+    setIsUpdatePostList(false);
+    setCurrentScrollPos(0);
+    getFirst();
   };
 
   useEffect(() => {
@@ -170,7 +229,15 @@ const PostBoard = () => {
           </PostBoardTitleContainer>
           {!isTablet && isShowContainer && (
             <SideOptionContainer>
-              <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+              <SideOptionFormForPostBoard
+                onSearchSubmit={null}
+                setTimeDepthValue={setTimeDepthValue}
+                timeDepthSelect={timeDepthSelect}
+                setTimeDepthSelect={setTimeDepthSelect}
+                isResultDesc={isResultDesc}
+                setIsResultDesc={setIsResultDesc}
+                setOrderDescOrAsc={setOrderDescOrAsc}
+              ></SideOptionFormForPostBoard>
             </SideOptionContainer>
           )}
           <PostBoardBodyContainer>
@@ -188,7 +255,15 @@ const PostBoard = () => {
         </PostBoardContainer>
         {isTablet && (
           <SideOptionContainer>
-            <SideOptionFormForPostBoard></SideOptionFormForPostBoard>
+            <SideOptionFormForPostBoard
+              onSearchSubmit={onSearchSubmit}
+              setTimeDepthValue={setTimeDepthValue}
+              timeDepthSelect={timeDepthSelect}
+              setTimeDepthSelect={setTimeDepthSelect}
+              isResultDesc={isResultDesc}
+              setIsResultDesc={setIsResultDesc}
+              setOrderDescOrAsc={setOrderDescOrAsc}
+            ></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}
       </>

@@ -10,12 +10,12 @@ const SearchBox = styled(Link)`
   flex-direction: row;
   align-items: center;
   text-decoration: none;
-  margin-left: 100px;
+  margin-left: 115px;
   cursor: default;
   ${media.smallDesktop`
     margin-left : inherit;
     position: absolute;
-    left: 50vw;
+    left: 50%;
     transform: translate(-50%, 0%);
   `}
 `;

@@ -3,7 +3,7 @@ import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 import media from "../../modules/MediaQuery";
 
 const PostBoardTitle = styled.span`
-  font-size: 16px;
+  font-size: 15px;
   text-align: center;
   letter-spacing: 0.64px;
   color: #000000;

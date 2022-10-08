@@ -37,11 +37,11 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 290px;
+  margin-left: 305px;
   top: -65px;
   ${media.smallDesktop`
     margin-left: inherit;
-    left: 50vw;
+    left: 50%;
     transform: translate(-50%, 0%);
     top: -56px;
   `}
@@ -51,7 +51,7 @@ const SearchBox = styled.div`
     left:inherit;
     top:inherit;
     transform: inherit;
-    width: 100%;
+    
     margin-bottom: 10px;
   `}
 `;
@@ -69,7 +69,7 @@ const SearchBar = styled.input`
     width: 200px;
   `}
   ${media.mobile`
-    width: 90%;
+  flex-grow : 1;
   `}
 
   &:hover {
@@ -77,28 +77,62 @@ const SearchBar = styled.input`
   }
 `;
 
+const SearcErrorTextBox = styled.div`
+  position: absolute;
+  z-index: 2;
+  font-size: 14px;
+  text-align: center;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 14px 27px 8px 27px;
+  border-radius: 5px;
+  height: 48px;
+  width: 350px;
+  background-color: rgba(166, 86, 70, 10);
+  opacity: ${(props) => (props.isInputError ? "0.9" : "0")};
+  color: #ffffff;
+  transition: all 0.5s;
+  ${media.tablet`
+    padding: 14px 5px 16px 8px;
+    width: 250px;
+  `}
+  ${media.mobile`
+  top : 50px;
+  left : inherit;
+  transform: inherit;
+  width: 90%;
+  `}
+`;
+
 export const SearchBarInSearchPage = ({
   searchInput,
   onSearchInputChange,
   onSearchSubmit,
   onKeyUp,
+  isInputError,
 }) => {
   return (
-    <SearchBox>
-      <SearchBar
-        name="text"
-        type="search"
-        placeholder="검색해서 고민을 탐색해보세요!"
-        value={searchInput}
-        onChange={onSearchInputChange}
-        limit={50}
-        required
-        autoFocus
-        onKeyUp={onKeyUp}
-      ></SearchBar>
-      <SearchButtonShape onClick={onSearchSubmit}>
-        <SearchIcon></SearchIcon>
-      </SearchButtonShape>
-    </SearchBox>
+    <>
+      <SearchBox>
+        <SearchBar
+          name="text"
+          type="search"
+          placeholder="검색해서 고민을 탐색해보세요!"
+          value={searchInput}
+          onChange={onSearchInputChange}
+          limit={50}
+          required
+          autoFocus
+          onKeyUp={onKeyUp}
+        ></SearchBar>
+        <SearchButtonShape onClick={onSearchSubmit}>
+          <SearchIcon></SearchIcon>
+        </SearchButtonShape>
+      </SearchBox>
+      <SearcErrorTextBox isInputError={isInputError}>
+        검색어를 입력해주세요
+      </SearcErrorTextBox>
+    </>
   );
 };
