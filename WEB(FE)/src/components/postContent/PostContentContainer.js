@@ -1,4 +1,5 @@
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { TabletQuery } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
@@ -34,11 +35,15 @@ const PostContentContainer = ({
   toggleEditing,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  };
   return (
     <PostContentContainerBox>
       <SideButtonContainer>
         <SideButtonBox>
-          <BackButton toLink="/" isMobile={!isTablet}>
+          <BackButton goBack={goBack} isMobile={!isTablet}>
             뒤로가기
           </BackButton>
           {!isTablet &&

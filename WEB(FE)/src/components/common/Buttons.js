@@ -332,7 +332,7 @@ const BackButtonImg = styled(IoMdArrowBack)`
   background-color: rgba(0, 0, 0, 0);
 `;
 
-const BackButtonBlock = styled(Link)`
+const BackButtonBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -351,9 +351,9 @@ const BackButtonBlock = styled(Link)`
   }
 `;
 
-export const BackButton = ({ toLink, children, isMobile }) => {
+export const BackButton = ({ goBack, children, isMobile }) => {
   return (
-    <BackButtonBlock to={toLink} isMobile={isMobile}>
+    <BackButtonBlock onClick={goBack} isMobile={isMobile}>
       <BackButtonImg></BackButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </BackButtonBlock>

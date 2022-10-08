@@ -3,12 +3,14 @@ import { FiArrowDown, FiArrowUp } from "react-icons/fi";
 import media from "../../modules/MediaQuery";
 
 const PostBoardTitle = styled.span`
-  font-size: 15px;
-  text-align: center;
+  font-size: 14px;
+  width: fit-content;
+  text-align: left;
   letter-spacing: 0.64px;
+  flex-grow: 1;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const PostBoardTitleBox = styled.div`
@@ -28,12 +30,14 @@ const PostBoardMoreButton = styled(FiArrowDown)`
   font-size: 16px;
   color: #4f4f4f;
   transition: all 0.3s;
+  z-index: 2;
 `;
 
 const PostBoardMoreUpButton = styled(FiArrowUp)`
   font-size: 16px;
   color: #4f4f4f;
   transition: all 0.3s;
+  z-index: 2;
 `;
 
 const PostBoardMoreButtonText = styled.span`
@@ -42,6 +46,7 @@ const PostBoardMoreButtonText = styled.span`
   text-align: center;
   letter-spacing: 0.64px;
   color: #4f4f4f;
+  z-index: 2;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 700;
   transition: all 0.3s;
@@ -57,8 +62,10 @@ const PostBoardMoreButtonBox = styled.div`
     margin: 5px 0px;
     text-decoration: none;
     height: 48px;
+    width: 90px;
     align-items: center;
     transition: all 0.3s;
+    z-index: 2;
     cursor: pointer;
     &:hover
       ${PostBoardMoreButton},

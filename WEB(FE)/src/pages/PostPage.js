@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
 import { dbFunction } from "../lib/FStore";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -19,6 +20,7 @@ const PostPage = () => {
     query,
     where,
   } = dbFunction;
+  console.log(authService.currentUser);
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);

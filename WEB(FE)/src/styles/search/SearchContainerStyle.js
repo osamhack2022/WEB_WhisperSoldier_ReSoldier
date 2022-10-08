@@ -106,8 +106,9 @@ const SearcErrorTextBox = styled.div`
 `;
 
 export const SearchBarInSearchPage = ({
-  searchInput,
-  onSearchInputChange,
+  inputValue,
+  onChange,
+  //onSearchInputChange,
   onSearchSubmit,
   onKeyUp,
   isInputError,
@@ -116,11 +117,11 @@ export const SearchBarInSearchPage = ({
     <>
       <SearchBox>
         <SearchBar
-          name="text"
+          name="searchInput"
           type="search"
           placeholder="검색해서 고민을 탐색해보세요!"
-          value={searchInput}
-          onChange={onSearchInputChange}
+          value={inputValue.searchInput}
+          onChange={onChange}
           limit={50}
           required
           autoFocus

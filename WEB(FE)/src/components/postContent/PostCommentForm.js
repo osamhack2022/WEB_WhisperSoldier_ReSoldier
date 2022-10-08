@@ -32,39 +32,26 @@ const WriteCommentButtonShape = styled.button`
   margin-top: 5px;
   position: relative;
   padding: 0px 10px;
-  color: #0d552c;
+  color: ${(props) => (props.error ? "#ffffff" : "#0d552c")};
   height: 28px;
-  width: 90px;
-  background-color: rgba(0, 0, 0, 0);
+  width: ${(props) => (props.error ? "140px" : "90px")};
+  background-color: ${(props) =>
+    props.error ? "#a65646" : "rgba(0, 0, 0, 0)"};
   font-weight: 500;
   font-size: 11px;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
-  border: 1px solid rgb(26, 117, 65);
+  cursor: ${(props) => (props.error ? "default" : "pointer")};
+  border: ${(props) =>
+    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
   transition: all 0.5s;
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
+  white-space: nowrap;
   &:hover {
-    background: #0d552c;
-    color: #ffffff;
+    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
+    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
   }
-`;
-
-const ErrorCommentButtonShape = styled.button`
-  margin-top: 5px;
-  position: relative;
-  padding: 0px 10px;
-  color: #ffffff;
-  height: 28px;
-  width: 140px;
-  background-color: #a65646;
-  font-weight: 500;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  border: 1px solid rgb(166, 86, 70);
-  transition: all 0.5s;
-  animation: vibration 0.1s 5;
 
   @keyframes vibration {
     from {
@@ -76,27 +63,13 @@ const ErrorCommentButtonShape = styled.button`
   }
 `;
 
-const WritCommentIcon = styled(TbSend)`
-  position: absolute;
-  top: 50%;
-  left: 15%;
-  transform: translate(0%, -50%);
-  background-color: rgba(0, 0, 0, 0);
-  color: #0d552c;
-  &:hover {
-    color: #ffffff;
-  }
-`;
-
-export const WriteCommentButton = ({ onClick, children }) => {
+export const WriteCommentButton = ({ onClick, errorCommentInfo, children }) => {
   return (
-    <WriteCommentButtonShape onClick={onClick}>
+    <WriteCommentButtonShape onClick={onClick} error={errorCommentInfo}>
       {children}
     </WriteCommentButtonShape>
   );
 };
-
-//<WritCommentIcon></WritCommentIcon>
 
 const PostCommentForm = ({
   state,
@@ -126,13 +99,12 @@ const PostCommentForm = ({
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
       <BottonLine></BottonLine>
-      {errorCommentInfo ? (
-        <ErrorCommentButtonShape>내용을 입력해주세요</ErrorCommentButtonShape>
-      ) : (
-        <WriteCommentButton onClick={onCommentSubmit}>
-          댓글 작성하기
-        </WriteCommentButton>
-      )}
+      <WriteCommentButton
+        onClick={onCommentSubmit}
+        errorCommentInfo={errorCommentInfo}
+      >
+        {errorCommentInfo ? "내용을 입력해주세요" : "댓글 작성하기"}
+      </WriteCommentButton>
     </PostCommentFormBox>
   );
 };

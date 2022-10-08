@@ -27,6 +27,11 @@ export const OptionBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
 `;
 
+export const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export const OptionTitle = styled.div`
   font-size: 13px;
   font-weight: 600;

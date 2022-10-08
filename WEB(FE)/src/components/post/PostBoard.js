@@ -230,7 +230,7 @@ const PostBoard = () => {
           {!isTablet && isShowContainer && (
             <SideOptionContainer>
               <SideOptionFormForPostBoard
-                onSearchSubmit={null}
+                onSearchSubmit={onSearchSubmit}
                 setTimeDepthValue={setTimeDepthValue}
                 timeDepthSelect={timeDepthSelect}
                 setTimeDepthSelect={setTimeDepthSelect}

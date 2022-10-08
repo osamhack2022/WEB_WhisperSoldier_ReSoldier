@@ -1,5 +1,7 @@
 import { useCallback } from "react";
+import styled from "styled-components";
 import {
+  ButtonBox,
   OptionBox,
   OptionContent,
   OptionContentBox,
@@ -7,6 +9,35 @@ import {
   SideOptionFormBox,
   SideOptionTitleBox,
 } from "../../styles/common/SideOptionFormStyle";
+
+const SetSettingButtonShape = styled.button`
+  margin-top: 5px;
+  position: relative;
+  padding: 0px 10px;
+  color: #0d552c;
+  height: 28px;
+  width: fit-content;
+  background-color: rgba(0, 0, 0, 0);
+  font-weight: 500;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1.5px solid rgb(26, 117, 65);
+  transition: all 0.5s;
+  white-space: nowrap;
+  &:hover {
+    background: #0d552c;
+    color: #ffffff;
+    font-weight: 400;
+  }
+`;
+
+const SetSettingButton = ({ onClick, children }) => {
+  return (
+    <SetSettingButtonShape onClick={onClick}>{children}</SetSettingButtonShape>
+  );
+};
 
 export const SideOptionForm = () => {
   return (
@@ -24,7 +55,7 @@ export const SideOptionFormForPostBoard = ({
   timeDepthSelect,
 }) => {
   //const isResultDesc = true;
-  const onSelectWeek = useCallback(() => {
+  const onSelectWeek = () => {
     setTimeDepthValue("week");
     setTimeDepthSelect({
       week: true,
@@ -33,9 +64,9 @@ export const SideOptionFormForPostBoard = ({
       fullYear: false,
       allTime: false,
     });
-  }, []);
+  };
 
-  const onSelectMonth = useCallback(() => {
+  const onSelectMonth = () => {
     setTimeDepthValue("month");
     setTimeDepthSelect({
       week: false,
@@ -44,9 +75,9 @@ export const SideOptionFormForPostBoard = ({
       fullYear: false,
       allTime: false,
     });
-  }, []);
+  };
 
-  const onSelectHalfYear = useCallback(() => {
+  const onSelectHalfYear = () => {
     setTimeDepthValue("halfYear");
     setTimeDepthSelect({
       week: false,
@@ -55,9 +86,9 @@ export const SideOptionFormForPostBoard = ({
       fullYear: false,
       allTime: false,
     });
-  }, []);
+  };
 
-  const onSelectFullYear = useCallback(() => {
+  const onSelectFullYear = () => {
     setTimeDepthValue("fullYear");
     setTimeDepthSelect({
       week: false,
@@ -66,9 +97,9 @@ export const SideOptionFormForPostBoard = ({
       fullYear: true,
       allTime: false,
     });
-  }, []);
+  };
 
-  const onSelectAllTime = useCallback(() => {
+  const onSelectAllTime = () => {
     setTimeDepthValue("allTime");
     setTimeDepthSelect({
       week: false,
@@ -77,21 +108,19 @@ export const SideOptionFormForPostBoard = ({
       fullYear: false,
       allTime: true,
     });
-  }, []);
+  };
 
-  const onSelectDesc = useCallback(() => {
+  const onSelectDesc = () => {
     console.log("onSelectDesc");
     setIsResultDesc(true);
     setOrderDescOrAsc("desc");
-  }, []);
+  };
 
-  const onSelectAsc = useCallback(() => {
+  const onSelectAsc = () => {
     console.log("onSelectAsc");
     setIsResultDesc(false);
     setOrderDescOrAsc("asc");
-  }, []);
-
-  console.log("[SideOptionForm.js]", timeDepthSelect, isResultDesc);
+  };
 
   return (
     <SideOptionFormBox>
@@ -139,7 +168,11 @@ export const SideOptionFormForPostBoard = ({
           </OptionContent>
         </OptionContentBox>
       </OptionBox>
-      <button onClick={onSearchSubmit}>설정 적용해서 조회하기</button>
+      <ButtonBox>
+        <SetSettingButton onClick={onSearchSubmit}>
+          설정 적용하기
+        </SetSettingButton>
+      </ButtonBox>
     </SideOptionFormBox>
   );
 };
