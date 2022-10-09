@@ -1,15 +1,18 @@
 import { signOut, getAuth, onAuthStateChanged } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { dbService, dbFunction } from "../lib/FStore";
 import { getDoc } from "firebase/firestore";
+import MyCommentBoard from "../components/profilePage/MyCommentBoard";
+import MyPostLikeBoard from "../components/profilePage/MyPostLikeBoard";
+import MyCommentLikeBoard from "../components/profilePage/MyCommentLikeBoard";
+import MyPostBoard from "../components/profilePage/MyPostBoard";
 
 const ProfilePage = () => {
   const { query, collection, getDocs, limit, orderBy, startAfter, where, doc } = dbFunction;
 
   const navigate = useNavigate();
-  const [postsCreated, setPostsCreated] = useState([]);
   const [commentsCreated, setCommentsCreated] = useState([]);
   const [postsLiked, setPostsLiked] = useState([]);
   const [commentsLiked, setCommentsLiked] = useState([]);
@@ -25,25 +28,8 @@ const ProfilePage = () => {
     navigate("/");
   };
 
-  const getPostsCreated = async (nowUserId) => {
-    console.log("생성한포스트직전아이디", nowUserId);
-    const q = query(collection(dbService, "WorryPost"),
-      orderBy("created_timestamp", "desc"),
-      where("creator_id", "==", nowUserId)
-    )
-    const snapshot = await getDocs(q);
-    if (snapshot) {
-      snapshot.forEach((doc) => {
-        const postObj = {
-          ...doc.data(),
-          id: doc.id,
-        };
-        setPostsCreated((prev) => [...prev, postObj]);
-      })
-    }
-
-  }
-  const getCommentsCreated = async (nowUserId) => {
+  
+  const myCommentBoard = async (nowUserId) => {
     console.log("생성한댓글직전아이디", nowUserId);
     const q = query(collection(dbService, "Comment"),
       orderBy("created_timestamp", "desc"),
@@ -60,7 +46,7 @@ const ProfilePage = () => {
       })
     }
   }
-  const getPostsLiked = async (nowUserId) => {
+  const myPostLikeBoard = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "PostLike"),
       where("user_id", "==", nowUserId),
@@ -86,8 +72,8 @@ const ProfilePage = () => {
       })
     }
   }
-  
-  const getCommentsLiked = async (nowUserId) => {
+
+  const myCommentLikeBoard = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "CommentLike"),
       where("user_id", "==", nowUserId),
@@ -122,10 +108,9 @@ const ProfilePage = () => {
         console.log("NOWUSERID: ", nowUserId);
         setCurerntUserId(nowUserId);
         console.log("이펙트에서:", currentUserId);
-        getPostsCreated(nowUserId);
-        getCommentsCreated(nowUserId);
-        getPostsLiked(nowUserId);
-        getCommentsLiked(nowUserId);
+        myCommentBoard(nowUserId);
+        myPostLikeBoard(nowUserId);
+        myCommentLikeBoard(nowUserId);
       } else {
         // not logged in
       }
@@ -137,28 +122,15 @@ const ProfilePage = () => {
     <div>
       <div>프로필 페이지 페이지</div>
       <div>가입한지 몇일째</div>
-      <div>
-        <h4>작성한 고민 글</h4> <hr />
-        {postsCreated.length !== 0 ? (
-          postsCreated.map((post) => (
-            <>
-              <Link to={`/post/${post.id}`} key={post.id}>{post.text}</Link>
-              <hr />
-            </>
-          ))
-        ) : (
-          <div>잠시만 기다려 주세요</div>
-        )}
-        <br />
-      </div>
+      <MyPostBoard></MyPostBoard>
       <div>
         <h4>작성한 댓글</h4> <hr />
         {commentsCreated.length !== 0 ? (
           commentsCreated.map((comment) => (
-            <>
-              <Link to={`/post/${comment.associated_post_id}`} key={comment.id}>{comment.comment_text}</Link>
+            <div key={comment.id}>
+              <Link to={`/post/${comment.associated_post_id}`}>{comment.comment_text}</Link>
               <hr />
-            </>
+            </div>
           ))
         ) : (
           <div>잠시만 기다려 주세요</div>
@@ -168,10 +140,10 @@ const ProfilePage = () => {
       <div><h4>공감한 고민 글</h4> <hr />
         {postsLiked.length !== 0 ? (
             postsLiked.map((post) => (
-              <>
-                <Link to={`/post/${post.id}`} key={post.id}>{post.text}</Link>
+              <div key={post.id}>
+                <Link to={`/post/${post.id}`}>{post.text}</Link>
                 <hr />
-              </>
+              </div>
             ))
           ) : (
             <div>잠시만 기다려 주세요</div>
@@ -181,10 +153,10 @@ const ProfilePage = () => {
       <div><h4>공감한 댓글</h4> <hr />
         {commentsLiked.length !== 0 ? (
             commentsLiked.map((comment) => (
-              <>
-                <Link to={`/post/${comment.associated_post_id}`} key={comment.id}>{comment.comment_text}</Link>
+              <div key={comment.id}>
+                <Link to={`/post/${comment.associated_post_id}`}>{comment.comment_text}</Link>
                 <hr />
-              </>
+              </div>
             ))
           ) : (
             <div>잠시만 기다려 주세요</div>
