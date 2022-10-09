@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
@@ -8,9 +8,13 @@ const MyPostLikeBoard = () => {
 		sessionStorage.getItem(whisperSodlierSessionKey)
 	);
 	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc, getDoc } = dbFunction;
-
   const [postsLiked, setPostsLiked] = useState([]);
-	
+	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
+  const [isNextItemExist, setIsNextItemExist] = useState(false);
+
+	const snapShotToLikedPosts = useCallback((snapshot) => {
+
+	})
 	const myPostLikeBoard = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "PostLike"),

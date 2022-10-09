@@ -11,7 +11,6 @@ const MyPostBoard = () => {
 	const [postsCreated, setPostsCreated] = useState([]);
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
-	//const [countCurrentItem, setCountCurrentItem] = useState(10);
 
 	const snapShotToCreatedPosts = useCallback((snapshot) => {
 		if (snapshot) {
@@ -62,7 +61,11 @@ const MyPostBoard = () => {
 			);
 			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
 			snapShotToCreatedPosts(firstSnapshot);
-			setIsNextItemExist(true);
+			if(firstSnapshot.docs.length < 10) {
+				setIsNextItemExist(false);
+			} else {
+				setIsNextItemExist(true);
+			}
 		};
 	}
 
@@ -88,7 +91,7 @@ const MyPostBoard = () => {
 				<div>잠시만 기다려 주세요</div>
 			)}
 			{isNextItemExist && (
-				<button onClick={onClick}>포스트 10개 더 보기</button>
+				<button onClick={onClick}>내 포스트 10개 더 보기</button>
 			)}
 			<br />
 		</div>
