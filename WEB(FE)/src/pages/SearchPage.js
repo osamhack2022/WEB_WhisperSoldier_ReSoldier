@@ -132,7 +132,8 @@ const SearchPage = () => {
           }
         }
       }
-      count -= 1;
+			count -= 1;
+			console.log("TotalCount: ", totalCount);
       if (totalCount <= countSearchPost) {
         setIsNextResultExist(false);
       } else {
@@ -185,8 +186,8 @@ const SearchPage = () => {
 
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
-        const postTextToBeChecked = String(postObj.text);
-
+        //const postTextToBeChecked = String();
+        if (postObj.text.includes(inputValue.searchInput)) {
         if (count < resultList.length) {
           count += 1;
           totalCount += 1;
@@ -198,10 +199,11 @@ const SearchPage = () => {
           console.log("searchFalse");
           totalCount += 1;
         }
+      }
         /*
-        if (postTextToBeChecked.includes(inputValue.searchInput)) {
+        
           
-        }*/
+        */
       }
       count -= 1;
       if (totalCount <= resultList.length) {
@@ -216,7 +218,35 @@ const SearchPage = () => {
     } else {
       setIsNextResultExist(false);
     }
-  };
+  }
+
+	
+  useEffect(() => {
+    if (searchInfo.isUpdateResultList) {
+      console.log("[SearchPage.js] : refresh Search Result List");
+      setNotSearch(false);
+      setLoading(true);
+      searchKeyWord(searchInfo.currentCountPosts, true);
+      setCurrentSearchKeyword(inputValue.searchInput);
+      setSearchInfo((prev) => ({ ...prev, isUpdateResultList: false }));
+    } else if (resultList.length > 0) {
+      console.log("[SearchPage.js] : set Search List Data from Global State");
+      console.log(searchInfo);
+      setNotSearch(false);
+      setInputChange((prev) => ({
+        ...prev,
+        searchInput: searchInfo.searchKeyword,
+      }));
+      setCurrentSearchCount(searchInfo.currentCountPosts);
+
+      setCurrentSearchKeyword(searchInfo.searchKeyword);
+      const timeDepth = invertNumtoTimeDepth(searchInfo.timeSettingValue);
+      setTimeDepthValue(timeDepth);
+      setTimeDepthSelect(getTimeDepthObj(timeDepthValue));
+
+      setIsResultDesc(searchInfo.descSettingValue);
+      setOrderDescOrAsc(isResultDesc ? "desc" : "asc");
+    }},[]);
 
   useEffect(() => {
     if (searchInfo.isUpdateResultList) {

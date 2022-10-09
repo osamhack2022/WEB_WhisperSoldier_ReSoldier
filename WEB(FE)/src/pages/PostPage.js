@@ -24,7 +24,7 @@ const PostPage = () => {
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
-
+  
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
@@ -180,6 +180,7 @@ const PostPage = () => {
           .toDate()
           .toLocaleString(),
         id: contentObj.id,
+        like_count: contentObj.like_count,
         postContent: contentObj.text,
         like_count: contentObj.like_count,
       }));

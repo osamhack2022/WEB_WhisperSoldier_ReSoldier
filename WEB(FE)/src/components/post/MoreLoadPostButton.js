@@ -36,7 +36,7 @@ const MoreLoadPostButtonBox = styled.div`
 
 const MoreLoadPostButton = ({ updatePostList }) => {
   return (
-    <MoreLoadPostButtonBox onClick={updatePostList}>
+    <MoreLoadPostButtonBox name="moreLoadPostButton" onClick={updatePostList}>
       <MoreLoadPostButtonText>포스트 10개 더 보기</MoreLoadPostButtonText>
       <DownIcon></DownIcon>
     </MoreLoadPostButtonBox>
