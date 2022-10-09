@@ -1,4 +1,4 @@
-import { signOut, onAuthStateChanged } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
 import React, { useState, useEffect } from "react";
@@ -8,33 +8,14 @@ import MyCommentLikeBoard from "../components/profilePage/MyCommentLikeBoard";
 import MyPostBoard from "../components/profilePage/MyPostBoard";
 
 const ProfilePage = () => {
-
   const navigate = useNavigate();
-
-  const [currentUserId, setCurerntUserId] = useState("");
-  
-  console.log();
-  console.log(currentUserId);
-  //const nowUserId = authService.currentUser.uid;
   const onClick = async () => {
     await signOut(authService).then(() => {
       console.log("[Profile.js]로그아웃 성공");
     });
     navigate("/");
   };
-  
   useEffect(() => {
-    const unsub = onAuthStateChanged(authService, (user) => {
-      unsub();
-      if (user) {
-        const nowUserId = user.uid
-        console.log("NOWUSERID: ", nowUserId);
-        setCurerntUserId(nowUserId);
-        console.log("이펙트에서:", currentUserId);
-      } else {
-        // not logged in
-      }
-    });
     
   }, [])
 
