@@ -5,7 +5,7 @@ import { ChatButton, UserProfileButton, WritePostButton } from "./Buttons";
 
 const ButtonSection = styled.div`
   position: absolute;
-  right: 0px;
+  right: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -16,7 +16,6 @@ const ButtonSection = styled.div`
 
 export const HeaderButtonSection = () => {
   const location = useLocation();
-  console.log(location);
   return (
     <ButtonSection>
       {location.pathname !== "/write" && <WritePostButton></WritePostButton>}

@@ -7,6 +7,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
+import { addDoc } from "firebase/firestore";
 
 const PostPage = () => {
   const {
@@ -35,6 +36,23 @@ const PostPage = () => {
   const [editing, setEditing] = useState(false);
   const [errorPostInfo, setErrorPostInfo] = useState(false);
   const [errorEditInfo, setErrorEditInfo] = useState(false);
+
+  const [isLikedByMe, setIsLikedByMe] = useState(false);
+
+  const getIsLiked = async () => {
+    const likeCheckQuery = query(
+      collection(dbService, "PostLike"),
+      where("associated_post_id", "==", postInfo.id),
+      where("user_id", "==", authService.currentUser)
+    );
+    console.log("유저정보:", authService.currentUser);
+    const querySnapshot = await getDocs(likeCheckQuery);
+    if (querySnapshot.docs.length === 0) {
+      setIsLikedByMe(false);
+    } else {
+      setIsLikedByMe(true);
+    }
+  };
 
   const onDeleteClick = async (e) => {
     const check = window.confirm("정말로 글을 삭제하시겠습니까?");
@@ -86,6 +104,60 @@ const PostPage = () => {
     }
   };
 
+  const toggleLike = async () => {
+    const postDocRef = doc(dbService, "WorryPost", postInfo.id);
+    console.log("TOGGLELIKE HAS BEEN ACTIVIATED");
+    if (isLikedByMe) {
+      //firebase db에 like_count 업데이트
+      var unLikeCount = 0;
+      const likeCheckQuery = query(
+        collection(dbService, "PostLike"),
+        where("associated_post_id", "==", postInfo.id),
+        where("user_id", "==", authService.currentUser)
+      );
+      const querySnapshot = await getDocs(likeCheckQuery);
+      if (querySnapshot.docs.length === 0) {
+        console.log("you have not liked this yet.");
+      } else {
+        querySnapshot.forEach((like) => {
+          deleteDoc(doc(dbService, "PostLike", like.id));
+          unLikeCount = unLikeCount + 1;
+        });
+      }
+      await updateDoc(postDocRef, {
+        like_count: postInfo.like_count - unLikeCount,
+      }).then(
+        setPostInfo((prev) => ({
+          ...prev,
+          like_count: postInfo.like_count - unLikeCount,
+        }))
+      );
+      setIsLikedByMe(false);
+      console.log("Subtracted");
+
+      //setPostInfo((prev) => ({...prev, like_count: postInfo.like_count - 1}))
+    } else {
+      await updateDoc(postDocRef, {
+        like_count: postInfo.like_count + 1,
+      }).then(
+        setPostInfo((prev) => ({
+          ...prev,
+          like_count: postInfo.like_count + 1,
+        }))
+      );
+      await addDoc(collection(dbService, "PostLike"), {
+        associated_post_id: postInfo.id,
+        user_id: authService.currentUser,
+      }).then(setIsLikedByMe(true));
+      console.log("Added");
+      console.log(postInfo.id);
+
+      //setPostInfo((prev) => ({...prev, like_count: postInfo.like_count + 1}))
+    }
+    //setIsLikedByMe((prev) => !prev);
+    //getIsLiked();
+  };
+
   /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
   const getContent = async () => {
     const docRef = doc(dbService, "WorryPost", id);
@@ -103,6 +175,7 @@ const PostPage = () => {
           .toLocaleString(),
         id: contentObj.id,
         postContent: contentObj.text,
+        like_count: contentObj.like_count,
       }));
       setState((prev) => ({
         ...prev,
@@ -117,6 +190,7 @@ const PostPage = () => {
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
+      getIsLiked();
     }
   }, []);
 
@@ -132,6 +206,8 @@ const PostPage = () => {
       onClick={onClick}
       onDeleteClick={onDeleteClick}
       toggleEditing={toggleEditing}
+      toggleLike={toggleLike}
+      isLikedByMe={isLikedByMe}
     ></PostContentContainer>
   );
 };

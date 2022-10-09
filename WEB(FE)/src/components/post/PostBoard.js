@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { dbService, dbFunction } from "../../lib/FStore";
+import { dbFunction } from "../../lib/FStore";
 import PostBoardTitleContainer from "./PostBoardTilteContainer";
 import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
@@ -24,7 +24,7 @@ import getTimeDepth from "../../modules/GetTimeDepth";
 
 const PostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
-  const { query, collection, getDocs, limit, orderBy, startAfter } = dbFunction;
+  const { getDocs } = dbFunction;
 
   const [posts, setPosts] = useState([]);
   const [nextPostSnapShot, setNextPostSnapShot] = useState({});
@@ -64,30 +64,10 @@ const PostBoard = () => {
         setPostsRecoil((prev) => [...prev, postObj]);
       });
     }
+    // eslint-disable-next-line
   }, []);
 
-  const getQueryWithDescendingTime = useCallback(
-    (limitDocs, startAfterPoint) => {
-      if (startAfterPoint) {
-        return query(
-          collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", "desc"),
-          startAfter(startAfterPoint),
-          limit(limitDocs)
-        );
-      } else {
-        return query(
-          collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", "desc"),
-          limit(limitDocs)
-        );
-      }
-    },
-    [dbService]
-  );
-
   const getFirst = async () => {
-    //const first = getQueryWithDescendingTime(10);
     const firstSnapshot = await getDocs(
       getSearchQuery(
         false,
@@ -103,7 +83,6 @@ const PostBoard = () => {
   };
 
   const moveNext = async () => {
-    //const next = getQueryWithDescendingTime(10, nextPostSnapShot);
     const querySnapshot = await getDocs(
       getSearchQuery(
         false,
@@ -114,11 +93,17 @@ const PostBoard = () => {
       )
     );
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-    const afterQuery = getQueryWithDescendingTime(
-      1,
-      querySnapshot.docs[querySnapshot.docs.length - 1]
+
+    const afterSnapshot = await getDocs(
+      getSearchQuery(
+        false,
+        orderDescOrAsc,
+        getTimeDepth(timeDepthValue),
+        querySnapshot.docs[querySnapshot.docs.length - 1],
+        1
+      )
     );
-    const afterSnapshot = await getDocs(afterQuery);
+
     setCountCurrentPost((prev) => prev + 10);
     if (afterSnapshot.docs.length === 0) {
       setIsNextPostExist(false);
@@ -140,13 +125,6 @@ const PostBoard = () => {
   }, []);
 
   const recoverPost = async () => {
-    /*
-    const recoverQuery = query(
-      collection(dbService, "WorryPost"),
-      orderBy("created_timestamp", "desc"),
-      limit(countCurrentPost)
-    );*/
-
     const recoverSnapshot = await getDocs(
       getSearchQuery(
         false,
@@ -157,10 +135,6 @@ const PostBoard = () => {
       )
     );
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
-    /*const afterQuery = getQueryWithDescendingTime(
-      1,
-      recoverSnapshot.docs[recoverSnapshot.docs.length - 1]
-    );*/
     const afterSnapshot = await getDocs(
       getSearchQuery(
         false,
@@ -215,6 +189,7 @@ const PostBoard = () => {
       );
       setCurrentScrollPos(0);
     }
+    // eslint-disable-next-line
   }, []);
 
   if (posts) {

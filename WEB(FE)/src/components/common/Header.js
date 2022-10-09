@@ -11,13 +11,18 @@ import { TabletQuery } from "../../lib/Const";
 
 const HeaderBox = styled.header`
   position: relative;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
   margin: 0px auto;
+  margin-bottom: 10px;
   width: 960px;
   height: 90px;
   display: flex;
   align-items: center;
   ${media.smallDesktop`
     margin: inherit;
+    margin-bottom :10px;
     width : 100%;
     height: 72px;
     padding: 20px 10vw;

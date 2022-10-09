@@ -57,67 +57,70 @@ export const SideOptionFormForPostBoard = ({
   //const isResultDesc = true;
   const onSelectWeek = () => {
     setTimeDepthValue("week");
-    setTimeDepthSelect({
+    setTimeDepthSelect((prev) => ({
+      ...prev,
       week: true,
       month: false,
       halfYear: false,
       fullYear: false,
       allTime: false,
-    });
+    }));
   };
 
   const onSelectMonth = () => {
     setTimeDepthValue("month");
-    setTimeDepthSelect({
+    setTimeDepthSelect((prev) => ({
+      ...prev,
       week: false,
       month: true,
       halfYear: false,
       fullYear: false,
       allTime: false,
-    });
+    }));
   };
 
   const onSelectHalfYear = () => {
     setTimeDepthValue("halfYear");
-    setTimeDepthSelect({
+    setTimeDepthSelect((prev) => ({
+      ...prev,
       week: false,
       month: false,
       halfYear: true,
       fullYear: false,
       allTime: false,
-    });
+    }));
   };
 
   const onSelectFullYear = () => {
     setTimeDepthValue("fullYear");
-    setTimeDepthSelect({
+    setTimeDepthSelect((prev) => ({
+      ...prev,
       week: false,
       month: false,
       halfYear: false,
       fullYear: true,
       allTime: false,
-    });
+    }));
   };
 
   const onSelectAllTime = () => {
     setTimeDepthValue("allTime");
-    setTimeDepthSelect({
+    setTimeDepthSelect((prev) => ({
+      ...prev,
       week: false,
       month: false,
       halfYear: false,
       fullYear: false,
       allTime: true,
-    });
+    }));
   };
 
   const onSelectDesc = () => {
-    console.log("onSelectDesc");
     setIsResultDesc(true);
     setOrderDescOrAsc("desc");
   };
 
   const onSelectAsc = () => {
-    console.log("onSelectAsc");
     setIsResultDesc(false);
     setOrderDescOrAsc("asc");
   };

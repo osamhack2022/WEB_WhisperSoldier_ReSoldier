@@ -4,13 +4,15 @@ import media from "../../modules/MediaQuery";
 import { MainTitle, SubTitle } from "../common/Logos";
 
 const TitleBox = styled(Link)`
-  width: 190px;
+  padding-left: 20px;
+  width: 210px;
   border: none;
   text-align: right;
   height: fit-content;
   text-decoration: none;
   cursor: pointer;
   ${media.smallDesktop`
+  padding-left : 0px;
     width : 160px;
   `}
   ${media.mobile`

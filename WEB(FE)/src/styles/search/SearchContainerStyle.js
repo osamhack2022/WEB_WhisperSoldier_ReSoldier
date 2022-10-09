@@ -38,12 +38,12 @@ const SearchBox = styled.div`
   flex-direction: row;
   align-items: center;
   margin-left: 305px;
-  top: -65px;
+  top: -75px;
   ${media.smallDesktop`
     margin-left: inherit;
     left: 50%;
     transform: translate(-50%, 0%);
-    top: -56px;
+    top: -66px;
   `}
   ${media.mobile`
     position: relative;

@@ -15,10 +15,10 @@ export const getSearchQuery = (
   isOrderByLikes = false,
   orderDescOrAsc = "desc",
   searchTimeDepth = getTimeDepth(),
-  startAfterPoint,
+  startAfterPoint = null,
   limitDocs = 0
 ) => {
-  if (limit > 0) {
+  if (limitDocs > 0) {
     if (startAfterPoint) {
       if (isOrderByLikes) {
         // 추후에 "공감하기" 구현되면 사용될 예정
@@ -87,21 +87,15 @@ export const invertTimeDepthToNum = (timeDepthValue) => {
 };
 
 export const invertNumtoTimeDepth = (num) => {
-  console.log(num);
   if (num === 1) {
-    console.log("invertNumtoTimeDepth : 1");
     return "week";
   } else if (num === 2) {
-    console.log("invertNumtoTimeDepth : 2");
     return "month";
   } else if (num === 3) {
-    console.log("invertNumtoTimeDepth : 3");
     return "halfYear";
   } else if (num === 4) {
-    console.log("invertNumtoTimeDepth : 4");
     return "fullYear";
   } else if (num === 5) {
-    console.log("invertNumtoTimeDepth : 5");
     return "allTime";
   } else {
     return null;

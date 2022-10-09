@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import calTimeToString from "../../modules/CalTime";
 import { CurrentScrollPos, PostInfo } from "../../store/PostStore";
@@ -35,9 +35,8 @@ const PostElementTime = styled.div`
 `;
 
 const PostElement = ({ post }) => {
-  const [postInfo, setPostInfo] = useRecoilState(PostInfo);
-  const [currentScrollPos, setCurrentScrollPos] =
-    useRecoilState(CurrentScrollPos);
+  const setPostInfo = useSetRecoilState(PostInfo);
+  const setCurrentScrollPos = useSetRecoilState(CurrentScrollPos);
 
   const onClick = (post) => {
     setPostInfo((prev) => ({
@@ -46,6 +45,7 @@ const PostElement = ({ post }) => {
       created_timestamp: post.created_timestamp.toDate().toLocaleString(),
       id: post.id,
       postContent: post.text,
+      like_count: post.like_count,
     }));
     setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);
@@ -58,6 +58,14 @@ const PostElement = ({ post }) => {
       <PostElementTime>
         {calTimeToString(post.created_timestamp)}
       </PostElementTime>
+      <div>
+        <img
+          src="https://blog.kakaocdn.net/dn/MycgT/btrD4WknzEo/6VdswUypGe0QlvCFeiUYpk/img.png"
+          width="20px"
+          alt="공감 아이콘"
+        />
+        {post.like_count}
+      </div>
     </PostElementBox>
   );
 };

@@ -101,6 +101,14 @@ const PostContentTitle = ({ postInfo, errorPostInfo }) => {
       <PostContentTime>
         {postInfo.created_timestamp !== null ? postInfo.created_timestamp : ""}
       </PostContentTime>
+      <div>
+        <img
+          src="https://blog.kakaocdn.net/dn/MycgT/btrD4WknzEo/6VdswUypGe0QlvCFeiUYpk/img.png"
+          width="20px"
+          alt="공감 아이콘"
+        />
+        {postInfo.like_count}
+      </div>
     </PostContentBox>
   );
 };

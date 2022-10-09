@@ -371,7 +371,7 @@ const LikeButtonImg = styled(AiOutlineHeart)`
   background-color: rgba(0, 0, 0, 0);
 `;
 
-const LikeButtonBlock = styled(Link)`
+const LikeButtonBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -391,9 +391,9 @@ const LikeButtonBlock = styled(Link)`
   }
 `;
 
-export const LikeButton = ({ toLink, children, isMobile }) => {
+export const LikeButton = ({ children, isMobile, toggleLike }) => {
   return (
-    <LikeButtonBlock to={toLink} isMobile={isMobile}>
+    <LikeButtonBlock onClick={toggleLike} isMobile={isMobile}>
       <LikeButtonImg></LikeButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </LikeButtonBlock>

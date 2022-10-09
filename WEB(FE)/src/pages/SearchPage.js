@@ -29,7 +29,7 @@ const SearchPage = () => {
   const [countResult, setCountResult] = useState(0);
   const [nextResultSnapshot, setNextPostSnapShot] = useState({});
   const [isNextResultExist, setIsNextResultExist] = useState(true);
-  //const [currentSearchCount, setCurrentSearchCount] = useState(0);
+  const [currentSearchCount, setCurrentSearchCount] = useState(0);
 
   const [sortOption, setSortOption] = useState({
     timeDepthValue: "week",
@@ -48,11 +48,12 @@ const SearchPage = () => {
 
   const onSearchSubmit = async (e) => {
     e.preventDefault();
-    if (inputValue.searchInput.length !== 0) {
+    if (inputValue.searchInput.length === 0) {
       setNotSearch(false);
       setLoading(true);
       setSearchResults([]);
       setResultList([]);
+      setCurrentSearchCount(0);
       searchKeyWord(10, true);
       setCurrentSearchKeyword(inputValue.searchInput);
     } else {
@@ -65,11 +66,12 @@ const SearchPage = () => {
 
   const onKeyUp = (e) => {
     if (e.key === "Enter") {
-      if (inputValue.searchInput.length !== 0) {
+      if (inputValue.searchInput.length === 0) {
         setNotSearch(false);
         setLoading(true);
         setSearchResults([]);
         setResultList([]);
+        setCurrentSearchCount(0);
         searchKeyWord(10, true);
         setCurrentSearchKeyword(inputValue.searchInput);
       } else {
@@ -96,6 +98,7 @@ const SearchPage = () => {
         getSearchQuery(false, orderDescOrAsc, getTimeDepth(timeDepthValue))
       );
     } else {
+      console.log(nextResultSnapshot);
       snapshot = await getDocs(
         getSearchQuery(
           false,
@@ -139,16 +142,25 @@ const SearchPage = () => {
         setCountResult(totalCount);
       }
 
-      //setCurrentSearchCount((prev) => prev + count);
-      setSearchInfo((prev) => ({
-        ...prev,
-        searchKeyword: inputValue.searchInput,
-        countResultPosts: totalCount,
-        currentCountPosts: count,
-        isExistNextSearchResult: isNextResultExist,
-        timeSettingValue: invertTimeDepthToNum(timeDepthValue),
-        descSettingValue: isResultDesc,
-      }));
+      setCurrentSearchCount((prev) => prev + count);
+      if (firstSearch) {
+        setSearchInfo({
+          searchKeyword: currentSearchKeyword,
+          countResultPosts: totalCount,
+          currentCountPosts: currentSearchCount,
+          isExistNextSearchResult: isNextResultExist,
+          timeSettingValue: invertTimeDepthToNum(timeDepthValue),
+          descSettingValue: isResultDesc,
+        });
+      } else {
+        setSearchInfo((prev) => ({
+          ...prev,
+          currentCountPosts: currentSearchCount,
+          isExistNextSearchResult: isNextResultExist,
+          timeSettingValue: invertTimeDepthToNum(timeDepthValue),
+          descSettingValue: isResultDesc,
+        }));
+      }
     } else {
       setIsNextResultExist(false);
     }
@@ -167,6 +179,7 @@ const SearchPage = () => {
     );
 
     if (snapshot) {
+      console.log("recover snapshot");
       let count = 0;
       let totalCount = 0;
 
@@ -174,36 +187,31 @@ const SearchPage = () => {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
         const postTextToBeChecked = String(postObj.text);
 
-        if (postTextToBeChecked.includes(inputValue.searchInput)) {
-          if (count < ResultList.length) {
-            setSearchResults((prev) => [...prev, postObj]);
-            setResultList((prev) => [...prev, postObj]);
-            count += 1;
-            totalCount += 1;
-          } else if (count === ResultList.length) {
-            count += 1;
-            totalCount += 1;
-            setNextPostSnapShot(snapshot.docs[i - 1]);
-          } else {
-            console.log("searchFalse");
-            totalCount += 1;
-          }
+        if (count < resultList.length) {
+          count += 1;
+          totalCount += 1;
+        } else if (count === resultList.length) {
+          count += 1;
+          totalCount += 1;
+          setNextPostSnapShot((prev) => snapshot.docs[i - 1]);
+        } else {
+          console.log("searchFalse");
+          totalCount += 1;
         }
+        /*
+        if (postTextToBeChecked.includes(inputValue.searchInput)) {
+          
+        }*/
       }
       count -= 1;
-      if (totalCount <= ResultList.length) {
+      if (totalCount <= resultList.length) {
         setIsNextResultExist(false);
       } else {
         setIsNextResultExist(true);
       }
       setSearchInfo((prev) => ({
         ...prev,
-        searchKeyword: inputValue.searchInput,
-        countResultPosts: totalCount,
-        currentCountPosts: count,
         isExistNextSearchResult: isNextResultExist,
-        timeSettingValue: invertTimeDepthToNum(timeDepthValue),
-        descSettingValue: isResultDesc,
       }));
     } else {
       setIsNextResultExist(false);
@@ -211,8 +219,6 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    console.log(searchInfo);
-    console.log(resultList);
     if (searchInfo.isUpdateResultList) {
       console.log("[SearchPage.js] : refresh Search Result List");
       setNotSearch(false);
@@ -222,17 +228,19 @@ const SearchPage = () => {
       setSearchInfo((prev) => ({ ...prev, isUpdateResultList: false }));
     } else if (resultList.length > 0) {
       console.log("[SearchPage.js] : set Search List Data from Global State");
+      console.log(searchInfo);
       setNotSearch(false);
       setInputChange((prev) => ({
         ...prev,
         searchInput: searchInfo.searchKeyword,
       }));
+      setCurrentSearchCount(searchInfo.currentCountPosts);
+
       setCurrentSearchKeyword(searchInfo.searchKeyword);
       const timeDepth = invertNumtoTimeDepth(searchInfo.timeSettingValue);
       setTimeDepthValue(timeDepth);
-      console.log(searchInfo.timeSettingValue, timeDepthValue);
       setTimeDepthSelect(getTimeDepthObj(timeDepthValue));
-      console.log(timeDepthSelect, timeDepthValue);
+
       setIsResultDesc(searchInfo.descSettingValue);
       setOrderDescOrAsc(isResultDesc ? "desc" : "asc");
 
@@ -245,8 +253,8 @@ const SearchPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("[UseEffect : ]", timeDepthValue);
-  }, [timeDepthValue]);
+    console.log("[UseEffect : ]", timeDepthValue, orderDescOrAsc, searchInfo);
+  }, [timeDepthValue, orderDescOrAsc, searchInfo]);
 
   return (
     <SearchContainer
@@ -257,6 +265,7 @@ const SearchPage = () => {
       isInputError={isInputError}
       currentSearchKeyword={currentSearchKeyword}
       countResult={countResult}
+      currentSearchCount={currentSearchCount}
       searchResults={searchResults}
       isNextResultExist={isNextResultExist}
       onClick={onClick}

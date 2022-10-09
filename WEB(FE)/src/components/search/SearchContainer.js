@@ -23,6 +23,7 @@ const SearchContainer = ({
   currentSearchKeyword,
   //onSearchInputChange,
   countResult,
+  currentSearchCount,
   searchResults,
   isNextResultExist,
   onClick,
@@ -63,7 +64,8 @@ const SearchContainer = ({
               onShowSideContainer={onShowSideContainer}
               isShowContainer={isShowContainer}
             >
-              '{currentSearchKeyword}' 검색 결과 : {countResult}개의 고민 포스트
+              '{currentSearchKeyword}' 검색 결과 : {countResult}중{" "}
+              {currentSearchCount}개의 고민 포스트
               {/*중{" "} {searchResults.length}개 고민 포스트 표시*/}
             </PostBoardTitleContainer>
             {!isTablet && isShowContainer && (
