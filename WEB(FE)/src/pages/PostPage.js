@@ -24,7 +24,7 @@ const PostPage = () => {
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
-  
+
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
@@ -109,7 +109,12 @@ const PostPage = () => {
           )
           .then(alert("수정되었습니다."))
           .then(setEditing(false));
-        setIsUpdatePostList(true);
+        setIsUpdatePostList((prev) => ({
+          ...prev,
+          searchPage: true,
+          newestPage: true,
+          popularPage: true,
+        }));
       }
     }
   };
@@ -161,7 +166,12 @@ const PostPage = () => {
       console.log("Added");
       console.log(postInfo.id);
     }
-    setIsUpdatePostList(true);
+    setIsUpdatePostList((prev) => ({
+      ...prev,
+      searchPage: true,
+      newestPage: true,
+      popularPage: true,
+    }));
   };
 
   /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
