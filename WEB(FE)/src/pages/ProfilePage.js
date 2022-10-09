@@ -17,7 +17,7 @@ const ProfilePage = () => {
   
   console.log();
   console.log(currentUserId);
-  const nowUserId = authService.currentUser.uid;
+  //const nowUserId = authService.currentUser.uid;
   const onClick = async () => {
     await signOut(authService).then(() => {
       console.log("[Profile.js]로그아웃 성공");
@@ -25,7 +25,7 @@ const ProfilePage = () => {
     navigate("/");
   };
 
-  const getPostsCreated = async () => {
+  const getPostsCreated = async (nowUserId) => {
     console.log("생성한포스트직전아이디", nowUserId);
     const q = query(collection(dbService, "WorryPost"),
       orderBy("created_timestamp", "desc"),
@@ -43,7 +43,7 @@ const ProfilePage = () => {
     }
 
   }
-  const getCommentsCreated = async () => {
+  const getCommentsCreated = async (nowUserId) => {
     console.log("생성한댓글직전아이디", nowUserId);
     const q = query(collection(dbService, "Comment"),
       orderBy("created_timestamp", "desc"),
@@ -60,7 +60,7 @@ const ProfilePage = () => {
       })
     }
   }
-  const getPostsLiked = async () => {
+  const getPostsLiked = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "PostLike"),
       where("user_id", "==", nowUserId),
@@ -86,7 +86,8 @@ const ProfilePage = () => {
       })
     }
   }
-  const getCommentsLiked = async () => {
+  
+  const getCommentsLiked = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "CommentLike"),
       where("user_id", "==", nowUserId),
@@ -97,24 +98,22 @@ const ProfilePage = () => {
     
     if (snapshot) {
       snapshot.forEach(async (document) => {
-        const postLikeObj = {
+        const commentLikeObj = {
           ...document.data(),
           id: document.id,
         };
-        console.log("postLikeObj: ", postLikeObj.associated_post_id);
-        const postRef = doc(dbService, "WorryPost", postLikeObj.associated_post_id)
-        const postSnap = await getDoc(postRef)
-        const postLikedObj = {
-          ...postSnap.data(),
-          id:postSnap.id,
+        console.log("commentLikeObj: ", commentLikeObj.associated_comment_id);
+        const commentRef = doc(dbService, "Comment", commentLikeObj.associated_comment_id)
+        const commentSnap = await getDoc(commentRef)
+        const commentLikedObj = {
+          ...commentSnap.data(),
+          id:commentSnap.id,
         }
-        setPostsLiked((prev) => [...prev, postLikedObj])
+        setCommentsLiked((prev) => [...prev, commentLikedObj])
       })
     }
   }
-  const getMyContents = (postOrComment, createOrLike) => {
-
-  }
+  
   useEffect(() => {
     const unsub = onAuthStateChanged(authService, (user) => {
       unsub();
@@ -123,9 +122,10 @@ const ProfilePage = () => {
         console.log("NOWUSERID: ", nowUserId);
         setCurerntUserId(nowUserId);
         console.log("이펙트에서:", currentUserId);
-        getPostsCreated();
-        getCommentsCreated();
-        getPostsLiked();
+        getPostsCreated(nowUserId);
+        getCommentsCreated(nowUserId);
+        getPostsLiked(nowUserId);
+        getCommentsLiked(nowUserId);
       } else {
         // not logged in
       }
@@ -136,50 +136,60 @@ const ProfilePage = () => {
   return (
     <div>
       <div>프로필 페이지 페이지</div>
-
+      <div>가입한지 몇일째</div>
       <div>
-        <h4>작성한 고민 글</h4> <hr /><br />
+        <h4>작성한 고민 글</h4> <hr />
         {postsCreated.length !== 0 ? (
           postsCreated.map((post) => (
             <>
-              <div key={post.id}>{post.text}</div>
+              <Link to={`/post/${post.id}`} key={post.id}>{post.text}</Link>
               <hr />
             </>
-            
           ))
         ) : (
           <div>잠시만 기다려 주세요</div>
         )}
+        <br />
       </div>
       <div>
-        <h4>작성한 댓글</h4> <hr /><br />
+        <h4>작성한 댓글</h4> <hr />
         {commentsCreated.length !== 0 ? (
           commentsCreated.map((comment) => (
             <>
-              <div key={comment.id}>{comment.comment_text}</div>
+              <Link to={`/post/${comment.associated_post_id}`} key={comment.id}>{comment.comment_text}</Link>
               <hr />
             </>
-            
           ))
         ) : (
           <div>잠시만 기다려 주세요</div>
         )}
+        <br />
       </div>
-      <div><h4>공감한 고민 글</h4> <hr /><br />
+      <div><h4>공감한 고민 글</h4> <hr />
         {postsLiked.length !== 0 ? (
             postsLiked.map((post) => (
               <>
-                <div key={post.id}>{post.text}</div>
+                <Link to={`/post/${post.id}`} key={post.id}>{post.text}</Link>
                 <hr />
               </>
-              
             ))
           ) : (
             <div>잠시만 기다려 주세요</div>
-          )}
+        )}
+        <br />
       </div>
-      <div><h4>공감한 댓글</h4> <hr /><br />
-        
+      <div><h4>공감한 댓글</h4> <hr />
+        {commentsLiked.length !== 0 ? (
+            commentsLiked.map((comment) => (
+              <>
+                <Link to={`/post/${comment.associated_post_id}`} key={comment.id}>{comment.comment_text}</Link>
+                <hr />
+              </>
+            ))
+          ) : (
+            <div>잠시만 기다려 주세요</div>
+        )}
+        <br />
       </div>
       <br />
       <Link to="/">홈페이지</Link>
