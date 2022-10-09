@@ -1,4 +1,4 @@
-import { deleteDoc, updateDoc, doc, query, collection, where, getDocs, addDoc } from "firebase/firestore";
+import { deleteDoc, updateDoc, doc, query, collection, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { authService } from "../../lib/FAuth";
 import { dbService } from "../../lib/FStore";
@@ -66,6 +66,7 @@ const PostCommentElement = ({
       await addDoc(collection(dbService, "CommentLike"), {
         associated_comment_id: commentElement.id,
         user_id: nowUserId,
+        created_timestamp: serverTimestamp(),
       })
       setIsLikedByMe(true);
       console.log("Liked");

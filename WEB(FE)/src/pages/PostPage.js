@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
-import { addDoc } from "firebase/firestore";
+import { addDoc, serverTimestamp } from "firebase/firestore";
 import { authService } from "../lib/FAuth";
 
 
@@ -148,6 +148,7 @@ const PostPage = ({ isDesktop, isTablet }) => {
       await addDoc(collection(dbService, "PostLike"), {
         associated_post_id: postInfo.id,
         user_id: nowUserId,
+        created_timestamp: serverTimestamp(),
       })
       .then(setIsLikedByMe(true));
       console.log("Added");
