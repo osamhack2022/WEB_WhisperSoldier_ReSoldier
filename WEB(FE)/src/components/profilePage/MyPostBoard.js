@@ -2,10 +2,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { authService } from "../../lib/FAuth";
+import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbService } from "../../lib/FStore";
 
 const MyPostBoard = () => {
+	const { uid: currentUserUid } = JSON.parse(
+		sessionStorage.getItem(whisperSodlierSessionKey)
+	);
 	const [postsCreated, setPostsCreated] = useState([]);
 	const myPostBoard = async (nowUserId, next) => {
 		if (next) {
@@ -30,16 +33,7 @@ const MyPostBoard = () => {
 		}
 	}
 	useEffect(() => {
-		const unsub = onAuthStateChanged(authService, (user) => {
-      unsub();
-      if (user) {
-        const nowUserId = user.uid
-        console.log("NOWUSERID: ", nowUserId);
-        myPostBoard(nowUserId, false);
-      } else {
-        // not logged in
-      }
-    });
+		myPostBoard(currentUserUid, false)
 	}, [])
 	return (
 		<div>
