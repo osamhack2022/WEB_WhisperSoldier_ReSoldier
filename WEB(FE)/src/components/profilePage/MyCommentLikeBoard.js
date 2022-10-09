@@ -8,9 +8,7 @@ const MyCommentLikeBoard = () => {
 		sessionStorage.getItem(whisperSodlierSessionKey)
 	);
 	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc, getDoc } = dbFunction;
-
   const [commentsLiked, setCommentsLiked] = useState([]);
-
 	const myCommentLikeBoard = async (nowUserId) => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "CommentLike"),

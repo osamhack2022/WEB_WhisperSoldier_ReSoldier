@@ -1,39 +1,79 @@
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { dbService } from "../../lib/FStore";
+import { dbFunction, dbService } from "../../lib/FStore";
 
 const MyPostBoard = () => {
 	const { uid: currentUserUid } = JSON.parse(
 		sessionStorage.getItem(whisperSodlierSessionKey)
 	);
+	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc } = dbFunction;
 	const [postsCreated, setPostsCreated] = useState([]);
-	const myPostBoard = async (nowUserId, next) => {
+	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
+  const [isNextItemExist, setIsNextItemExist] = useState(false);
+	//const [countCurrentItem, setCountCurrentItem] = useState(10);
+
+	const snapShotToCreatedPosts = useCallback((snapshot) => {
+		if (snapshot) {
+			snapshot.forEach((doc) => {
+				const postObj = {
+					...doc.data(),
+					id: doc.id,
+				};
+				setPostsCreated((prev) => [...prev, postObj]);
+			});
+		}
+	}, []);
+
+	const myPostBoard = async (next) => {
 		if (next) {
 			console.log("showing next");
-	
+			const querySnapshot = await getDocs(
+				query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "desc"),
+					where("creator_id", "==", currentUserUid),
+					startAfter(nextItemSnapShot),
+					limit(10)
+				)
+			);
+			setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+
+			const afterSnapshot = await getDocs(
+				query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "desc"),
+					where("creator_id", "==", currentUserUid),
+					startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+					limit(1)
+				)
+			);
+			if (afterSnapshot.docs.length === 0) {
+				setIsNextItemExist(false);
+			} else {
+				setIsNextItemExist(true);
+			}
+			snapShotToCreatedPosts(querySnapshot);
 		} else {
-		  console.log("생성한포스트직전아이디", nowUserId);
-		  const q = query(collection(dbService, "WorryPost"),
-			orderBy("created_timestamp", "desc"),
-			where("creator_id", "==", nowUserId)
-		  )
-		  const snapshot = await getDocs(q);
-		  if (snapshot) {
-			snapshot.forEach((doc) => {
-			  const postObj = {
-				...doc.data(),
-				id: doc.id,
-			  };
-			  setPostsCreated((prev) => [...prev, postObj]);
-			})
-		}
-		}
+			const firstSnapshot = await getDocs(
+				query(collection(dbService, "WorryPost"),
+					orderBy("created_timestamp", "desc"),
+					where("creator_id", "==", currentUserUid),
+					limit(10)
+				)
+			);
+			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
+			snapShotToCreatedPosts(firstSnapshot);
+			setIsNextItemExist(true);
+		};
+	}
+
+	const onClick = async (e) => {
+		e.preventDefault();
+		myPostBoard(true);
 	}
 	useEffect(() => {
-		myPostBoard(currentUserUid, false)
+		myPostBoard(false);
 	}, [])
+
 	return (
 		<div>
 			<h4>작성한 고민 글</h4> <hr />
@@ -46,6 +86,9 @@ const MyPostBoard = () => {
 				))
 			) : (
 				<div>잠시만 기다려 주세요</div>
+			)}
+			{isNextItemExist && (
+				<button onClick={onClick}>포스트 10개 더 보기</button>
 			)}
 			<br />
 		</div>
