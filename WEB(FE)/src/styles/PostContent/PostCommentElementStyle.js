@@ -95,7 +95,7 @@ export const CommentTimeText = styled.div`
 `;
 
 export const CommentText = styled.div`
-  white-space: "pre-wrap";
+  white-space: pre-wrap;
   margin-bottom: 3px;
 
   font-weight: normal;

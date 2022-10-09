@@ -9,10 +9,9 @@ const ProfilePage = () => {
   const { query, collection, getDocs, limit, orderBy, startAfter, where, doc } = dbFunction;
 
   const navigate = useNavigate();
-  const [PostsCreated, setPostsCreated] = useState([]);
+  const [postsCreated, setPostsCreated] = useState([]);
   const [commentsCreated, setCommentsCreated] = useState([]);
   const [postsLiked, setPostsLiked] = useState([]);
-  const [postsLikeRefs, setPostsLikeRefs] = useState([]);
   const [commentsLiked, setCommentsLiked] = useState([]);
   const [currentUserId, setCurerntUserId] = useState("");
   
@@ -25,6 +24,7 @@ const ProfilePage = () => {
     });
     navigate("/");
   };
+
   const getPostsCreated = async () => {
     console.log("생성한포스트직전아이디", nowUserId);
     const q = query(collection(dbService, "WorryPost"),
@@ -43,12 +43,52 @@ const ProfilePage = () => {
     }
 
   }
-  const getCommentsCreated = () => {
-    
+  const getCommentsCreated = async () => {
+    console.log("생성한댓글직전아이디", nowUserId);
+    const q = query(collection(dbService, "Comment"),
+      orderBy("created_timestamp", "desc"),
+      where("commentor_id", "==", nowUserId)
+    )
+    const snapshot = await getDocs(q);
+    if (snapshot) {
+      snapshot.forEach((doc) => {
+        const postObj = {
+          ...doc.data(),
+          id: doc.id,
+        };
+        setCommentsCreated((prev) => [...prev, postObj]);
+      })
+    }
   }
   const getPostsLiked = async () => {
     console.log("직전 아이디: ", nowUserId);
     const q = query(collection(dbService, "PostLike"),
+      where("user_id", "==", nowUserId),
+      orderBy("created_timestamp", "desc")
+    )
+    const snapshot = await getDocs(q);
+    console.log("SNAPSHOT:", snapshot.docs);
+    
+    if (snapshot) {
+      snapshot.forEach(async (document) => {
+        const commentLikeObj = {
+          ...document.data(),
+          id: document.id,
+        };
+        console.log("commentLikeObj: ", commentLikeObj.associated_post_id);
+        const postRef = doc(dbService, "WorryPost", commentLikeObj.associated_post_id)
+        const postSnap = await getDoc(postRef)
+        const postLikedObj = {
+          ...postSnap.data(),
+          id:postSnap.id,
+        }
+        setPostsLiked((prev) => [...prev, postLikedObj])
+      })
+    }
+  }
+  const getCommentsLiked = async () => {
+    console.log("직전 아이디: ", nowUserId);
+    const q = query(collection(dbService, "CommentLike"),
       where("user_id", "==", nowUserId),
       orderBy("created_timestamp", "desc")
     )
@@ -72,9 +112,6 @@ const ProfilePage = () => {
       })
     }
   }
-  const getCommentsLiked = () => {
-    
-  }
   const getMyContents = (postOrComment, createOrLike) => {
 
   }
@@ -87,6 +124,7 @@ const ProfilePage = () => {
         setCurerntUserId(nowUserId);
         console.log("이펙트에서:", currentUserId);
         getPostsCreated();
+        getCommentsCreated();
         getPostsLiked();
       } else {
         // not logged in
@@ -101,10 +139,10 @@ const ProfilePage = () => {
 
       <div>
         <h4>작성한 고민 글</h4> <hr /><br />
-        {PostsCreated.length !== 0 ? (
-          PostsCreated.map((post) => (
+        {postsCreated.length !== 0 ? (
+          postsCreated.map((post) => (
             <>
-              <div key={post.id} post={post}>{post.text}</div>
+              <div key={post.id}>{post.text}</div>
               <hr />
             </>
             
@@ -113,14 +151,25 @@ const ProfilePage = () => {
           <div>잠시만 기다려 주세요</div>
         )}
       </div>
-      <div><h4>작성한 댓글</h4> <hr /><br />
-      
+      <div>
+        <h4>작성한 댓글</h4> <hr /><br />
+        {commentsCreated.length !== 0 ? (
+          commentsCreated.map((comment) => (
+            <>
+              <div key={comment.id}>{comment.comment_text}</div>
+              <hr />
+            </>
+            
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
       </div>
       <div><h4>공감한 고민 글</h4> <hr /><br />
         {postsLiked.length !== 0 ? (
             postsLiked.map((post) => (
               <>
-                <div key={post.id} post={post}>{post.text}</div>
+                <div key={post.id}>{post.text}</div>
                 <hr />
               </>
               
