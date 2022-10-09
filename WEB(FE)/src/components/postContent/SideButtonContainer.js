@@ -36,15 +36,11 @@ export const OtherUserButtonContainer = ({
 }) => {
   return (
     <>
-      {isLikedByMe ? (
-        <LikeButton toggleLike={toggleLike} isMobile={isMobile}>
-          취소하기
-        </LikeButton>
-      ) : (
-        <LikeButton toggleLike={toggleLike} isMobile={isMobile}>
-          공감하기
-        </LikeButton>
-      )}
+      <LikeButton
+        toggleLike={toggleLike}
+        isMobile={isMobile}
+        isLikedByMe={isLikedByMe}
+      ></LikeButton>
 
       <PostChatButton toLink="/" isMobile={isMobile}>
         채팅하기

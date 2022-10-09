@@ -6,7 +6,8 @@ const HomeContainerBox = styled.div`
   margin: 0px auto;
   width: 960px;
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
+  flex-direction: row;
   ${media.smallDesktop`
   margin: inherit;
   width: inherit;
@@ -85,6 +86,7 @@ const TagBox = styled.div`
 const HomeContainer = () => {
   return (
     <HomeContainerBox>
+      {/*
       <HomeContentUpperBox>
         <BannerBox></BannerBox>
         <DashBoardBox></DashBoardBox>
@@ -93,8 +95,8 @@ const HomeContainer = () => {
         <NewestPostBox></NewestPostBox>
         <PopularPostBox></PopularPostBox>
         <TagBox></TagBox>
-      </HomeContentLowerBox>
-      {/* <PostBoard></PostBoard> */}
+  </HomeContentLowerBox>*/}
+      <PostBoard></PostBoard>
     </HomeContainerBox>
   );
 };

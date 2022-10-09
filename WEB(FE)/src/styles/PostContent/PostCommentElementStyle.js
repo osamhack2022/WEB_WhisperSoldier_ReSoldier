@@ -6,9 +6,10 @@ import { RiUser3Line } from "react-icons/ri";
 import { useCallback } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { IoWarningOutline } from "react-icons/io5";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsEmojiAngry } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
+import { IoHeartDislikeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 export const CommentBox = styled.div`
@@ -24,7 +25,8 @@ export const CommentBox = styled.div`
 
 export const CommentTitle = styled.div`
   display: flex;
-  margin-bottom: 7px;
+  margin-top: 10px;
+  margin-bottom: 15px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -87,6 +89,9 @@ export const CommentUserIcon = () => {
 };
 
 export const CommentTimeText = styled.div`
+  position: absolute;
+  right: 60px;
+  margin-right: 10px;
   font-size: 12px;
   text-align: right;
   letter-spacing: -0.34px;
@@ -95,9 +100,8 @@ export const CommentTimeText = styled.div`
 `;
 
 export const CommentText = styled.div`
-  white-space: "pre-wrap";
-  margin-bottom: 3px;
-
+  white-space: pre-wrap;
+  margin-bottom: 10px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -238,7 +242,17 @@ const LikeButtonImg = styled(AiOutlineHeart)`
   background-color: rgba(0, 0, 0, 0);
 `;
 
-const LikeButtonBlock = styled(Link)`
+const DisLikeButtonImg = styled(IoHeartDislikeOutline)`
+  height: 14px;
+  width: 14px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const LikeButtonBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -257,10 +271,19 @@ const LikeButtonBlock = styled(Link)`
   }
 `;
 
-export const LikeCommentButton = ({ toLink, children, isMobile }) => {
+export const LikeCommentButton = ({
+  children,
+  isMobile,
+  toggleLike,
+  isLikedByMe,
+}) => {
   return (
-    <LikeButtonBlock to={toLink} isMobile={isMobile}>
-      <LikeButtonImg></LikeButtonImg>
+    <LikeButtonBlock isMobile={isMobile} onClick={toggleLike}>
+      {isLikedByMe ? (
+        <DisLikeButtonImg></DisLikeButtonImg>
+      ) : (
+        <LikeButtonImg></LikeButtonImg>
+      )}
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </LikeButtonBlock>
   );
@@ -286,7 +309,7 @@ const PostChatButtonBlock = styled(Link)`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right:10px;
+  margin-right: 10px;
   &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -475,5 +498,59 @@ export const CommentELementEditBox = ({ newComment, onCommentChange }) => {
       ></CommentElementTextArea>
       <BottonLine></BottonLine>
     </>
+  );
+};
+
+const CommentContentLikeIcon = styled(AiOutlineHeart)`
+  height: 12px;
+  width: 12px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #eb5757;
+  fill: #eb5757;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const CommentContentMyLikeIcon = styled(AiFillHeart)`
+  height: 12px;
+  width: 12px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #eb5757;
+  fill: #eb5757;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
+const CommentContentInfoText = styled.div`
+  font-size: 12px;
+  text-align: left;
+  letter-spacing: 0.48px;
+  color: #4f4f4f;
+  font-weight: 400;
+`;
+
+const CommentContentLikeBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  right: 20px;
+  align-items: center;
+  margin: 0px;
+  text-decoration: none;
+  height: fit-content;
+  width: fit-content;
+  align-items: center;
+`;
+
+export const CommentContentLikeCount = ({ children, isMyLike }) => {
+  return (
+    <CommentContentLikeBox>
+      {isMyLike ? (
+        <CommentContentMyLikeIcon></CommentContentMyLikeIcon>
+      ) : (
+        <CommentContentLikeIcon></CommentContentLikeIcon>
+      )}
+      <CommentContentInfoText>{children}</CommentContentInfoText>
+    </CommentContentLikeBox>
   );
 };

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { authService } from "../lib/FAuth";
 import { dbService } from "../lib/FStore";
 import { dbFunction } from "../lib/FStore";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
-import { addDoc } from "firebase/firestore";
+import { addDoc, serverTimestamp } from "firebase/firestore";
+import { whisperSodlierSessionKey } from "../lib/Const";
 
 const PostPage = () => {
   const {
@@ -21,7 +21,6 @@ const PostPage = () => {
     query,
     where,
   } = dbFunction;
-  console.log(authService.currentUser);
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
@@ -39,14 +38,25 @@ const PostPage = () => {
 
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
-  const getIsLiked = async () => {
+  const getIsLiked = async (currentPostInfo = null) => {
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
+
+    if (!currentPostInfo) {
+      currentPostInfo = postInfo.id;
+    }
+
+    console.log(currentUserUid);
+    console.log(postInfo);
     const likeCheckQuery = query(
       collection(dbService, "PostLike"),
-      where("associated_post_id", "==", postInfo.id),
-      where("user_id", "==", authService.currentUser)
+      where("associated_post_id", "==", currentPostInfo),
+      where("user_id", "==", currentUserUid)
     );
-    console.log("유저정보:", authService.currentUser);
+
     const querySnapshot = await getDocs(likeCheckQuery);
+    console.log(querySnapshot);
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false);
     } else {
@@ -105,15 +115,16 @@ const PostPage = () => {
   };
 
   const toggleLike = async () => {
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
     const postDocRef = doc(dbService, "WorryPost", postInfo.id);
-    console.log("TOGGLELIKE HAS BEEN ACTIVIATED");
+    console.log(postDocRef);
     if (isLikedByMe) {
-      //firebase db에 like_count 업데이트
-      var unLikeCount = 0;
       const likeCheckQuery = query(
         collection(dbService, "PostLike"),
         where("associated_post_id", "==", postInfo.id),
-        where("user_id", "==", authService.currentUser)
+        where("user_id", "==", currentUserUid)
       );
       const querySnapshot = await getDocs(likeCheckQuery);
       if (querySnapshot.docs.length === 0) {
@@ -121,21 +132,18 @@ const PostPage = () => {
       } else {
         querySnapshot.forEach((like) => {
           deleteDoc(doc(dbService, "PostLike", like.id));
-          unLikeCount = unLikeCount + 1;
         });
       }
       await updateDoc(postDocRef, {
-        like_count: postInfo.like_count - unLikeCount,
+        like_count: postInfo.like_count - 1,
       }).then(
         setPostInfo((prev) => ({
           ...prev,
-          like_count: postInfo.like_count - unLikeCount,
+          like_count: postInfo.like_count - 1,
         }))
       );
       setIsLikedByMe(false);
       console.log("Subtracted");
-
-      //setPostInfo((prev) => ({...prev, like_count: postInfo.like_count - 1}))
     } else {
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count + 1,
@@ -147,15 +155,13 @@ const PostPage = () => {
       );
       await addDoc(collection(dbService, "PostLike"), {
         associated_post_id: postInfo.id,
-        user_id: authService.currentUser,
+        user_id: currentUserUid,
+        created_timestamp: serverTimestamp(),
       }).then(setIsLikedByMe(true));
       console.log("Added");
       console.log(postInfo.id);
-
-      //setPostInfo((prev) => ({...prev, like_count: postInfo.like_count + 1}))
     }
-    //setIsLikedByMe((prev) => !prev);
-    //getIsLiked();
+    setIsUpdatePostList(true);
   };
 
   /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
@@ -181,6 +187,7 @@ const PostPage = () => {
         ...prev,
         editContent: contentObj.text,
       }));
+      getIsLiked(contentObj.id);
     } else {
       setErrorPostInfo(true);
       console.log("No such Document!");
@@ -190,8 +197,10 @@ const PostPage = () => {
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
+    } else {
       getIsLiked();
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

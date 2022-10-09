@@ -9,7 +9,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { authService } from "../../lib/FAuth";
+import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbService } from "../../lib/FStore";
 import {
   CommentBox,
@@ -28,6 +28,7 @@ import {
   PostChatCommentButton,
   ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
+import { PostContentLikeCount } from "../../styles/PostContent/PostContentTitleStyle";
 
 const PostCommentElement = ({
   commentElement,
@@ -39,32 +40,45 @@ const PostCommentElement = ({
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
   const [editCommentErrorInfo, setEditCommentErrorInfo] = useState(false);
+  const [countLikeInComment, setCountLikeInComment] = useState(0);
 
-  var nowUserId = authService.currentUser.uid;
   const [isLikedByMe, setIsLikedByMe] = useState(false);
-  const likeCheckQuery = query(
-    collection(dbService, "CommentLike"),
-    where("associated_comment_id", "==", commentElement.id),
-    where("user_id", "==", nowUserId)
-  );
+
+  const getLikeCheckQuery = (currentUserUid) => {
+    return query(
+      collection(dbService, "CommentLike"),
+      where("associated_comment_id", "==", commentElement.id),
+      where("user_id", "==", currentUserUid)
+    );
+  };
 
   const getIsLiked = async () => {
-    const querySnapshot = await getDocs(likeCheckQuery);
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
+
+    const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false);
     } else {
       setIsLikedByMe(true);
     }
-    const afterLikeActionSnapshot = await getDocs(likeCheckQuery);
+    const afterLikeActionSnapshot = await getDocs(
+      getLikeCheckQuery(currentUserUid)
+    );
     await updateDoc(doc(dbService, "Comment", commentElement.id), {
       like_count: afterLikeActionSnapshot.docs.length,
     });
   };
 
   const toggleLike = async () => {
+    console.log("toggleLike - Comment");
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
     const commentDocRef = doc(dbService, "Comment", commentElement.id);
     if (isLikedByMe) {
-      const querySnapshot = await getDocs(likeCheckQuery);
+      const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
       if (querySnapshot.docs.length === 0) {
         console.log("you have not liked this yet.");
       } else {
@@ -73,15 +87,19 @@ const PostCommentElement = ({
         });
       }
       setIsLikedByMe(false);
+      setCountLikeInComment((prev) => prev - 1);
     } else {
       await addDoc(collection(dbService, "CommentLike"), {
         associated_comment_id: commentElement.id,
-        user_id: nowUserId,
+        user_id: currentUserUid,
       });
       setIsLikedByMe(true);
       console.log("Liked");
+      setCountLikeInComment((prev) => prev + 1);
     }
-    const afterLikeActionSnapshot = await getDocs(likeCheckQuery);
+    const afterLikeActionSnapshot = await getDocs(
+      getLikeCheckQuery(currentUserUid)
+    );
     await updateDoc(commentDocRef, {
       like_count: afterLikeActionSnapshot.docs.length,
     });
@@ -135,6 +153,8 @@ const PostCommentElement = ({
 
   useEffect(() => {
     getIsLiked();
+    setCountLikeInComment(commentElement.like_count);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -145,7 +165,9 @@ const PostCommentElement = ({
           <CommentUserText>익명</CommentUserText>
         </CommentUserBox>
         <CommentTimeText>{created_timestamp}</CommentTimeText>
-        <div>공감 수: {commentElement.like_count}</div>
+        <PostContentLikeCount isMyLike={isLikedByMe}>
+          {countLikeInComment}
+        </PostContentLikeCount>
       </CommentTitle>
       {!isEditingComment ? (
         <CommentText>{commentElement.comment_text}</CommentText>
@@ -177,15 +199,13 @@ const PostCommentElement = ({
         </CommentButtonBox>
       ) : (
         <CommentButtonBox>
-          {isLikedByMe ? (
-            <LikeCommentButton toggleLike={toggleLike} isMobile={!isTablet}>
-              공감 취소하기
-            </LikeCommentButton>
-          ) : (
-            <LikeCommentButton toggleLike={toggleLike} isMobile={!isTablet}>
-              공감하기
-            </LikeCommentButton>
-          )}
+          <LikeCommentButton
+            toggleLike={toggleLike}
+            isMobile={!isTablet}
+            isLikedByMe={isLikedByMe}
+          >
+            {isLikedByMe ? "공감 취소하기" : "공감하기"}
+          </LikeCommentButton>
           <PostChatCommentButton toLink="/" isMobile={!isTablet}>
             채팅하기
           </PostChatCommentButton>

@@ -10,6 +10,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BsEmojiAngry } from "react-icons/bs";
 import { MdOutlineCancel } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
+import { IoHeartDislikeOutline } from "react-icons/io5";
 import media from "../../modules/MediaQuery";
 
 export const AuthButton = styled.button`
@@ -371,6 +372,16 @@ const LikeButtonImg = styled(AiOutlineHeart)`
   background-color: rgba(0, 0, 0, 0);
 `;
 
+const DisLikeButtonImg = styled(IoHeartDislikeOutline)`
+  height: 18px;
+  width: 18px;
+  font-weight: 100;
+  margin-right: 5px;
+  color: #4f4f4f;
+  transition: all 0.3s;
+  background-color: rgba(0, 0, 0, 0);
+`;
+
 const LikeButtonBlock = styled.div`
   display: flex;
   justify-content: space-between;
@@ -382,7 +393,12 @@ const LikeButtonBlock = styled.div`
   align-items: center;
   transition: all 0.2s;
   margin-right: ${(props) => props.isMobile && "10px"};
-  &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
+  &:hover
+    ${CommonButtonText},
+    &:hover
+    ${LikeButtonImg},
+    &:hover
+    ${DisLikeButtonImg} {
     color: #000000;
     transform: scale(1.1);
   }
@@ -391,11 +407,17 @@ const LikeButtonBlock = styled.div`
   }
 `;
 
-export const LikeButton = ({ children, isMobile, toggleLike }) => {
+export const LikeButton = ({ isMobile, toggleLike, isLikedByMe }) => {
   return (
     <LikeButtonBlock onClick={toggleLike} isMobile={isMobile}>
-      <LikeButtonImg></LikeButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      {isLikedByMe ? (
+        <DisLikeButtonImg></DisLikeButtonImg>
+      ) : (
+        <LikeButtonImg></LikeButtonImg>
+      )}
+      <CommonButtonText isMobile={isMobile}>
+        {isLikedByMe ? "취소하기" : "공감하기"}
+      </CommonButtonText>
     </LikeButtonBlock>
   );
 };

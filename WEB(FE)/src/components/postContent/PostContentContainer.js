@@ -94,6 +94,7 @@ const PostContentContainer = ({
         <PostContentTitle
           postInfo={postInfo}
           errorPostInfo={errorPostInfo}
+          isMyLike={isLikedByMe}
         ></PostContentTitle>
         <PostContentBody
           postInfo={postInfo}
