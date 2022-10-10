@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
 
 const MyPostBoard = () => {
 	const { uid: currentUserUid } = JSON.parse(
 		sessionStorage.getItem(whisperSodlierSessionKey)
 	);
-	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc } = dbFunction;
+	const { query, collection, getDocs, limit, orderBy, startAfter, where } = dbFunction;
 	const [postsCreated, setPostsCreated] = useState([]);
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
@@ -29,16 +30,12 @@ const MyPostBoard = () => {
 			try {
 				console.log("showing next");
 				const querySnapshot = await getDocs(
-					query(collection(dbService, "WorryPost"),
-						orderBy("created_timestamp", "desc"),
-						where("creator_id", "==", currentUserUid),
-						startAfter(nextItemSnapShot),
-						limit(10)
-					)
+					getProfilePageQuery("WorryPost", "creator_id", 10, nextItemSnapShot)
 				);
 				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 	
 				const afterSnapshot = await getDocs(
+					// 이 부분을 getProfilePageQuery로 처리할 시 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
 					query(collection(dbService, "WorryPost"),
 						orderBy("created_timestamp", "desc"),
 						where("creator_id", "==", currentUserUid),
@@ -61,11 +58,7 @@ const MyPostBoard = () => {
 		}
 		} else {
 			const firstSnapshot = await getDocs(
-				query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "desc"),
-					where("creator_id", "==", currentUserUid),
-					limit(10)
-				)
+				getProfilePageQuery("WorryPost", "creator_id", 10)
 			);
 			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
 			snapShotToCreatedPosts(firstSnapshot);

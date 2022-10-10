@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
 
 const MyCommentBoard = () => {
 	const { uid: currentUserUid } = JSON.parse(
 		sessionStorage.getItem(whisperSodlierSessionKey)
 	);
-	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc } = dbFunction;
+	const { query, collection, getDocs, limit, orderBy, startAfter, where } = dbFunction;
 	const [commentsCreated, setCommentsCreated] = useState([]);
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
 	const [isNextItemExist, setIsNextItemExist] = useState(false);
@@ -29,14 +30,10 @@ const MyCommentBoard = () => {
 			try {
 				console.log("showing next comments created");
 				const querySnapshot = await getDocs(
-					query(collection(dbService, "Comment"),
-						orderBy("created_timestamp", "desc"),
-						where("commentor_id", "==", currentUserUid),
-						startAfter(nextItemSnapShot),
-						limit(10)
-					)
+					getProfilePageQuery("Comment", "commentor_id", 10, nextItemSnapShot)
 				);
 				const afterSnapshot = await getDocs(
+					// 이 부분을 getProfilePageQuery로 처리할 시 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
 					query(collection(dbService, "Comment"),
 						orderBy("created_timestamp", "desc"),
 						where("commentor_id", "==", currentUserUid),
@@ -52,24 +49,18 @@ const MyCommentBoard = () => {
 				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 				snapShotToCreatedComments(querySnapshot);
 			} catch (e) {
-					if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
-						setIsNextItemExist(false);
-					} else {
-						console.log("Other Error")
+				if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
+					setIsNextItemExist(false);
+				} else {
+					console.log("Other Error")
 				}
 			}
 		} else {
 			const firstSnapshot = await getDocs(
-				query(collection(dbService, "Comment"),
-					orderBy("created_timestamp", "desc"),
-					where("commentor_id", "==", currentUserUid),
-					limit(10)
-				)
+				getProfilePageQuery("Comment", "commentor_id", 10)
 			);
 			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1])
 			snapShotToCreatedComments(firstSnapshot);
-			console.log("mycommentboard length:", firstSnapshot.docs.length);
-			console.log("nextItemsnapshot: ", nextItemSnapShot);
 			if(firstSnapshot.docs.length < 10) {
 				setIsNextItemExist(false);
 			} else {

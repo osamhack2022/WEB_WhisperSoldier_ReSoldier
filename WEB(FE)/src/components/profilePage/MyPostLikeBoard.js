@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
 
 const MyPostLikeBoard = () => {
 	const { uid: currentUserUid } = JSON.parse(
@@ -36,16 +37,12 @@ const MyPostLikeBoard = () => {
 			try {
 				console.log("showing next liked posts");
 				const querySnapshot = await getDocs(
-					query(collection(dbService, "PostLike"),
-						orderBy("created_timestamp", "desc"),
-						where("user_id", "==", currentUserUid),
-						startAfter(nextItemSnapShot),
-						limit(10)
-					)
+					getProfilePageQuery("PostLike", "user_id", 10, nextItemSnapShot)
 				);
 				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 				
 				const afterSnapshot = await getDocs(
+					// 이 부분을 getProfilePageQuery로 처리할 시 try-catch에서 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
 					query(collection(dbService, "PostLike"),
 						orderBy("created_timestamp", "desc"),
 						where("user_id", "==", currentUserUid),
@@ -68,11 +65,7 @@ const MyPostLikeBoard = () => {
 		}
 		} else {
 			const firstSnapshot = await getDocs(
-				query(collection(dbService, "PostLike"),
-					where("user_id", "==", currentUserUid),
-					orderBy("created_timestamp", "desc"),
-					limit(10)
-				)
+				getProfilePageQuery("PostLike", "user_id", 10)
 			);
 			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
 			snapShotToLikedPosts(firstSnapshot);

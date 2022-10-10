@@ -6,6 +6,7 @@ import MyCommentBoard from "../components/profilePage/MyCommentBoard";
 import MyPostLikeBoard from "../components/profilePage/MyPostLikeBoard";
 import MyCommentLikeBoard from "../components/profilePage/MyCommentLikeBoard";
 import MyPostBoard from "../components/profilePage/MyPostBoard";
+import ChangePasswordForm from "../components/profilePage/ChangePasswordForm";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const ProfilePage = () => {
     <div>
       <div>프로필 페이지 페이지</div>
       <div>가입한지 몇일째</div>
+      <ChangePasswordForm></ChangePasswordForm>
       <MyPostBoard></MyPostBoard>
       <MyCommentBoard></MyCommentBoard>
       <MyPostLikeBoard></MyPostLikeBoard>
