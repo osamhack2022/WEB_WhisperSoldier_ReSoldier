@@ -7,8 +7,8 @@ export const SearchInfo = atom({
     countResultPosts: 0,
     currentCountPosts: 0,
     isExistNextSearchResult: false,
-    isUpdateResultList: false,
-    timeSettingValue: 1,
+    //isUpdateResultList: false,
+    timeSettingValue: "week",
     descSettingValue: true,
   },
 });

@@ -11,6 +11,7 @@ import {
   CurrentScrollPos,
   IsNextPostExistRecoil,
   IsUpdatePostList,
+  PostListSortOption,
   PostsRecoil,
 } from "../../store/PostStore";
 import {
@@ -19,7 +20,7 @@ import {
 } from "../../styles/post/PostBoardStyle";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
-import { getSearchQuery } from "../../modules/GetSearchQuery";
+import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
 
 const PostBoard = () => {
@@ -41,6 +42,8 @@ const PostBoard = () => {
     useRecoilState(CurrentScrollPos);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
+  const [postListSortOption, setPostListSortOption] =
+    useRecoilState(PostListSortOption);
 
   const [timeDepthValue, setTimeDepthValue] = useState("week");
   const [timeDepthSelect, setTimeDepthSelect] = useState({
@@ -80,6 +83,11 @@ const PostBoard = () => {
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
     setIsNextPostExist(true);
+    setPostListSortOption((prev) => ({
+      ...prev,
+      timeSettingValue: timeDepthValue,
+      descSettingValue: isResultDesc,
+    }));
   };
 
   const moveNext = async () => {
@@ -113,6 +121,12 @@ const PostBoard = () => {
       setIsNextPostExistRecoil(true);
     }
     snapshotToPosts(querySnapshot);
+
+    setPostListSortOption((prev) => ({
+      ...prev,
+      timeSettingValue: timeDepthValue,
+      descSettingValue: isResultDesc,
+    }));
   };
 
   const onClick = async (e) => {
@@ -125,21 +139,28 @@ const PostBoard = () => {
   }, []);
 
   const recoverPost = async () => {
+    console.log(
+      "recoverPost : ",
+      postListSortOption.descSettingValue ? "desc" : "asc",
+      postListSortOption.timeSettingValue,
+      countCurrentPost
+    );
     const recoverSnapshot = await getDocs(
       getSearchQuery(
         false,
-        orderDescOrAsc,
-        getTimeDepth(timeDepthValue),
+        postListSortOption.descSettingValue ? "desc" : "asc",
+        getTimeDepth(postListSortOption.timeSettingValue),
         null,
         countCurrentPost
       )
     );
+    console.log(recoverSnapshot);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
       getSearchQuery(
         false,
-        orderDescOrAsc,
-        getTimeDepth(timeDepthValue),
+        postListSortOption.descSettingValue ? "desc" : "asc",
+        getTimeDepth(postListSortOption.timeSettingValue),
         recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
         1
       )
@@ -160,28 +181,38 @@ const PostBoard = () => {
     setPostsRecoil([]);
     setCountCurrentPost(10);
     setIsNextPostExist(false);
-    setIsUpdatePostList(false);
+    setIsUpdatePostList((prev) => ({ ...prev, newestPage: false }));
     setCurrentScrollPos(0);
     getFirst();
   };
 
   useEffect(() => {
     console.log("[PostBoard.js]", isUpdatePostList);
-    if (postsRecoil.length === 0 || isUpdatePostList) {
-      if (isUpdatePostList) {
+    if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
+      if (isUpdatePostList.newestPage) {
         setPosts([]);
         setNextPostSnapShot({});
         setIsNextPostExist(false);
         setPostsRecoil([]);
         setCountCurrentPost(10);
         setIsNextPostExist(false);
-        setIsUpdatePostList(false);
+        setIsUpdatePostList((prev) => ({ ...prev, newestPage: false }));
         setCurrentScrollPos(0);
+        setTimeDepthValue(postListSortOption.timeSettingValue);
+        setTimeDepthSelect(
+          getTimeDepthObj(postListSortOption.timeSettingValue)
+        );
+        setOrderDescOrAsc(postListSortOption.descSettingValue ? "desc" : "asc");
+        setIsResultDesc(postListSortOption.descSettingValue);
       }
       getFirst();
     } else {
       setPosts(postsRecoil);
       setIsNextPostExist(isNextPostExistRecoil);
+      setTimeDepthValue(postListSortOption.timeSettingValue);
+      setTimeDepthSelect(getTimeDepthObj(postListSortOption.timeSettingValue));
+      setOrderDescOrAsc(postListSortOption.descSettingValue ? "desc" : "asc");
+      setIsResultDesc(postListSortOption.descSettingValue);
       recoverPost();
       setTimeout(
         () => window.scrollTo(currentScrollPos, currentScrollPos),

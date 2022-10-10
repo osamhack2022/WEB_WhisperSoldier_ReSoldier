@@ -35,7 +35,12 @@ const WritePage = () => {
         });
         console.log("Document written with ID: ", docRef.id);
         alert("고민이 정상적으로 업로드되었습니다.");
-        setIsUpdatePostList(true);
+        setIsUpdatePostList((prev) => ({
+          ...prev,
+          searchPage: true,
+          newestPage: true,
+          popularPage: true,
+        }));
         navigate("/");
       } catch (error) {
         console.log("Error adding document: ", error);

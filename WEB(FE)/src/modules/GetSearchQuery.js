@@ -69,39 +69,6 @@ export const getSearchQuery = (
   }
 };
 
-export const invertTimeDepthToNum = (timeDepthValue) => {
-  switch (timeDepthValue) {
-    case "week":
-      return 1;
-    case "month":
-      return 2;
-    case "halfYear":
-      return 3;
-    case "fullYear":
-      return 4;
-    case "allTime":
-      return 5;
-    default:
-      return 0;
-  }
-};
-
-export const invertNumtoTimeDepth = (num) => {
-  if (num === 1) {
-    return "week";
-  } else if (num === 2) {
-    return "month";
-  } else if (num === 3) {
-    return "halfYear";
-  } else if (num === 4) {
-    return "fullYear";
-  } else if (num === 5) {
-    return "allTime";
-  } else {
-    return null;
-  }
-};
-
 export const getTimeDepthObj = (str) => {
   switch (str) {
     case "week":

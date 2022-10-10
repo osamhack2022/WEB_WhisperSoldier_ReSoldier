@@ -11,9 +11,26 @@ export const PostInfo = atom({
   },
 });
 
+export const IsUpdatePostList = atom({
+  key: "isUpdatePostList",
+  default: {
+    searchPage: false,
+    newestPage: false,
+    popularPage: false,
+  },
+});
+
 export const PostsRecoil = atom({
   key: "postsRecoil",
   default: [],
+});
+
+export const PostListSortOption = atom({
+  key: "postListSortOption",
+  default: {
+    timeSettingValue: "week",
+    descSettingValue: true,
+  },
 });
 
 export const CountCurrentPost = atom({
@@ -29,9 +46,4 @@ export const IsNextPostExistRecoil = atom({
 export const CurrentScrollPos = atom({
   key: "currentScrollPos",
   default: 0,
-});
-
-export const IsUpdatePostList = atom({
-  key: "isUpdatePostList",
-  default: false,
 });
