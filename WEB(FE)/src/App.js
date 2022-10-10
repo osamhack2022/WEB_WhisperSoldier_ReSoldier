@@ -18,6 +18,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
+import BoardPage from "./pages/BoardPage";
 
 const Body = styled.div`
   position: relative;
@@ -79,6 +80,7 @@ const App = () => {
             <Route path="/post/:id" element={<PostPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/write" element={<WritePage />} />
+            <Route path="/board" element={<BoardPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/message" element={<ChatPage />} />
           </Routes>

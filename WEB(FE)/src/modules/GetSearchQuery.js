@@ -21,7 +21,13 @@ export const getSearchQuery = (
   if (limitDocs > 0) {
     if (startAfterPoint) {
       if (isOrderByLikes) {
-        // 추후에 "공감하기" 구현되면 사용될 예정
+        return query(
+          collection(dbService, "WorryPost"),
+          orderBy("like_count", orderDescOrAsc),
+          where("created_timestamp", ">=", searchTimeDepth),
+          startAfter(startAfterPoint),
+          limit(limitDocs)
+        );
       } else {
         return query(
           collection(dbService, "WorryPost"),
@@ -33,7 +39,12 @@ export const getSearchQuery = (
       }
     } else {
       if (isOrderByLikes) {
-        // 추후에 "공감하기" 구현되면 사용될 예정
+        return query(
+          collection(dbService, "WorryPost"),
+          where("created_timestamp", ">=", searchTimeDepth),
+          orderBy("created_timestamp", "desc"),
+          orderBy("like_count", "desc")
+        );
       } else {
         return query(
           collection(dbService, "WorryPost"),

@@ -1,28 +1,26 @@
 import {
-  BannerBox,
-  DashBoardBox,
   HomeContainerBox,
   HomeContentLowerBox,
   HomeContentUpperBox,
-  TagBox,
 } from "../../styles/common/HomeContainerStyle";
 import NewestPostBox from "./NewestPostBox";
 import PopularPostBox from "./PopularPostBox";
-import PostBoard from "../post/PostBoard";
+import BannerBox from "./HomeBanner";
+import TagBox from "./PopularTagBox";
+import DashBoardBox from "./DashBoardBox";
 
 const HomeContainer = () => {
   return (
     <HomeContainerBox>
       <HomeContentUpperBox>
         <BannerBox></BannerBox>
-        <DashBoardBox>대시보드 박스</DashBoardBox>
+        <DashBoardBox></DashBoardBox>
       </HomeContentUpperBox>
       <HomeContentLowerBox>
-        <NewestPostBox>최신 포스트 박스</NewestPostBox>
-        <PopularPostBox>인기 포스트 박스</PopularPostBox>
-        <TagBox>태그 목록 박스</TagBox>
+        <NewestPostBox></NewestPostBox>
+        <PopularPostBox></PopularPostBox>
+        <TagBox></TagBox>
       </HomeContentLowerBox>
-      {/* <PostBoard></PostBoard> */}
     </HomeContainerBox>
   );
 };
