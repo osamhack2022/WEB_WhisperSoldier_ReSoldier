@@ -56,7 +56,7 @@ const PostBoard = () => {
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
   const [isResultDesc, setIsResultDesc] = useState(true);
 
-  const snapshotToPosts = useCallback((snapshot) => {
+  const snapshotToPosts = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
         const postObj = {
@@ -67,8 +67,7 @@ const PostBoard = () => {
         setPostsRecoil((prev) => [...prev, postObj]);
       });
     }
-    // eslint-disable-next-line
-  }, []);
+  };
 
   const getFirst = async () => {
     const firstSnapshot = await getDocs(
@@ -82,7 +81,13 @@ const PostBoard = () => {
     );
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
-    setIsNextPostExist(true);
+    if (firstSnapshot.docs.length < 10) {
+      setIsNextPostExist(false);
+      setIsNextPostExistRecoil(false);
+    } else {
+      setIsNextPostExist(true);
+      setIsNextPostExistRecoil(true);
+    }
     setPostListSortOption((prev) => ({
       ...prev,
       timeSettingValue: timeDepthValue,
@@ -187,7 +192,7 @@ const PostBoard = () => {
   };
 
   useEffect(() => {
-    console.log("[PostBoard.js]", isUpdatePostList);
+    console.log("[PostBoard.js]", isUpdatePostList.newestPage);
     if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
       if (isUpdatePostList.newestPage) {
         setPosts([]);
