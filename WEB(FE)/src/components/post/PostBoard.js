@@ -82,7 +82,11 @@ const PostBoard = () => {
     );
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
-    setIsNextPostExist(true);
+    if(firstSnapshot.docs.length < 10) {
+      setIsNextPostExist(false);
+    } else {
+      setIsNextPostExist(true);
+    }
     setPostListSortOption((prev) => ({
       ...prev,
       timeSettingValue: timeDepthValue,

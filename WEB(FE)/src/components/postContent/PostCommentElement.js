@@ -7,6 +7,7 @@ import {
   where,
   getDocs,
   addDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
@@ -92,6 +93,7 @@ const PostCommentElement = ({
       await addDoc(collection(dbService, "CommentLike"), {
         associated_comment_id: commentElement.id,
         user_id: currentUserUid,
+        created_timestamp: serverTimestamp()
       });
       setIsLikedByMe(true);
       console.log("Liked");

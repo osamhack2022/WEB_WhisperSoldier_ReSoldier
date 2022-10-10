@@ -9,15 +9,10 @@ const MyCommentLikeBoard = () => {
 	);
 	const { query, collection, getDocs, limit, orderBy, startAfter, where, doc, getDoc } = dbFunction;
   const [commentsLiked, setCommentsLiked] = useState([]);
-	const myCommentLikeBoard = async (nowUserId) => {
-    console.log("직전 아이디: ", nowUserId);
-    const q = query(collection(dbService, "CommentLike"),
-      where("user_id", "==", nowUserId),
-      orderBy("created_timestamp", "desc")
-    )
-    const snapshot = await getDocs(q);
-    console.log("SNAPSHOT:", snapshot.docs);
-    
+  const [nextItemSnapShot, setNextItemSnapShot] = useState({});
+  const [isNextItemExist, setIsNextItemExist] = useState(false);
+  
+  const snapshotToLikedComments = (snapshot) => {
     if (snapshot) {
       snapshot.forEach(async (document) => {
         const commentLikeObj = {
@@ -35,6 +30,57 @@ const MyCommentLikeBoard = () => {
       })
     }
   }
+
+  const myCommentLikeBoard = async (next) => {
+    if (next) {
+      console.log("showing next liked comments");
+      const querySnapshot = await getDocs(
+        query(collection(dbService, "CommentLike"),
+          where("user_id", "==", currentUserUid),
+          orderBy("created_timestamp", "desc"),
+          startAfter(nextItemSnapShot),
+          limit(10)
+        )
+      );
+      setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      
+      const afterSnapshot = await getDocs(
+        query(collection(dbService, "CommentLike"),
+          where("user_id", "==", currentUserUid),
+          orderBy("created_timestamp", "desc"),
+          startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+          limit(1)
+        )
+      );
+      if (afterSnapshot.docs.length === 0) {
+				setIsNextItemExist(false);
+			} else {
+				setIsNextItemExist(true);
+      };
+			snapshotToLikedComments(querySnapshot);
+    } else {
+      const firstSnapshot = await getDocs(
+        query(collection(dbService, "CommentLike"),
+          where("user_id", "==", currentUserUid),
+          orderBy("created_timestamp", "desc"),
+          limit(10)
+        )
+      );
+			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
+      snapshotToLikedComments(firstSnapshot);
+      if(firstSnapshot.docs.length < 10) {
+				setIsNextItemExist(false);
+			} else {
+				setIsNextItemExist(true);
+			}
+    }
+  }
+
+  const onClick = async (e) => {
+    e.preventDefault();
+    myCommentLikeBoard(true);
+  }
+
 	useEffect(() => {
 		myCommentLikeBoard(currentUserUid);
 	}, [])

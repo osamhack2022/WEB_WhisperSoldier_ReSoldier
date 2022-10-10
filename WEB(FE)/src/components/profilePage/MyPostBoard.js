@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
@@ -12,7 +12,7 @@ const MyPostBoard = () => {
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
 
-	const snapShotToCreatedPosts = useCallback((snapshot) => {
+	const snapShotToCreatedPosts = (snapshot) => {
 		if (snapshot) {
 			snapshot.forEach((doc) => {
 				const postObj = {
@@ -22,7 +22,7 @@ const MyPostBoard = () => {
 				setPostsCreated((prev) => [...prev, postObj]);
 			});
 		}
-	}, []);
+	};
 
 	const myPostBoard = async (next) => {
 		if (next) {

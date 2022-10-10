@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
@@ -12,7 +12,7 @@ const MyPostLikeBoard = () => {
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
 
-  const snapShotToLikedPosts = useCallback((snapshot) => {
+  const snapShotToLikedPosts = (snapshot) => {
     if (snapshot) {
       snapshot.forEach(async (document) => {
         const commentLikeObj = {
@@ -29,7 +29,7 @@ const MyPostLikeBoard = () => {
         setPostsLiked((prev) => [...prev, postLikedObj])
       })
     }
-  }, []);
+  };
 
 	const myPostLikeBoard = async (next) => {
 		if (next) {
@@ -97,7 +97,7 @@ const MyPostLikeBoard = () => {
 					<div>잠시만 기다려 주세요</div>
 			)}
       {isNextItemExist && (
-				<button onClick={onClick}>내 포스트 10개 더 보기</button>
+				<button onClick={onClick}>내가 공감한 포스트 10개 더 보기</button>
 			)}
 			<br />
 		</div>

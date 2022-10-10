@@ -13,7 +13,7 @@ import PostBoard from "../post/PostBoard";
 const HomeContainer = () => {
   return (
     <HomeContainerBox>
-      <HomeContentUpperBox>
+      {/* <HomeContentUpperBox>
         <BannerBox>배너 박스</BannerBox>
         <DashBoardBox>대시보드 박스</DashBoardBox>
       </HomeContentUpperBox>
@@ -21,8 +21,8 @@ const HomeContainer = () => {
         <NewestPostBox></NewestPostBox>
         <PopularPostBox></PopularPostBox>
         <TagBox>태그 목록 박스</TagBox>
-      </HomeContentLowerBox>
-      {/* <PostBoard></PostBoard> */}
+      </HomeContentLowerBox> */}
+      <PostBoard></PostBoard>
     </HomeContainerBox>
   );
 };

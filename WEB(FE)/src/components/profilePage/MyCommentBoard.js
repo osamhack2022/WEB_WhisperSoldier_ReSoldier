@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
-import MyPostBoard from "./MyPostBoard";
 
 const MyCommentBoard = () => {
 	const { uid: currentUserUid } = JSON.parse(
@@ -13,7 +12,7 @@ const MyCommentBoard = () => {
 	const [nextItemSnapShot, setNextItemSnapShot] = useState({});
 	const [isNextItemExist, setIsNextItemExist] = useState(false);
 	
-	const snapShotToCreatedComments = useCallback((snapshot) => {
+	const snapShotToCreatedComments = (snapshot) => {
 		if (snapshot) {
 			snapshot.forEach((doc) => {
 				const postObj = {
@@ -23,7 +22,7 @@ const MyCommentBoard = () => {
 				setCommentsCreated((prev) => [...prev, postObj]);
 			});
 		}
-	}, []);
+	};
 
 	const myCommentBoard = async (next) => {
 		if (next) {
