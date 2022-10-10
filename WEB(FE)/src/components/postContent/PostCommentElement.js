@@ -8,6 +8,7 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  increment,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
@@ -114,6 +115,10 @@ const PostCommentElement = ({
       await deleteDoc(doc(dbService, "Comment", commentElement.id)).then(
         alert("댓글이 삭제되었습니다.")
       );
+      const updateRef = doc(dbService, "WorryPost", commentElement.associated_post_id);
+      await updateDoc(updateRef, {
+        comment_count: increment(-1)
+      })
       getPostComments(false, true);
       // 댓글창 업데이트 (isAddingComments = false, isDeletingComments = true)
     }

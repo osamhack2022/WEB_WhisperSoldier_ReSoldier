@@ -2,11 +2,12 @@ import { onAuthStateChanged, updatePassword } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
-const {  } = JSON.parse(
-	sessionStorage.getItem(whisperSodlierSessionKey)
-);
+
 
 const ChangePasswordForm = () => {
+	const { uid: currentUserUid } = JSON.parse(
+		sessionStorage.getItem(whisperSodlierSessionKey)
+	  );
 	const [newPassword, setNewPassword] = useState("");
 	const [checkNewPassword, setCheckNewPassword] = useState("");
 	const [currentPassword, setCurrentPassword] = useState("");

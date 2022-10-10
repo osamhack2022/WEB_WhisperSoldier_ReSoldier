@@ -9,9 +9,7 @@ import {
 import { whisperSodlierSessionKey } from "../lib/Const";
 import { dbService } from "../lib/FStore";
 
-const { uid: currentUserUid } = JSON.parse(
-	sessionStorage.getItem(whisperSodlierSessionKey)
-);
+
 
 export const getProfilePageQuery = (
 		collectionFrom = "",
@@ -19,6 +17,9 @@ export const getProfilePageQuery = (
     limitDocs = 0,
 		startAfterPoint = null
   ) => {
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
 		if (startAfterPoint) {
       return query(
         collection(dbService, collectionFrom),

@@ -83,6 +83,19 @@ const PostPage = () => {
       querySnapshot.forEach((comment) => {
         deleteDoc(doc(dbService, "Comment", comment.id));
       });
+
+      /* 삭제된 post의 공감 삭제 */
+      const queryLikeSnapshot = await getDocs(
+        query(
+          collection(dbService, "PostLike"),
+          where("associated_post_id", "==", postInfo.id),
+          orderBy("created_timestamp", "desc")
+        )
+      );
+      queryLikeSnapshot.forEach((like) => {
+        deleteDoc(doc(dbService, "PostLike", like.id));
+      });
+
       navigate("/");
     }
   };
@@ -192,7 +205,7 @@ const PostPage = () => {
         id: contentObj.id,
         like_count: contentObj.like_count,
         postContent: contentObj.text,
-        like_count: contentObj.like_count,
+        comment_count: contentObj.comment_count,
       }));
       setState((prev) => ({
         ...prev,

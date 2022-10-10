@@ -13,7 +13,9 @@ const PostCommentContainer = ({
   isTablet,
 }) => {
   const {
+    doc,
     addDoc,
+    updateDoc,
     collection,
     serverTimestamp,
     getDocs,
@@ -21,6 +23,7 @@ const PostCommentContainer = ({
     query,
     where,
     startAfter,
+    increment,
   } = dbFunction;
 
   const [nextCommentSnapshot, setNextCommentSnapshot] = useState({});
@@ -89,6 +92,10 @@ const PostCommentContainer = ({
           like_count: 0,
           created_timestamp: serverTimestamp(),
         });
+        const updateRef = doc(dbService, "WorryPost", postInfo.id);
+        await updateDoc(updateRef, {
+          comment_count: increment(1)
+        })
         alert("댓글이 정상적으로 업로드되었습니다.");
         setState((prev) => ({ ...prev, comment: "" }));
         getPostComments(true);

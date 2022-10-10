@@ -22,6 +22,7 @@ const PostElement = ({ post }) => {
       id: post.id,
       postContent: post.text,
       like_count: post.like_count,
+      comment_count: post.comment_count,
     }));
     setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);
@@ -33,7 +34,7 @@ const PostElement = ({ post }) => {
       </PostElementTitle>
       <PostElementInfoBox>
         <PostElementLikeCount>{post.like_count}</PostElementLikeCount>
-        <PostElementCommentCount>댓글 수</PostElementCommentCount>
+        <PostElementCommentCount>{post.comment_count}</PostElementCommentCount>
       </PostElementInfoBox>
       <PostElementTime>
         {calTimeToString(post.created_timestamp)}

@@ -14,6 +14,7 @@ import {
   addDoc, 
   serverTimestamp,
   where,
+  increment,
 } from "firebase/firestore";
 
 export const dbService = getFirestore();
@@ -32,4 +33,5 @@ export const dbFunction = {
   addDoc, 
   serverTimestamp,
   where,
+  increment,
 };
