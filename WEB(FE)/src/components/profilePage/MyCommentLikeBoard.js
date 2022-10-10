@@ -33,31 +33,39 @@ const MyCommentLikeBoard = () => {
 
   const myCommentLikeBoard = async (next) => {
     if (next) {
-      console.log("showing next liked comments");
-      const querySnapshot = await getDocs(
-        query(collection(dbService, "CommentLike"),
-          where("user_id", "==", currentUserUid),
-          orderBy("created_timestamp", "desc"),
-          startAfter(nextItemSnapShot),
-          limit(10)
-        )
-      );
-      setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      
-      const afterSnapshot = await getDocs(
-        query(collection(dbService, "CommentLike"),
-          where("user_id", "==", currentUserUid),
-          orderBy("created_timestamp", "desc"),
-          startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
-          limit(1)
-        )
-      );
-      if (afterSnapshot.docs.length === 0) {
-				setIsNextItemExist(false);
-			} else {
-				setIsNextItemExist(true);
-      };
-			snapshotToLikedComments(querySnapshot);
+      try {
+        console.log("showing next liked comments");
+        const querySnapshot = await getDocs(
+          query(collection(dbService, "CommentLike"),
+            where("user_id", "==", currentUserUid),
+            orderBy("created_timestamp", "desc"),
+            startAfter(nextItemSnapShot),
+            limit(10)
+          )
+        );
+        setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        
+        const afterSnapshot = await getDocs(
+          query(collection(dbService, "CommentLike"),
+            orderBy("created_timestamp", "desc"),
+            where("user_id", "==", currentUserUid),
+            startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+            limit(1)
+          )
+        );
+        if (afterSnapshot.docs.length === 0) {
+          setIsNextItemExist(false);
+        } else {
+          setIsNextItemExist(true);
+        };
+        snapshotToLikedComments(querySnapshot);
+      } catch (e) {
+        if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
+          setIsNextItemExist(false);
+        } else {
+          console.log("Other Error")
+      }
+    }
     } else {
       const firstSnapshot = await getDocs(
         query(collection(dbService, "CommentLike"),
@@ -82,7 +90,7 @@ const MyCommentLikeBoard = () => {
   }
 
 	useEffect(() => {
-		myCommentLikeBoard(currentUserUid);
+		myCommentLikeBoard(false);
 	}, [])
 	return (
 		<div><h4>공감한 댓글</h4> <hr />
@@ -95,6 +103,9 @@ const MyCommentLikeBoard = () => {
 					))
 				) : (
 					<div>잠시만 기다려 주세요</div>
+			)}
+      {isNextItemExist && (
+				<button onClick={onClick}>내가 공감한 댓글 10개 더 보기</button>
 			)}
 			<br />
 		</div>

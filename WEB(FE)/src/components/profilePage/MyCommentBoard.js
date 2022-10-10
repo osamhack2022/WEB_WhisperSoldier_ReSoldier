@@ -26,31 +26,38 @@ const MyCommentBoard = () => {
 
 	const myCommentBoard = async (next) => {
 		if (next) {
-			console.log("showing next comments created");
-			const querySnapshot = await getDocs(
-				query(collection(dbService, "Comment"),
-					orderBy("created_timestamp", "desc"),
-					where("commentor_id", "==", currentUserUid),
-					startAfter(nextItemSnapShot),
-					limit(10)
-				)
-			);
-			setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-
-			const afterSnapshot = await getDocs(
-				query(collection(dbService, "Comment"),
-					orderBy("created_timestamp", "desc"),
-					where("commentor_id", "==", currentUserUid),
-					startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
-					limit(1)
-				)
-			);
-			if (afterSnapshot.docs.length === 0) {
-				setIsNextItemExist(false);
-			} else {
-				setIsNextItemExist(true);
+			try {
+				console.log("showing next comments created");
+				const querySnapshot = await getDocs(
+					query(collection(dbService, "Comment"),
+						orderBy("created_timestamp", "desc"),
+						where("commentor_id", "==", currentUserUid),
+						startAfter(nextItemSnapShot),
+						limit(10)
+					)
+				);
+				const afterSnapshot = await getDocs(
+					query(collection(dbService, "Comment"),
+						orderBy("created_timestamp", "desc"),
+						where("commentor_id", "==", currentUserUid),
+						startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+						limit(1)
+					)
+				);
+				if (afterSnapshot.docs.length === 0) {
+					setIsNextItemExist(false);
+				} else {
+					setIsNextItemExist(true);
+				}
+				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+				snapShotToCreatedComments(querySnapshot);
+			} catch (e) {
+					if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
+						setIsNextItemExist(false);
+					} else {
+						console.log("Other Error")
+				}
 			}
-			snapShotToCreatedComments(querySnapshot);
 		} else {
 			const firstSnapshot = await getDocs(
 				query(collection(dbService, "Comment"),
@@ -61,6 +68,8 @@ const MyCommentBoard = () => {
 			);
 			setNextItemSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1])
 			snapShotToCreatedComments(firstSnapshot);
+			console.log("mycommentboard length:", firstSnapshot.docs.length);
+			console.log("nextItemsnapshot: ", nextItemSnapShot);
 			if(firstSnapshot.docs.length < 10) {
 				setIsNextItemExist(false);
 			} else {

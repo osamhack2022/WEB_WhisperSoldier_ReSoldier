@@ -33,31 +33,39 @@ const MyPostLikeBoard = () => {
 
 	const myPostLikeBoard = async (next) => {
 		if (next) {
-      console.log("showing next liked posts");
-      const querySnapshot = await getDocs(
-				query(collection(dbService, "PostLike"),
-					orderBy("created_timestamp", "desc"),
-					where("user_id", "==", currentUserUid),
-					startAfter(nextItemSnapShot),
-					limit(10)
-				)
-      );
-      setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      
-      const afterSnapshot = await getDocs(
-				query(collection(dbService, "PostLike"),
-					orderBy("created_timestamp", "desc"),
-					where("user_id", "==", currentUserUid),
-					startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
-					limit(1)
-				)
-      );
-      if (afterSnapshot.docs.length === 0) {
-				setIsNextItemExist(false);
-			} else {
-				setIsNextItemExist(true);
-      };
-			snapShotToLikedPosts(querySnapshot);
+			try {
+				console.log("showing next liked posts");
+				const querySnapshot = await getDocs(
+					query(collection(dbService, "PostLike"),
+						orderBy("created_timestamp", "desc"),
+						where("user_id", "==", currentUserUid),
+						startAfter(nextItemSnapShot),
+						limit(10)
+					)
+				);
+				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+				
+				const afterSnapshot = await getDocs(
+					query(collection(dbService, "PostLike"),
+						orderBy("created_timestamp", "desc"),
+						where("user_id", "==", currentUserUid),
+						startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+						limit(1)
+					)
+				);
+				if (afterSnapshot.docs.length === 0) {
+					setIsNextItemExist(false);
+				} else {
+					setIsNextItemExist(true);
+				};
+				snapShotToLikedPosts(querySnapshot);
+			} catch (e) {
+				if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
+					setIsNextItemExist(false);
+				} else {
+					console.log("Other Error")
+			}
+		}
 		} else {
 			const firstSnapshot = await getDocs(
 				query(collection(dbService, "PostLike"),

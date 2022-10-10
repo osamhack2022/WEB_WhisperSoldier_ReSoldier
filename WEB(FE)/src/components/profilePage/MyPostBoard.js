@@ -26,31 +26,39 @@ const MyPostBoard = () => {
 
 	const myPostBoard = async (next) => {
 		if (next) {
-			console.log("showing next");
-			const querySnapshot = await getDocs(
-				query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "desc"),
-					where("creator_id", "==", currentUserUid),
-					startAfter(nextItemSnapShot),
-					limit(10)
-				)
-			);
-			setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-
-			const afterSnapshot = await getDocs(
-				query(collection(dbService, "WorryPost"),
-					orderBy("created_timestamp", "desc"),
-					where("creator_id", "==", currentUserUid),
-					startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
-					limit(1)
-				)
-			);
-			if (afterSnapshot.docs.length === 0) {
-				setIsNextItemExist(false);
-			} else {
-				setIsNextItemExist(true);
+			try {
+				console.log("showing next");
+				const querySnapshot = await getDocs(
+					query(collection(dbService, "WorryPost"),
+						orderBy("created_timestamp", "desc"),
+						where("creator_id", "==", currentUserUid),
+						startAfter(nextItemSnapShot),
+						limit(10)
+					)
+				);
+				setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+	
+				const afterSnapshot = await getDocs(
+					query(collection(dbService, "WorryPost"),
+						orderBy("created_timestamp", "desc"),
+						where("creator_id", "==", currentUserUid),
+						startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+						limit(1)
+					)
+				);
+				if (afterSnapshot.docs.length === 0) {
+					setIsNextItemExist(false);
+				} else {
+					setIsNextItemExist(true);
+				}
+				snapShotToCreatedPosts(querySnapshot);
+			} catch (e) {
+				if( e.message === "Function startAfter() called with invalid data. Unsupported field value: undefined" ) {
+					setIsNextItemExist(false);
+				} else {
+					console.log("Other Error")
 			}
-			snapShotToCreatedPosts(querySnapshot);
+		}
 		} else {
 			const firstSnapshot = await getDocs(
 				query(collection(dbService, "WorryPost"),
