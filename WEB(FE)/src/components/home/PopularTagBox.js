@@ -19,14 +19,14 @@ const TagBoxStyle = styled.div`
 `;
 
 const TagBoxTitle = styled.div`
-  font-size: 16x;
+  font-size: 14x;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
   letter-spacing: 0.64px;
   flex-grow: 1;
-  color: #000000;
+  color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 600;
   border-bottom: 1px solid #dcdcdc;

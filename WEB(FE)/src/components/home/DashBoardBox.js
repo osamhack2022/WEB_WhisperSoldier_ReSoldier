@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 
@@ -11,6 +10,7 @@ const DashBoardBoxStyle = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
+  font-size: 10px;
   ${media.tablet`
   margin: inherit;
   margin-top : 10px;
@@ -21,7 +21,7 @@ const DashBoardBoxStyle = styled.div`
 `;
 
 const DashBoardTitleText = styled.div`
-  font-size: 14x;
+  font-size: 10x;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;

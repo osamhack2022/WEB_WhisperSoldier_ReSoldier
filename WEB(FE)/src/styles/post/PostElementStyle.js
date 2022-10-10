@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export const PostElementBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
   padding: 10px 0px;
-  margin: 5px 0px;
+  margin: 3px 0px;
 `;
 
 export const PostElementTitle = styled(Link)`
@@ -102,5 +102,5 @@ export const PostElementCommentCount = ({ children }) => {
 export const PostElementInfoBox = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 5px 0px;
+  margin: 3px 0px;
 `;

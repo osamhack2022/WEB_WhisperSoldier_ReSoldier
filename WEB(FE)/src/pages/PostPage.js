@@ -192,7 +192,6 @@ const PostPage = () => {
         id: contentObj.id,
         like_count: contentObj.like_count,
         postContent: contentObj.text,
-        like_count: contentObj.like_count,
       }));
       setState((prev) => ({
         ...prev,

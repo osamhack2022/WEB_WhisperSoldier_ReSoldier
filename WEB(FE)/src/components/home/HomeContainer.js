@@ -3,11 +3,10 @@ import {
   HomeContentLowerBox,
   HomeContentUpperBox,
 } from "../../styles/common/HomeContainerStyle";
-import NewestPostBox from "./NewestPostBox";
-import PopularPostBox from "./PopularPostBox";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
 import DashBoardBox from "./DashBoardBox";
+import PostBox from "./PostBox";
 
 const HomeContainer = () => {
   return (
@@ -17,8 +16,8 @@ const HomeContainer = () => {
         <DashBoardBox></DashBoardBox>
       </HomeContentUpperBox>
       <HomeContentLowerBox>
-        <NewestPostBox></NewestPostBox>
-        <PopularPostBox></PopularPostBox>
+        <PostBox></PostBox>
+        <PostBox isLikeDesc={true}></PostBox>
         <TagBox></TagBox>
       </HomeContentLowerBox>
     </HomeContainerBox>

@@ -7,17 +7,32 @@ const WritePostButtonShape = styled.button`
   padding: 0px 10px;
   color: #ffffff;
   height: 28px;
-  width: 90px;
-  background-color: #1a7541;
+  width: ${(props) => (props.error ? "120px" : "90px")};
+  background-color: ${(props) => (props.error ? "#a65646" : "#1a7541")};
   font-weight: 500;
   font-size: 11px;
   text-align: right;
   text-decoration: none;
   border-radius: 25px;
-  border: 1px solid rgb(26, 117, 65);
+  cursor: ${(props) => (props.error ? "default" : "pointer")};
+  border: ${(props) =>
+    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
   transition: all 0.5s;
+  white-space: nowrap;
   &:hover {
-    background: #0d552c;
+    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
+    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
+  }
+
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
+
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
   }
 `;
 
@@ -30,43 +45,12 @@ const WritPostIcon = styled(BsPencilSquare)`
   color: #ffffff;
 `;
 
-export const WritePostButton = ({ onClick, children }) => {
+export const WritePostButton = ({ onClick, children, errorWritePostInfo }) => {
   return (
-    <WritePostButtonShape onClick={onClick}>
-      <WritPostIcon></WritPostIcon> {children}
+    <WritePostButtonShape onClick={onClick} error={errorWritePostInfo}>
+      {!errorWritePostInfo && <WritPostIcon></WritPostIcon>} {children}
     </WritePostButtonShape>
   );
-};
-
-const ErrorWritePostButtonShape = styled.button`
-  position: relative;
-  padding: 0px 10px;
-  color: #ffffff;
-  height: 28px;
-  width: 120px;
-  background-color: #a65646;
-  font-weight: 500;
-  font-size: 11px;
-  text-align: right;
-  text-decoration: none;
-  border-radius: 25px;
-  border: 1px solid rgb(166, 86, 70);
-  transition: all 0.5s;
-
-  animation: vibration 0.1s 5;
-
-  @keyframes vibration {
-    from {
-      transform: rotate(1deg);
-    }
-    to {
-      transform: rotate(-1deg);
-    }
-  }
-`;
-
-export const ErrorWritePostButton = ({ children }) => {
-  return <ErrorWritePostButtonShape>{children}</ErrorWritePostButtonShape>;
 };
 
 export const WritePostHeaderBox = styled.div`
@@ -84,11 +68,12 @@ const WritePostHeader = ({ onClick, errorWritePostInfo }) => {
   return (
     <WritePostHeaderBox>
       <WritePostTitle>고민 작성하기</WritePostTitle>
-      {errorWritePostInfo.isError ? (
-        <ErrorWritePostButton>내용을 입력해 주세요</ErrorWritePostButton>
-      ) : (
-        <WritePostButton onClick={onClick}>작성완료</WritePostButton>
-      )}
+      <WritePostButton
+        onClick={onClick}
+        errorWritePostInfo={errorWritePostInfo}
+      >
+        {errorWritePostInfo ? "내용을 입력해 주세요" : "작성완료"}
+      </WritePostButton>
     </WritePostHeaderBox>
   );
 };

@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { TbSend } from "react-icons/tb";
 import styled from "styled-components";
 
 const PostCommentFormBox = styled.div`

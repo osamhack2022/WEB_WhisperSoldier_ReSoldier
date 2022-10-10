@@ -1,5 +1,6 @@
 import { getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getSearchQuery } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
@@ -14,6 +15,7 @@ const NewestPostBoxStyle = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
+  width: 350px;
   ${media.tablet`
       width : 40%;
     `}
@@ -23,25 +25,35 @@ const NewestPostBoxStyle = styled.div`
 `;
 
 const PostBoxTitle = styled.div`
-  font-size: 16x;
+  font-size: 14x;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
   letter-spacing: 0.64px;
   flex-grow: 1;
-  color: #000000;
+  color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 600;
   border-bottom: 1px solid #dcdcdc;
 `;
 
-const PostMoreText = styled.div`
-  font-size: 14x;
+const PostMoreBox = styled.div`
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: center;
+  letter-spacing: 0.64px;
+  color: #000000;
+  background-color: rgba(0, 0, 0, 0);
+  font-weight: 500;
+`;
+
+const PostMoreLink = styled(Link)`
+  font-size: 14x;
+  padding-bottom: 10px;
+  text-align: center;
+  text-decoration: none;
   letter-spacing: 0.64px;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
@@ -81,7 +93,9 @@ const NewestPostBox = () => {
       ) : (
         <div>잠시만 기다려 주세요</div>
       )}
-      <PostMoreText>더보기</PostMoreText>
+      <PostMoreBox>
+        <PostMoreLink to="/board?sort=latest">더보기</PostMoreLink>
+      </PostMoreBox>
     </NewestPostBoxStyle>
   );
 };

@@ -39,7 +39,7 @@ const WritePostBox = ({ state, onChange, onClick, errorWritePostInfo }) => {
     <InputBox>
       <WritePostHeader
         onClick={onClick}
-        errorWritePostInfo={errorWritePostInfo}
+        errorWritePostInfo={errorWritePostInfo.isError}
       ></WritePostHeader>
       <InputForm
         name="postContent"

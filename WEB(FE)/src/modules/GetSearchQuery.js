@@ -24,7 +24,6 @@ export const getSearchQuery = (
         return query(
           collection(dbService, "WorryPost"),
           orderBy("like_count", orderDescOrAsc),
-          where("created_timestamp", ">=", searchTimeDepth),
           startAfter(startAfterPoint),
           limit(limitDocs)
         );
@@ -41,9 +40,8 @@ export const getSearchQuery = (
       if (isOrderByLikes) {
         return query(
           collection(dbService, "WorryPost"),
-          where("created_timestamp", ">=", searchTimeDepth),
-          orderBy("created_timestamp", "desc"),
-          orderBy("like_count", "desc")
+          orderBy("like_count", "desc"),
+          limit(limitDocs)
         );
       } else {
         return query(

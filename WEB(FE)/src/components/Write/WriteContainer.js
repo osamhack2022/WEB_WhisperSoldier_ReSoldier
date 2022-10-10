@@ -4,13 +4,18 @@ import SideButtonBox from "../common/SideButtonBox";
 import { SideOptionForm } from "../common/SideOptionForm";
 import WritePostBox from "./WriteInputBox";
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
+import { useNavigate } from "react-router-dom";
 
 const WriteContainer = ({ state, onChange, onClick, errorWritePostInfo }) => {
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  };
   return (
     <>
       <WriteContainerBox>
         <SideButtonBox>
-          <BackButton toLink="/">뒤로가기</BackButton>
+          <BackButton goBack={goBack}>뒤로가기</BackButton>
         </SideButtonBox>
 
         <WritePostBox
