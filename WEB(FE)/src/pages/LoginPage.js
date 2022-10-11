@@ -59,7 +59,7 @@ const LoginPage = () => {
         console.log("[LoginPage.js] : 로그인 정상]");
         console.log(auth);
         setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
-        navigate("/");
+        navigate("/", { replace: true });
       }
     } catch (e) {
       switch (e.code) {
