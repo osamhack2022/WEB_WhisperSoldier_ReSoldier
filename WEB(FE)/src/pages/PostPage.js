@@ -95,6 +95,18 @@ const PostPage = () => {
       queryLikeSnapshot.forEach((like) => {
         deleteDoc(doc(dbService, "PostLike", like.id));
       });
+
+      const queryCommentLikeSnapshot = await getDocs(
+        query(
+          collection(dbService, "CommentLike"),
+          where("associated_comment_id", "==", postInfo.id),
+          orderBy("created_timestamp", "desc")
+        )
+      );
+      queryCommentLikeSnapshot.forEach((like) => {
+        deleteDoc(doc(dbService, "CommentLike", like.id));
+      });
+
       setIsUpdatePostList((prev) => ({
         ...prev,
         searchPage: true,
