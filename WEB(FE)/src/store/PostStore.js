@@ -7,6 +7,7 @@ export const PostInfo = atom({
     created_timestamp: null,
     id: "",
     like_count: 0,
+    comment_count: 0,
     postContent: "",
   },
 });

@@ -4,6 +4,8 @@ import { TimeStampToStr } from "../../modules/TimeStampToStr";
 import { dbService, dbFunction } from "../../lib/FStore";
 import PostCommentContent from "./PostCommentContent";
 import PostCommentForm from "./PostCommentForm";
+import { useSetRecoilState } from "recoil";
+import { IsUpdatePostList } from "../../store/PostStore";
 
 const PostCommentContainer = ({
   postInfo,
@@ -13,7 +15,9 @@ const PostCommentContainer = ({
   isTablet,
 }) => {
   const {
+    doc,
     addDoc,
+    updateDoc,
     collection,
     serverTimestamp,
     getDocs,
@@ -21,12 +25,15 @@ const PostCommentContainer = ({
     query,
     where,
     startAfter,
+    increment,
   } = dbFunction;
 
   const [nextCommentSnapshot, setNextCommentSnapshot] = useState({});
   const [postComments, setPostComments] = useState([]);
   const [isLoadingComments, setIsLoadingComments] = useState(true);
   const [errorCommentInfo, setCommentInfo] = useState(false);
+
+  const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const getPostCommentQuery = (isAddingComments) => {
     if (!isAddingComments) {
@@ -89,6 +96,16 @@ const PostCommentContainer = ({
           like_count: 0,
           created_timestamp: serverTimestamp(),
         });
+        const updateRef = doc(dbService, "WorryPost", postInfo.id);
+        await updateDoc(updateRef, {
+          comment_count: increment(1),
+        });
+        setIsUpdatePostList((prev) => ({
+          ...prev,
+          searchPage: true,
+          newestPage: true,
+          popularPage: true,
+        }));
         alert("댓글이 정상적으로 업로드되었습니다.");
         setState((prev) => ({ ...prev, comment: "" }));
         getPostComments(true);

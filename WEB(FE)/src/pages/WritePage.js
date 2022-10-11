@@ -29,6 +29,7 @@ const WritePage = () => {
           created_timestamp: serverTimestamp(),
           creator_id: authService.currentUser.uid, // 현재 사용자의 uid
           like_count: 0,
+          comment_count: 0,
           post_rep_accept: false,
           tag_name: "",
           text: state.postContent,

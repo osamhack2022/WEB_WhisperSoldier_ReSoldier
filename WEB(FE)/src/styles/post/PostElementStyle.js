@@ -74,6 +74,7 @@ const PostElementCommentIcon = styled(GoComment)`
   height: 12px;
   width: 12px;
   font-weight: 100;
+  margin-top: 1px;
   margin-right: 5px;
   color: #4181b1;
   background-color: rgba(0, 0, 0, 0);

@@ -8,12 +8,13 @@ import {
   limit,
   orderBy,
   startAfter,
-  doc, 
-  updateDoc, 
-  deleteDoc, 
-  addDoc, 
+  doc,
+  updateDoc,
+  deleteDoc,
+  addDoc,
   serverTimestamp,
   where,
+  increment,
 } from "firebase/firestore";
 
 export const dbService = getFirestore();
@@ -26,10 +27,11 @@ export const dbFunction = {
   limit,
   orderBy,
   startAfter,
-  doc, 
-  updateDoc, 
-  deleteDoc, 
-  addDoc, 
+  doc,
+  updateDoc,
+  deleteDoc,
+  addDoc,
   serverTimestamp,
   where,
+  increment,
 };
