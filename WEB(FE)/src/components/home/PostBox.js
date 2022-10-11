@@ -43,10 +43,18 @@ const PostBox = ({ isLikeDesc }) => {
   const MoreButtonClick = () => {
     if (isLikeDesc) {
       navigate("/board?sort=like_count");
-      setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        popularPage: true,
+        newestPage: true,
+      }));
     } else {
       navigate("/board?sort=latest");
-      setIsUpdatePostList((prev) => ({ ...prev, newestPage: false }));
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        popularPage: true,
+        newestPage: true,
+      }));
     }
   };
 

@@ -30,10 +30,10 @@ export const getSearchQuery = (
       } else {
         return query(
           collection(dbService, "WorryPost"),
-          orderBy("created_timestamp", orderDescOrAsc),
           where("created_timestamp", ">=", searchTimeDepth),
-          startAfter(startAfterPoint),
-          limit(limitDocs)
+          orderBy("created_timestamp", orderDescOrAsc),
+          limit(limitDocs),
+          startAfter(startAfterPoint)
         );
       }
     } else {

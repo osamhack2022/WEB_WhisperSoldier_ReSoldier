@@ -22,9 +22,12 @@ import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
+import { useLocation, useParams } from "react-router-dom";
 
 const PostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
+  //let { params } = useParams();
+  const location = useLocation();
   const { getDocs } = dbFunction;
 
   const [posts, setPosts] = useState([]);
@@ -85,8 +88,28 @@ const PostBoard = () => {
       setIsNextPostExist(false);
       setIsNextPostExistRecoil(false);
     } else {
-      setIsNextPostExist(true);
-      setIsNextPostExistRecoil(true);
+      try {
+        const nextPostsSnapshot = await getDocs(
+          getSearchQuery(
+            false,
+            orderDescOrAsc,
+            getTimeDepth(timeDepthValue),
+            firstSnapshot.docs[firstSnapshot.docs.length - 1],
+            1
+          )
+        );
+        if (nextPostsSnapshot.docs.length === 0) {
+          console.log("no more post data!");
+          setIsNextPostExist(false);
+          setIsNextPostExistRecoil(false);
+        } else {
+          setIsNextPostExist(true);
+          setIsNextPostExistRecoil(true);
+          console.log("more post data exist!");
+        }
+      } catch (e) {
+        console.log("error with get Post!");
+      }
     }
     setPostListSortOption((prev) => ({
       ...prev,
@@ -193,7 +216,13 @@ const PostBoard = () => {
 
   useEffect(() => {
     console.log("[PostBoard.js]", isUpdatePostList.newestPage);
+    //console.log("this page params :", params);
+    console.log("this page location :", location.search);
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get("sort");
+    console.log(id);
     if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
+      console.log("frsh or refresh data!");
       if (isUpdatePostList.newestPage) {
         setPosts([]);
         setNextPostSnapShot({});
@@ -212,6 +241,7 @@ const PostBoard = () => {
       }
       getFirst();
     } else {
+      console.log("get global state!");
       setPosts(postsRecoil);
       setIsNextPostExist(isNextPostExistRecoil);
       setTimeDepthValue(postListSortOption.timeSettingValue);

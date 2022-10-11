@@ -123,24 +123,28 @@ const SearchPage = () => {
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
         const postTextToBeChecked = String(postObj.text);
-        let isFullList = false;
-
+        //let isFullList = false;
+        console.log(keyword, countSearchPost);
         if (postTextToBeChecked.includes(keyword)) {
-          if (!isFullList && count < countSearchPost) {
+          if (count < countSearchPost) {
             setSearchResults((prev) => [...prev, postObj]);
             setResultList((prev) => [...prev, postObj]);
             count += 1;
             totalCount += 1;
-          } else if (!isFullList && count === countSearchPost) {
+          } else if (count === countSearchPost) {
+            count += 1;
             totalCount += 1;
-            isFullList = true;
             setNextPostSnapShot(snapshot.docs[i - 1]);
+            console.log(totalCount, snapshot.docs[i - 1]);
           } else {
             totalCount += 1;
           }
         }
       }
-      //console.log("TotalCount: ", totalCount);
+      if (count > countSearchPost) {
+        count -= 1;
+      }
+      console.log("TotalCount: ", totalCount);
       if (totalCount <= countSearchPost) {
         setIsNextResultExist(false);
       } else {
