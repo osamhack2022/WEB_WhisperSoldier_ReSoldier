@@ -24,7 +24,7 @@ import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
 import { useLocation } from "react-router-dom";
 
-const PostBoard = () => {
+const PopularPostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   //let { params } = useParams();
   const location = useLocation();
@@ -74,13 +74,7 @@ const PostBoard = () => {
 
   const getFirst = async () => {
     const firstSnapshot = await getDocs(
-      getSearchQuery(
-        false,
-        orderDescOrAsc,
-        getTimeDepth(timeDepthValue),
-        null,
-        10
-      )
+      getSearchQuery(true, "desc", null, null, 10)
     );
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
@@ -91,9 +85,9 @@ const PostBoard = () => {
       try {
         const nextPostsSnapshot = await getDocs(
           getSearchQuery(
-            false,
-            orderDescOrAsc,
-            getTimeDepth(timeDepthValue),
+            true,
+            "desc",
+            null,
             firstSnapshot.docs[firstSnapshot.docs.length - 1],
             1
           )
@@ -111,30 +105,19 @@ const PostBoard = () => {
         console.log("error with get Post!");
       }
     }
-    setPostListSortOption((prev) => ({
-      ...prev,
-      timeSettingValue: timeDepthValue,
-      descSettingValue: isResultDesc,
-    }));
   };
 
   const moveNext = async () => {
     const querySnapshot = await getDocs(
-      getSearchQuery(
-        false,
-        orderDescOrAsc,
-        getTimeDepth(timeDepthValue),
-        nextPostSnapShot,
-        10
-      )
+      getSearchQuery(true, "desc", null, nextPostSnapShot, 10)
     );
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
     const afterSnapshot = await getDocs(
       getSearchQuery(
-        false,
-        orderDescOrAsc,
-        getTimeDepth(timeDepthValue),
+        true,
+        "desc",
+        null,
         querySnapshot.docs[querySnapshot.docs.length - 1],
         1
       )
@@ -167,28 +150,16 @@ const PostBoard = () => {
   }, []);
 
   const recoverPost = async () => {
-    console.log(
-      "recoverPost : ",
-      postListSortOption.descSettingValue ? "desc" : "asc",
-      postListSortOption.timeSettingValue,
-      countCurrentPost
-    );
     const recoverSnapshot = await getDocs(
-      getSearchQuery(
-        false,
-        postListSortOption.descSettingValue ? "desc" : "asc",
-        getTimeDepth(postListSortOption.timeSettingValue),
-        null,
-        countCurrentPost
-      )
+      getSearchQuery(true, "desc", null, null, countCurrentPost)
     );
     console.log(recoverSnapshot);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
       getSearchQuery(
-        false,
-        postListSortOption.descSettingValue ? "desc" : "asc",
-        getTimeDepth(postListSortOption.timeSettingValue),
+        true,
+        "desc",
+        null,
         recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
         1
       )
@@ -209,15 +180,15 @@ const PostBoard = () => {
     setPostsRecoil([]);
     setCountCurrentPost(10);
     setIsNextPostExist(false);
-    setIsUpdatePostList((prev) => ({ ...prev, newestPage: false }));
+    setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
     setCurrentScrollPos(0);
     getFirst();
   };
 
   useEffect(() => {
-    console.log("[PostBoard.js-latest]", isUpdatePostList.newestPage);
+    console.log("[PostBoard-popular.js]", isUpdatePostList.popularPage);
 
-    if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
+    if (postsRecoil.length === 0 || isUpdatePostList.popularPage) {
       console.log("frsh or refresh data!");
       if (isUpdatePostList.newestPage) {
         setPosts([]);
@@ -226,24 +197,14 @@ const PostBoard = () => {
         setPostsRecoil([]);
         setCountCurrentPost(10);
         setIsNextPostExist(false);
-        setIsUpdatePostList((prev) => ({ ...prev, newestPage: false }));
+        setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
         setCurrentScrollPos(0);
-        setTimeDepthValue(postListSortOption.timeSettingValue);
-        setTimeDepthSelect(
-          getTimeDepthObj(postListSortOption.timeSettingValue)
-        );
-        setOrderDescOrAsc(postListSortOption.descSettingValue ? "desc" : "asc");
-        setIsResultDesc(postListSortOption.descSettingValue);
       }
       getFirst();
     } else {
       console.log("get global state!");
       setPosts(postsRecoil);
       setIsNextPostExist(isNextPostExistRecoil);
-      setTimeDepthValue(postListSortOption.timeSettingValue);
-      setTimeDepthSelect(getTimeDepthObj(postListSortOption.timeSettingValue));
-      setOrderDescOrAsc(postListSortOption.descSettingValue ? "desc" : "asc");
-      setIsResultDesc(postListSortOption.descSettingValue);
       recoverPost();
       setTimeout(
         () => window.scrollTo(currentScrollPos, currentScrollPos),
@@ -262,7 +223,7 @@ const PostBoard = () => {
             onShowSideContainer={onShowSideContainer}
             isShowContainer={isShowContainer}
           >
-            최신 고민 게시판
+            인기 고민 게시판
           </PostBoardTitleContainer>
           {!isTablet && isShowContainer && (
             <SideOptionContainer>
@@ -310,4 +271,4 @@ const PostBoard = () => {
   }
 };
 
-export default PostBoard;
+export default PopularPostBoard;

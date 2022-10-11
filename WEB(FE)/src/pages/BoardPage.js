@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import PopularPostBoard from "../components/post/PopularPostBoard";
 import PostBoard from "../components/post/PostBoard";
 import media from "../modules/MediaQuery";
 
@@ -18,9 +21,24 @@ export const BoardContainer = styled.div`
 `;
 
 const BoardPage = () => {
+  const location = useLocation();
+  const [kindOfBoard, setKindOfBoard] = useState("");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get("sort");
+
+    if (id === "latest") {
+      setKindOfBoard("latest");
+    } else if (id === "like_count") {
+      setKindOfBoard("like_count");
+    } else {
+      // 잘못된 페이지
+    }
+  }, []);
   return (
     <BoardContainer>
-      <PostBoard></PostBoard>
+      {kindOfBoard === "latest" && <PostBoard></PostBoard>}
+      {kindOfBoard === "like_count" && <PopularPostBoard></PopularPostBoard>}
     </BoardContainer>
   );
 };
