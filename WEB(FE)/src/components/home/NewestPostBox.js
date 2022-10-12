@@ -25,7 +25,7 @@ const NewestPostBoxStyle = styled.div`
 `;
 
 const PostBoxTitle = styled.div`
-  font-size: 14x;
+  font-size: 14px;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import PostElement from "../post/PostElement";
 
 const MyPostBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -88,10 +89,11 @@ const MyPostBoard = () => {
       <h4>작성한 고민 글</h4> <hr />
       {postsCreated.length !== 0 ? (
         postsCreated.map((post) => (
-          <div key={post.id}>
-            <Link to={`/post/${post.id}`}>{post.text}</Link>
-            <hr />
-          </div>
+          // <div key={post.id}>
+          //   <Link to={`/post/${post.id}`}>{post.text}</Link>
+          <PostElement key={post.id} post={post}></PostElement>
+          /* <hr />
+          </div> */
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>

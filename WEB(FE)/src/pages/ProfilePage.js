@@ -10,13 +10,16 @@ import ChangePasswordForm from "../components/profile/ChangePasswordForm";
 import {
   MyInfoBox,
   MyInfoIconBox,
+  MyInfoMainText,
   MyInfoText,
   MyInfoTextSection,
   PrimaryMenuBar,
   PrimaryMenuBox,
+  PrimaryMenuButton,
   ProfileContainer,
   ProfileCotentBox,
 } from "../styles/profile/ProfilePageStyle";
+import ChangeProfile from "../components/profile/ChangeProfile";
 
 const PROFILE = "profile";
 const MYPOST = "myPost";
@@ -63,24 +66,28 @@ const ProfilePage = () => {
           <MyInfoBox>
             <MyInfoIconBox></MyInfoIconBox>
             <MyInfoTextSection>
-              <MyInfoText>닉네임 표시 위치</MyInfoText>
-              <MyInfoText notTop={true}>가입한지 100일째</MyInfoText>
+              <MyInfoMainText>닉네임 표시 위치</MyInfoMainText>
+              <MyInfoText notTop={true}>위솔과 함께한지 100일째</MyInfoText>
             </MyInfoTextSection>
           </MyInfoBox>
         </PrimaryMenuBox>
         <PrimaryMenuBox isNotTop={true}>
-          <div onClick={onProfile}>프로필 설정</div>
-          <div onClick={onMyPost}>작성한 글</div>
-          <div onClick={onMyComment}>작성한 댓글</div>
-          <div onClick={onLikePost}>공감한 글</div>
-          <div onClick={onLikeComment}>공감한 댓글</div>
+          <PrimaryMenuButton onClick={onProfile}>프로필 설정</PrimaryMenuButton>
+          <PrimaryMenuButton onClick={onMyPost}>작성한 글</PrimaryMenuButton>
+          <PrimaryMenuButton onClick={onMyComment}>
+            작성한 댓글
+          </PrimaryMenuButton>
+          <PrimaryMenuButton onClick={onLikePost}>공감한 글</PrimaryMenuButton>
+          <PrimaryMenuButton onClick={onLikeComment}>
+            공감한 댓글
+          </PrimaryMenuButton>
         </PrimaryMenuBox>
         <PrimaryMenuBox isNotTop={true}>
-          <button onClick={onLogout}>로그아웃</button>
+          <PrimaryMenuButton onClick={onLogout}>로그아웃</PrimaryMenuButton>
         </PrimaryMenuBox>
       </PrimaryMenuBar>
       <ProfileCotentBox>
-        {currentPage === PROFILE && <ChangePasswordForm></ChangePasswordForm>}
+        {currentPage === PROFILE && <ChangeProfile></ChangeProfile>}
         {currentPage === MYPOST && <MyPostBoard></MyPostBoard>}
         {currentPage === MYCOMMENT && <MyCommentBoard></MyCommentBoard>}
         {currentPage === LIKEPOST && <MyPostLikeBoard></MyPostLikeBoard>}

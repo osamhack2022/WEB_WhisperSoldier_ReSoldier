@@ -42,10 +42,20 @@ export const PrimaryMenuBox = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
-  margin-top: ${(props) => props.isNotTop && "5px"};
+  margin-top: ${(props) => props.isNotTop && "10px"};
   ${media.mobile`
   width: 100%;
   `}
+`;
+
+export const PrimaryMenuButton = styled.div`
+  width: 90%;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 1px solid #dcdcdc;
+  cursor: pointer;
 `;
 
 export const MyInfoBox = styled.div`
@@ -80,6 +90,16 @@ export const MyInfoIconBox = () => {
   );
 };
 
+export const MyInfoMainText = styled.div`
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #000000;
+  text-align: right;
+  margin-top: ${(props) => props.notTop && "5px"};
+`;
+
 export const MyInfoText = styled.div`
   width: 100%;
   font-size: 14px;
@@ -101,6 +121,7 @@ export const MyInfoTextSection = styled.div`
 
 export const ProfileCotentBox = styled.div`
   margin-left: 10px;
+  padding: 10px 20px;
   height: fit-content;
   /* width: 500px; */
   flex-grow: 1;
