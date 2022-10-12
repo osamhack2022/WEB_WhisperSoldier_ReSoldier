@@ -4,6 +4,7 @@ import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
 import PostElement from "../post/PostElement";
+import { SectionTitle } from "./ChangeProfile";
 
 const MyPostBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -86,7 +87,7 @@ const MyPostBoard = () => {
 
   return (
     <div>
-      <h4>작성한 고민 글</h4> <hr />
+      <SectionTitle>작성한 고민 글</SectionTitle>
       {postsCreated.length !== 0 ? (
         postsCreated.map((post) => (
           // <div key={post.id}>

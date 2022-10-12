@@ -1,15 +1,9 @@
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  updatePassword,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
+import { signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import { useState } from "react";
 import styled from "styled-components";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
-import { useForm } from "../../modules/useForm";
-import { ChangeProfileImgButton, FunctionTitle } from "./ChangeProfile";
+import { useAndSetForm } from "../../modules/useForm";
 
 const ChangePasswordFormStyle = styled.div`
   display: flex;
@@ -17,12 +11,6 @@ const ChangePasswordFormStyle = styled.div`
   justify-content: flex-start;
   height: fit-content;
   width: 320px;
-`;
-
-const FormText = styled.div`
-  font-size: 16px;
-  text-align: left;
-  font-weight: 700;
 `;
 
 const AuthInputBox = styled.input`
@@ -47,124 +35,257 @@ const AuthInputBox = styled.input`
   }
 `;
 
+export const ChangePasswordButton = styled.button`
+  margin: 10px 0px 5px 0px;
+  position: relative;
+  padding: 0px 20px;
+  color: ${(props) => (props.error ? "#ffffff" : "#0d552c")};
+  height: 30px;
+  width: ${(props) => (props.error ? "200px" : "100px")};
+  background-color: ${(props) =>
+    props.error ? "#a65646" : "rgba(0, 0, 0, 0)"};
+  font-weight: 500;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 25px;
+  margin-left: ${(props) => (props.isMarginLeft ? "10px" : "0px")};
+  cursor: ${(props) => (props.error ? "default" : "pointer")};
+  border: ${(props) =>
+    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
+  transition: all 0.5s;
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
+  white-space: nowrap;
+  &:hover {
+    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
+    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
+  }
+`;
+
 const ChangePasswordForm = () => {
-  // const { uid: currentUserUid } = JSON.parse(
   const currentUserKey = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
 
-  //console.log(currentUserKey);
-
-  const [passworInputValue, onChange] = useForm({
+  const [passworInputValue, setPasswordInputValue, onChange] = useAndSetForm({
     current: "",
     new: "",
     checkNew: "",
   });
-  const [loginErrorInfo, setLoginErrorInfo] = useState({
+  const [passwordErrorInfo, setPasswordErrorInfo] = useState({
     isErr: false,
-    isEmailError: false,
     errMsg: "",
+    isCurrentPasswordErr: false,
+    isNewPasswordErr: false,
     isLoading: false,
   });
   const onChangePassword = (e) => {
     e.preventDefault();
-    //const auth = getAuth();
-    signInWithEmailAndPassword(
-      authService,
-      currentUserKey.email,
-      passworInputValue.current
-    )
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        // ...
+    if (passworInputValue.current.length > 0) {
+      if (
+        passworInputValue.new.length > 0 &&
+        passworInputValue.checkNew.length > 0
+      ) {
         if (passworInputValue.new === passworInputValue.checkNew) {
-          const check = window.confirm("비밀번호를 바꾸시겠습니까?");
-          if (check) {
-            updatePassword(authService.currentUser, passworInputValue.new)
-              .then(() => {
-                alert("변경 성공");
-              })
-              .catch((error) => {
-                alert("변경 실패: ", error);
-              });
-          }
+          setPasswordErrorInfo((prev) => ({
+            ...prev,
+            isLoading: true,
+          }));
+          signInWithEmailAndPassword(
+            authService,
+            currentUserKey.email,
+            passworInputValue.current
+          )
+            .then((userCredential) => {
+              const check = window.confirm("비밀번호를 바꾸시겠습니까?");
+              if (check) {
+                updatePassword(authService.currentUser, passworInputValue.new)
+                  .then(() => {
+                    alert("비밀번호가 변경되었습니다.");
+                  })
+                  .catch((error) => {
+                    setPasswordErrorInfo((prev) => ({
+                      ...prev,
+                      isErr: true,
+                      isLoading: false,
+                      isNewPasswordErr: true,
+                      errMsg: "오류가 발생했습니다",
+                    }));
+                    setTimeout(() => {
+                      setPasswordErrorInfo((prev) => ({
+                        ...prev,
+                        isErr: false,
+                        isLoading: false,
+                        isCurrentPasswordErr: false,
+                        isNewPasswordErr: false,
+                        errMsg: "",
+                      }));
+                      setPasswordInputValue((prev) => ({
+                        ...prev,
+                        current: "",
+                        new: "",
+                        checkNew: "",
+                      }));
+                    }, 3000);
+                  });
+              }
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorCode, errorMessage);
+
+              switch (error.code) {
+                case "auth/wrong-password":
+                  setPasswordErrorInfo((prev) => ({
+                    ...prev,
+                    isErr: true,
+                    isLoading: false,
+                    isCurrentPasswordErr: true,
+                    errMsg: "현재 비밀번호가 잘못되었습니다",
+                  }));
+                  break;
+                default:
+                  setPasswordErrorInfo((prev) => ({
+                    ...prev,
+                    isErr: true,
+                    isLoading: false,
+                    isCurrentPasswordErr: true,
+                    isNewPasswordErr: true,
+                    errMsg: "잠시후에 다시 시도해주세요",
+                  }));
+              }
+              setTimeout(() => {
+                setPasswordErrorInfo((prev) => ({
+                  ...prev,
+                  isErr: false,
+                  isLoading: false,
+                  isCurrentPasswordErr: false,
+                  isNewPasswordErr: false,
+                  errMsg: "",
+                }));
+                setPasswordInputValue((prev) => ({
+                  ...prev,
+                  current: "",
+                  new: "",
+                  checkNew: "",
+                }));
+              }, 3000);
+            });
         } else {
-          alert("재입력한 비밀번호가 다릅니다.");
+          setPasswordErrorInfo((prev) => ({
+            ...prev,
+            isErr: true,
+            isLoading: false,
+            isNewPasswordErr: true,
+            errMsg: "재입력한 비밀번호가 다릅니다",
+          }));
+          setTimeout(() => {
+            setPasswordErrorInfo((prev) => ({
+              ...prev,
+              isErr: false,
+              isLoading: false,
+              isCurrentPasswordErr: false,
+              isNewPasswordErr: false,
+              errMsg: "",
+            }));
+            setPasswordInputValue((prev) => ({
+              ...prev,
+              current: "",
+              new: "",
+              checkNew: "",
+            }));
+          }, 3000);
         }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-
-        switch (e.code) {
-          case "auth/wrong-password":
-            setLoginErrorInfo((prev) => ({
-              ...prev,
-              isErr: true,
-              isLoading: false,
-              errMsg: "아이디 또는 비밀번호가 잘못되었습니다",
-            }));
-            break;
-          case "auth/user-not-found":
-            setLoginErrorInfo((prev) => ({
-              ...prev,
-              isEmailError: true,
-              isLoading: false,
-              errMsg: "존재하지 않은 계정입니다",
-            }));
-            break;
-          default:
-            setLoginErrorInfo((prev) => ({
-              ...prev,
-              isErr: true,
-              isLoading: false,
-              errMsg: "잠시후에 다시 시도해주세요",
-            }));
-        }
-      });
-    //체크하는 로직
-  };
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(authService, (user) => {
-      unsub();
-      if (user) {
-        const nowUser = authService.currentUser;
       } else {
-        // not logged in
+        setPasswordErrorInfo((prev) => ({
+          ...prev,
+          isErr: true,
+          isLoading: false,
+          isNewPasswordErr: true,
+          errMsg: "새로운 비밀번호를 입력해주세요",
+        }));
+        setTimeout(() => {
+          setPasswordErrorInfo((prev) => ({
+            ...prev,
+            isErr: false,
+            isLoading: false,
+            isCurrentPasswordErr: false,
+            isNewPasswordErr: false,
+            errMsg: "",
+          }));
+          setPasswordInputValue((prev) => ({
+            ...prev,
+            current: "",
+            new: "",
+            checkNew: "",
+          }));
+        }, 3000);
       }
-    });
-  }, []);
+    } else {
+      setPasswordErrorInfo((prev) => ({
+        ...prev,
+        isErr: true,
+        isLoading: false,
+        isCurrentPasswordErr: true,
+        errMsg: "현재 비밀번호를 입력해주세요",
+      }));
+      setTimeout(() => {
+        setPasswordErrorInfo((prev) => ({
+          ...prev,
+          isErr: false,
+          isLoading: false,
+          isCurrentPasswordErr: false,
+          isNewPasswordErr: false,
+          errMsg: "",
+        }));
+        setPasswordInputValue((prev) => ({
+          ...prev,
+          current: "",
+          new: "",
+          checkNew: "",
+        }));
+      }, 3000);
+    }
+  };
 
   return (
     <ChangePasswordFormStyle>
       <form>
         <AuthInputBox
-          type="text"
+          type="password"
           name="current"
-          placeholder="기존 비밀번호"
+          placeholder="현재 비밀번호"
           value={passworInputValue.current}
           onChange={onChange}
+          error={passwordErrorInfo.isCurrentPasswordErr}
+          required
         ></AuthInputBox>
         <AuthInputBox
-          type="text"
+          type="password"
           name="new"
           placeholder="새 비밀번호"
           value={passworInputValue.new}
           onChange={onChange}
+          error={passwordErrorInfo.isNewPasswordErr}
+          required
         ></AuthInputBox>
         <AuthInputBox
-          type="text"
+          type="password"
           name="checkNew"
           placeholder="새 비밀번호 확인"
           value={passworInputValue.checkNew}
           onChange={onChange}
+          error={passwordErrorInfo.isNewPasswordErr}
+          required
         ></AuthInputBox>
-        <ChangeProfileImgButton type="submit" onClick={onChangePassword}>
-          비밀번호 변경하기
-        </ChangeProfileImgButton>
+        <ChangePasswordButton
+          type="submit"
+          onClick={onChangePassword}
+          error={passwordErrorInfo.isErr}
+        >
+          {passwordErrorInfo.isErr ? passwordErrorInfo.errMsg : "비밀번호 변경"}
+        </ChangePasswordButton>
       </form>
     </ChangePasswordFormStyle>
   );

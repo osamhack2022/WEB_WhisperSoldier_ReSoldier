@@ -52,11 +52,11 @@ const MyInfoIcon = styled(FaUserCircle)`
 `;
 
 export const ChangeProfileImgButton = styled.button`
-  margin-top: 5px;
+  margin: 10px 0px 5px 0px;
   position: relative;
   padding: 0px 10px;
   color: ${(props) => (props.error ? "#ffffff" : "#0d552c")};
-  height: 36px;
+  height: 30px;
   width: ${(props) => (props.error ? "140px" : "100px")};
   background-color: ${(props) =>
     props.error ? "#a65646" : "rgba(0, 0, 0, 0)"};
@@ -79,11 +79,11 @@ export const ChangeProfileImgButton = styled.button`
 `;
 
 const WthdrawButton = styled.button`
-  margin-top: 5px;
+  margin-top: 10px;
   position: relative;
   padding: 0px 10px;
   color: ${(props) => (props.error ? "#ffffff" : "#0d552c")};
-  height: 36px;
+  height: 30px;
   width: ${(props) => (props.error ? "140px" : "100px")};
   background-color: ${(props) =>
     props.error ? "#a65646" : "rgba(0, 0, 0, 0)"};

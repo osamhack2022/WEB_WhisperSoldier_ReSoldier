@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { SectionTitle } from "./ChangeProfile";
+import CommentElement from "./CommentElement";
 
 const MyCommentBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -14,6 +16,7 @@ const MyCommentBoard = () => {
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
 
+  console.log(commentsCreated);
   const snapShotToCreatedComments = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
@@ -84,15 +87,16 @@ const MyCommentBoard = () => {
   }, []);
   return (
     <div>
-      <h4>작성한 댓글</h4> <hr />
+      <SectionTitle>작성한 댓글</SectionTitle>
       {commentsCreated.length !== 0 ? (
         commentsCreated.map((comment) => (
-          <div key={comment.id}>
-            <Link to={`/post/${comment.associated_post_id}`}>
-              {comment.comment_text}
-            </Link>
-            <hr />
-          </div>
+          //<div key={comment.id}>
+          //<Link to={`/post/${comment.associated_post_id}`}>
+          //{comment.comment_text}
+          //</Link>
+          //<hr />
+          //</div>
+          <CommentElement key={comment.id} comment={comment}></CommentElement>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>

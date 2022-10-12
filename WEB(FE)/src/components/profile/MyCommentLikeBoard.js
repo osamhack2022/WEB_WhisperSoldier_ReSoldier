@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { SectionTitle } from "./ChangeProfile";
+import CommentElement from "./CommentElement";
 
 const MyCommentLikeBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -105,22 +107,21 @@ const MyCommentLikeBoard = () => {
   }, []);
   return (
     <div>
-      <h4>공감한 댓글</h4> <hr />
+      <SectionTitle>공감한 댓글</SectionTitle>
       {commentsLiked.length !== 0 ? (
         commentsLiked.map((comment) => (
-          <div key={comment.id}>
-            <Link to={`/post/${comment.associated_post_id}`}>
-              {comment.comment_text}
-            </Link>
-            <hr />
-          </div>
+          //<div key={comment.id}>
+          //<Link to={`/post/${comment.associated_post_id}`}>
+          //{comment.comment_text}
+          //</Link>
+          //<hr />
+          //</div>
+          <CommentElement key={comment.id} comment={comment}></CommentElement>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>
       )}
-      {isNextItemExist && (
-        <button onClick={onClick}>내가 공감한 댓글 10개 더 보기</button>
-      )}
+      {isNextItemExist && <button onClick={onClick}>10개 더 보기</button>}
       <br />
     </div>
   );

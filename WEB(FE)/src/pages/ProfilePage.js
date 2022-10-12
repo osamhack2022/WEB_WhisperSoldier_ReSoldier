@@ -20,6 +20,8 @@ import {
   ProfileCotentBox,
 } from "../styles/profile/ProfilePageStyle";
 import ChangeProfile from "../components/profile/ChangeProfile";
+import { whisperSodlierSessionKey } from "../lib/Const";
+import { calTimeToDateString } from "../modules/CalTime";
 
 const PROFILE = "profile";
 const MYPOST = "myPost";
@@ -28,6 +30,10 @@ const LIKEPOST = "likePost";
 const LIKECOMMENT = "likeComment";
 
 const ProfilePage = () => {
+  const currentUserKey = JSON.parse(
+    sessionStorage.getItem(whisperSodlierSessionKey)
+  );
+
   const navigate = useNavigate();
   const [currentPage, setcurrentPage] = useState("profile");
 
@@ -66,8 +72,13 @@ const ProfilePage = () => {
           <MyInfoBox>
             <MyInfoIconBox></MyInfoIconBox>
             <MyInfoTextSection>
-              <MyInfoMainText>닉네임 표시 위치</MyInfoMainText>
-              <MyInfoText notTop={true}>위솔과 함께한지 100일째</MyInfoText>
+              <MyInfoMainText>
+                {currentUserKey.email.substring(13, 0)} 님
+              </MyInfoMainText>
+              <MyInfoText notTop={true}>
+                위솔과 함께한지 {calTimeToDateString(currentUserKey.createdAt)}
+                일째
+              </MyInfoText>
             </MyInfoTextSection>
           </MyInfoBox>
         </PrimaryMenuBox>

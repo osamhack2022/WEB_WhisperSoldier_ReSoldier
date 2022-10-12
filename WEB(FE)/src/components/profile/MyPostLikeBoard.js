@@ -4,6 +4,7 @@ import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
 import PostElement from "../post/PostElement";
+import { SectionTitle } from "./ChangeProfile";
 
 const MyPostLikeBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -106,7 +107,7 @@ const MyPostLikeBoard = () => {
 
   return (
     <div>
-      <h4>공감한 고민 글</h4> <hr />
+      <SectionTitle>공감한 고민 글</SectionTitle>
       {postsLiked.length !== 0 ? (
         postsLiked.map((post) => (
           // <div key={post.id}>

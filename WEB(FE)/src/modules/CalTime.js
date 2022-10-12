@@ -15,3 +15,9 @@ export default function calTimeToString(timeStamp) {
     return "오래 전";
   }
 }
+
+export function calTimeToDateString(timeStamp) {
+  const value = new Date() - timeStamp;
+
+  return Math.floor(value / (1000 * 60 * 60 * 24));
+}
