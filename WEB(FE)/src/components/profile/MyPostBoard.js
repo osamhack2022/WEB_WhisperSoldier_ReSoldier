@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
+import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import PostElement from "../post/PostElement";
-import { SectionTitle } from "./ChangeProfile";
 
 const MyPostBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -77,16 +79,18 @@ const MyPostBoard = () => {
     }
   };
 
-  const onClick = async (e) => {
+  const onNextMyPosts = async (e) => {
     e.preventDefault();
     myPostBoard(true);
   };
   useEffect(() => {
     myPostBoard(false);
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <div>
+    <>
+    <ProfileCotentBox>
       <SectionTitle>작성한 고민 글</SectionTitle>
       {postsCreated.length !== 0 ? (
         postsCreated.map((post) => (
@@ -100,10 +104,10 @@ const MyPostBoard = () => {
         <div>잠시만 기다려 주세요</div>
       )}
       {isNextItemExist && (
-        <button onClick={onClick}>내 포스트 10개 더 보기</button>
+        <MoreLoadPostButton updatePostList={onNextMyPosts} isMarginLeft={true}></MoreLoadPostButton>
       )}
-      <br />
-    </div>
+    </ProfileCotentBox>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { FiArrowDown } from "react-icons/fi";
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
 const MoreLoadPostButtonText = styled.div`
   font-size: 14px;
@@ -29,15 +30,20 @@ const MoreLoadPostButtonBox = styled.div`
   border: 1px solid rgb(189, 189, 189);
   cursor: pointer;
   transition: all 0.3s;
+  margin-left : ${(props)=>(props.marginLeft ? "10px" : "0px")};
   &:hover {
     background-color: #dcdcdc;
   }
+  ${media.mobile`
+  margin-left: inherit;
+
+  `}
 `;
 
-const MoreLoadPostButton = ({ updatePostList }) => {
+const MoreLoadPostButton = ({ updatePostList, isMarginLeft, isComment }) => {
   return (
-    <MoreLoadPostButtonBox name="moreLoadPostButton" onClick={updatePostList}>
-      <MoreLoadPostButtonText>포스트 10개 더 보기</MoreLoadPostButtonText>
+    <MoreLoadPostButtonBox name="moreLoadPostButton" onClick={updatePostList} marginLeft={isMarginLeft}>
+      <MoreLoadPostButtonText>{isComment?"댓글 10개 더 보기":"포스트 10개 더 보기"}</MoreLoadPostButtonText>
       <DownIcon></DownIcon>
     </MoreLoadPostButtonBox>
   );

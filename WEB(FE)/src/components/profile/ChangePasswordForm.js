@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
+import media from "../../modules/MediaQuery";
 import { useAndSetForm } from "../../modules/useForm";
 
 const ChangePasswordFormStyle = styled.div`
@@ -11,6 +12,14 @@ const ChangePasswordFormStyle = styled.div`
   justify-content: flex-start;
   height: fit-content;
   width: 320px;
+  flex-wrap :no-wrap;
+  ${media.tablet`
+  width: 180px;
+  `}
+  ${media.mobile`
+  flex-grow : 1;
+  max-width : 280px;
+  `}
 `;
 
 const AuthInputBox = styled.input`
@@ -33,6 +42,14 @@ const AuthInputBox = styled.input`
       transform: rotate(-0.5deg);
     }
   }
+
+  ${media.tablet`
+  width: 180px;
+  `}
+  ${media.mobile`
+  width : 80%;
+  max-width : 280px;
+  `}
 `;
 
 export const ChangePasswordButton = styled.button`

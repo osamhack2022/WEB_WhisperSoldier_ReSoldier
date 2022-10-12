@@ -39,7 +39,7 @@ const PostElement = ({ post }) => {
         </PostElementCommentCount>
       </PostElementInfoBox>
       <PostElementTime>
-        {calTimeToString(post.created_timestamp)}
+        {calTimeToString(post.created_timestamp)} {post.like_timestamp &&" | "+calTimeToString(post.like_timestamp)+"에 공감했습니다"}
       </PostElementTime>
     </PostElementBox>
   );

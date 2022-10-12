@@ -1,12 +1,11 @@
 import { signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { authService } from "../lib/FAuth";
 import { useEffect, useState } from "react";
 import MyCommentBoard from "../components/profile/MyCommentBoard";
 import MyPostLikeBoard from "../components/profile/MyPostLikeBoard";
 import MyCommentLikeBoard from "../components/profile/MyCommentLikeBoard";
 import MyPostBoard from "../components/profile/MyPostBoard";
-import ChangePasswordForm from "../components/profile/ChangePasswordForm";
 import {
   MyInfoBox,
   MyInfoIconBox,
@@ -17,25 +16,37 @@ import {
   PrimaryMenuBox,
   PrimaryMenuButton,
   ProfileContainer,
-  ProfileCotentBox,
+
+  ProfileCotentContainer,
 } from "../styles/profile/ProfilePageStyle";
 import ChangeProfile from "../components/profile/ChangeProfile";
-import { whisperSodlierSessionKey } from "../lib/Const";
+import { TabletQuery, whisperSodlierSessionKey } from "../lib/Const";
 import { calTimeToDateString } from "../modules/CalTime";
-
-const PROFILE = "profile";
-const MYPOST = "myPost";
-const MYCOMMENT = "myComment";
-const LIKEPOST = "likePost";
-const LIKECOMMENT = "likeComment";
+import { useRecoilState } from "recoil";
+import { ProfileSelectStore, ShowContentStore } from "../store/ProfileStore";
+import { useMediaQuery } from "react-responsive";
+import SideButtonBox from "../components/common/SideButtonBox";
+import { BackButton } from "../components/common/Buttons";
 
 const ProfilePage = () => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
+  
   const currentUserKey = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
 
   const navigate = useNavigate();
-  const [currentPage, setcurrentPage] = useState("profile");
+  const [currentPage, setcurrentPage] = useState({
+    profile : true,
+    myPost : false,
+    myComment : false,
+    likePost : false,
+    likeComment : false,
+  });
+  const [showContent, setShowContent] = useState(false);
+
+  const [profileSelectStore, setProfileSelectStore] = useRecoilState(ProfileSelectStore);
+  const [showContentStore, setShowContentStore] = useRecoilState(ShowContentStore);
 
   const onLogout = async () => {
     await signOut(authService).then(() => {
@@ -45,29 +56,133 @@ const ProfilePage = () => {
   };
 
   const onProfile = () => {
-    setcurrentPage(PROFILE);
+    setcurrentPage((prev)=>({
+      ...prev,
+      profile : true,
+      myPost : false,
+      myComment : false,
+      likePost : false,
+      likeComment : false,
+    }));
+    setProfileSelectStore((prev)=>({
+      ...prev,
+      profile : true,
+      myPost : false,
+      myComment : false,
+      likePost : false,
+      likeComment : false,
+    }));
+    if(!isTablet){
+      setShowContent(true);
+      setShowContentStore(true);
+    }
   };
   const onMyPost = () => {
-    setcurrentPage(MYPOST);
+    setcurrentPage((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : true,
+      myComment : false,
+      likePost : false,
+      likeComment : false,
+    }));
+    setProfileSelectStore((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : true,
+      myComment : false,
+      likePost : false,
+      likeComment : false,
+    }));
+    if(!isTablet){
+      setShowContent(true);
+      setShowContentStore(true);
+    }
   };
 
   const onMyComment = () => {
-    setcurrentPage(MYCOMMENT);
+    setcurrentPage((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : true,
+      likePost : false,
+      likeComment : false,
+    }));
+    setProfileSelectStore((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : true,
+      likePost : false,
+      likeComment : false,
+    }));
+    if(!isTablet){
+      setShowContent(true);
+      setShowContentStore(true);
+    }
   };
 
   const onLikePost = () => {
-    setcurrentPage(LIKEPOST);
+    setcurrentPage((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : false,
+      likePost : true,
+      likeComment : false,
+    }));
+    setProfileSelectStore((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : false,
+      likePost : true,
+      likeComment : false,
+    }));
+    if(!isTablet){
+      setShowContent(true);
+      setShowContentStore(true);
+    }
   };
 
   const onLikeComment = () => {
-    setcurrentPage(LIKECOMMENT);
+    setcurrentPage((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : false,
+      likePost : false,
+      likeComment : true,
+    }));
+    setProfileSelectStore((prev)=>({
+      ...prev,
+      profile : false,
+      myPost : false,
+      myComment : false,
+      likePost : true,
+      likeComment : false,
+    }));
+    if(!isTablet){
+      setShowContent(true);
+      setShowContentStore(true);
+    }
   };
 
-  useEffect(() => {}, []);
+  const BackMenu = () =>{
+    setShowContent(false);
+      setShowContentStore(false);
+  }
+
+  useEffect(() => {
+    setcurrentPage(profileSelectStore);
+    setShowContent(showContentStore);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <ProfileContainer>
-      <PrimaryMenuBar>
+      {(isTablet||!showContent)&&<PrimaryMenuBar>
         <PrimaryMenuBox>
           <MyInfoBox>
             <MyInfoIconBox></MyInfoIconBox>
@@ -89,23 +204,29 @@ const ProfilePage = () => {
             작성한 댓글
           </PrimaryMenuButton>
           <PrimaryMenuButton onClick={onLikePost}>공감한 글</PrimaryMenuButton>
-          <PrimaryMenuButton onClick={onLikeComment}>
+          <PrimaryMenuButton onClick={onLikeComment} bottom={true}>
             공감한 댓글
           </PrimaryMenuButton>
         </PrimaryMenuBox>
         <PrimaryMenuBox isNotTop={true}>
-          <PrimaryMenuButton onClick={onLogout}>로그아웃</PrimaryMenuButton>
+          <PrimaryMenuButton onClick={onLogout} bottom={true} logout={true}>로그아웃</PrimaryMenuButton>
         </PrimaryMenuBox>
-      </PrimaryMenuBar>
-      <ProfileCotentBox>
-        {currentPage === PROFILE && <ChangeProfile></ChangeProfile>}
-        {currentPage === MYPOST && <MyPostBoard></MyPostBoard>}
-        {currentPage === MYCOMMENT && <MyCommentBoard></MyCommentBoard>}
-        {currentPage === LIKEPOST && <MyPostLikeBoard></MyPostLikeBoard>}
-        {currentPage === LIKECOMMENT && (
+      </PrimaryMenuBar>}
+      {!isTablet&&showContent&&<SideButtonBox><BackButton goBack={BackMenu} isMobile={!isTablet} notRight={true}>
+            뒤로가기
+          </BackButton></SideButtonBox>}
+      
+      {(isTablet||showContent)&&<ProfileCotentContainer>
+        {currentPage.profile && <ChangeProfile></ChangeProfile>}
+        {currentPage.myPost && <MyPostBoard></MyPostBoard>}
+        {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
+        {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
+        {currentPage.likeComment && (
           <MyCommentLikeBoard></MyCommentLikeBoard>
         )}
-      </ProfileCotentBox>
+        </ProfileCotentContainer>}
+
+      
     </ProfileContainer>
   );
 };

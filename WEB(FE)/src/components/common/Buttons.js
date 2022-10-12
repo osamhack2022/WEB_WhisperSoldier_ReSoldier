@@ -340,7 +340,7 @@ const BackButtonBlock = styled.div`
   margin: 5px 0px;
   padding-right: ${(props) => props.isMobile && "10px"};
   margin-right: ${(props) => props.isMobile && "10px"};
-  border-right: ${(props) => props.isMobile && "1px solid #dcdcdc"};
+  border-right: ${(props) => props.isMobile &&!props.notRight && "1px solid #dcdcdc"};
   text-decoration: none;
   height: 30px;
   width: fit-content;
@@ -352,9 +352,9 @@ const BackButtonBlock = styled.div`
   }
 `;
 
-export const BackButton = ({ goBack, children, isMobile }) => {
+export const BackButton = ({ goBack, children, isMobile, notRight }) => {
   return (
-    <BackButtonBlock onClick={goBack} isMobile={isMobile}>
+    <BackButtonBlock onClick={goBack} isMobile={isMobile} notRight={notRight}>
       <BackButtonImg></BackButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </BackButtonBlock>

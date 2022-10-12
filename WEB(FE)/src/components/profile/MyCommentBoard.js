@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
-import { SectionTitle } from "./ChangeProfile";
+import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
+import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import CommentElement from "./CommentElement";
 
 const MyCommentBoard = () => {
@@ -77,7 +79,7 @@ const MyCommentBoard = () => {
     }
   };
 
-  const onClick = async (e) => {
+  const onNextMyComments = async (e) => {
     e.preventDefault();
     myCommentBoard(true);
   };
@@ -86,7 +88,8 @@ const MyCommentBoard = () => {
     myCommentBoard(false);
   }, []);
   return (
-    <div>
+    <>
+    <ProfileCotentBox>
       <SectionTitle>작성한 댓글</SectionTitle>
       {commentsCreated.length !== 0 ? (
         commentsCreated.map((comment) => (
@@ -101,11 +104,12 @@ const MyCommentBoard = () => {
       ) : (
         <div>잠시만 기다려 주세요</div>
       )}
-      {isNextItemExist && (
-        <button onClick={onClick}>내 댓글 10개 더 보기</button>
+    </ProfileCotentBox>
+    {isNextItemExist && (
+        <MoreLoadPostButton updatePostList={onNextMyComments} isMarginLeft={true} isComment={true}></MoreLoadPostButton>
       )}
-      <br />
-    </div>
+    </>
+
   );
 };
 

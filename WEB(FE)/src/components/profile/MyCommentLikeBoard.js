@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
-import { SectionTitle } from "./ChangeProfile";
+import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
+import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import CommentElement from "./CommentElement";
 
 const MyCommentLikeBoard = () => {
@@ -24,7 +25,7 @@ const MyCommentLikeBoard = () => {
   const [commentsLiked, setCommentsLiked] = useState([]);
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
-
+  console.log(commentsLiked);
   const snapshotToLikedComments = (snapshot) => {
     if (snapshot) {
       snapshot.forEach(async (document) => {
@@ -42,6 +43,7 @@ const MyCommentLikeBoard = () => {
         const commentLikedObj = {
           ...commentSnap.data(),
           id: commentSnap.id,
+          like_timestamp : document.data().created_timestamp,
         };
         setCommentsLiked((prev) => [...prev, commentLikedObj]);
       });
@@ -97,7 +99,7 @@ const MyCommentLikeBoard = () => {
     }
   };
 
-  const onClick = async (e) => {
+  const onNextMyLikeComments = async (e) => {
     e.preventDefault();
     myCommentLikeBoard(true);
   };
@@ -106,24 +108,27 @@ const MyCommentLikeBoard = () => {
     myCommentLikeBoard(false);
   }, []);
   return (
-    <div>
-      <SectionTitle>공감한 댓글</SectionTitle>
-      {commentsLiked.length !== 0 ? (
-        commentsLiked.map((comment) => (
-          //<div key={comment.id}>
-          //<Link to={`/post/${comment.associated_post_id}`}>
-          //{comment.comment_text}
-          //</Link>
-          //<hr />
-          //</div>
-          <CommentElement key={comment.id} comment={comment}></CommentElement>
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
+    <>
+      <ProfileCotentBox>
+        <SectionTitle>공감한 댓글</SectionTitle>
+        {commentsLiked.length !== 0 ? (
+          commentsLiked.map((comment) => (
+            //<div key={comment.id}>
+            //<Link to={`/post/${comment.associated_post_id}`}>
+            //{comment.comment_text}
+            //</Link>
+            //<hr />
+            //</div>
+            <CommentElement key={comment.id} comment={comment}></CommentElement>
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
+      {isNextItemExist && (
+        <MoreLoadPostButton updatePostList={onNextMyLikeComments} isMarginLeft={true} isComment={true}></MoreLoadPostButton>
       )}
-      {isNextItemExist && <button onClick={onClick}>10개 더 보기</button>}
-      <br />
-    </div>
+    </>
   );
 };
 

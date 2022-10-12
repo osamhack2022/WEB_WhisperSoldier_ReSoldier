@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
+import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import PostElement from "../post/PostElement";
-import { SectionTitle } from "./ChangeProfile";
+
 
 const MyPostLikeBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -32,7 +35,7 @@ const MyPostLikeBoard = () => {
           ...document.data(),
           id: document.id,
         };
-        console.log("commentLikeObj: ", commentLikeObj.associated_post_id);
+        console.log("commentLikeObj: ", commentLikeObj);
         const postRef = doc(
           dbService,
           "WorryPost",
@@ -42,6 +45,7 @@ const MyPostLikeBoard = () => {
         const postLikedObj = {
           ...postSnap.data(),
           id: postSnap.id,
+          like_timestamp : document.data().created_timestamp,
         };
         setPostsLiked((prev) => [...prev, postLikedObj]);
       });
@@ -55,6 +59,8 @@ const MyPostLikeBoard = () => {
         const querySnapshot = await getDocs(
           getProfilePageQuery("PostLike", "user_id", 10, nextItemSnapShot)
         );
+
+        snapShotToLikedPosts(querySnapshot);
         setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
         const afterSnapshot = await getDocs(
@@ -72,7 +78,7 @@ const MyPostLikeBoard = () => {
         } else {
           setIsNextItemExist(true);
         }
-        snapShotToLikedPosts(querySnapshot);
+        
       } catch (e) {
         if (
           e.message ===
@@ -97,33 +103,36 @@ const MyPostLikeBoard = () => {
     }
   };
 
-  const onClick = async (e) => {
+  const onNextMyLikePosts = async (e) => {
     e.preventDefault();
     myPostLikeBoard(true);
   };
+
   useEffect(() => {
     myPostLikeBoard(false);
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <div>
-      <SectionTitle>공감한 고민 글</SectionTitle>
-      {postsLiked.length !== 0 ? (
-        postsLiked.map((post) => (
-          // <div key={post.id}>
-          //   <Link to={`/post/${post.id}`}>{post.text}</Link>
-          <PostElement key={post.id} post={post}></PostElement>
-          /* <hr />
+    <>
+      <ProfileCotentBox>
+        <SectionTitle>공감한 고민 글</SectionTitle>
+        {postsLiked.length !== 0 ? (
+          postsLiked.map((post) => (
+            // <div key={post.id}>
+            //   <Link to={`/post/${post.id}`}>{post.text}</Link>
+            <PostElement key={post.id} post={post}></PostElement>
+            /* <hr />
           </div> */
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )}
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
       {isNextItemExist && (
-        <button onClick={onClick}>내가 공감한 포스트 10개 더 보기</button>
+        <MoreLoadPostButton updatePostList={onNextMyLikePosts} isMarginLeft={true}></MoreLoadPostButton>
       )}
-      <br />
-    </div>
+    </>
   );
 };
 
