@@ -15,6 +15,7 @@ const ChatContentBoard = () => {
 	return (
 		<>
 			<div>채팅하는사람 (익명1, 익명2 등등)</div>
+			<div>원본 고민 글</div>
 			<ChatContentElement></ChatContentElement>
 			<ChatContentElement></ChatContentElement>
 			<ChatContentElement></ChatContentElement>
