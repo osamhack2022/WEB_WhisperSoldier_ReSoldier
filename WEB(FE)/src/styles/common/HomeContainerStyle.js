@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 
@@ -6,8 +5,8 @@ export const HomeContainerBox = styled.div`
   margin: 0px auto;
   width: 960px;
   display: flex;
-  //flex-direction: column;
-  flex-direction: row;
+  flex-direction: column;
+  //flex-direction: row;
   ${media.smallDesktop`
   margin: inherit;
   width: inherit;

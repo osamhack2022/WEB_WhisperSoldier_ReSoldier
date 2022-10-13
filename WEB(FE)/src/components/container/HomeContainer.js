@@ -8,7 +8,7 @@ import {
   PopularPostBox,
   TagBox,
 } from "../../styles/common/HomeContainerStyle";
-import PostBoard from "../post/PostBoard";
+//import PostBoard from "../post/PostBoard";
 
 const HomeContainer = () => {
   return (
