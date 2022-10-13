@@ -20,9 +20,17 @@ const ChatListContainer = styled.div`
   `}
 `;
 
+const ChatListTitleBox = styled.div`
+  margin : 0px 0px 10px 0px;
+  padding : 10px;
+  height: fit-content;
+  border-bottom: 1px solid rgb(189, 189, 189);
+  width: 100%;
+`;
+
 const ChatListTitleText = styled.div`
-  margin-left: 10px;
-  font-size: 14px;
+  font-size: 16px;
+  text-align : center;
   font-weight: 600;
   line-height: 1.2;
 `;
@@ -51,7 +59,10 @@ const ChatPairBoard = () => {
   }, []);
   return (
     <ChatListContainer>
-      <ChatListTitleText>위솔 메신저</ChatListTitleText>
+      <ChatListTitleBox>
+      <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
+      </ChatListTitleBox>
+      
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <div key={pair.id}>

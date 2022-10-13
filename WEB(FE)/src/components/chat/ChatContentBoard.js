@@ -55,6 +55,8 @@ const ChatContentBoard = () => {
         <ChatContentElement isMe={true}></ChatContentElement>
         <ChatContentElement isMe={true}></ChatContentElement>
         <ChatContentElement></ChatContentElement>
+        <ChatContentElement isMe={true}></ChatContentElement>
+        <ChatContentElement></ChatContentElement>
       </ChatContentBox>
 
       <ChatInputBox>

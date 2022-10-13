@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ChatContent from "../components/chat/ChatContentBoard";
+import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
 import media from "../modules/MediaQuery";
 
@@ -23,7 +23,7 @@ const ChatPage = () => {
   return (
     <ChatContainer>
       <ChatPairBoard></ChatPairBoard>
-      <ChatContent></ChatContent>
+      <ChatContentBoard></ChatContentBoard>
     </ChatContainer>
   );
 };
