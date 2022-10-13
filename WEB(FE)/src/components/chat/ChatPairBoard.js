@@ -14,7 +14,10 @@ const ChatListContainer = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
-  width: 250px;
+  width: 300px;
+  ${media.tablet`
+  width:50%;`
+  }
   ${media.mobile`
   width: 100%;
   `}

@@ -1,4 +1,7 @@
 export default function calTimeToString(timeStamp) {
+  if(!timeStamp){ /* 테스트 코드 */
+    return "방금전";
+  }
   const value = new Date() - timeStamp.toDate();
   if (Math.floor(value / (1000 * 60)) < 5) {
     return "방금전";
