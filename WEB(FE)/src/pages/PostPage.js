@@ -236,22 +236,16 @@ const PostPage = () => {
   };
 
   const onClickChatButton = async (e) => {
+    e.preventDefault();
     //채팅방이 이미 존재하는지 체크하기
     const res = await getDocs(dbService, "ChatPair");
+    console.log("포스트인포: ", postInfo)
     //만약 없다면, 새로 만들기
     //있다면, 일단 채팅페이지로 navigate
     //서브컬렉션도 이 단계에서 만들어줘야되는건가...?? 아닌가? 알아봐야됨
     //밑에 있는 예시 기반으로 문서 추가 예정
-    await addDoc(collection(dbService, "Comment"), {
-
-      /* commentor_id: authService.currentUser.uid,
-      associated_post_id: postInfo.id,
-      comment_text: state.comment,
-      comment_report: false,
-      comment_rep_accept: false,
-      like_count: 0,
-      created_timestamp: serverTimestamp(), */
-    });
+    /* await addDoc(collection(dbService, "Comment"), {
+    }); */
   };
 
   useEffect(() => {
@@ -277,6 +271,7 @@ const PostPage = () => {
       toggleEditing={toggleEditing}
       toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
+      onClickChatButton={onClickChatButton}
     ></PostContentContainer>
   );
 };
