@@ -7,8 +7,8 @@ import {
 import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
 import { useForm } from "../modules/useForm";
-import { useSetRecoilState } from "recoil";
-import { UserInfo } from "../store/AuthStore";
+// import { useSetRecoilState } from "recoil";
+// import { UserInfo } from "../store/AuthStore";
 import { useState } from "react";
 
 const LoginPage = () => {
@@ -16,8 +16,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  //const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const setUserInfo = useSetRecoilState(UserInfo);
+  //const setUserInfo = useSetRecoilState(UserInfo);
   const [loginErrorInfo, setLoginErrorInfo] = useState({
     isErr: false,
     isEmailError: false,
@@ -32,10 +31,13 @@ const LoginPage = () => {
     setLoginErrorInfo((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      const auth = authService;
-      auth.setPersistence(browserSessionPersistence).then((res) => {});
+      authService.setPersistence(browserSessionPersistence).then((res) => {});
 
-      await signInWithEmailAndPassword(auth, state.email, state.password);
+      await signInWithEmailAndPassword(
+        authService,
+        state.email,
+        state.password
+      );
 
       const {
         currentUser: { emailVerified },
@@ -57,9 +59,13 @@ const LoginPage = () => {
         }, 3000);
       } else {
         console.log("[LoginPage.js] : 로그인 정상]");
-        console.log(auth);
-        setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
-        navigate("/", { replace: true });
+        console.log(authService);
+        if (authService.currentUser.displayName === null) {
+          navigate("/welcome", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
+        //setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
       }
     } catch (e) {
       switch (e.code) {

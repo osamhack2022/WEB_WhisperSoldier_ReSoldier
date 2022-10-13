@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { UserInfo } from "./store/AuthStore";
+//import { useRecoilState, useRecoilValue } from "recoil";
+//import { UserInfo } from "./store/AuthStore";
 import HomePage from "./pages/HomePage";
 import FirstPage from "./pages/FirstPage";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +19,8 @@ import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
 import BoardPage from "./pages/BoardPage";
+import { whisperSodlierSessionKey } from "./lib/Const";
+import WelcomePage from "./pages/WelcomePage";
 
 const Body = styled.div`
   position: relative;
@@ -26,14 +28,17 @@ const Body = styled.div`
 
 /*각 페이지 라우트*/
 const App = () => {
-  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const [sessionInfo, setSessionInfo] = useState(
-    sessionStorage.getItem(`firebase:authUser:${FApiKey}:[DEFAULT]`)
+  //const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const [sessionObj, setSessionObj] = useState(
+    JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
   );
-  const auth = authService.currentUser;
+  //const auth = authService.currentUser;
 
-  const _session_key = `firebase:authUser:${FApiKey}:[DEFAULT]`;
-  const is_login = sessionStorage.getItem(_session_key);
+  const currentUserKey = JSON.parse(
+    sessionStorage.getItem(whisperSodlierSessionKey)
+  );
+
+  console.log(currentUserKey);
 
   /*
   useEffect(() => {
@@ -47,32 +52,34 @@ const App = () => {
     onAuthStateChanged(authService, (u) => {
       if (u) {
         if (authService.currentUser.emailVerified) {
-          setUserInfo((prev) => ({
-            ...prev,
-            emailChecked: true,
-            isLogin: true,
-          }));
-          setSessionInfo(sessionStorage.getItem(_session_key));
+          // setUserInfo((prev) => ({
+          //   ...prev,
+          //   emailChecked: true,
+          //   isLogin: true,
+          // }));
+          setSessionObj(
+            JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
+          );
         } else {
-          setUserInfo((prev) => ({
-            ...prev,
-            emailChecked: false,
-            isLogin: true,
-          }));
+          // setUserInfo((prev) => ({
+          //   ...prev,
+          //   emailChecked: false,
+          //   isLogin: true,
+          // }));
         }
       } else {
-        setUserInfo((prev) => ({ ...prev, isLogin: false }));
-        setSessionInfo(null);
+        //setUserInfo((prev) => ({ ...prev, isLogin: false }));
+        setSessionObj(null);
       }
     });
   }, []);
 
   useEffect(() => {
-    setSessionInfo(sessionStorage.getItem(_session_key));
+    setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
   }, []);
   return (
     <>
-      {sessionInfo ? (
+      {sessionObj && sessionObj.providerData[0].displayName ? (
         <Body>
           <Header></Header>
           <Routes>
@@ -92,6 +99,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPage />} />
+          <Route path="/welcome" element={<WelcomePage />} />
         </Routes>
       )}
     </>
