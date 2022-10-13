@@ -1,6 +1,6 @@
 import { useForm } from "../../modules/useForm";
 import ChatContentElement from "./ChatContentElement";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MyInfoIconBox } from "../../styles/profile/ProfilePageStyle";
 import {
   ChatContentBox,
@@ -12,7 +12,7 @@ import {
   SendMessageButton,
 } from "../../styles/chat/ChatContentBoardStyle";
 
-const ChatContentBoard = () => {
+const ChatContentBoard = ({ setSHowChatContent }) => {
   const scrollRef = useRef();
   const [chatInput, onChange] = useForm({ message: "" });
   const [errorChatInfo, setErrorChatInfo] = useState({
@@ -30,6 +30,25 @@ const ChatContentBoard = () => {
       //submit chat to database
     }
   };
+
+  const autoResizeTextarea = useCallback(() => {
+    let textarea = document.querySelector(".autoTextarea");
+
+    if (textarea) {
+      textarea.style.height = "40px";
+      let height = textarea.scrollHeight; // 높이
+      textarea.style.height = `${height}px`;
+    }
+  }, []);
+
+  const onKeyUp = useCallback((e) => {
+    e.preventDefault();
+    if (e.keyCode === 13) {
+      if (!e.shiftKey) {
+        // 메시지 전송 함수
+      }
+    }
+  }, []);
 
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -61,6 +80,7 @@ const ChatContentBoard = () => {
 
       <ChatInputBox>
         <ChatInput
+          className="autoTextarea"
           name="message"
           type="text"
           onChange={onChange}
@@ -68,6 +88,9 @@ const ChatContentBoard = () => {
           placeholder="메시지를 입력하세요"
           isErr={errorChatInfo.isErr}
           autoFocus
+          maxLength={2000}
+          onInput={autoResizeTextarea}
+          onKeyUp={onKeyUp}
         ></ChatInput>
         <SendMessageButton onChatSubmit={onChatSubmit}></SendMessageButton>
       </ChatInputBox>

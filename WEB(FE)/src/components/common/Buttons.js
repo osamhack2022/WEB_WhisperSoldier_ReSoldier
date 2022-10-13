@@ -340,7 +340,8 @@ const BackButtonBlock = styled.div`
   margin: 5px 0px;
   padding-right: ${(props) => props.isMobile && "10px"};
   margin-right: ${(props) => props.isMobile && "10px"};
-  border-right: ${(props) => props.isMobile &&!props.notRight && "1px solid #dcdcdc"};
+  border-right: ${(props) =>
+    props.isMobile && !props.notRight && "1px solid #dcdcdc"};
   text-decoration: none;
   height: 30px;
   width: fit-content;
@@ -433,7 +434,7 @@ const PostChatButtonImg = styled(BsChatDots)`
   background-color: rgba(0, 0, 0, 0);
 `;
 
-const PostChatButtonBlock = styled(Link)`
+const PostChatButtonBlock = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
