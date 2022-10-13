@@ -15,6 +15,7 @@ import {
   serverTimestamp,
   where,
   increment,
+  onSnapshot,
 } from "firebase/firestore";
 
 export const dbService = getFirestore();
@@ -34,4 +35,5 @@ export const dbFunction = {
   serverTimestamp,
   where,
   increment,
+  onSnapshot,
 };

@@ -1,12 +1,30 @@
-import { Link } from "react-router-dom";
+import styled from "styled-components";
+import ChatContent from "../components/chat/ChatContentBoard";
+import ChatPairBoard from "../components/chat/ChatPairBoard";
+import media from "../modules/MediaQuery";
+
+const ChatContainer = styled.div`
+  margin: 0px auto;
+  width: 960px;
+  display: flex;
+  flex-direction: row;
+  ${media.smallDesktop`
+    margin: inherit;
+    width: inherit;
+    padding: 0px 10vw;
+  `}
+  ${media.mobile`
+  flex-direction:column;
+    padding: 0px 5vw;
+  `}
+`;
 
 const ChatPage = () => {
   return (
-    <div>
-      <div>채팅 페이지</div>
-      <br />
-      <Link to="/">홈페이지</Link>
-    </div>
+    <ChatContainer>
+      <ChatPairBoard></ChatPairBoard>
+      <ChatContent></ChatContent>
+    </ChatContainer>
   );
 };
 
