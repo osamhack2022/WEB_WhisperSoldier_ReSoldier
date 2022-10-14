@@ -4,6 +4,7 @@ import { dbFunction, dbService } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
+import { arrayUnion, serverTimestamp } from "firebase/firestore";
 
 const ChatListContainer = styled.div`
   display: flex;
@@ -42,14 +43,25 @@ const ChatPairBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
-  const { query, collection, orderBy, onSnapshot, where } = dbFunction;
+  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } = dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
   console.log("currentUserUid: ", currentUserUid);
+  const onClickTestButton = () => {
+    const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
+    updateDoc(docRef, {
+      recentMessage: {
+        message_text: "이 문자열이 보인다면 테스트가 성공했을겁니다아마도",
+        read_by: arrayUnion(currentUserUid), // 반대는 arrayRemove()
+        sent_by: currentUserUid,
+        sent_timestamp: serverTimestamp(),
+      }
+    })
+  }
   useEffect(() => {
     const q = query(
       collection(dbService, "ChatPair"),
+      orderBy("recentMessage.sent_timestamp", "desc"),
       where("member_ids", "array-contains", currentUserUid),
-      orderBy("recentMessage.sent_timestamp", "desc")
     );
     onSnapshot(q, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
@@ -64,17 +76,18 @@ const ChatPairBoard = () => {
     <ChatListContainer>
       <ChatListTitleBox>
       <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
+      <button onClick={onClickTestButton}>테스트버튼</button>
       </ChatListTitleBox>
       
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <div key={pair.id}>
-            익명 {index === 0 ? ", 최신 채팅입니다   " : ""}
+            익명 {index === 0 ? ", [최신]  " : ""}
             {/* 이 부분은 닉네임 넣으면 할 것...! */}
-            {/* {currentUserUid === pair.members[0].member_id ? (
+            {currentUserUid === pair.members[0].member_id ? (
 										pair.members[1].member_displayname
 									) : (
-										(currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")} */}
+										(currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
           </div>
         ))
       ) : (
