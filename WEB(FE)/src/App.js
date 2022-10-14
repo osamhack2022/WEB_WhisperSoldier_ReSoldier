@@ -41,7 +41,6 @@ const App = () => {
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
   const location = useLocation();
-  console.log(currentUserKey);
 
   /*
   useEffect(() => {
@@ -75,8 +74,7 @@ const App = () => {
         setSessionObj(null);
       }
     });
-    console.log(authService);
-  }, [authService]);
+  }, []);
 
   useEffect(() => {
     setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));

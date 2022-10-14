@@ -35,6 +35,7 @@ const PostContentContainer = ({
   toggleEditing,
   toggleLike,
   isLikedByMe,
+  postUserNickname,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const PostContentContainer = ({
           postInfo={postInfo}
           errorPostInfo={errorPostInfo}
           isMyLike={isLikedByMe}
+          postUserNickname={postUserNickname}
         ></PostContentTitle>
         <PostContentBody
           postInfo={postInfo}

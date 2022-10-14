@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import { useForm } from "../../modules/useForm";
+import { useAndSetForm, useForm } from "../../modules/useForm";
 import { UserInfo } from "../../store/AuthStore";
 import {
   AuthButton,
@@ -18,6 +18,8 @@ import {
 import { AuthInputBox } from "../common/InputBox";
 import { FirstComment } from "../common/Logos";
 import AuthTemplate from "./AuthTemplate";
+import axios from "axios";
+
 const Block1 = styled.div`
   margin: 70px 0px 70px 0px;
 `;
@@ -25,7 +27,7 @@ const WelcomeForm = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
-  const [inputValue, onChange] = useForm({ nickname: "" });
+  const [inputValue, setInputValue, onChange] = useAndSetForm({ nickname: "" });
   const navigate = useNavigate();
   const [errProfileInfo, setErrProfileInfo] = useState({
     isErrNickname: false,
@@ -85,6 +87,15 @@ const WelcomeForm = () => {
     }
   };
 
+  const onGetRandomNickname = async (e) => {
+    e.preventDefault();
+    const response = await axios.get(
+      "https://nickname.hwanmoo.kr/?format=json&count=1"
+    );
+    console.log(response.data.words[0]);
+    setInputValue((prev) => ({ ...prev, nickname: response.data.words[0] }));
+  };
+
   return (
     <AuthTemplate>
       <FirstComment>닉네임을 설정해주세요!</FirstComment>
@@ -103,7 +114,9 @@ const WelcomeForm = () => {
           <AuthButton onClick={onSetNickName}>닉네임 설정</AuthButton>
         )}
         <FindPasswordButtonContainer>
-          <FindPasswordButton>랜덤 닉네임 설정하기</FindPasswordButton>
+          <FindPasswordButton onClick={onGetRandomNickname}>
+            랜덤 닉네임 설정하기
+          </FindPasswordButton>
         </FindPasswordButtonContainer>
       </form>
     </AuthTemplate>

@@ -137,9 +137,9 @@ const FindPasswordButtonLink = styled(Link)`
   }
 `;
 
-export const FindPasswordButton = ({ toLink, children }) => {
+export const FindPasswordButton = ({ toLink, children, onClick }) => {
   return (
-    <FindPasswordButtonBlock>
+    <FindPasswordButtonBlock onClick={onClick}>
       <FindPasswordButtonLink to={toLink}>{children}</FindPasswordButtonLink>
     </FindPasswordButtonBlock>
   );

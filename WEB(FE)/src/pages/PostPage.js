@@ -38,6 +38,8 @@ const PostPage = () => {
 
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
+  const [postUserNickname, setPostUserNickname] = useState("");
+
   const getIsLiked = async (currentPostInfo = null) => {
     const { uid: currentUserUid } = JSON.parse(
       sessionStorage.getItem(whisperSodlierSessionKey)
@@ -204,6 +206,21 @@ const PostPage = () => {
     }));
   };
 
+  const getPostUserNickname = async (refreshData = null) => {
+    let nicknameDoc;
+    if (refreshData) {
+      nicknameDoc = await getDoc(
+        doc(dbService, "User", refreshData.creator_id)
+      );
+    } else {
+      nicknameDoc = await getDoc(doc(dbService, "User", postInfo.creator_id));
+    }
+
+    if (nicknameDoc.data()) {
+      setPostUserNickname(nicknameDoc.data().nickname);
+    }
+  };
+
   /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
   const getContent = async () => {
     const docRef = doc(dbService, "WorryPost", id);
@@ -229,6 +246,7 @@ const PostPage = () => {
         editContent: contentObj.text,
       }));
       getIsLiked(contentObj.id);
+      getPostUserNickname(contentObj);
     } else {
       setErrorPostInfo(true);
       console.log("No such Document!");
@@ -240,6 +258,7 @@ const PostPage = () => {
       getContent();
     } else {
       getIsLiked();
+      getPostUserNickname();
     }
     // eslint-disable-next-line
   }, []);
@@ -258,6 +277,7 @@ const PostPage = () => {
       toggleEditing={toggleEditing}
       toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
+      postUserNickname={postUserNickname}
     ></PostContentContainer>
   );
 };

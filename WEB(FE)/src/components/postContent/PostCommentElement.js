@@ -9,6 +9,7 @@ import {
   addDoc,
   serverTimestamp,
   increment,
+  getDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
@@ -45,6 +46,8 @@ const PostCommentElement = ({
   const [countLikeInComment, setCountLikeInComment] = useState(0);
 
   const [isLikedByMe, setIsLikedByMe] = useState(false);
+
+  const [commentUserNickname, setCommentUserNickname] = useState("");
 
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
@@ -179,9 +182,19 @@ const PostCommentElement = ({
     setNewComment(value);
   };
 
+  const getPostUserNickname = async (commentor_id) => {
+    const nicknameDoc = await getDoc(doc(dbService, "User", commentor_id));
+
+    if (nicknameDoc.data()) {
+      setCommentUserNickname(nicknameDoc.data().nickname);
+    }
+  };
+
   useEffect(() => {
     getIsLiked();
+    console.log(commentElement);
     setCountLikeInComment(commentElement.like_count);
+    getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
   }, []);
 
@@ -190,7 +203,9 @@ const PostCommentElement = ({
       <CommentTitle>
         <CommentUserBox>
           <CommentUserIcon></CommentUserIcon>
-          <CommentUserText>익명</CommentUserText>
+          <CommentUserText>
+            {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
+          </CommentUserText>
         </CommentUserBox>
         <CommentTimeText>{created_timestamp}</CommentTimeText>
         <PostContentLikeCount isMyLike={isLikedByMe}>
