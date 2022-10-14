@@ -1,6 +1,16 @@
+import { updateProfile } from "firebase/auth";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { whisperSodlierSessionKey } from "../../lib/Const";
+import { authService } from "../../lib/FAuth";
+import { dbFunction, dbService } from "../../lib/FStore";
+import { useForm } from "../../modules/useForm";
+import { UserInfo } from "../../store/AuthStore";
 import {
   AuthButton,
+  AuthErrorButton,
   FindPasswordButton,
   FindPasswordButtonContainer,
   FindPasswordButtonsContainer,
@@ -12,13 +22,86 @@ const Block1 = styled.div`
   margin: 70px 0px 70px 0px;
 `;
 const WelcomeForm = () => {
+  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
+    dbFunction;
+  const [inputValue, onChange] = useForm({ nickname: "" });
+  const navigate = useNavigate();
+  const [errProfileInfo, setErrProfileInfo] = useState({
+    isErrNickname: false,
+  });
+  const [errMeg, setErrMsg] = useState({ errNicknameMsg: "" });
+
+  const onSetNickName = async (e) => {
+    e.preventDefault();
+    if (inputValue.nickname.length !== 0) {
+      const nicknameSearchQuery = query(
+        collection(dbService, "User"),
+        where("nickname", "==", inputValue.nickname)
+      );
+
+      const nicenameSnapshot = await getDocs(nicknameSearchQuery);
+      if (nicenameSnapshot.docs.length === 0) {
+        await setDoc(
+          doc(
+            dbService,
+            "User",
+            JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
+          ),
+          { nickname: inputValue.nickname, admin: false }
+        );
+        console.log(authService.currentUser);
+
+        updateProfile(authService.currentUser, {
+          displayName: inputValue.nickname,
+        })
+          .then(() => {
+            // Profile updated!
+            // ...
+            console.log("닉네임 설정 성공");
+            setUserInfo((prev) => ({ ...prev, refresh: true }));
+
+            navigate("/", { replace: true });
+            // window.location.reload();
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+            console.log(error);
+          });
+      } else {
+        setErrProfileInfo({ isErrNickname: true });
+        setErrMsg({ errNicknameMsg: "중복되는 닉네임입니다" });
+        setTimeout(() => {
+          setErrProfileInfo({ isErrNickname: false });
+        }, 3000);
+      }
+    } else {
+      setErrProfileInfo({ isErrNickname: true });
+      setErrMsg({ errNicknameMsg: "닉네임을 입력해주세요" });
+      setTimeout(() => {
+        setErrProfileInfo({ isErrNickname: false });
+      }, 3000);
+    }
+  };
+
   return (
     <AuthTemplate>
       <FirstComment>닉네임을 설정해주세요!</FirstComment>
       <Block1></Block1>
       <form>
-        <AuthInputBox placeholder="닉네임을 입력해주세요"></AuthInputBox>
-        <AuthButton>닉네임 설정</AuthButton>
+        <AuthInputBox
+          name="nickname"
+          value={inputValue.nickname}
+          onChange={onChange}
+          placeholder="닉네임을 입력해주세요"
+        ></AuthInputBox>
+
+        {errProfileInfo.isErrNickname ? (
+          <AuthErrorButton>{errMeg.errNicknameMsg}</AuthErrorButton>
+        ) : (
+          <AuthButton onClick={onSetNickName}>닉네임 설정</AuthButton>
+        )}
         <FindPasswordButtonContainer>
           <FindPasswordButton>랜덤 닉네임 설정하기</FindPasswordButton>
         </FindPasswordButtonContainer>

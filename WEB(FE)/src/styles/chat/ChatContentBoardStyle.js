@@ -85,7 +85,7 @@ export const ChatInput = styled.textarea`
   border-radius: 25px;
   resize: none;
   white-space: pre-wrap;
-  font-size: 14px;
+  font-size: 13px;
   overflow: hidden;
   &:focus {
     outline: none;

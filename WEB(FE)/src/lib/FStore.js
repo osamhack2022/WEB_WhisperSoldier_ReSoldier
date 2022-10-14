@@ -16,6 +16,7 @@ import {
   where,
   increment,
   onSnapshot,
+  setDoc,
 } from "firebase/firestore";
 
 export const dbService = getFirestore();
@@ -36,4 +37,5 @@ export const dbFunction = {
   where,
   increment,
   onSnapshot,
+  setDoc,
 };

@@ -9,20 +9,33 @@ import media from "../../modules/MediaQuery";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 
-const HeaderBox = styled.header`
-  position: relative;
+const HeaderContainer = styled.header`
+  width: 100%;
+  height: fit-content;
   background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  margin: 0px auto;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(189, 189, 189);
+  padding: 0px;
   margin-bottom: 10px;
+`;
+
+const HeaderBox = styled.div`
+  position: relative;
+  box-sizing: content-box;
+  border-radius: 5px;
+  margin: 0px auto;
+  /* padding: 0px auto; */
   width: 960px;
-  height: 90px;
+  height: 72px;
   display: flex;
   align-items: center;
+
   ${media.smallDesktop`
-    margin: inherit;
-    margin-bottom :10px;
+    margin: 0px;
+    box-sizing: border-box;
     width : 100%;
     height: 72px;
     padding: 20px 10vw;
@@ -42,7 +55,7 @@ const Header = () => {
   const location = useLocation();
   const isTablet = useMediaQuery({ query: TabletQuery });
   return (
-    <>
+    <HeaderContainer>
       <HeaderBox>
         <HeaderTitleContainer></HeaderTitleContainer>
         {isTablet && (
@@ -55,7 +68,7 @@ const Header = () => {
         )}
       </HeaderBox>
       {!isTablet && <Navigation></Navigation>}
-    </>
+    </HeaderContainer>
   );
 };
 

@@ -35,7 +35,7 @@ export const FirstComment = styled.div`
 export const MainTitle = styled.span`
   margin: 0px;
   padding: 0px;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   font-style: normal;
   line-height: normal;
@@ -54,12 +54,13 @@ export const SubTitle = styled.div`
   margin: 0px;
   padding: 0px;
   position: relative;
-  top: -8px;
+  top: -5px;
   font-size: 14px;
   text-align: right;
   letter-spacing: 0.72px;
   color: #0d552c;
   font-weight: 600;
+  margin-left: 10px;
   ${media.smallDesktop`
     margin: inherit;
     margin-left : 10px;
