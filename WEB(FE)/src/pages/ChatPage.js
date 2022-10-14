@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
@@ -20,10 +21,20 @@ const ChatContainer = styled.div`
 `;
 
 const ChatPage = () => {
+  const [currentChatPair, setCurrentChatPair] = useState("");
+
+  const getCurrentChatPair = (pairId) => {
+    console.log("pairId: ", pairId);
+  }
   return (
     <ChatContainer>
-      <ChatPairBoard></ChatPairBoard>
-      <ChatContentBoard></ChatContentBoard>
+      <ChatPairBoard
+        getCurrentChatPair={getCurrentChatPair}
+        setCurrentChatPair={setCurrentChatPair}
+      ></ChatPairBoard>
+      <ChatContentBoard
+        currentChatPair={currentChatPair}
+      ></ChatContentBoard>
     </ChatContainer>
   );
 };

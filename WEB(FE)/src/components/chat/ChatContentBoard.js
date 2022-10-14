@@ -11,14 +11,20 @@ import {
   ChatInputBox,
   SendMessageButton,
 } from "../../styles/chat/ChatContentBoardStyle";
+import { onSnapshot } from "firebase/firestore";
+import { dbService, dbFunction } from "../../lib/FStore";
 
-const ChatContentBoard = () => {
+const ChatContentBoard = ({currentChatPair}) => {
   const scrollRef = useRef();
   const [chatInput, onChange] = useForm({ message: "" });
   const [errorChatInfo, setErrorChatInfo] = useState({
     isErr: false,
   });
-
+  const [chats, setChats] = useState([]);
+  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } = dbFunction;
+  const getChats = () => {
+    
+  }
   const onChatSubmit = (e) => {
     e.preventDefault();
     if (chatInput.message.length === 0) {
@@ -33,6 +39,26 @@ const ChatContentBoard = () => {
 
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const collectionDirectory = String(`ChatPair/${currentChatPair}/ChatMessage`);
+    console.log(collectionDirectory);
+    if (currentChatPair !== "") {
+      const q = query(collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
+      orderBy("sent_timestamp", "desc"),
+      )
+      console.log(currentChatPair);
+    //const unsub = onSnapshot(doc(dbService, `ChatPair/${currentChatPair}/ChatMessage`, ), ())
+    onSnapshot(q, (snapshot) => {
+      const chatsArray = snapshot.docs.map((chats) => ({
+        id: chats.id,
+        ...chats.data(),
+      }));
+      console.log("chatsArray: ", chatsArray);
+      setChats(chatsArray);
+    });
+    } else {
+
+    }
+    
   }, []);
 
   return (

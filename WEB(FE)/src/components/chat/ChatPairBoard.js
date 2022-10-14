@@ -39,7 +39,10 @@ const ChatListTitleText = styled.div`
   line-height: 1.2;
 `;
 
-const ChatPairBoard = () => {
+const ChatPairBoard = ({
+  getCurrentChatPair,
+  setCurrentChatPair
+}) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
@@ -81,19 +84,35 @@ const ChatPairBoard = () => {
       
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
-          <div key={pair.id}>
-            익명 {index === 0 ? ", [최신]  " : ""}
-            {/* 이 부분은 닉네임 넣으면 할 것...! */}
-            {currentUserUid === pair.members[0].member_id ? (
-										pair.members[1].member_displayname
-									) : (
-										(currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
+          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id)}>
+              익명 {index === 0 ? ", [최신]  " : ""}
+              {currentUserUid === pair.members[0].member_id ? (
+                pair.members[1].member_displayname
+              ) : (
+                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
           </div>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>
       )}
-
+      {/* {chatPairs.length !== 0 ? (
+        chatPairs.map((pair, index) => (
+          <ChatPairElement
+            key={pair.id}
+            getCurrentChatPair={getCurrentChatPair(pair.id)}
+          >
+            <div>
+              익명 {index === 0 ? ", [최신]  " : ""}
+              {currentUserUid === pair.members[0].member_id ? (
+                pair.members[1].member_displayname
+              ) : (
+                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
+            </div>
+          </ChatPairElement>
+        ))
+      ) : (
+        <div>잠시만 기다려 주세요</div>
+      )} */}
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>

@@ -80,9 +80,9 @@ const MyInfoIconBox = ({isNewMessage}) => {
 };
 
 
-const ChatPairElement = ({isNewMessage}) => {
+const ChatPairElement = ({isNewMessage, getCurrentChatPair}) => {
   return (
-    <ChatParitElementBox>
+    <ChatParitElementBox onClick={getCurrentChatPair}>
       <MyInfoIconBox isNewMessage={isNewMessage}></MyInfoIconBox>
       <ChatInfoBox>
       <ChatInfoTitle>채팅 상대방 닉네임</ChatInfoTitle>
