@@ -42,6 +42,7 @@ import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/system";
 
 import uuid from "react-uuid";
+import CheckDefaultProfileImgDialog from "./CheckDefaultProfileImgNestDialog";
 
 const style = {
   position: "absolute",
@@ -54,6 +55,28 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const UploadImgButton = styled(Button)({
+  margin: "10px 0px 5px 0px",
+  position: "relative",
+  padding: "1px 8px",
+  color: "#ffffff",
+  height: "31px",
+  width: "140px",
+  background: "#0d552c",
+  fontFamily: "IBM Plex Sans KR, sans-serif",
+  fontWeight: "500",
+  fontSize: "11px",
+  textAlign: "center",
+  textDecoration: "none",
+  borderRadius: "25px",
+  marginLeft: "10px",
+  border: "1px solid rgb(26, 117, 65)",
+  "&:hover": {
+    background: "#0d552c",
+    color: "#ffffff",
+  },
+});
 
 const ChnageProfileImgButton = styled(Button)({
   margin: "10px 0px 5px 0px",
@@ -78,6 +101,7 @@ const ChnageProfileImgButton = styled(Button)({
 });
 
 const ChangeProfile = ({ setUserName }) => {
+  console.log(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
@@ -190,6 +214,7 @@ const ChangeProfile = ({ setUserName }) => {
 
   const onClearImg = () => {
     setProfileImg("");
+    setMyProfileImg("");
   };
 
   const onUploadProfileImg = async (e) => {
@@ -273,23 +298,32 @@ const ChangeProfile = ({ setUserName }) => {
                     src={profileImg}
                     sx={{ width: 90, height: 90 }}
                   />
+                ) : myProfileImg.length > 0 ? (
+                  <Avatar
+                    alt="userImg"
+                    src={myProfileImg}
+                    sx={{ width: 90, height: 90 }}
+                  />
                 ) : (
                   <BigMyInfoIcon></BigMyInfoIcon>
                 )}
-                <UploadProfileImgButton
-                  type="file"
-                  accept="image"
-                  onChange={onFileChange}
-                ></UploadProfileImgButton>
-                <Button onClick={onClearImg}>사진 지우기</Button>
+
+                <UploadImgButton
+                  variant="contained"
+                  component="label"
+                  disableElevation
+                >
+                  사진 업로드
+                  <input
+                    hidden
+                    accept="image/*"
+                    type="file"
+                    onChange={onFileChange}
+                  />
+                </UploadImgButton>
+
                 <Button onClick={onUploadProfileImg}>프로필 사진 업로드</Button>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Text in a modal
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Duis mollis, est non commodo luctus, nisi erat porttitor
-                  ligula.
-                </Typography>
+                <CheckDefaultProfileImgDialog></CheckDefaultProfileImgDialog>
               </ChangeProfileImgBlock>
             </Box>
           </Modal>

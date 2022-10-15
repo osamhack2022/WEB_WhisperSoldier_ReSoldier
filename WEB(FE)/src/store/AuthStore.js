@@ -8,3 +8,8 @@ export const UserInfo = atom({
     refresh: false,
   }, // default value (aka initial value)
 });
+
+// export const UserProfileImgStore = atom({
+//   key: "userProfileImgStore",
+//   default: {},
+// });

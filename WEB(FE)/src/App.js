@@ -76,9 +76,9 @@ const App = () => {
     });
   }, []);
 
-  useEffect(() => {
-    setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
-  }, []);
+  // useEffect(() => {
+  //   setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
+  // }, []);
 
   useEffect(() => {
     if ("/" === location.pathname && userInfo.refresh) {
