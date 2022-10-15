@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 import media from "../../modules/MediaQuery";
 export const ChangeProfileBox = styled.div`
   display: flex;
@@ -58,6 +59,15 @@ export const BigMyInfoIcon = styled(FaUserCircle)`
   color: #555555;
 `;
 
+export const CloesChangeProfileModalButton = styled(MdClose)`
+  position: absolute;
+  height: fit-content;
+  /* width: 100%;/// */
+  right: 20px;
+  color: #555555;
+  cursor: pointer;
+`;
+
 export const ChangeProfileImgBlock = styled.div`
   display: flex;
   flex-direction: column;
@@ -97,6 +107,10 @@ export const ChangeNickNameBox = styled.div`
   max-width : 280px;
   `}
 `;
+
+// export const createProfileImg = () =>{
+//   return;
+// };
 
 export const NicknameTextBox = styled.div`
   position: absolute;

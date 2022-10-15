@@ -9,6 +9,7 @@ import {
   ChangeProfileBox,
   ChangeProfileImgBlock,
   ChangeProfileImgButton,
+  CloesChangeProfileModalButton,
   FunctionTitle,
   MyInfoIcon,
   NicknameTextBox,
@@ -22,7 +23,12 @@ import { whisperSodlierSessionKey } from "../../lib/Const";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { UpdateProfileInfo } from "../../store/ProfileStore";
-import { dbFunction, dbService } from "../../lib/FStore";
+import {
+  dbFunction,
+  dbService,
+  storageFunction,
+  storageService,
+} from "../../lib/FStore";
 import { updateDoc } from "firebase/firestore";
 //import styled from "styled-components";
 import media from "../../modules/MediaQuery";
@@ -32,7 +38,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/system";
+
+import uuid from "react-uuid";
 
 const style = {
   position: "absolute",
@@ -69,6 +78,7 @@ const ChnageProfileImgButton = styled(Button)({
 });
 
 const ChangeProfile = ({ setUserName }) => {
+  const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
   const [currentNickname, setCurrentNickname, onChange] = useAndSetForm({
@@ -78,6 +88,10 @@ const ChangeProfile = ({ setUserName }) => {
   const [errProfileInfo, setErrProfileInfo] = useState({
     isErrNickname: false,
   });
+  const [myProfileImg, setMyProfileImg] = useState(
+    JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
+      .photoURL
+  );
   const [errMeg, setErrMsg] = useState({ errNicknameMsg: "" });
   const [successInfo, setSuccessInfo] = useState({
     nickname: false,
@@ -87,7 +101,9 @@ const ChangeProfile = ({ setUserName }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const onSetUserImg = async () => {};
+  const [profileImg, setProfileImg] = useState("");
+  console.log(profileImg);
+  //const onSetUserImg = async () => {};
 
   const onSetNickName = async () => {
     if (currentNickname.nickname.length !== 0) {
@@ -154,6 +170,67 @@ const ChangeProfile = ({ setUserName }) => {
     }
   };
 
+  const onFileChange = (e) => {
+    console.log(e.target.files);
+    const {
+      target: { files },
+    } = e;
+    const theFile = files[0];
+    const reader = new FileReader();
+    // reader.readAsDataURL(theFile);
+    reader.onloadend = (finishedEvent) => {
+      console.log(finishedEvent);
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setProfileImg(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
+  const onClearImg = () => {
+    setProfileImg("");
+  };
+
+  const onUploadProfileImg = async (e) => {
+    e.preventDefault();
+    const attachmentRef = ref(
+      storageService,
+      `userProfileImg/${
+        JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
+      }/${uuid()}`
+    );
+    try {
+      await uploadString(attachmentRef, profileImg, "data_url").then(
+        (snapshot) => {
+          console.log("Uploaded a data_url string!");
+        }
+      );
+      const profileImgUrl = await getDownloadURL(attachmentRef);
+
+      console.log("success upload image!");
+      updateProfile(authService.currentUser, {
+        photoURL: profileImgUrl,
+      })
+        .then(() => {
+          // Profile updated!
+          // ...
+          console.log("프로필 사진 변경 성공");
+          // alert("닉네임 변경을 성공했습니다.");
+          setMyProfileImg(profileImgUrl);
+
+          setOpen(false);
+        })
+        .catch((error) => {
+          // An error occurred
+          // ...
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <ProfileCotentBox>
       <ChangeProfileBox>
@@ -163,7 +240,16 @@ const ChangeProfile = ({ setUserName }) => {
         <SectionTitle>내 프로필 설정하기</SectionTitle>
         <SectionBox isCenter={true}>
           <FunctionTitle>프로필 사진</FunctionTitle>
-          <MyInfoIcon></MyInfoIcon>
+          {myProfileImg.length > 0 ? (
+            <Avatar
+              alt="userImg"
+              src={myProfileImg}
+              sx={{ width: 64, height: 64 }}
+            />
+          ) : (
+            <MyInfoIcon></MyInfoIcon>
+          )}
+
           {/* <ChangeProfileImgButton isMarginLeft={true}>
             사진 변경하기
           </ChangeProfileImgButton> */}
@@ -177,13 +263,26 @@ const ChangeProfile = ({ setUserName }) => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
+              <CloesChangeProfileModalButton
+                onClick={handleClose}
+              ></CloesChangeProfileModalButton>
               <ChangeProfileImgBlock>
-                <BigMyInfoIcon></BigMyInfoIcon>
+                {profileImg ? (
+                  <Avatar
+                    alt="userImg"
+                    src={profileImg}
+                    sx={{ width: 90, height: 90 }}
+                  />
+                ) : (
+                  <BigMyInfoIcon></BigMyInfoIcon>
+                )}
                 <UploadProfileImgButton
                   type="file"
                   accept="image"
+                  onChange={onFileChange}
                 ></UploadProfileImgButton>
-                <AuthInputBox></AuthInputBox>
+                <Button onClick={onClearImg}>사진 지우기</Button>
+                <Button onClick={onUploadProfileImg}>프로필 사진 업로드</Button>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Text in a modal
                 </Typography>
