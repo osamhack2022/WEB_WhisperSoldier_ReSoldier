@@ -88,11 +88,9 @@ const ChatPairElement = ({
   currentUserUid,
   index,
   }) => {
-  const [newMessageCheck, setNewMessageCheck] = useState(isNewMessage);
-  console.log("pair.recentMessage.read_by: ", newMessageCheck)
   console.log("isNewMessageTest: ", isNewMessageTest);
   return (
-    <ChatParitElementBox onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
+    <ChatParitElementBox onClick={() => getCurrentChatPair(pair.id, pair.members)}>
       <MyInfoIconBox isNewMessage={isNewMessage}></MyInfoIconBox>
       <ChatInfoBox>
         <ChatInfoTitle>

@@ -13,8 +13,9 @@ import {
 } from "../../styles/chat/ChatContentBoardStyle";
 import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
+import { getDoc } from "firebase/firestore";
 
-const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
+const ChatContentBoard = ({ currentChatPair, getCurrentChatPair, setCurrentChatPair, chattingWith, setChattingWith }) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
@@ -24,8 +25,26 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
     isErr: false,
   });
   const [chats, setChats] = useState([]);
-  const { query, collection, orderBy, onSnapshot, where, updateDoc, doc, serverTimestamp, addDoc, arrayUnion } = dbFunction;
+  const { query, collection, orderBy, onSnapshot, getDocs, deleteDoc, updateDoc, doc, serverTimestamp, addDoc, arrayUnion } = dbFunction;
   
+  const onChatPairDeleteClick = async (e) => {
+    e.preventDefault();
+    const check = window.confirm("정말로 채팅방을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다.");
+    if (check) {
+    getCurrentChatPair("", "")
+    const chatMessageSnap = await getDocs(query(
+        collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
+      )
+    );
+    chatMessageSnap.forEach((chatMsgDoc) => {
+      deleteDoc(doc(dbService, `ChatPair/${currentChatPair}/ChatMessage`, chatMsgDoc.id));
+    })
+      await deleteDoc(doc(dbService, "ChatPair", currentChatPair)).then(
+        alert("채팅방이 삭제되었습니다.")
+      )
+      setChats([]);
+    }
+  }
   const onChatSubmit = (e) => {
     e.preventDefault();
     if (chatInput.message.length === 0) {
@@ -60,25 +79,37 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
 
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+
     if (currentChatPair !== "") {
         const q = query(collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
           orderBy("sent_timestamp", "asc"),
         )
-        console.log("FROM UseEffect: ", currentChatPair);
-        const unsub = onSnapshot(q, (snapshot) => {
-          const chatsArray = snapshot.docs.map((msg) => ({
-            id: msg.id,
-            ...msg.data(),
-          }));
-          console.log("chatsArray: ", chatsArray);
-          setChats(chatsArray);
-          console.log("updating recentMesage");
-          updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-            "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === ("added" || "modified")) {
+              const chatsArray = snapshot.docs.map((msg) => ({
+                id: msg.id,
+                ...msg.data(),
+              }));
+              setChats(chatsArray);
+              console.log("updating recentMesage");
+              updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+                "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+              });
+            }
+            if (change.type === "removed") {
+              const chatsArray = snapshot.docs.map((msg) => ({
+                id: msg.id,
+                ...msg.data(),
+              }));
+              setChats(chatsArray);
+              console.log("updating recentMesage");
+              getCurrentChatPair("", "")
+            }
           });
         });
         return () => {
-          unsub();
+          unsubscribe();
         }
       } else {
         console.log("no selected chat pair")
@@ -92,8 +123,8 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
       <ChatContentHeaderBox>
         <MyInfoIconBox></MyInfoIconBox>
         <ChatContentText>{chattingWith}</ChatContentText>
+        <button onClick={onChatPairDeleteClick}>채팅방 삭제하기</button>
       </ChatContentHeaderBox>
-
       <ChatContentBox ref={scrollRef}>
         {chats.length !== 0 ? (
           chats.map((msg) => (
@@ -113,20 +144,7 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
             </>
           )
         )}
-        {/* <ChatContentElement></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement isMe={true}></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement isMe={true}></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement isMe={true}></ChatContentElement>
-        <ChatContentElement isMe={true}></ChatContentElement>
-        <ChatContentElement></ChatContentElement>
-        <ChatContentElement isMe={true}></ChatContentElement>
-        <ChatContentElement></ChatContentElement> */}
+        
       </ChatContentBox>
 
       <ChatInputBox>

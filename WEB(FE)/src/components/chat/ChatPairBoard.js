@@ -41,7 +41,8 @@ const ChatListTitleText = styled.div`
 
 const ChatPairBoard = ({
   getCurrentChatPair,
-  setCurrentChatPair
+  setCurrentChatPair,
+  currentChatPair,
 }) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
@@ -62,19 +63,41 @@ const ChatPairBoard = ({
     });
   } */
   useEffect(() => {
-    const q = query(
+    const chatPairQuery = query(
       collection(dbService, "ChatPair"),
       orderBy("recentMessage.sent_timestamp", "desc"),
       where("member_ids", "array-contains", currentUserUid),
     );
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(chatPairQuery, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       console.log("chatPairArray: ", chatPairArray);
       setChatPairs(chatPairArray);
+      
     });
+    /* onSnapshot(chatPairQuery, (snapshot) => {
+      setChatPairs([]);
+      snapshot.forEach((doc) => {
+        const chatPairObj = {
+          ...doc.data(),
+          id: doc.id,
+        };
+        if (doc.data().sent_timestamp !== null) {
+          setChatPairs((prev) => [...prev, chatPairObj]);
+        }
+      
+      });
+    }) */
+
+    /* const chatMessageQuery = query(
+      collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`)
+    )
+    onSnapshot(chatMessageQuery, (snapshot) => {
+      if (snapshot.docs.length === 0) {
+      }
+    }); */
   }, []);
   return (
     <ChatListContainer>
