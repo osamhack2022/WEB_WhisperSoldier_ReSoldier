@@ -46,11 +46,11 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
         updateDoc(doc(dbService, "ChatPair", currentChatPair), {
           recentMessage: {
             message_text: chatInput.message,
-            read_by: arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+            read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
             sent_by: currentUserUid,
             sent_timestamp: serverTimestamp(),
           },
-        })
+        });
         setInput({message: ""});
       } else {
         console.log("You have not selected a user to chat with!")
@@ -72,6 +72,10 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
           }));
           console.log("chatsArray: ", chatsArray);
           setChats(chatsArray);
+          console.log("updating recentMesage");
+          updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+            "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+          });
         });
         return () => {
           unsub();

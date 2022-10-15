@@ -73,20 +73,38 @@ const ChatTimeInfo = styled.div`
 const MyInfoIconBox = ({isNewMessage}) => {
   return (
     <MyInfoIconBoxStyle>
-      <IsNewMesssageIcon isNewMessage={true}></IsNewMesssageIcon>
+      <IsNewMesssageIcon isNewMessage={isNewMessage}></IsNewMesssageIcon>
       <MyInfoIcon></MyInfoIcon>
     </MyInfoIconBoxStyle>
   );
 };
 
 
-const ChatPairElement = ({isNewMessage, getCurrentChatPair}) => {
+const ChatPairElement = ({
+  isNewMessage,
+  isNewMessageTest,
+  getCurrentChatPair,
+  pair,
+  currentUserUid,
+  index,
+  }) => {
+  const [newMessageCheck, setNewMessageCheck] = useState(isNewMessage);
+  console.log("pair.recentMessage.read_by: ", newMessageCheck)
+  console.log("isNewMessageTest: ", isNewMessageTest);
   return (
-    <ChatParitElementBox onClick={getCurrentChatPair}>
+    <ChatParitElementBox onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
       <MyInfoIconBox isNewMessage={isNewMessage}></MyInfoIconBox>
       <ChatInfoBox>
-      <ChatInfoTitle>채팅 상대방 닉네임</ChatInfoTitle>
-      <ChatInfoContent>마지막 채팅 내용</ChatInfoContent>
+        <ChatInfoTitle>
+          {index === 0 ? "[최신] " : ""}
+          {currentUserUid === pair.members[0].member_id ? (
+                pair.members[1].member_displayname
+              ) : (
+                (currentUserUid === pair.members[1].member_id) ? (
+            pair.members[0].member_displayname
+          ) : "오류입니다")}
+        </ChatInfoTitle>
+        <ChatInfoContent>마지막 채팅 내용</ChatInfoContent>
       </ChatInfoBox>
       <ChatTimeInfo>{calTimeToString()}</ChatTimeInfo>
       

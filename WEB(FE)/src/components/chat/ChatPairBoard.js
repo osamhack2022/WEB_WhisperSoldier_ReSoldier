@@ -49,6 +49,7 @@ const ChatPairBoard = ({
   const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } = dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
   console.log("currentUserUid: ", currentUserUid);
+  console.log("chatPairs: ", chatPairs)
   const onClickTestButton = () => {
     const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
     updateDoc(docRef, {
@@ -82,7 +83,7 @@ const ChatPairBoard = ({
       <button onClick={onClickTestButton}>테스트버튼</button>
       </ChatListTitleBox>
       
-      {chatPairs.length !== 0 ? (
+      {/* {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <div key={pair.id} onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
               익명 {index === 0 ? ", [최신]  " : ""}
@@ -94,33 +95,32 @@ const ChatPairBoard = ({
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>
-      )}
-      {/* {chatPairs.length !== 0 ? (
+      )} */}
+      {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <ChatPairElement
             key={pair.id}
-            getCurrentChatPair={getCurrentChatPair(pair.id)}
+            //onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}
+            getCurrentChatPair={getCurrentChatPair}
+            pair={pair}
+            currentUserUid={currentUserUid}
+            index={index}
+            isNewMessage={pair.recentMessage.read_by !== undefined ? !(pair.recentMessage.read_by.includes(currentUserUid)) : false}
+            isNewMessageTest={pair.recentMessage.read_by !== undefined ? (pair.recentMessage.read_by).includes("qezdqWPqnzLpubc1dYft4b5tJ6q2") : "doesnt exist"}
           >
-            <div>
-              익명 {index === 0 ? ", [최신]  " : ""}
-              {currentUserUid === pair.members[0].member_id ? (
-                pair.members[1].member_displayname
-              ) : (
-                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
-            </div>
           </ChatPairElement>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>
-      )} */}
+      )}
+      {/* <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
+      <ChatPairElement></ChatPairElement> */}
     </ChatListContainer>
   );
 };

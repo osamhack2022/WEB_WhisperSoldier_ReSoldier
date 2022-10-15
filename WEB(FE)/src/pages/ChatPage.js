@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
+import { whisperSodlierSessionKey } from "../lib/Const";
+import { dbService, dbFunction } from "../lib/FStore";
 import media from "../modules/MediaQuery";
 
 const ChatContainer = styled.div`
@@ -23,9 +25,27 @@ const ChatContainer = styled.div`
 const ChatPage = () => {
   const [currentChatPair, setCurrentChatPair] = useState("");
   const [chattingWith, setChattingWith] = useState("");
-  const getCurrentChatPair = (pairId, members, myUid) => {
+  const { query, collection, getDoc, onSnapshot, where, updateDoc, doc, serverTimestamp, addDoc, arrayUnion } = dbFunction;
+
+  const getCurrentChatPair = async (pairId, members, myUid) => {
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
     console.log("pairId: ", pairId);
     setCurrentChatPair(pairId);
+    //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
+    const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
+    const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by
+    console.log("chatPairReadByArray: ", chatPairReadByArray)
+    //읽었는지 여부 업데이트
+    if (chatPairReadByArray.includes(currentUserUid)) {
+      console.log("already read");
+    } else {
+      console.log("updating recentMesage");
+      updateDoc(doc(dbService, "ChatPair", pairId), {
+        "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+      });
+    }
     console.log("Members: ", members);
     (myUid === members[0].member_id ? (
         setChattingWith(members[1].member_displayname)
