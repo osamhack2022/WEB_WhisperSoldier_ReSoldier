@@ -58,7 +58,7 @@ const ChatPairBoard = ({
         sent_by: currentUserUid,
         sent_timestamp: serverTimestamp(),
       }
-    })
+    });
   }
   useEffect(() => {
     const q = query(
@@ -84,7 +84,7 @@ const ChatPairBoard = ({
       
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
-          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id)}>
+          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
               익명 {index === 0 ? ", [최신]  " : ""}
               {currentUserUid === pair.members[0].member_id ? (
                 pair.members[1].member_displayname

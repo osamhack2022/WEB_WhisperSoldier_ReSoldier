@@ -22,9 +22,17 @@ const ChatContainer = styled.div`
 
 const ChatPage = () => {
   const [currentChatPair, setCurrentChatPair] = useState("");
-
-  const getCurrentChatPair = (pairId) => {
+  const [chattingWith, setChattingWith] = useState("");
+  const getCurrentChatPair = (pairId, members, myUid) => {
     console.log("pairId: ", pairId);
+    setCurrentChatPair(pairId);
+    console.log("Members: ", members);
+    (myUid === members[0].member_id ? (
+        setChattingWith(members[1].member_displayname)
+    ) : (
+      (myUid === members[1].member_id) ? (
+    setChattingWith(members[0].member_displayname)
+      ) : console.log("오류입니다")))  
   }
   return (
     <ChatContainer>
@@ -34,6 +42,7 @@ const ChatPage = () => {
       ></ChatPairBoard>
       <ChatContentBoard
         currentChatPair={currentChatPair}
+        chattingWith={chattingWith}
       ></ChatContentBoard>
     </ChatContainer>
   );
