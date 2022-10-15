@@ -105,7 +105,7 @@ const ChatContentBoard = ({ currentChatPair, chattingWith }) => {
           ))
         ) : (
           currentChatPair !== "" ? (
-            <div>잠시만 기다려 주세요</div>
+            <div>아직 채팅이 없습니다. 채팅을 시작해보세요</div>
           ) : (
             <>
               <div>선택된 대화가 없습니다.</div>

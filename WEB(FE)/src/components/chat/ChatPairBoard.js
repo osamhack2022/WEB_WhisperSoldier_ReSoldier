@@ -50,7 +50,7 @@ const ChatPairBoard = ({
   const [chatPairs, setChatPairs] = useState([]);
   console.log("currentUserUid: ", currentUserUid);
   console.log("chatPairs: ", chatPairs)
-  const onClickTestButton = () => {
+  /* const onClickTestButton = () => {
     const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
     updateDoc(docRef, {
       recentMessage: {
@@ -60,7 +60,7 @@ const ChatPairBoard = ({
         sent_timestamp: serverTimestamp(),
       }
     });
-  }
+  } */
   useEffect(() => {
     const q = query(
       collection(dbService, "ChatPair"),
@@ -80,7 +80,6 @@ const ChatPairBoard = ({
     <ChatListContainer>
       <ChatListTitleBox>
       <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
-      <button onClick={onClickTestButton}>테스트버튼</button>
       </ChatListTitleBox>
       
       {/* {chatPairs.length !== 0 ? (

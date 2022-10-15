@@ -104,9 +104,9 @@ const ChatPairElement = ({
             pair.members[0].member_displayname
           ) : "오류입니다")}
         </ChatInfoTitle>
-        <ChatInfoContent>마지막 채팅 내용</ChatInfoContent>
+        <ChatInfoContent>{pair.recentMessage.message_text}</ChatInfoContent>
       </ChatInfoBox>
-      <ChatTimeInfo>{calTimeToString()}</ChatTimeInfo>
+      <ChatTimeInfo>{calTimeToString(pair.recentMessage.sent_timestamp)}</ChatTimeInfo>
       
     </ChatParitElementBox>
   );
