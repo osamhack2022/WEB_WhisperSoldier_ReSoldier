@@ -4,13 +4,17 @@ import { useAndSetForm, useForm } from "../../modules/useForm";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import {
   AuthInputBox,
+  BigMyInfoIcon,
   ChangeNickNameBox,
   ChangeProfileBox,
+  ChangeProfileImgBlock,
   ChangeProfileImgButton,
   FunctionTitle,
   MyInfoIcon,
+  NicknameTextBox,
   SectionBox,
   SectionTitle,
+  UploadProfileImgButton,
 } from "../../styles/profile/ChangeProfileStyle";
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
@@ -20,37 +24,49 @@ import { useRecoilState } from "recoil";
 import { UpdateProfileInfo } from "../../store/ProfileStore";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { updateDoc } from "firebase/firestore";
-import styled from "styled-components";
+//import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 import { UserInfo } from "../../store/AuthStore";
 
-const NicknameTextBox = styled.div`
-  position: absolute;
-  z-index: 2;
-  font-size: 14px;
-  text-align: center;
-  top: 82px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  padding: 14px 27px 8px 27px;
-  border-radius: 5px;
-  height: 48px;
-  width: 350px;
-  background-color: rgba(65, 129, 177, 10);
-  opacity: ${(props) => (props.success ? "0.9" : "0")};
-  color: #ffffff;
-  transition: all 0.5s;
-  ${media.tablet`
-    padding: 14px 5px 16px 8px;
-    width: 250px;
-  `}
-  ${media.mobile`
-  top : 72px;
-  left : 5vw;
-  transform: inherit;
-  width: 90%;
-  `}
-`;
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import { styled } from "@mui/system";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 320,
+  bgcolor: "background.paper",
+  borderRadius: "5px",
+  boxShadow: 24,
+  p: 4,
+};
+
+const ChnageProfileImgButton = styled(Button)({
+  margin: "10px 0px 5px 0px",
+  position: "relative",
+  padding: "1px 8px",
+  color: "#0d552c",
+  height: "31px",
+  width: "140px",
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  fontFamily: "IBM Plex Sans KR, sans-serif",
+  fontWeight: "500",
+  fontSize: "11px",
+  textAlign: "center",
+  textDecoration: "none",
+  borderRadius: "25px",
+  marginLeft: "10px",
+  border: "1px solid rgb(26, 117, 65)",
+  "&:hover": {
+    background: "#0d552c",
+    color: "#ffffff",
+  },
+});
 
 const ChangeProfile = ({ setUserName }) => {
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
@@ -66,6 +82,12 @@ const ChangeProfile = ({ setUserName }) => {
   const [successInfo, setSuccessInfo] = useState({
     nickname: false,
   });
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const onSetUserImg = async () => {};
 
   const onSetNickName = async () => {
     if (currentNickname.nickname.length !== 0) {
@@ -116,44 +138,6 @@ const ChangeProfile = ({ setUserName }) => {
             setErrProfileInfo({ isErrNickname: false });
           }, 3000);
         }
-
-        // const isExistNickname = await getDoc(
-        //   doc(dbService, "User", currentNickname.nickname)
-        // );
-        // if (!isExistNickname.data()) {
-        //   await deleteDoc(
-        //     doc(
-        //       dbService,
-        //       "UserNickname",
-        //       JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
-        //         .providerData[0].displayName
-        //     )
-        //   );
-        //   await setDoc(
-        //     doc(dbService, "User", currentNickname.nickname),
-        //     { nickname: currentNickname.nickname }
-        //   );
-        //   updateProfile(authService.currentUser, {
-        //     displayName: currentNickname.nickname,
-        //   })
-        //     .then(() => {
-        //       // Profile updated!
-        //       // ...
-        //       console.log("닉네임 변경 성공");
-        //       setUpdateProfileInfo(true);
-        //     })
-        //     .catch((error) => {
-        //       // An error occurred
-        //       // ...
-        //       console.log(error);
-        //     });
-        // } else {
-        //   setErrProfileInfo({ isErrNickname: true });
-        //   setErrMsg({ errNicknameMsg: "중복되는 닉네임입니다" });
-        //   setTimeout(() => {
-        //     setErrProfileInfo({ isErrNickname: false });
-        //   }, 3000);
-        // }
       } else {
         setErrProfileInfo({ isErrNickname: true });
         setErrMsg({ errNicknameMsg: "기존 닉네임과 동일합니다" });
@@ -180,9 +164,36 @@ const ChangeProfile = ({ setUserName }) => {
         <SectionBox isCenter={true}>
           <FunctionTitle>프로필 사진</FunctionTitle>
           <MyInfoIcon></MyInfoIcon>
-          <ChangeProfileImgButton isMarginLeft={true}>
+          {/* <ChangeProfileImgButton isMarginLeft={true}>
             사진 변경하기
-          </ChangeProfileImgButton>
+          </ChangeProfileImgButton> */}
+          <ChnageProfileImgButton onClick={handleOpen}>
+            프로필 사진 변경하기
+          </ChnageProfileImgButton>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <ChangeProfileImgBlock>
+                <BigMyInfoIcon></BigMyInfoIcon>
+                <UploadProfileImgButton
+                  type="file"
+                  accept="image"
+                ></UploadProfileImgButton>
+                <AuthInputBox></AuthInputBox>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Text in a modal
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Duis mollis, est non commodo luctus, nisi erat porttitor
+                  ligula.
+                </Typography>
+              </ChangeProfileImgBlock>
+            </Box>
+          </Modal>
         </SectionBox>
         <SectionBox>
           <FunctionTitle>별명</FunctionTitle>

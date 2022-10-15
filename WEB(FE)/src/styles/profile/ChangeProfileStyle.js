@@ -52,6 +52,40 @@ export const MyInfoIcon = styled(FaUserCircle)`
   color: #555555;
 `;
 
+export const BigMyInfoIcon = styled(FaUserCircle)`
+  height: 90px;
+  width: 90px;
+  color: #555555;
+`;
+
+export const ChangeProfileImgBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const UploadProfileImgButton = styled.input`
+  margin-top: 10px;
+  position: relative;
+  color: #0d552c;
+  height: 31px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 12px;
+  text-align: center;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid rgb(26, 117, 65);
+  border-radius: 25px;
+  transition: all 0.5s;
+  background: #ffffff;
+  &:hover {
+    background: #0d552c;
+    color: #ffffff;
+  }
+`;
+
 export const ChangeNickNameBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,7 +96,37 @@ export const ChangeNickNameBox = styled.div`
   width : 80%;
   max-width : 280px;
   `}
-`
+`;
+
+export const NicknameTextBox = styled.div`
+  position: absolute;
+  z-index: 3;
+  font-size: 14px;
+  text-align: center;
+  top: 82px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 14px 27px 8px 27px;
+  border-radius: 5px;
+  height: 48px;
+  width: 350px;
+  background-color: rgba(65, 129, 177, 10);
+  opacity: ${(props) => (props.success ? "0.9" : "0")};
+  visibility: ${(props) => (props.success ? "visible" : "hidden")};
+  /* display: ${(props) => (props.success ? "block" : "none")}; */
+  color: #ffffff;
+  transition: all 0.5s;
+  ${media.tablet`
+    padding: 14px 5px 16px 8px;
+    width: 250px;
+  `}
+  ${media.mobile`
+  top : 72px;
+  left : 5vw;
+  transform: inherit;
+  width: 90%;
+  `}
+`;
 
 export const ChangeProfileImgButton = styled.button`
   margin: 10px 0px 5px 0px;

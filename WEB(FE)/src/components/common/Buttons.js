@@ -334,6 +334,7 @@ const BackButtonImg = styled(IoMdArrowBack)`
 `;
 
 const BackButtonBlock = styled.div`
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;

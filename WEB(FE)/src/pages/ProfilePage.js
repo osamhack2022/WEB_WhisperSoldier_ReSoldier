@@ -30,6 +30,7 @@ import {
 import { useMediaQuery } from "react-responsive";
 import SideButtonBox from "../components/common/SideButtonBox";
 import { BackButton } from "../components/common/Buttons";
+import { getSelectObj } from "../modules/GetSelectObj";
 
 const ProfilePage = () => {
   const [updateProfileInfo, setUpdateProfileInfo] =
@@ -69,44 +70,16 @@ const ProfilePage = () => {
   };
 
   const onProfile = () => {
-    setcurrentPage((prev) => ({
-      ...prev,
-      profile: true,
-      myPost: false,
-      myComment: false,
-      likePost: false,
-      likeComment: false,
-    }));
-    setProfileSelectStore((prev) => ({
-      ...prev,
-      profile: true,
-      myPost: false,
-      myComment: false,
-      likePost: false,
-      likeComment: false,
-    }));
+    setcurrentPage((prev) => getSelectObj(prev, "profile"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "profile"));
     if (!isTablet) {
       setShowContent(true);
       setShowContentStore(true);
     }
   };
   const onMyPost = () => {
-    setcurrentPage((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: true,
-      myComment: false,
-      likePost: false,
-      likeComment: false,
-    }));
-    setProfileSelectStore((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: true,
-      myComment: false,
-      likePost: false,
-      likeComment: false,
-    }));
+    setcurrentPage((prev) => getSelectObj(prev, "myPost"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "myPost"));
     if (!isTablet) {
       setShowContent(true);
       setShowContentStore(true);
@@ -114,22 +87,8 @@ const ProfilePage = () => {
   };
 
   const onMyComment = () => {
-    setcurrentPage((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: true,
-      likePost: false,
-      likeComment: false,
-    }));
-    setProfileSelectStore((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: true,
-      likePost: false,
-      likeComment: false,
-    }));
+    setcurrentPage((prev) => getSelectObj(prev, "myComment"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "myComment"));
     if (!isTablet) {
       setShowContent(true);
       setShowContentStore(true);
@@ -137,22 +96,8 @@ const ProfilePage = () => {
   };
 
   const onLikePost = () => {
-    setcurrentPage((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: false,
-      likePost: true,
-      likeComment: false,
-    }));
-    setProfileSelectStore((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: false,
-      likePost: true,
-      likeComment: false,
-    }));
+    setcurrentPage((prev) => getSelectObj(prev, "likePost"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "likePost"));
     if (!isTablet) {
       setShowContent(true);
       setShowContentStore(true);
@@ -160,22 +105,8 @@ const ProfilePage = () => {
   };
 
   const onLikeComment = () => {
-    setcurrentPage((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: false,
-      likePost: false,
-      likeComment: true,
-    }));
-    setProfileSelectStore((prev) => ({
-      ...prev,
-      profile: false,
-      myPost: false,
-      myComment: false,
-      likePost: true,
-      likeComment: false,
-    }));
+    setcurrentPage((prev) => getSelectObj(prev, "likeComment"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "likeComment"));
     if (!isTablet) {
       setShowContent(true);
       setShowContentStore(true);
