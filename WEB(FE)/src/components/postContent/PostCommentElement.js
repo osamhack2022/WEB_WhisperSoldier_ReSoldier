@@ -28,6 +28,7 @@ import {
   EditComfirmButton,
   EditCommentButton,
   LikeCommentButton,
+  MyInfoIconBox,
   PostChatCommentButton,
   ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
@@ -48,6 +49,7 @@ const PostCommentElement = ({
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
   const [commentUserNickname, setCommentUserNickname] = useState("");
+  const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
 
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
@@ -183,10 +185,12 @@ const PostCommentElement = ({
   };
 
   const getPostUserNickname = async (commentor_id) => {
-    const nicknameDoc = await getDoc(doc(dbService, "User", commentor_id));
+    const userDoc = await getDoc(doc(dbService, "User", commentor_id));
 
-    if (nicknameDoc.data()) {
-      setCommentUserNickname(nicknameDoc.data().nickname);
+    if (userDoc.data()) {
+      setCommentUserNickname(userDoc.data().nickname);
+      setCommentUserProfileImg(userDoc.data().profileImg);
+      console.log(userDoc.data().profileImg);
     }
   };
 
@@ -202,7 +206,9 @@ const PostCommentElement = ({
     <CommentBox>
       <CommentTitle>
         <CommentUserBox>
-          <CommentUserIcon></CommentUserIcon>
+          <MyInfoIconBox
+            commentUserProfileImg={commentUserProfileImg}
+          ></MyInfoIconBox>
           <CommentUserText>
             {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
           </CommentUserText>

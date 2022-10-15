@@ -1,13 +1,13 @@
 import { updateProfile } from "firebase/auth";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+//import { useNavigate } from "react-router-dom";
+//import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { useAndSetForm, useForm } from "../../modules/useForm";
-import { UserInfo } from "../../store/AuthStore";
+//import { UserInfo } from "../../store/AuthStore";
 import {
   AuthButton,
   AuthErrorButton,
@@ -23,12 +23,12 @@ import axios from "axios";
 const Block1 = styled.div`
   margin: 70px 0px 70px 0px;
 `;
-const WelcomeForm = () => {
-  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+const NicknameForm = ({ setNicknameStep }) => {
+  //const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
   const [inputValue, setInputValue, onChange] = useAndSetForm({ nickname: "" });
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [errProfileInfo, setErrProfileInfo] = useState({
     isErrNickname: false,
   });
@@ -50,7 +50,7 @@ const WelcomeForm = () => {
             "User",
             JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
           ),
-          { nickname: inputValue.nickname, admin: false }
+          { nickname: inputValue.nickname, admin: false, profileImg: "" }
         );
         console.log(authService.currentUser);
 
@@ -61,9 +61,8 @@ const WelcomeForm = () => {
             // Profile updated!
             // ...
             console.log("닉네임 설정 성공");
-            setUserInfo((prev) => ({ ...prev, refresh: true }));
 
-            navigate("/", { replace: true });
+            setNicknameStep(false);
             // window.location.reload();
           })
           .catch((error) => {
@@ -123,4 +122,4 @@ const WelcomeForm = () => {
   );
 };
 
-export default WelcomeForm;
+export default NicknameForm;

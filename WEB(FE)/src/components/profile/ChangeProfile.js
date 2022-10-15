@@ -228,7 +228,7 @@ const ChangeProfile = ({
   };
 
   const onFileChange = (e) => {
-    console.log(e.target.files);
+    //console.log(e.target.files);
     const {
       target: { files },
     } = e;
@@ -275,6 +275,15 @@ const ChangeProfile = ({
             }
             console.log("프로필 사진 변경 성공");
             // alert("닉네임 변경을 성공했습니다.");
+            updateDoc(
+              doc(
+                dbService,
+                "User",
+                JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
+              ),
+              { profileImg: profileImgUrl }
+            );
+
             setIsLoading(false);
             setMyProfileImg(profileImgUrl);
 

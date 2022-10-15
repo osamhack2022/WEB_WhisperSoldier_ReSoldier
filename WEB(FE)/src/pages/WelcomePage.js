@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
-import WelcomeForm from "../components/auth/WelcomeForm";
+import NicknameForm from "../components/auth/NicknameForm";
+import ProfileImgForm from "../components/auth/ProfileImgForm";
 import media from "../modules/MediaQuery";
 
 const WelcomePageContainer = styled.div`
@@ -19,9 +21,14 @@ const WelcomePageContainer = styled.div`
 `;
 
 const WelcomePage = () => {
+  const [nicknameStep, setNicknameStep] = useState(true);
   return (
     <div>
-      <WelcomeForm></WelcomeForm>
+      {nicknameStep ? (
+        <NicknameForm setNicknameStep={setNicknameStep}></NicknameForm>
+      ) : (
+        <ProfileImgForm></ProfileImgForm>
+      )}
     </div>
   );
 };

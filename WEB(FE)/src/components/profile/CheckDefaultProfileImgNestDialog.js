@@ -6,8 +6,15 @@ import { styled } from "@mui/system";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
-import { storageFunction, storageService } from "../../lib/FStore";
+import {
+  dbFunction,
+  dbService,
+  storageFunction,
+  storageService,
+} from "../../lib/FStore";
 import { SetDefaultProfileImgButton } from "../../styles/profile/ChangeProfileStyle";
+import { whisperSodlierSessionKey } from "../../lib/Const";
+import { updateDoc } from "firebase/firestore";
 
 const ConfirmButton = styled(Button)({
   color: "#0d552c",
@@ -42,6 +49,8 @@ const CheckDefaultProfileImgDialog = ({
 }) => {
   const [open, setOpen] = useState(false);
   const { ref, deleteObject } = storageFunction;
+  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
+    dbFunction;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,6 +77,14 @@ const CheckDefaultProfileImgDialog = ({
         }
         console.log("프로필 사진 변경 성공");
         // alert("닉네임 변경을 성공했습니다.");
+        updateDoc(
+          doc(
+            dbService,
+            "User",
+            JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
+          ),
+          { profileImg: "" }
+        );
 
         setOpen(false);
 

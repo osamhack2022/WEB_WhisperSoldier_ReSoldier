@@ -209,27 +209,16 @@ const PostPage = () => {
   };
 
   const getPostUserNickname = async (refreshData = null) => {
-    let nicknameDoc;
-    let postUserProfileImgRef;
+    let userDoc;
     if (refreshData) {
-      nicknameDoc = await getDoc(
-        doc(dbService, "User", refreshData.creator_id)
-      );
-      postUserProfileImgRef = ref(
-        storageService,
-        `userProfileImg/${refreshData.creator_id}`
-      );
+      userDoc = await getDoc(doc(dbService, "User", refreshData.creator_id));
     } else {
-      nicknameDoc = await getDoc(doc(dbService, "User", postInfo.creator_id));
-      postUserProfileImgRef = ref(
-        storageService,
-        `userProfileImg/${postInfo.creator_id}`
-      );
+      userDoc = await getDoc(doc(dbService, "User", postInfo.creator_id));
     }
-    console.log(postUserProfileImgRef.child);
 
-    if (nicknameDoc.data()) {
-      setPostUserNickname(nicknameDoc.data().nickname);
+    if (userDoc.data()) {
+      setPostUserNickname(userDoc.data().nickname);
+      setPostUserProfileImg(userDoc.data().profileImg);
     }
   };
 
@@ -290,6 +279,7 @@ const PostPage = () => {
       toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
       postUserNickname={postUserNickname}
+      postUserProfileImg={postUserProfileImg}
     ></PostContentContainer>
   );
 };

@@ -1,5 +1,6 @@
 import {
   LoadingText,
+  MyInfoIconBox,
   PostContentBox,
   PostContentLikeCount,
   PostContentTiltleText,
@@ -13,13 +14,16 @@ const PostContentTitle = ({
   errorPostInfo,
   isMyLike,
   postUserNickname,
+  postUserProfileImg,
 }) => {
   return (
     <PostContentBox>
       <PostUserBox>
         {postInfo.created_timestamp ? (
           <>
-            <UserProfileImg></UserProfileImg>
+            <MyInfoIconBox
+              postUserProfileImg={postUserProfileImg}
+            ></MyInfoIconBox>
             <PostContentTiltleText>
               {postUserNickname.length > 0 ? postUserNickname : "닉네임 없음"}
             </PostContentTiltleText>
