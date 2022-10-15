@@ -63,9 +63,13 @@ export const CloesChangeProfileModalButton = styled(MdClose)`
   position: absolute;
   height: fit-content;
   /* width: 100%;/// */
-  right: 20px;
+  right: 30px;
   color: #555555;
   cursor: pointer;
+  transition: all 0.5s;
+  &:hover {
+    transform: scale(1.3);
+  }
 `;
 
 export const ChangeProfileImgBlock = styled.div`
@@ -227,4 +231,61 @@ export const AuthInputBox = styled.input`
 
 export const WthdrawBox = styled.div`
   height: fit-content;
+`;
+
+export const ConfirmUploadImgButton = styled.div`
+  margin: 10px 0px 5px 0px;
+  position: relative;
+  padding: 5px 10px;
+  color: ${(props) => (props.loading ? "#003000" : "#ffffff")};
+  height: 31px;
+  width: ${(props) =>
+    props.error ? "180px" : props.loading ? "140px" : "140px"};
+  background-color: ${(props) =>
+    props.error ? "#a65646" : props.loading ? "#C8C8C8" : "rgb(26, 117, 65)"};
+  font-weight: 500;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 25px;
+  margin-left: ${(props) => (props.isMarginLeft ? "10px" : "0px")};
+  cursor: ${(props) =>
+    props.error ? "default" : props.loading ? "default" : "pointer"};
+  border: ${(props) =>
+    props.error
+      ? "1px solid rgb(166, 86, 70)"
+      : props.loading
+      ? "1px solid #003000"
+      : "1px solid rgb(26, 117, 65)"};
+  transition: all 0.5s;
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
+  white-space: nowrap;
+  &:hover {
+    background: ${(props) =>
+      props.error ? "#a65646" : props.loading ? "#C8C8C8" : "#0d552c"};
+    color: ${(props) =>
+      props.error ? "#ffffff" : props.loading ? "#003000" : "#ffffff"};
+  }
+`;
+
+export const SetDefaultProfileImgButton = styled.div`
+  margin: 15px 0px 5px 0px;
+  height: 25px;
+  width: fit-content;
+  align-items: center;
+  border-bottom: #4f4f4f solid 2px;
+  transition: all 0.2s;
+  font-size: 12px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  text-decoration: none;
+  color: #4f4f4f;
+  font-weight: 500;
+  transition: all 0.5s;
+  cursor: pointer;
+  &:hover {
+    color: #003000;
+    transform: scale(1.03);
+    border-bottom: #003000 solid 2px;
+  }
 `;

@@ -16,6 +16,7 @@ import {
   SectionBox,
   SectionTitle,
   UploadProfileImgButton,
+  ConfirmUploadImgButton,
 } from "../../styles/profile/ChangeProfileStyle";
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
@@ -57,20 +58,19 @@ const style = {
 };
 
 const UploadImgButton = styled(Button)({
-  margin: "10px 0px 5px 0px",
+  margin: "20px 0px 5px 0px",
   position: "relative",
   padding: "1px 8px",
-  color: "#ffffff",
+  color: "#0d552c",
   height: "31px",
   width: "140px",
-  background: "#0d552c",
+  background: "rgba(0, 0, 0, 0)",
   fontFamily: "IBM Plex Sans KR, sans-serif",
   fontWeight: "500",
   fontSize: "11px",
   textAlign: "center",
   textDecoration: "none",
   borderRadius: "25px",
-  marginLeft: "10px",
   border: "1px solid rgb(26, 117, 65)",
   "&:hover": {
     background: "#0d552c",
@@ -78,8 +78,30 @@ const UploadImgButton = styled(Button)({
   },
 });
 
+// const ConfirmUploadImgButton = styled(Button)({
+//   margin: "10px 0px 5px 0px",
+//   position: "relative",
+//   padding: "1px 8px",
+//   color: "#0d552c",
+//   height: "31px",
+//   width: "140px",
+//   background: "rgba(0, 0, 0, 0)",
+//   fontFamily: "IBM Plex Sans KR, sans-serif",
+//   fontWeight: "500",
+//   fontSize: "11px",
+//   textAlign: "center",
+//   textDecoration: "none",
+//   borderRadius: "25px",
+//   marginLeft: "10px",
+//   border: "1px solid rgb(26, 117, 65)",
+//   "&:hover": {
+//     background: "#0d552c",
+//     color: "#ffffff",
+//   },
+// });
+
 const ChnageProfileImgButton = styled(Button)({
-  margin: "10px 0px 5px 0px",
+  margin: "15px 0px 0px 5px",
   position: "relative",
   padding: "1px 8px",
   color: "#0d552c",
@@ -100,7 +122,12 @@ const ChnageProfileImgButton = styled(Button)({
   },
 });
 
-const ChangeProfile = ({ setUserName }) => {
+const ChangeProfile = ({
+  setUserName,
+  setUpdateProfileInfo,
+  myProfileImg,
+  setMyProfileImg,
+}) => {
   // console.log(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));/
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
@@ -111,14 +138,20 @@ const ChangeProfile = ({ setUserName }) => {
   });
   const [errProfileInfo, setErrProfileInfo] = useState({
     isErrNickname: false,
+    isProfileImg: false,
   });
-  const [myProfileImg, setMyProfileImg] = useState(
-    JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
-      .photoURL
-  );
-  const [errMeg, setErrMsg] = useState({ errNicknameMsg: "" });
+  // const [myProfileImg, setMyProfileImg] = useState(
+  //   JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
+  //     .photoURL
+  // );
+  const [errMeg, setErrMsg] = useState({
+    errNicknameMsg: "",
+    errProfileImgMsg: "",
+  });
   const [successInfo, setSuccessInfo] = useState({
     nickname: false,
+    profileImg: false,
+    defaultProfileImg: false,
   });
 
   const [open, setOpen] = useState(false);
@@ -126,7 +159,7 @@ const ChangeProfile = ({ setUserName }) => {
   const handleClose = () => setOpen(false);
 
   const [profileImg, setProfileImg] = useState("");
-  console.log(profileImg);
+  const [isLoading, setIsLoading] = useState(false);
   //const onSetUserImg = async () => {};
 
   const onSetNickName = async () => {
@@ -203,7 +236,7 @@ const ChangeProfile = ({ setUserName }) => {
     const reader = new FileReader();
     // reader.readAsDataURL(theFile);
     reader.onloadend = (finishedEvent) => {
-      console.log(finishedEvent);
+      //console.log(finishedEvent);
       const {
         currentTarget: { result },
       } = finishedEvent;
@@ -212,55 +245,76 @@ const ChangeProfile = ({ setUserName }) => {
     reader.readAsDataURL(theFile);
   };
 
-  const onClearImg = () => {
-    setProfileImg("");
-    setMyProfileImg("");
-  };
-
   const onUploadProfileImg = async (e) => {
     e.preventDefault();
-    const attachmentRef = ref(
-      storageService,
-      `userProfileImg/${
-        JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
-      }/${uuid()}`
-    );
-    try {
-      await uploadString(attachmentRef, profileImg, "data_url").then(
-        (snapshot) => {
-          console.log("Uploaded a data_url string!");
-        }
+    if (profileImg) {
+      setIsLoading(true);
+      const attachmentRef = ref(
+        storageService,
+        `userProfileImg/${
+          JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).uid
+        }/${uuid()}`
       );
-      const profileImgUrl = await getDownloadURL(attachmentRef);
+      try {
+        await uploadString(attachmentRef, profileImg, "data_url").then(
+          (snapshot) => {
+            console.log("Uploaded a data_url string!");
+          }
+        );
+        const profileImgUrl = await getDownloadURL(attachmentRef);
 
-      console.log("success upload image!");
-      updateProfile(authService.currentUser, {
-        photoURL: profileImgUrl,
-      })
-        .then(() => {
-          // Profile updated!
-          // ...
-          console.log("프로필 사진 변경 성공");
-          // alert("닉네임 변경을 성공했습니다.");
-          setMyProfileImg(profileImgUrl);
-
-          setOpen(false);
+        console.log("success upload image!");
+        updateProfile(authService.currentUser, {
+          photoURL: profileImgUrl,
         })
-        .catch((error) => {
-          // An error occurred
-          // ...
-          console.log(error);
-        });
-    } catch (e) {
-      console.log(e);
+          .then(() => {
+            // Profile updated!
+            // ...
+            if (myProfileImg) {
+              deleteObject(ref(storageService, myProfileImg));
+            }
+            console.log("프로필 사진 변경 성공");
+            // alert("닉네임 변경을 성공했습니다.");
+            setIsLoading(false);
+            setMyProfileImg(profileImgUrl);
+
+            setOpen(false);
+
+            setSuccessInfo((prev) => ({ ...prev, profileImg: true }));
+            setTimeout(() => {
+              setSuccessInfo((prev) => ({ ...prev, profileImg: false }));
+            }, 3000);
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+            console.log(error);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      setErrProfileInfo({ isProfileImg: true });
+      setErrMsg({ errProfileImgMsg: "업로드 된 사진이 없습니다" });
+      setTimeout(() => {
+        setErrProfileInfo({ isProfileImg: false });
+      }, 3000);
     }
+
+    //setUpdateProfileInfo(true);
   };
 
   return (
     <ProfileCotentBox>
       <ChangeProfileBox>
         <NicknameTextBox success={successInfo.nickname}>
-          닉네임 변경 성공했습니다
+          닉네임 변경했습니다.
+        </NicknameTextBox>
+        <NicknameTextBox success={successInfo.profileImg}>
+          프로필 사진 변경했습니다.
+        </NicknameTextBox>
+        <NicknameTextBox success={successInfo.defaultProfileImg}>
+          기본 프로필 사진으로 변경했습니다.
         </NicknameTextBox>
         <SectionTitle>내 프로필 설정하기</SectionTitle>
         <SectionBox isCenter={true}>
@@ -279,7 +333,7 @@ const ChangeProfile = ({ setUserName }) => {
             사진 변경하기
           </ChangeProfileImgButton> */}
           <ChnageProfileImgButton onClick={handleOpen}>
-            프로필 사진 변경하기
+            프로필 사진 변경
           </ChnageProfileImgButton>
           <Modal
             open={open}
@@ -322,11 +376,24 @@ const ChangeProfile = ({ setUserName }) => {
                   />
                 </UploadImgButton>
 
-                <Button onClick={onUploadProfileImg}>프로필 사진 업로드</Button>
+                <ConfirmUploadImgButton
+                  onClick={onUploadProfileImg}
+                  error={errProfileInfo.isProfileImg}
+                  loading={isLoading}
+                >
+                  {errProfileInfo.isProfileImg
+                    ? errMeg.errProfileImgMsg
+                    : isLoading
+                    ? "잠시만 기다려주세요"
+                    : "프로필 사진 변경"}
+                </ConfirmUploadImgButton>
                 <CheckDefaultProfileImgDialog
                   setProfileImg={setProfileImg}
                   setMyProfileImg={setMyProfileImg}
                   isOuterOpen={setOpen}
+                  myProfileImg={myProfileImg}
+                  setUpdateProfileInfo={setUpdateProfileInfo}
+                  setSuccessInfo={setSuccessInfo}
                 ></CheckDefaultProfileImgDialog>
               </ChangeProfileImgBlock>
             </Box>

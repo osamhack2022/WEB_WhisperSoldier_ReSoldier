@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dbService } from "../lib/FStore";
+import { dbService, storageFunction, storageService } from "../lib/FStore";
 import { dbFunction } from "../lib/FStore";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
@@ -21,6 +21,7 @@ const PostPage = () => {
     query,
     where,
   } = dbFunction;
+  const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
@@ -39,6 +40,7 @@ const PostPage = () => {
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
   const [postUserNickname, setPostUserNickname] = useState("");
+  const [postUserProfileImg, setPostUserProfileImg] = useState("");
 
   const getIsLiked = async (currentPostInfo = null) => {
     const { uid: currentUserUid } = JSON.parse(
@@ -208,13 +210,23 @@ const PostPage = () => {
 
   const getPostUserNickname = async (refreshData = null) => {
     let nicknameDoc;
+    let postUserProfileImgRef;
     if (refreshData) {
       nicknameDoc = await getDoc(
         doc(dbService, "User", refreshData.creator_id)
       );
+      postUserProfileImgRef = ref(
+        storageService,
+        `userProfileImg/${refreshData.creator_id}`
+      );
     } else {
       nicknameDoc = await getDoc(doc(dbService, "User", postInfo.creator_id));
+      postUserProfileImgRef = ref(
+        storageService,
+        `userProfileImg/${postInfo.creator_id}`
+      );
     }
+    console.log(postUserProfileImgRef.child);
 
     if (nicknameDoc.data()) {
       setPostUserNickname(nicknameDoc.data().nickname);

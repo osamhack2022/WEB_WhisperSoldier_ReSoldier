@@ -133,7 +133,12 @@ const ProfilePage = () => {
       setCurrentSessionKey((prev) =>
         JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
       );
+      setMyProfileImg(
+        JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
+          .providerData[0].photoURL
+      );
     }
+    setUpdateProfileInfo(false);
   }, [updateProfileInfo]);
 
   return (
@@ -186,7 +191,12 @@ const ProfilePage = () => {
       {(isTablet || showContent) && (
         <ProfileCotentContainer>
           {currentPage.profile && (
-            <ChangeProfile setUserName={setUserName}></ChangeProfile>
+            <ChangeProfile
+              setUserName={setUserName}
+              setUpdateProfileInfo={setUpdateProfileInfo}
+              myProfileImg={myProfileImg}
+              setMyProfileImg={setMyProfileImg}
+            ></ChangeProfile>
           )}
           {currentPage.myPost && <MyPostBoard></MyPostBoard>}
           {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
