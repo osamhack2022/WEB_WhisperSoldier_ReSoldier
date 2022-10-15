@@ -4,6 +4,8 @@ import DialogActions from "@mui/material/DialogActions";
 import { useState } from "react";
 import { styled } from "@mui/system";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import { authService } from "../../lib/FAuth";
+import { updateProfile } from "firebase/auth";
 
 const ConfirmButton = styled(Button)({
   color: "#0d552c",
@@ -29,7 +31,11 @@ const CancelButton = styled(Button)({
   },
 });
 
-const CheckDefaultProfileImgDialog = () => {
+const CheckDefaultProfileImgDialog = ({
+  setProfileImg,
+  setMyProfileImg,
+  isOuterOpen,
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -38,6 +44,30 @@ const CheckDefaultProfileImgDialog = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const onComfirmChangeDefaultProfileImg = () => {
+    setOpen(false);
+    setProfileImg("");
+    setMyProfileImg("");
+    isOuterOpen(false);
+
+    updateProfile(authService.currentUser, {
+      photoURL: "",
+    })
+      .then(() => {
+        // Profile updated!
+        // ...
+        console.log("프로필 사진 변경 성공");
+        // alert("닉네임 변경을 성공했습니다.");
+
+        setOpen(false);
+      })
+      .catch((error) => {
+        // An error occurred
+        // ...
+        console.log(error);
+      });
   };
   return (
     <div>
@@ -56,7 +86,11 @@ const CheckDefaultProfileImgDialog = () => {
           <CancelButton onClick={handleClose} color="primary">
             취소
           </CancelButton>
-          <ConfirmButton onClick={handleClose} color="primary" autoFocus>
+          <ConfirmButton
+            onClick={onComfirmChangeDefaultProfileImg}
+            color="primary"
+            autoFocus
+          >
             변경
           </ConfirmButton>
         </DialogActions>

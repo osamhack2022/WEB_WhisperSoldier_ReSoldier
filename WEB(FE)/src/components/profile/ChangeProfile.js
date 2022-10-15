@@ -101,7 +101,7 @@ const ChnageProfileImgButton = styled(Button)({
 });
 
 const ChangeProfile = ({ setUserName }) => {
-  console.log(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
+  // console.log(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));/
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
@@ -265,7 +265,7 @@ const ChangeProfile = ({ setUserName }) => {
         <SectionTitle>내 프로필 설정하기</SectionTitle>
         <SectionBox isCenter={true}>
           <FunctionTitle>프로필 사진</FunctionTitle>
-          {myProfileImg.length > 0 ? (
+          {myProfileImg ? (
             <Avatar
               alt="userImg"
               src={myProfileImg}
@@ -298,7 +298,7 @@ const ChangeProfile = ({ setUserName }) => {
                     src={profileImg}
                     sx={{ width: 90, height: 90 }}
                   />
-                ) : myProfileImg.length > 0 ? (
+                ) : myProfileImg ? (
                   <Avatar
                     alt="userImg"
                     src={myProfileImg}
@@ -323,7 +323,11 @@ const ChangeProfile = ({ setUserName }) => {
                 </UploadImgButton>
 
                 <Button onClick={onUploadProfileImg}>프로필 사진 업로드</Button>
-                <CheckDefaultProfileImgDialog></CheckDefaultProfileImgDialog>
+                <CheckDefaultProfileImgDialog
+                  setProfileImg={setProfileImg}
+                  setMyProfileImg={setMyProfileImg}
+                  isOuterOpen={setOpen}
+                ></CheckDefaultProfileImgDialog>
               </ChangeProfileImgBlock>
             </Box>
           </Modal>

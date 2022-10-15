@@ -33,6 +33,10 @@ import { BackButton } from "../components/common/Buttons";
 import { getSelectObj } from "../modules/GetSelectObj";
 
 const ProfilePage = () => {
+  const [myProfileImg, setMyProfileImg] = useState(
+    JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
+      .photoURL
+  );
   const [updateProfileInfo, setUpdateProfileInfo] =
     useRecoilState(UpdateProfileInfo);
 
@@ -138,7 +142,7 @@ const ProfilePage = () => {
         <PrimaryMenuBar>
           <PrimaryMenuBox>
             <MyInfoBox>
-              <MyInfoIconBox></MyInfoIconBox>
+              <MyInfoIconBox myProfileImg={myProfileImg}></MyInfoIconBox>
               <MyInfoTextSection>
                 <MyInfoMainText>{userName} 님</MyInfoMainText>
                 <MyInfoText notTop={true}>
