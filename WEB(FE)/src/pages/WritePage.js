@@ -10,6 +10,8 @@ import { IsUpdatePostList } from "../store/PostStore";
 
 const WritePage = () => {
   const [state, onChange] = useForm({ postContent: "" });
+  const [tagState, onChangeTagState] = useForm({ postTag: "" });
+  const [tag, setTag] = useState("");
   const [errorWritePostInfo, setErrorWritePostInfo] = useState({
     isError: false,
   });
@@ -31,7 +33,7 @@ const WritePage = () => {
           like_count: 0,
           comment_count: 0,
           post_rep_accept: false,
-          tag_name: "",
+          tag_name: tagState.postTag,
           text: state.postContent,
         });
         console.log("Document written with ID: ", docRef.id);
@@ -53,6 +55,10 @@ const WritePage = () => {
       <WriteContainer
         state={state}
         onChange={onChange}
+        tagState={tagState}
+        onChangeTagState={onChangeTagState}
+        tag={tag}
+        setTag={setTag}
         errorWritePostInfo={errorWritePostInfo}
         onClick={onClick}
       ></WriteContainer>

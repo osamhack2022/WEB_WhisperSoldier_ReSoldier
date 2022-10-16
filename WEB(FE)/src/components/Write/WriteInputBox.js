@@ -34,7 +34,7 @@ const BottonLine = styled.div`
   border-top: 1px solid #bdbdbd;
 `;
 
-const WritePostBox = ({ state, onChange, onClick, errorWritePostInfo }) => {
+const WritePostBox = ({ state, onChange, tagState, onChangeTagState, tag, setTag, onClick, errorWritePostInfo }) => {
   return (
     <InputBox>
       <WritePostHeader
@@ -49,6 +49,13 @@ const WritePostBox = ({ state, onChange, onClick, errorWritePostInfo }) => {
         onChange={onChange}
         required
       ></InputForm>
+      <input 
+        name="postTag"
+        placeholder="태그를 정의해주세요" 
+        type="text"
+        value={tagState.postTag} 
+        onChange={onChangeTagState}
+      ></input>
       <BottonLine></BottonLine>
     </InputBox>
   );
