@@ -17,6 +17,7 @@ import {
   SectionTitle,
   UploadProfileImgButton,
   ConfirmUploadImgButton,
+  WthdrawButton,
 } from "../../styles/profile/ChangeProfileStyle";
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
@@ -44,6 +45,7 @@ import { styled } from "@mui/system";
 
 import uuid from "react-uuid";
 import CheckDefaultProfileImgDialog from "./CheckDefaultProfileImgNestDialog";
+import WthdrawDialog from "./WthdrawDialog";
 
 const style = {
   position: "absolute",
@@ -77,28 +79,6 @@ const UploadImgButton = styled(Button)({
     color: "#ffffff",
   },
 });
-
-// const ConfirmUploadImgButton = styled(Button)({
-//   margin: "10px 0px 5px 0px",
-//   position: "relative",
-//   padding: "1px 8px",
-//   color: "#0d552c",
-//   height: "31px",
-//   width: "140px",
-//   background: "rgba(0, 0, 0, 0)",
-//   fontFamily: "IBM Plex Sans KR, sans-serif",
-//   fontWeight: "500",
-//   fontSize: "11px",
-//   textAlign: "center",
-//   textDecoration: "none",
-//   borderRadius: "25px",
-//   marginLeft: "10px",
-//   border: "1px solid rgb(26, 117, 65)",
-//   "&:hover": {
-//     background: "#0d552c",
-//     color: "#ffffff",
-//   },
-// });
 
 const ChnageProfileImgButton = styled(Button)({
   margin: "15px 0px 0px 5px",
@@ -432,10 +412,10 @@ const ChangeProfile = ({
           <FunctionTitle>비밀번호 변경</FunctionTitle>
           <ChangePasswordForm></ChangePasswordForm>
         </SectionBox>
-
-        {/* <WthdrawBox>
-        <WthdrawButton>회원 탈퇴하기</WthdrawButton>
-      </WthdrawBox> */}
+        <SectionBox>
+          <FunctionTitle>회원 탈퇴</FunctionTitle>
+          <WthdrawDialog myProfileImg={myProfileImg}></WthdrawDialog>
+        </SectionBox>
       </ChangeProfileBox>
     </ProfileCotentBox>
   );
