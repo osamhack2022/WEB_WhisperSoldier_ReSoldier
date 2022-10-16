@@ -68,14 +68,13 @@ const ChatPairBoard = ({
       orderBy("recentMessage.sent_timestamp", "desc"),
       where("member_ids", "array-contains", currentUserUid),
     );
-    onSnapshot(chatPairQuery, (snapshot) => {
+    const unsubscribe = onSnapshot(chatPairQuery, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       console.log("chatPairArray: ", chatPairArray);
       setChatPairs(chatPairArray);
-      
     });
     /* onSnapshot(chatPairQuery, (snapshot) => {
       setChatPairs([]);
@@ -98,26 +97,15 @@ const ChatPairBoard = ({
       if (snapshot.docs.length === 0) {
       }
     }); */
+    return () => {
+      unsubscribe();
+    }
   }, []);
   return (
     <ChatListContainer>
       <ChatListTitleBox>
       <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
       </ChatListTitleBox>
-      
-      {/* {chatPairs.length !== 0 ? (
-        chatPairs.map((pair, index) => (
-          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
-              익명 {index === 0 ? ", [최신]  " : ""}
-              {currentUserUid === pair.members[0].member_id ? (
-                pair.members[1].member_displayname
-              ) : (
-                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
-          </div>
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )} */}
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <ChatPairElement
@@ -135,14 +123,6 @@ const ChatPairBoard = ({
       ) : (
         <div>잠시만 기다려 주세요</div>
       )}
-      {/* <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement>
-      <ChatPairElement></ChatPairElement> */}
     </ChatListContainer>
   );
 };

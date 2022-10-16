@@ -25,7 +25,7 @@ const ChatContainer = styled.div`
 const ChatPage = () => {
   const [currentChatPair, setCurrentChatPair] = useState("");
   const [chattingWith, setChattingWith] = useState("");
-  const { query, collection, getDoc, onSnapshot, where, updateDoc, doc, serverTimestamp, addDoc, arrayUnion } = dbFunction;
+  const { getDoc, updateDoc, doc, arrayUnion } = dbFunction;
 
   const getCurrentChatPair = async (pairId, members) => {
     const { uid: currentUserUid } = JSON.parse(
