@@ -16,6 +16,7 @@ import {
   where,
   increment,
   onSnapshot,
+  arrayUnion,
   setDoc,
 } from "firebase/firestore";
 import {
@@ -46,6 +47,7 @@ export const dbFunction = {
   where,
   increment,
   onSnapshot,
+  arrayUnion,
   setDoc,
 };
 

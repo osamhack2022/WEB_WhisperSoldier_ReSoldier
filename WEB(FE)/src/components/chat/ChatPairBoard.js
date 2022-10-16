@@ -4,6 +4,7 @@ import { dbFunction, dbService } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
+import { arrayUnion, serverTimestamp } from "firebase/firestore";
 
 const ChatListContainer = styled.div`
   display: flex;
@@ -37,20 +38,38 @@ const ChatListTitleText = styled.div`
   line-height: 1.2;
 `;
 
-const ChatPairBoard = ({ toggleShowChatContent }) => {
+const ChatPairBoard = ({
+  getCurrentChatPair,
+  setCurrentChatPair,
+  currentChatPair,
+  toggleShowChatContent,
+}) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
-  const { query, collection, orderBy, onSnapshot, where } = dbFunction;
+  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } =
+    dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
   console.log("currentUserUid: ", currentUserUid);
+  console.log("chatPairs: ", chatPairs);
+  /* const onClickTestButton = () => {
+    const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
+    updateDoc(docRef, {
+      recentMessage: {
+        message_text: "이 문자열이 보인다면 테스트가 성공했을겁니다아마도",
+        read_by: arrayUnion(currentUserUid), // 반대는 arrayRemove()
+        sent_by: currentUserUid,
+        sent_timestamp: serverTimestamp(),
+      }
+    });
+  } */
   useEffect(() => {
-    const q = query(
+    const chatPairQuery = query(
       collection(dbService, "ChatPair"),
-      where("member_ids", "array-contains", currentUserUid),
-      orderBy("recentMessage.sent_timestamp", "desc")
+      orderBy("recentMessage.sent_timestamp", "desc"),
+      where("member_ids", "array-contains", currentUserUid)
     );
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(chatPairQuery, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -58,6 +77,27 @@ const ChatPairBoard = ({ toggleShowChatContent }) => {
       console.log("chatPairArray: ", chatPairArray);
       setChatPairs(chatPairArray);
     });
+    /* onSnapshot(chatPairQuery, (snapshot) => {
+      setChatPairs([]);
+      snapshot.forEach((doc) => {
+        const chatPairObj = {
+          ...doc.data(),
+          id: doc.id,
+        };
+        if (doc.data().sent_timestamp !== null) {
+          setChatPairs((prev) => [...prev, chatPairObj]);
+        }
+      
+      });
+    }) */
+
+    /* const chatMessageQuery = query(
+      collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`)
+    )
+    onSnapshot(chatMessageQuery, (snapshot) => {
+      if (snapshot.docs.length === 0) {
+      }
+    }); */
   }, []);
   return (
     <ChatListContainer>
@@ -65,30 +105,53 @@ const ChatPairBoard = ({ toggleShowChatContent }) => {
         <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
       </ChatListTitleBox>
 
-      {/*chatPairs.length !== 0 ? (
+      {/* {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
-          <div key={pair.id}>
-            익명 {index === 0 ? ", 최신 채팅입니다   " : ""}
-            {currentUserUid === pair.members[0].member_id ? (
-										pair.members[1].member_displayname
-									) : (
-										(currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
+          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
+              익명 {index === 0 ? ", [최신]  " : ""}
+              {currentUserUid === pair.members[0].member_id ? (
+                pair.members[1].member_displayname
+              ) : (
+                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
           </div>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>
-      )*/}
-
-      <ChatPairElement
-        toggleShowChatContent={toggleShowChatContent}
-      ></ChatPairElement>
+      )} */}
+      {chatPairs.length !== 0 ? (
+        chatPairs.map((pair, index) => (
+          <ChatPairElement
+            key={pair.id}
+            //onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}
+            getCurrentChatPair={getCurrentChatPair}
+            pair={pair}
+            currentUserUid={currentUserUid}
+            index={index}
+            isNewMessage={
+              pair.recentMessage.read_by !== undefined
+                ? !pair.recentMessage.read_by.includes(currentUserUid)
+                : false
+            }
+            isNewMessageTest={
+              pair.recentMessage.read_by !== undefined
+                ? pair.recentMessage.read_by.includes(
+                    "qezdqWPqnzLpubc1dYft4b5tJ6q2"
+                  )
+                : "doesnt exist"
+            }
+          ></ChatPairElement>
+        ))
+      ) : (
+        <div>잠시만 기다려 주세요</div>
+      )}
+      {/* <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
       <ChatPairElement></ChatPairElement>
-      <ChatPairElement isLast={true}></ChatPairElement>
+      <ChatPairElement></ChatPairElement> */}
     </ChatListContainer>
   );
 };

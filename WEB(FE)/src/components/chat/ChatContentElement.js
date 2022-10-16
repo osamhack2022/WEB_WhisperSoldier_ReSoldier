@@ -80,11 +80,11 @@ const ChatContentText = styled.div`
   line-height: 1.2;
 `;
 
-const ChatContentElement = ({ isMe }) => {
+const ChatContentElement = ({ msg, isMe }) => {
   return (
     <ChatContentElementBlock me={isMe}>
       <ChatContentElementBox me={isMe}>
-        <ChatContentText>채팅 하나하나</ChatContentText>
+        <ChatContentText>{msg.message_text}</ChatContentText>
       </ChatContentElementBox>
     </ChatContentElementBlock>
   );

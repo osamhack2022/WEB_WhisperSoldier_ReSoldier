@@ -455,9 +455,9 @@ const PostChatButtonBlock = styled.div`
   }
 `;
 
-export const PostChatButton = ({ toLink, children, isMobile }) => {
+export const PostChatButton = ({ toLink, children, isMobile, onClickChatButtonFromPost, onClickChatButton }) => {
   return (
-    <PostChatButtonBlock to={toLink} isMobile={isMobile}>
+    <PostChatButtonBlock /* to={toLink} */ onClick={onClickChatButtonFromPost} isMobile={isMobile} >
       <PostChatButtonImg></PostChatButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </PostChatButtonBlock>
