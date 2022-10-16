@@ -4,8 +4,8 @@ import media from "../../modules/MediaQuery";
 import { MainTitle, SubTitle } from "../common/Logos";
 
 const TitleBox = styled(Link)`
-  padding-left: 20px;
-  width: 210px;
+  /* padding-left: 20px; */
+  width: 160px;
   border: none;
   text-align: right;
   height: fit-content;

@@ -1,5 +1,6 @@
 import {
   LoadingText,
+  MyInfoIconBox,
   PostContentBox,
   PostContentLikeCount,
   PostContentTiltleText,
@@ -8,14 +9,24 @@ import {
   UserProfileImg,
 } from "../../styles/PostContent/PostContentTitleStyle";
 
-const PostContentTitle = ({ postInfo, errorPostInfo, isMyLike }) => {
+const PostContentTitle = ({
+  postInfo,
+  errorPostInfo,
+  isMyLike,
+  postUserNickname,
+  postUserProfileImg,
+}) => {
   return (
     <PostContentBox>
       <PostUserBox>
         {postInfo.created_timestamp ? (
           <>
-            <UserProfileImg></UserProfileImg>
-            <PostContentTiltleText>익명</PostContentTiltleText>
+            <MyInfoIconBox
+              postUserProfileImg={postUserProfileImg}
+            ></MyInfoIconBox>
+            <PostContentTiltleText>
+              {postUserNickname.length > 0 ? postUserNickname : "닉네임 없음"}
+            </PostContentTiltleText>
           </>
         ) : (
           !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>

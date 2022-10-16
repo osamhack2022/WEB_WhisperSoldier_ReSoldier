@@ -5,6 +5,11 @@ export const UserInfo = atom({
   default: {
     emailChecked: false,
     isLogin: false,
+    refresh: false,
   }, // default value (aka initial value)
 });
 
+// export const UserProfileImgStore = atom({
+//   key: "userProfileImgStore",
+//   default: {},
+// });

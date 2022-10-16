@@ -17,16 +17,15 @@ const ChatListContainer = styled.div`
   border: 1px solid rgb(189, 189, 189);
   width: 300px;
   ${media.tablet`
-  width:50%;`
-  }
+  width:50%;`}
   ${media.mobile`
   width: 100%;
   `}
 `;
 
 const ChatListTitleBox = styled.div`
-  margin : 0px 0px 10px 0px;
-  padding : 10px;
+  margin: 0px 0px 10px 0px;
+  padding: 10px;
   height: fit-content;
   border-bottom: 1px solid rgb(189, 189, 189);
   width: 100%;
@@ -34,7 +33,7 @@ const ChatListTitleBox = styled.div`
 
 const ChatListTitleText = styled.div`
   font-size: 16px;
-  text-align : center;
+  text-align: center;
   font-weight: 600;
   line-height: 1.2;
 `;
@@ -43,14 +42,16 @@ const ChatPairBoard = ({
   getCurrentChatPair,
   setCurrentChatPair,
   currentChatPair,
+  toggleShowChatContent,
 }) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
-  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } = dbFunction;
+  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } =
+    dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
   console.log("currentUserUid: ", currentUserUid);
-  console.log("chatPairs: ", chatPairs)
+  console.log("chatPairs: ", chatPairs);
   /* const onClickTestButton = () => {
     const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
     updateDoc(docRef, {
@@ -66,7 +67,7 @@ const ChatPairBoard = ({
     const chatPairQuery = query(
       collection(dbService, "ChatPair"),
       orderBy("recentMessage.sent_timestamp", "desc"),
-      where("member_ids", "array-contains", currentUserUid),
+      where("member_ids", "array-contains", currentUserUid)
     );
     const unsubscribe = onSnapshot(chatPairQuery, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
@@ -104,8 +105,22 @@ const ChatPairBoard = ({
   return (
     <ChatListContainer>
       <ChatListTitleBox>
-      <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
+        <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
       </ChatListTitleBox>
+
+      {/* {chatPairs.length !== 0 ? (
+        chatPairs.map((pair, index) => (
+          <div key={pair.id} onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}>
+              익명 {index === 0 ? ", [최신]  " : ""}
+              {currentUserUid === pair.members[0].member_id ? (
+                pair.members[1].member_displayname
+              ) : (
+                (currentUserUid === pair.members[1].member_id) ? (pair.members[0].member_displayname) : "오류입니다")}
+          </div>
+        ))
+      ) : (
+        <div>잠시만 기다려 주세요</div>
+      )} */}
       {chatPairs.length !== 0 ? (
         chatPairs.map((pair, index) => (
           <ChatPairElement
@@ -115,10 +130,19 @@ const ChatPairBoard = ({
             pair={pair}
             currentUserUid={currentUserUid}
             index={index}
-            isNewMessage={pair.recentMessage.read_by !== undefined ? !(pair.recentMessage.read_by.includes(currentUserUid)) : false}
-            isNewMessageTest={pair.recentMessage.read_by !== undefined ? (pair.recentMessage.read_by).includes("qezdqWPqnzLpubc1dYft4b5tJ6q2") : "doesnt exist"}
-          >
-          </ChatPairElement>
+            isNewMessage={
+              pair.recentMessage.read_by !== undefined
+                ? !pair.recentMessage.read_by.includes(currentUserUid)
+                : false
+            }
+            isNewMessageTest={
+              pair.recentMessage.read_by !== undefined
+                ? pair.recentMessage.read_by.includes(
+                    "qezdqWPqnzLpubc1dYft4b5tJ6q2"
+                  )
+                : "doesnt exist"
+            }
+          ></ChatPairElement>
         ))
       ) : (
         <div>잠시만 기다려 주세요</div>

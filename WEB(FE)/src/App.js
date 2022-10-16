@@ -1,6 +1,6 @@
-import { Route, Routes } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { UserInfo } from "./store/AuthStore";
+import { Route, Routes, useLocation } from "react-router-dom";
+//import { useRecoilState, useRecoilValue } from "recoil";
+//import { UserInfo } from "./store/AuthStore";
 import HomePage from "./pages/HomePage";
 import FirstPage from "./pages/FirstPage";
 import LoginPage from "./pages/LoginPage";
@@ -14,11 +14,16 @@ import ResetPage from "./pages/ResetPage";
 import "./styles/App.css";
 import { useEffect, useState } from "react";
 import { authService, FApiKey } from "./lib/FAuth";
-import { onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
 import BoardPage from "./pages/BoardPage";
+import { whisperSodlierSessionKey } from "./lib/Const";
+import WelcomePage from "./pages/WelcomePage";
+import { useRecoilState } from "recoil";
+import { UserInfo } from "./store/AuthStore";
+import LoadPage from "./pages/LoadPage";
 
 const Body = styled.div`
   position: relative;
@@ -27,13 +32,15 @@ const Body = styled.div`
 /*각 페이지 라우트*/
 const App = () => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const [sessionInfo, setSessionInfo] = useState(
-    sessionStorage.getItem(`firebase:authUser:${FApiKey}:[DEFAULT]`)
+  const [sessionObj, setSessionObj] = useState(
+    JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
   );
-  const auth = authService.currentUser;
+  //const auth = authService.currentUser;
 
-  const _session_key = `firebase:authUser:${FApiKey}:[DEFAULT]`;
-  const is_login = sessionStorage.getItem(_session_key);
+  const currentUserKey = JSON.parse(
+    sessionStorage.getItem(whisperSodlierSessionKey)
+  );
+  const location = useLocation();
 
   /*
   useEffect(() => {
@@ -47,45 +54,61 @@ const App = () => {
     onAuthStateChanged(authService, (u) => {
       if (u) {
         if (authService.currentUser.emailVerified) {
-          setUserInfo((prev) => ({
-            ...prev,
-            emailChecked: true,
-            isLogin: true,
-          }));
-          setSessionInfo(sessionStorage.getItem(_session_key));
+          // setUserInfo((prev) => ({
+          //   ...prev,
+          //   emailChecked: true,
+          //   isLogin: true,
+          // }));
+          setSessionObj(
+            JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
+          );
         } else {
-          setUserInfo((prev) => ({
-            ...prev,
-            emailChecked: false,
-            isLogin: true,
-          }));
+          // setUserInfo((prev) => ({
+          //   ...prev,
+          //   emailChecked: false,
+          //   isLogin: true,
+          // }));
         }
       } else {
-        setUserInfo((prev) => ({ ...prev, isLogin: false }));
-        setSessionInfo(null);
+        //setUserInfo((prev) => ({ ...prev, isLogin: false }));
+        setSessionObj(null);
       }
     });
   }, []);
 
+  // useEffect(() => {
+  //   setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
+  // }, []);
+
   useEffect(() => {
-    setSessionInfo(sessionStorage.getItem(_session_key));
-  }, []);
+    if ("/" === location.pathname && userInfo.refresh) {
+      window.location.reload();
+      setUserInfo((prev) => ({ ...prev, refresh: false }));
+    }
+  }, [location]);
   return (
     <>
-      {sessionInfo ? (
-        <Body>
-          <Header></Header>
+      {sessionObj ? (
+        sessionObj.providerData[0].displayName ? (
+          <Body>
+            <Header></Header>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/post/:id" element={<PostPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/write" element={<WritePage />} />
+              <Route path="/board" element={<BoardPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/message" element={<ChatPage />} />
+            </Routes>
+            <Footer></Footer>
+          </Body>
+        ) : (
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/post/:id" element={<PostPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/write" element={<WritePage />} />
-            <Route path="/board" element={<BoardPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/message" element={<ChatPage />} />
+            <Route path="/welcome" element={<WelcomePage />} />
+            <Route path="/" element={<LoadPage />} />
           </Routes>
-          <Footer></Footer>
-        </Body>
+        )
       ) : (
         <Routes>
           <Route path="/" element={<FirstPage />} />

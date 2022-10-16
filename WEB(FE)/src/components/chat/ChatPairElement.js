@@ -6,15 +6,14 @@ import { SkyBlue } from "../../styles/Color";
 import { BorderBottomOnePx } from "../../styles/Component";
 import calTimeToString from "../../modules/CalTime";
 
-
 const ChatParitElementBox = styled.div`
-position : relative;
+  position: relative;
   margin-top: 10px;
-  width : 90%;
-  padding-bottom : 10px;
+  width: 90%;
+  padding-bottom: ${(props) => (!props.isLast ? "10px" : "20px")};
   display: flex;
-  align-items : center;
-  border-bottom: ${BorderBottomOnePx};
+  align-items: center;
+  border-bottom: ${(props) => !props.isLast && BorderBottomOnePx};
 `;
 
 const MyInfoIcon = styled(FaUserCircle)`
@@ -35,42 +34,42 @@ const MyInfoIconBoxStyle = styled.div`
 const IsNewMesssageIcon = styled.div`
   height: 9px;
   width: 9px;
-  margin-right : 10px;
+  margin-right: 10px;
   border-radius: 50%;
   margin-right: 3px;
-  background-color : ${SkyBlue};
-  visibility: ${(props)=>(props.isNewMessage ? "visible":"hidden")};
-  transition : all 0.5s;
+  background-color: ${SkyBlue};
+  visibility: ${(props) => (props.isNewMessage ? "visible" : "hidden")};
+  transition: all 0.5s;
 `;
 
 const ChatInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right :10px;
+  margin-right: 10px;
 `;
 
 const ChatInfoTitle = styled.div`
-font-size : 14px;
-font-weight : 600;
+  font-size: 14px;
+  font-weight: 600;
 `;
 
 const ChatInfoContent = styled.div`
-font-size : 14px;
-font-weight : 500;
+  font-size: 14px;
+  font-weight: 500;
 `;
 
 const ChatTimeInfo = styled.div`
-  position : absolute;
-  top : 2px;
-  right : 10px;
+  position: absolute;
+  top: 2px;
+  right: 10px;
   font-size: 12px;
   text-align: left;
   letter-spacing: 0.48px;
   color: #bdbdbd;
   font-weight: 400;
-`
+`;
 
-const MyInfoIconBox = ({isNewMessage}) => {
+const MyInfoIconBox = ({ isNewMessage }) => {
   return (
     <MyInfoIconBoxStyle>
       <IsNewMesssageIcon isNewMessage={isNewMessage}></IsNewMesssageIcon>
@@ -79,7 +78,6 @@ const MyInfoIconBox = ({isNewMessage}) => {
   );
 };
 
-
 const ChatPairElement = ({
   isNewMessage,
   isNewMessageTest,
@@ -87,25 +85,30 @@ const ChatPairElement = ({
   pair,
   currentUserUid,
   index,
-  }) => {
+  isLast,
+  toggleShowChatContent,
+}) => {
   console.log("isNewMessageTest: ", isNewMessageTest);
   return (
-    <ChatParitElementBox onClick={() => getCurrentChatPair(pair.id, pair.members)}>
+    <ChatParitElementBox
+      onClick={() => getCurrentChatPair(pair.id, pair.members)}
+      isLast={isLast} /**onClick={toggleShowChatContent} */
+    >
       <MyInfoIconBox isNewMessage={isNewMessage}></MyInfoIconBox>
       <ChatInfoBox>
         <ChatInfoTitle>
           {index === 0 ? "[최신] " : ""}
-          {currentUserUid === pair.members[0].member_id ? (
-                pair.members[1].member_displayname
-              ) : (
-                (currentUserUid === pair.members[1].member_id) ? (
-            pair.members[0].member_displayname
-          ) : "오류입니다")}
+          {currentUserUid === pair.members[0].member_id
+            ? pair.members[1].member_displayname
+            : currentUserUid === pair.members[1].member_id
+            ? pair.members[0].member_displayname
+            : "오류입니다"}
         </ChatInfoTitle>
         <ChatInfoContent>{pair.recentMessage.message_text}</ChatInfoContent>
       </ChatInfoBox>
-      <ChatTimeInfo>{calTimeToString(pair.recentMessage.sent_timestamp)}</ChatTimeInfo>
-      
+      <ChatTimeInfo>
+        {calTimeToString(pair.recentMessage.sent_timestamp)}
+      </ChatTimeInfo>
     </ChatParitElementBox>
   );
 };

@@ -1,6 +1,8 @@
 import { RiUser3Line } from "react-icons/ri";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
+import Avatar from "@mui/material/Avatar";
 
 export const PostContentBox = styled.div`
   position: relative;
@@ -8,7 +10,7 @@ export const PostContentBox = styled.div`
   align-items: center;
   padding: 0px 20px;
   width: 100%;
-  height: 42px;
+  height: 60px;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
@@ -17,6 +19,8 @@ export const PostContentBox = styled.div`
 export const PostUserBox = styled.div`
   display: flex;
   flex-direction: row;
+
+  align-items: center;
   justify-content: space-between;
   height: fit-content;
 `;
@@ -139,5 +143,34 @@ export const UserProfileImg = () => {
     <UserProfileIconShape>
       <UserProfileIcon></UserProfileIcon>
     </UserProfileIconShape>
+  );
+};
+
+const MyInfoIcon = styled(FaUserCircle)`
+  height: 40px;
+  width: 40px;
+  color: #555555;
+`;
+
+const MyInfoIconBoxStyle = styled.div`
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+`;
+
+export const MyInfoIconBox = ({ postUserProfileImg }) => {
+  return (
+    <MyInfoIconBoxStyle>
+      {postUserProfileImg ? (
+        <Avatar
+          alt="userImg"
+          src={postUserProfileImg}
+          sx={{ width: 40, height: 40 }}
+        />
+      ) : (
+        <MyInfoIcon></MyInfoIcon>
+      )}
+    </MyInfoIconBoxStyle>
   );
 };
