@@ -16,3 +16,19 @@ body {
   background-color: #f6f6f6;
   overflow-y: scroll;
 }
+
+/* 커스텀 스크롤바
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  height: 10%;
+  background: #0d552c;
+  border-radius: 25px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #c8c8c8;
+}
+*/

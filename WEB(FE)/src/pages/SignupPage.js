@@ -7,8 +7,6 @@ import {
 } from "firebase/auth";
 import SignUpForm from "../components/auth/SignUpForm";
 import { useForm } from "../modules/useForm";
-import { useRecoilState } from "recoil";
-import { UserInfo } from "../store/AuthStore";
 import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";
 import { regex } from "../lib/Const";
 
@@ -18,7 +16,6 @@ const SignupPage = () => {
     password: "",
     rePassword: "",
   });
-  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
   const [signUpErrorInfo, setSignUpErrorInfo] = useState({
     isErr: false,
     isEmailError: false,
@@ -31,7 +28,7 @@ const SignupPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (emailFormat.test(state.email) === false) {
+    if (emailFormat.test(state.email) !== false) {
       setSignUpErrorInfo((prev) => ({
         ...prev,
         isEmailError: true,

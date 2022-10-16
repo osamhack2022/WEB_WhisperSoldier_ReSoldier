@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
 import media from "../../modules/MediaQuery";
+import Avatar from "@mui/material/Avatar";
 
 export const ProfileContainer = styled.div`
   display: flex;
@@ -52,33 +53,30 @@ const PrimaryMenuButtonText = styled.div`
   font-size: 14px;
   text-align: center;
   transition: all 0.5s;
-  `;
-
-
-const PrimaryMenuButtonBox = styled.div`
-margin-top: 10px;
-  padding-bottom: 10px;
-width: 90%;
-border-bottom:${(props) => !props.bottom && "1px solid #dcdcdc"};
-cursor: pointer;
-  transition: all 0.5s;
-
-&:hover ${PrimaryMenuButtonText}{
-  transform : scale(1.05);
-  color : ${(props) => props.logout ? "#A65646": "#0d552c"};
-  font-weight : 600;
-}
 `;
 
-export const PrimaryMenuButton = ({children, onClick, bottom, logout})=>{
+const PrimaryMenuButtonBox = styled.div`
+  margin-top: 10px;
+  padding-bottom: 10px;
+  width: 90%;
+  border-bottom: ${(props) => !props.bottom && "1px solid #dcdcdc"};
+  cursor: pointer;
+  transition: all 0.5s;
+
+  &:hover ${PrimaryMenuButtonText} {
+    transform: scale(1.05);
+    color: ${(props) => (props.logout ? "#A65646" : "#0d552c")};
+    font-weight: 600;
+  }
+`;
+
+export const PrimaryMenuButton = ({ children, onClick, bottom, logout }) => {
   return (
     <PrimaryMenuButtonBox onClick={onClick} bottom={bottom} logout={logout}>
-      <PrimaryMenuButtonText>{children}
-      </PrimaryMenuButtonText>
+      <PrimaryMenuButtonText>{children}</PrimaryMenuButtonText>
     </PrimaryMenuButtonBox>
   );
-}
-
+};
 
 export const MyInfoBox = styled.div`
   display: flex;
@@ -104,10 +102,18 @@ const MyInfoIconBoxStyle = styled.div`
   align-items: center;
 `;
 
-export const MyInfoIconBox = () => {
+export const MyInfoIconBox = ({ myProfileImg }) => {
   return (
     <MyInfoIconBoxStyle>
-      <MyInfoIcon></MyInfoIcon>
+      {myProfileImg ? (
+        <Avatar
+          alt="userImg"
+          src={myProfileImg}
+          sx={{ width: 40, height: 40 }}
+        />
+      ) : (
+        <MyInfoIcon></MyInfoIcon>
+      )}
     </MyInfoIconBoxStyle>
   );
 };
@@ -142,10 +148,10 @@ export const MyInfoTextSection = styled.div`
 `;
 
 export const ProfileCotentContainer = styled.div`
-display: flex;
-height : fit-content;
-flex-direction: column;
-flex-grow: 1;
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 export const ProfileCotentBox = styled.div`
@@ -153,8 +159,8 @@ export const ProfileCotentBox = styled.div`
   padding: 10px 20px;
   height: fit-content;
   /* width: 500px; */
-  flex-grow : 1;
-  
+  flex-grow: 1;
+
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);

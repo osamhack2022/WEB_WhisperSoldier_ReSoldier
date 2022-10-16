@@ -9,10 +9,12 @@ import {
   addDoc,
   serverTimestamp,
   increment,
+  getDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { dbService } from "../../lib/FStore";
+import { dbFunction, dbService } from "../../lib/FStore";
 import {
   CommentBox,
   CommentButtonBox,
@@ -27,6 +29,7 @@ import {
   EditComfirmButton,
   EditCommentButton,
   LikeCommentButton,
+  MyInfoIconBox,
   PostChatCommentButton,
   ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
@@ -45,6 +48,11 @@ const PostCommentElement = ({
   const [countLikeInComment, setCountLikeInComment] = useState(0);
 
   const [isLikedByMe, setIsLikedByMe] = useState(false);
+
+  const navigate = useNavigate();
+
+  const [commentUserNickname, setCommentUserNickname] = useState("");
+  const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
 
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
@@ -108,21 +116,72 @@ const PostCommentElement = ({
     });
   };
 
-  const onClickChatButton = async (e) => {
+  const onClickChatButtonFromComment = async (e) => {
+    const { uid: currentUserUid } = JSON.parse(
+      sessionStorage.getItem(whisperSodlierSessionKey)
+    );
+    e.preventDefault();
+    //아직은 따로 설정을 안해줘서 undefined인 모양이다 -> 원래 uid로 조회가 안되는듯!
+    const { query, collection, getDocs, where, addDoc, serverTimestamp } =
+      dbFunction;
     //채팅방이 이미 존재하는지 체크하기
-    //만약 없다면, 새로 만들기
-    //있다면, 일단 채팅페이지로 navigate
-    //서브컬렉션도 이 단계에서 만들어줘야되는건가...?? 아닌가? 알아봐야됨
-    //밑에 있는 예시 기반으로 문서 추가 예정
-    await addDoc(collection(dbService, "Comment"), {
-      /* commentor_id: authService.currentUser.uid,
-      associated_post_id: postInfo.id,
-      comment_text: state.comment,
-      comment_report: false,
-      comment_rep_accept: false,
-      like_count: 0,
-      created_timestamp: serverTimestamp(), */
-    });
+    console.log("commentElement commentor_id :", commentElement.commentor_id);
+    let checkQuery;
+    if (commentElement.commentor_id <= currentUserUid) {
+      checkQuery = query(
+        collection(dbService, "ChatPair"),
+        where("member_ids", "==", [commentElement.commentor_id, currentUserUid])
+      );
+    } else {
+      checkQuery = query(
+        collection(dbService, "ChatPair"),
+        where("member_ids", "==", [currentUserUid, commentElement.commentor_id])
+      );
+    }
+    const checkSnapshot = await getDocs(checkQuery);
+    if (checkSnapshot.docs.length === 0) {
+      //만약 없다면, 새로 만들기
+      console.log("찾은 개수 0. 채팅방을 생성하기");
+      const commentorSnap = await getDoc(
+        doc(dbService, "User", commentElement.commentor_id)
+      );
+      const commentor_displayName = commentorSnap.data().nickname;
+      const currentUserSnap = await getDoc(
+        doc(dbService, "User", currentUserUid)
+      );
+      const currentUser_displayName = currentUserSnap.data().nickname;
+
+      await addDoc(collection(dbService, "ChatPair"), {
+        created_timestamp: serverTimestamp(),
+        is_report_and_block: false,
+        member_ids:
+          commentElement.commentor_id <= currentUserUid
+            ? [commentElement.commentor_id, currentUserUid]
+            : [currentUserUid, commentElement.commentor_id],
+        members: [
+          {
+            member_displayname: commentor_displayName,
+            member_id: commentElement.commentor_id,
+          },
+          {
+            member_displayname: currentUser_displayName,
+            member_id: currentUserUid,
+          },
+        ],
+        recentMessage: {
+          message_text: null,
+          read_by: [],
+          sent_by: null,
+          sent_timestamp: serverTimestamp(),
+        },
+      });
+      console.log("채팅방 생성 완료. chatPage로 navigate...");
+      navigate("/message");
+    } else {
+      //있다면, 일단 채팅페이지로 navigate
+      console.log("찾았음! chatPage로 내비게이트");
+      navigate("/message");
+    }
   };
 
   const onDeleteCommentClick = async () => {
@@ -179,9 +238,21 @@ const PostCommentElement = ({
     setNewComment(value);
   };
 
+  const getPostUserNickname = async (commentor_id) => {
+    const userDoc = await getDoc(doc(dbService, "User", commentor_id));
+
+    if (userDoc.data()) {
+      setCommentUserNickname(userDoc.data().nickname);
+      setCommentUserProfileImg(userDoc.data().profileImg);
+      console.log(userDoc.data().profileImg);
+    }
+  };
+
   useEffect(() => {
     getIsLiked();
+    console.log(commentElement);
     setCountLikeInComment(commentElement.like_count);
+    getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
   }, []);
 
@@ -189,8 +260,12 @@ const PostCommentElement = ({
     <CommentBox>
       <CommentTitle>
         <CommentUserBox>
-          <CommentUserIcon></CommentUserIcon>
-          <CommentUserText>익명</CommentUserText>
+          <MyInfoIconBox
+            commentUserProfileImg={commentUserProfileImg}
+          ></MyInfoIconBox>
+          <CommentUserText>
+            {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
+          </CommentUserText>
         </CommentUserBox>
         <CommentTimeText>{created_timestamp}</CommentTimeText>
         <PostContentLikeCount isMyLike={isLikedByMe}>
@@ -234,7 +309,11 @@ const PostCommentElement = ({
           >
             {isLikedByMe ? "공감 취소하기" : "공감하기"}
           </LikeCommentButton>
-          <PostChatCommentButton toLink="/" isMobile={!isTablet}>
+          <PostChatCommentButton
+            toLink="/"
+            isMobile={!isTablet}
+            onClickChatButtonFromComment={onClickChatButtonFromComment}
+          >
             채팅하기
           </PostChatCommentButton>
           <ReportCommentButton toLink="/" isMobile={!isTablet}>

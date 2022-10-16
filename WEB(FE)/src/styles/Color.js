@@ -1,0 +1,1 @@
+export const SkyBlue = "#4181B1"; // tag4 color

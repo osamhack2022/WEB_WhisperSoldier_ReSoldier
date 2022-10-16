@@ -16,9 +16,20 @@ import {
   where,
   increment,
   onSnapshot,
+  arrayUnion,
+  setDoc,
 } from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 export const dbService = getFirestore();
+
+export const storageService = getStorage(app);
 
 export const dbFunction = {
   query,
@@ -36,4 +47,13 @@ export const dbFunction = {
   where,
   increment,
   onSnapshot,
+  arrayUnion,
+  setDoc,
+};
+
+export const storageFunction = {
+  ref,
+  uploadString,
+  getDownloadURL,
+  deleteObject,
 };

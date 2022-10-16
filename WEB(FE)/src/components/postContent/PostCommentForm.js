@@ -13,19 +13,25 @@ const PostCommentFormBox = styled.div`
 const PostCommentTextarea = styled.textarea`
   background-color: #fbfbfb;
   width: 100%;
+  height: 33px;
   max-height: 30vh;
+  font-size: 13px;
+  overflow: hidden;
   white-space: pre-wrap;
   border: none;
+  border-bottom: 1px solid #bdbdbd;
+  padding: 7px 10px;
+
   resize: none;
   &:focus {
     outline: none;
   }
 `;
 
-const BottonLine = styled.div`
-  margin: 1px 0px;
-  border-top: 1px solid #bdbdbd;
-`;
+// const BottonLine = styled.div`
+//   margin: 1px 0px;
+//   border-top: 1px solid #bdbdbd;
+// `;
 
 const WriteCommentButtonShape = styled.button`
   margin-top: 5px;
@@ -80,7 +86,7 @@ const PostCommentForm = ({
     let textarea = document.querySelector(".autoTextarea");
 
     if (textarea) {
-      textarea.style.height = "auto";
+      textarea.style.height = "33px";
       let height = textarea.scrollHeight; // 높이
       textarea.style.height = `${height}px`;
     }
@@ -97,7 +103,7 @@ const PostCommentForm = ({
         maxLength={2000}
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
-      <BottonLine></BottonLine>
+      {/* <BottonLine></BottonLine> */}
       <WriteCommentButton
         onClick={onCommentSubmit}
         errorCommentInfo={errorCommentInfo}

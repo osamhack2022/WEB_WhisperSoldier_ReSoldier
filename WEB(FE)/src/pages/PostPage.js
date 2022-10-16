@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dbService } from "../lib/FStore";
+import { dbService, storageFunction, storageService } from "../lib/FStore";
 import { dbFunction } from "../lib/FStore";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
@@ -21,6 +21,7 @@ const PostPage = () => {
     query,
     where,
   } = dbFunction;
+  const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
@@ -37,6 +38,9 @@ const PostPage = () => {
   const [errorEditInfo, setErrorEditInfo] = useState(false);
 
   const [isLikedByMe, setIsLikedByMe] = useState(false);
+
+  const [postUserNickname, setPostUserNickname] = useState("");
+  const [postUserProfileImg, setPostUserProfileImg] = useState("");
 
   const getIsLiked = async (currentPostInfo = null) => {
     const { uid: currentUserUid } = JSON.parse(
@@ -204,6 +208,20 @@ const PostPage = () => {
     }));
   };
 
+  const getPostUserNickname = async (refreshData = null) => {
+    let userDoc;
+    if (refreshData) {
+      userDoc = await getDoc(doc(dbService, "User", refreshData.creator_id));
+    } else {
+      userDoc = await getDoc(doc(dbService, "User", postInfo.creator_id));
+    }
+
+    if (userDoc.data()) {
+      setPostUserNickname(userDoc.data().nickname);
+      setPostUserProfileImg(userDoc.data().profileImg);
+    }
+  };
+
   /*새로고침시 전역 상태 정보가 날라가는 현상으로 인한 오류 발생을 막기 위한 함수*/
   const getContent = async () => {
     const docRef = doc(dbService, "WorryPost", id);
@@ -229,10 +247,24 @@ const PostPage = () => {
         editContent: contentObj.text,
       }));
       getIsLiked(contentObj.id);
+      getPostUserNickname(contentObj);
     } else {
       setErrorPostInfo(true);
       console.log("No such Document!");
     }
+  };
+
+  const onClickChatButton = async (e) => {
+    e.preventDefault();
+    //채팅방이 이미 존재하는지 체크하기
+    const res = await getDocs(dbService, "ChatPair");
+    console.log("포스트인포: ", postInfo);
+    //만약 없다면, 새로 만들기
+    //있다면, 일단 채팅페이지로 navigate
+    //서브컬렉션도 이 단계에서 만들어줘야되는건가...?? 아닌가? 알아봐야됨
+    //밑에 있는 예시 기반으로 문서 추가 예정
+    /* await addDoc(collection(dbService, "Comment"), {
+    }); */
   };
 
   useEffect(() => {
@@ -240,6 +272,7 @@ const PostPage = () => {
       getContent();
     } else {
       getIsLiked();
+      getPostUserNickname();
     }
     // eslint-disable-next-line
   }, []);
@@ -258,6 +291,9 @@ const PostPage = () => {
       toggleEditing={toggleEditing}
       toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
+      onClickChatButton={onClickChatButton}
+      postUserNickname={postUserNickname}
+      postUserProfileImg={postUserProfileImg}
     ></PostContentContainer>
   );
 };

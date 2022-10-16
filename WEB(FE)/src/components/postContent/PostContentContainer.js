@@ -35,6 +35,9 @@ const PostContentContainer = ({
   toggleEditing,
   toggleLike,
   isLikedByMe,
+  onClickChatButton,
+  postUserNickname,
+  postUserProfileImg,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
@@ -63,6 +66,8 @@ const PostContentContainer = ({
                 isMobile={!isTablet}
                 toggleLike={toggleLike}
                 isLikedByMe={isLikedByMe}
+                postInfo={postInfo}
+                onClickChatButton={onClickChatButton}
               ></OtherUserButtonContainer>
             ))}
         </SideButtonBox>
@@ -78,8 +83,10 @@ const PostContentContainer = ({
                 ></WriteUserButtonContainer>
               ) : (
                 <OtherUserButtonContainer
+                  postInfo={postInfo}
                   toggleLike={toggleLike}
                   isLikedByMe={isLikedByMe}
+                  onClickChatButton={onClickChatButton}
                 ></OtherUserButtonContainer>
               )
             ) : (
@@ -95,6 +102,8 @@ const PostContentContainer = ({
           postInfo={postInfo}
           errorPostInfo={errorPostInfo}
           isMyLike={isLikedByMe}
+          postUserNickname={postUserNickname}
+          postUserProfileImg={postUserProfileImg}
         ></PostContentTitle>
         <PostContentBody
           postInfo={postInfo}

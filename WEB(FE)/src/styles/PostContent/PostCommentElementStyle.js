@@ -11,6 +11,8 @@ import { BsEmojiAngry } from "react-icons/bs";
 import { BsChatDots } from "react-icons/bs";
 import { IoHeartDislikeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
+import Avatar from "@mui/material/Avatar";
 
 export const CommentBox = styled.div`
   position: relative;
@@ -37,12 +39,13 @@ export const CommentTitle = styled.div`
 export const CommentUserBox = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const CommentUserText = styled.div`
   margin-left: 5px;
-  font-size: 12px;
-  font-weight: normal;
+  font-size: 13px;
+  font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
@@ -79,6 +82,35 @@ const CommentUserIconShape = styled.div`
     background: #0d552c;
   }
 `;
+
+const MyInfoIcon = styled(FaUserCircle)`
+  height: 40px;
+  width: 40px;
+  color: #555555;
+`;
+
+const MyInfoIconBoxStyle = styled.div`
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+`;
+
+export const MyInfoIconBox = ({ commentUserProfileImg }) => {
+  return (
+    <MyInfoIconBoxStyle>
+      {commentUserProfileImg ? (
+        <Avatar
+          alt="userImg"
+          src={commentUserProfileImg}
+          sx={{ width: 40, height: 40 }}
+        />
+      ) : (
+        <MyInfoIcon></MyInfoIcon>
+      )}
+    </MyInfoIconBoxStyle>
+  );
+};
 
 export const CommentUserIcon = () => {
   return (
@@ -319,9 +351,9 @@ const PostChatButtonBlock = styled(Link)`
   }
 `;
 
-export const PostChatCommentButton = ({ toLink, children, isMobile }) => {
+export const PostChatCommentButton = ({ toLink, children, isMobile, onClickChatButtonFromComment }) => {
   return (
-    <PostChatButtonBlock to={toLink} isMobile={isMobile}>
+    <PostChatButtonBlock /* to={toLink} */ onClick={onClickChatButtonFromComment} isMobile={isMobile}>
       <PostChatButtonImg></PostChatButtonImg>
       <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
     </PostChatButtonBlock>
