@@ -2,14 +2,9 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import { styled } from "@mui/system";
-import {
-  deleteUser,
-  reauthenticateWithCredential,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { deleteUser, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import {
   dbFunction,
@@ -18,7 +13,6 @@ import {
   storageService,
 } from "../../lib/FStore";
 import { useForm } from "../../modules/useForm";
-import { AuthInputBox } from "../../styles/profile/ChangeProfileStyle";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import { PasswordInputBox } from "../../styles/profile/WthdrawDialogStyle";
 
@@ -147,24 +141,10 @@ const WthdrawConfirmDialog = ({
 
   const onWthdraw = async (e) => {
     e.preventDefault();
-    // 프로필 문서와 사진 삭제 후 회원 탈퇴 - 게시글은 유지
-
-    // const credential = promptForCredentials();
-
-    // reauthenticateWithCredential(authService.currentUser, credential).then(() => {
-    // // User re-authenticated.
-    //     console.log("재인증 성공")
-    // }).catch((error) => {
-    // // An error ocurred
-    // console.log(error);
-    // // ...
-    // });
-
     deleteDoc(doc(dbService, "User", authService.currentUser.uid));
     if (myProfileImg) {
       deleteObject(ref(storageService, myProfileImg));
     }
-
     await deleteUser(authService.currentUser)
       .then(() => {
         console.log("회원탈퇴 성공");
