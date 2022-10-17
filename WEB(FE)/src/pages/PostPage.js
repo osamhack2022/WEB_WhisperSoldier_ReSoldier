@@ -289,6 +289,7 @@ const PostPage = () => {
       setState((prev) => ({
         ...prev,
         editContent: contentObj.text,
+        editTag: contentObj.tag_name,
       }));
       getIsLiked(contentObj.id);
       getPostUserNickname(contentObj);
