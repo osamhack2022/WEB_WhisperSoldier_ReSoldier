@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dbService, storageFunction, storageService } from "../lib/FStore";
+import { dbService } from "../lib/FStore";
 import { dbFunction } from "../lib/FStore";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
@@ -21,7 +21,6 @@ const PostPage = () => {
     query,
     where,
   } = dbFunction;
-  const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
@@ -31,7 +30,6 @@ const PostPage = () => {
     comment: "",
   });
 
-  const navigate = useNavigate();
   const { id } = useParams();
   const [editing, setEditing] = useState(false);
   const [errorPostInfo, setErrorPostInfo] = useState(false);
@@ -68,59 +66,6 @@ const PostPage = () => {
     }
   };
 
-  const onDeleteClick = async (e) => {
-    const check = window.confirm("정말로 글을 삭제하시겠습니까?");
-    if (check) {
-      console.log(`deleting ${postInfo.id}`);
-      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-        alert("글이 삭제되었습니다.")
-      );
-
-      /*삭제된 post 내 속한 댓글 삭제 */
-      const querySnapshot = await getDocs(
-        query(
-          collection(dbService, "Comment"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      querySnapshot.forEach((comment) => {
-        deleteDoc(doc(dbService, "Comment", comment.id));
-      });
-
-      /* 삭제된 post의 공감 삭제 */
-      const queryLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "PostLike"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "PostLike", like.id));
-      });
-
-      const queryCommentLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "CommentLike"),
-          where("associated_comment_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryCommentLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "CommentLike", like.id));
-      });
-
-      setIsUpdatePostList((prev) => ({
-        ...prev,
-        searchPage: true,
-        newestPage: true,
-        popularPage: true,
-      }));
-      navigate("/");
-    }
-  };
-
   const toggleEditing = () => {
     setEditing((prev) => !prev);
   };
@@ -151,61 +96,6 @@ const PostPage = () => {
         }));
       }
     }
-  };
-
-  const toggleLike = async () => {
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
-    const postDocRef = doc(dbService, "WorryPost", postInfo.id);
-    console.log(postDocRef);
-    if (isLikedByMe) {
-      const likeCheckQuery = query(
-        collection(dbService, "PostLike"),
-        where("associated_post_id", "==", postInfo.id),
-        where("user_id", "==", currentUserUid)
-      );
-      const querySnapshot = await getDocs(likeCheckQuery);
-      if (querySnapshot.docs.length === 0) {
-        console.log("you have not liked this yet.");
-      } else {
-        querySnapshot.forEach((like) => {
-          deleteDoc(doc(dbService, "PostLike", like.id));
-        });
-      }
-      await updateDoc(postDocRef, {
-        like_count: postInfo.like_count - 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count - 1,
-        }))
-      );
-      setIsLikedByMe(false);
-      console.log("Subtracted");
-    } else {
-      await updateDoc(postDocRef, {
-        like_count: postInfo.like_count + 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count + 1,
-        }))
-      );
-      await addDoc(collection(dbService, "PostLike"), {
-        associated_post_id: postInfo.id,
-        user_id: currentUserUid,
-        created_timestamp: serverTimestamp(),
-      }).then(setIsLikedByMe(true));
-      console.log("Added");
-      console.log(postInfo.id);
-    }
-    setIsUpdatePostList((prev) => ({
-      ...prev,
-      searchPage: true,
-      newestPage: true,
-      popularPage: true,
-    }));
   };
 
   const getPostUserNickname = async (refreshData = null) => {
@@ -254,19 +144,6 @@ const PostPage = () => {
     }
   };
 
-  const onClickChatButton = async (e) => {
-    e.preventDefault();
-    //채팅방이 이미 존재하는지 체크하기
-    const res = await getDocs(dbService, "ChatPair");
-    console.log("포스트인포: ", postInfo);
-    //만약 없다면, 새로 만들기
-    //있다면, 일단 채팅페이지로 navigate
-    //서브컬렉션도 이 단계에서 만들어줘야되는건가...?? 아닌가? 알아봐야됨
-    //밑에 있는 예시 기반으로 문서 추가 예정
-    /* await addDoc(collection(dbService, "Comment"), {
-    }); */
-  };
-
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
@@ -280,6 +157,7 @@ const PostPage = () => {
   return (
     <PostContentContainer
       postInfo={postInfo}
+      setPostInfo={setPostInfo}
       state={state}
       onChange={onChange}
       editing={editing}
@@ -287,11 +165,9 @@ const PostPage = () => {
       errorPostInfo={errorPostInfo}
       errorEditInfo={errorEditInfo}
       onClick={onClick}
-      onDeleteClick={onDeleteClick}
       toggleEditing={toggleEditing}
-      toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
-      onClickChatButton={onClickChatButton}
+      setIsLikedByMe={setIsLikedByMe}
       postUserNickname={postUserNickname}
       postUserProfileImg={postUserProfileImg}
     ></PostContentContainer>

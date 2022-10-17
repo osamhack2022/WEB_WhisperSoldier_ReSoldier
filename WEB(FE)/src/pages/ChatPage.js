@@ -1,10 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
-import { whisperSodlierSessionKey } from "../lib/Const";
-import { dbService, dbFunction } from "../lib/FStore";
 import { BackButton } from "../components/common/Buttons";
 import SideButtonBox from "../components/common/SideButtonBox";
 import { TabletQuery } from "../lib/Const";
@@ -29,42 +27,9 @@ const ChatContainer = styled.div`
 const ChatPage = () => {
   const [currentChatPair, setCurrentChatPair] = useState("");
   const [chattingWith, setChattingWith] = useState("");
-  const { getDoc, updateDoc, doc, arrayUnion } = dbFunction;
 
-  const getCurrentChatPair = async (pairId, members) => {
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
-    console.log("pairId: ", pairId);
-    setCurrentChatPair(pairId);
-    //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
-    if (pairId !== "") {
-      const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
-      const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
-      console.log("chatPairReadByArray: ", chatPairReadByArray);
-      //읽었는지 여부 업데이트
-      if (chatPairReadByArray.includes(currentUserUid)) {
-        console.log("already read");
-      } else {
-        console.log("updating recentMesage");
-        updateDoc(doc(dbService, "ChatPair", pairId), {
-          "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
-        });
-      }
-    }
-    if (members !== "") {
-      console.log("Members: ", members);
-      currentUserUid === members[0].member_id
-        ? setChattingWith(members[1].member_displayname)
-        : currentUserUid === members[1].member_id
-        ? setChattingWith(members[0].member_displayname)
-        : console.log("오류입니다");
-    } else {
-      setChattingWith("");
-    }
-  };
   const isTablet = useMediaQuery({ query: TabletQuery });
-  const [showChatContent, setSHowChatContent] = useState(true);
+  const [showChatContent, setSHowChatContent] = useState(false);
 
   const toggleShowChatContent = () => {
     setSHowChatContent(!showChatContent);
@@ -74,8 +39,8 @@ const ChatPage = () => {
       {(isTablet || !showChatContent) && (
         <ChatPairBoard
           toggleShowChatContent={toggleShowChatContent}
-          getCurrentChatPair={getCurrentChatPair}
           setCurrentChatPair={setCurrentChatPair}
+          setChattingWith={setChattingWith}
           currentChatPair={currentChatPair}
         ></ChatPairBoard>
       )}
@@ -93,7 +58,6 @@ const ChatPage = () => {
       {(isTablet || showChatContent) && (
         <ChatContentBoard
           currentChatPair={currentChatPair}
-          getCurrentChatPair={getCurrentChatPair}
           setCurrentChatPair={setCurrentChatPair}
           chattingWith={chattingWith}
           setChattingWith={setChattingWith}

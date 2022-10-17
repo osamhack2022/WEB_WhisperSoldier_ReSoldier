@@ -78,6 +78,7 @@ const ChatContentText = styled.div`
   font-size: 14px;
   font-weight: 500;
   line-height: 1.2;
+  white-space: pre-wrap;
 `;
 
 const ChatContentElement = ({ msg, isMe }) => {

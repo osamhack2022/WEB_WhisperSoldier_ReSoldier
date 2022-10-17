@@ -24,6 +24,7 @@ import {
 
 const PostContentContainer = ({
   postInfo,
+  setPostInfo,
   state,
   onChange,
   editing,
@@ -31,11 +32,9 @@ const PostContentContainer = ({
   errorEditInfo,
   onClick,
   setState,
-  onDeleteClick,
   toggleEditing,
-  toggleLike,
   isLikedByMe,
-  onClickChatButton,
+  setIsLikedByMe,
   postUserNickname,
   postUserProfileImg,
 }) => {
@@ -57,17 +56,17 @@ const PostContentContainer = ({
             (authService.currentUser.uid === postInfo.creator_id ? (
               <WriteUserButtonContainer
                 editing={editing}
-                onDeleteClick={onDeleteClick}
+                postInfo={postInfo}
                 toggleEditing={toggleEditing}
                 isMobile={!isTablet}
               ></WriteUserButtonContainer>
             ) : (
               <OtherUserButtonContainer
                 isMobile={!isTablet}
-                toggleLike={toggleLike}
                 isLikedByMe={isLikedByMe}
+                setIsLikedByMe={setIsLikedByMe}
                 postInfo={postInfo}
-                onClickChatButton={onClickChatButton}
+                setPostInfo={setPostInfo}
               ></OtherUserButtonContainer>
             ))}
         </SideButtonBox>
@@ -78,15 +77,15 @@ const PostContentContainer = ({
               authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer
                   editing={editing}
-                  onDeleteClick={onDeleteClick}
+                  postInfo={postInfo}
                   toggleEditing={toggleEditing}
                 ></WriteUserButtonContainer>
               ) : (
                 <OtherUserButtonContainer
                   postInfo={postInfo}
-                  toggleLike={toggleLike}
                   isLikedByMe={isLikedByMe}
-                  onClickChatButton={onClickChatButton}
+                  setPostInfo={setPostInfo}
+                  setIsLikedByMe={setIsLikedByMe}
                 ></OtherUserButtonContainer>
               )
             ) : (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaUserCircle } from "react-icons/fa";
 import media from "../../modules/MediaQuery";
@@ -84,20 +84,25 @@ const ChatPairElement = ({
   getCurrentChatPair,
   pair,
   currentUserUid,
-  index,
+  //index,
   isLast,
   toggleShowChatContent,
 }) => {
   console.log("isNewMessageTest: ", isNewMessageTest);
+  // useEffect(()=>{
+  //   const UserDoc =
+  // },[]);
+
+  const clickChatPairBox = () => {
+    getCurrentChatPair(pair.id, pair.members);
+    toggleShowChatContent();
+  };
   return (
-    <ChatParitElementBox
-      onClick={() => getCurrentChatPair(pair.id, pair.members)}
-      isLast={isLast} /**onClick={toggleShowChatContent} */
-    >
+    <ChatParitElementBox onClick={clickChatPairBox} isLast={isLast}>
       <MyInfoIconBox isNewMessage={isNewMessage}></MyInfoIconBox>
       <ChatInfoBox>
         <ChatInfoTitle>
-          {index === 0 ? "[최신] " : ""}
+          {/* {index === 0 ? "[최신] " : ""} */}
           {currentUserUid === pair.members[0].member_id
             ? pair.members[1].member_displayname
             : currentUserUid === pair.members[1].member_id
