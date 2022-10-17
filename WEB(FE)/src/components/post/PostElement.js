@@ -23,6 +23,7 @@ const PostElement = ({ post }) => {
       postContent: post.text,
       like_count: post.like_count,
       comment_count: post.comment_count,
+      tag_name: post.tag_name,
     }));
     setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);

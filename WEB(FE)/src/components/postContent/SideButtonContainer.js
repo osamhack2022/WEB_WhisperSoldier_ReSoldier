@@ -41,7 +41,6 @@ export const OtherUserButtonContainer = ({
   toggleLike,
   isLikedByMe,
   postInfo,
-  onClickChatButton,
 }) => {
   const navigate = useNavigate();
   
@@ -121,7 +120,7 @@ export const OtherUserButtonContainer = ({
         isLikedByMe={isLikedByMe}
       ></LikeButton>
 
-      <PostChatButton /* toLink="/" */ isMobile={isMobile} onClickChatButtonFromPost={onClickChatButtonFromPost} onClickChatButton={onClickChatButton}>
+      <PostChatButton /* toLink="/" */ isMobile={isMobile} onClickChatButtonFromPost={onClickChatButtonFromPost}>
         채팅하기
       </PostChatButton>
       <ReportButton toLink="/" isMobile={isMobile}>

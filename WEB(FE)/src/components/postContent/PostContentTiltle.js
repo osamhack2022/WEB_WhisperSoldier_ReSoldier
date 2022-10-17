@@ -32,6 +32,9 @@ const PostContentTitle = ({
           !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>
         )}
       </PostUserBox>
+      <div>
+        &nbsp;&nbsp;# {postInfo.tag_name}
+      </div>
       {postInfo.created_timestamp ? (
         <>
           <PostContentTime>

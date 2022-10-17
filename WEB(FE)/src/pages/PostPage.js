@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
-import { addDoc, serverTimestamp } from "firebase/firestore";
+import { addDoc, increment, serverTimestamp } from "firebase/firestore";
 import { whisperSodlierSessionKey } from "../lib/Const";
 
 const PostPage = () => {
@@ -29,6 +29,7 @@ const PostPage = () => {
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
+    editTag: postInfo.tag_name,
   });
 
   const navigate = useNavigate();
@@ -75,6 +76,17 @@ const PostPage = () => {
       await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
         alert("글이 삭제되었습니다.")
       );
+      const oldtagSnap = await getDocs(query(collection(dbService, "Tag"), 
+            where("tag_name", "==", postInfo.tag_name),
+          ));
+      if (oldtagSnap.docs.length === 0) {
+        console.log("Could not find Old Tag");
+      } else {
+        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+          "tag_count": increment(-1),
+        });
+        console.log("Old Tag count incremented by -1 as the tag EXISTS in collection")
+      }
 
       /*삭제된 post 내 속한 댓글 삭제 */
       const querySnapshot = await getDocs(
@@ -137,12 +149,43 @@ const PostPage = () => {
       if (check) {
         await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
           text: state.editContent,
+          tag_name: state.editTag,
         })
           .then(
-            setPostInfo((prev) => ({ ...prev, postContent: state.editContent }))
+            setPostInfo((prev) => ({ ...prev, postContent: state.editContent, tag_name: state.editTag }))
           )
           .then(alert("수정되었습니다."))
           .then(setEditing(false));
+        
+        // 태그가 없을 경우에는 따로 Tag 컬렉션에 추가하지 않는다.
+          const oldtagSnap = await getDocs(query(collection(dbService, "Tag"), 
+            where("tag_name", "==", postInfo.tag_name),
+          ));
+          if (oldtagSnap.docs.length === 0) {
+            console.log("Could not find Old Tag");
+          } else {
+            updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+              "tag_count": increment(-1),
+            });
+            console.log("Old Tag count incremented by -1 as the tag EXISTS in collection")
+          }
+        if (state.editTag !== "") {
+          const newTagSnap = await getDocs(query(collection(dbService, "Tag"),
+            where("tag_name", "==", state.editTag)
+          ));
+          if (newTagSnap.docs.length === 0) {
+            const tagDocRef = await addDoc(collection(dbService, "Tag"), {
+              tag_count: 1,
+              tag_name: state.editTag,
+            });
+            console.log("Tag added to collection with ID: ", tagDocRef.id);
+          } else {
+            updateDoc(doc(dbService, "Tag", newTagSnap.docs[0].id), {
+              "tag_count": increment(1),
+            });
+            console.log("Tag count incremented by 1 as the tag EXISTS in collection")
+          }
+        }
         setIsUpdatePostList((prev) => ({
           ...prev,
           searchPage: true,
@@ -241,6 +284,7 @@ const PostPage = () => {
         like_count: contentObj.like_count,
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
+        tag_name: contentObj.tag_name,
       }));
       setState((prev) => ({
         ...prev,
@@ -252,19 +296,6 @@ const PostPage = () => {
       setErrorPostInfo(true);
       console.log("No such Document!");
     }
-  };
-
-  const onClickChatButton = async (e) => {
-    e.preventDefault();
-    //채팅방이 이미 존재하는지 체크하기
-    const res = await getDocs(dbService, "ChatPair");
-    console.log("포스트인포: ", postInfo);
-    //만약 없다면, 새로 만들기
-    //있다면, 일단 채팅페이지로 navigate
-    //서브컬렉션도 이 단계에서 만들어줘야되는건가...?? 아닌가? 알아봐야됨
-    //밑에 있는 예시 기반으로 문서 추가 예정
-    /* await addDoc(collection(dbService, "Comment"), {
-    }); */
   };
 
   useEffect(() => {
@@ -291,7 +322,6 @@ const PostPage = () => {
       toggleEditing={toggleEditing}
       toggleLike={toggleLike}
       isLikedByMe={isLikedByMe}
-      onClickChatButton={onClickChatButton}
       postUserNickname={postUserNickname}
       postUserProfileImg={postUserProfileImg}
     ></PostContentContainer>

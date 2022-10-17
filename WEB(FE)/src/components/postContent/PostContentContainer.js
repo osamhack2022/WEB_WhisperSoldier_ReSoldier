@@ -35,7 +35,6 @@ const PostContentContainer = ({
   toggleEditing,
   toggleLike,
   isLikedByMe,
-  onClickChatButton,
   postUserNickname,
   postUserProfileImg,
 }) => {
@@ -67,7 +66,6 @@ const PostContentContainer = ({
                 toggleLike={toggleLike}
                 isLikedByMe={isLikedByMe}
                 postInfo={postInfo}
-                onClickChatButton={onClickChatButton}
               ></OtherUserButtonContainer>
             ))}
         </SideButtonBox>
@@ -86,7 +84,6 @@ const PostContentContainer = ({
                   postInfo={postInfo}
                   toggleLike={toggleLike}
                   isLikedByMe={isLikedByMe}
-                  onClickChatButton={onClickChatButton}
                 ></OtherUserButtonContainer>
               )
             ) : (
