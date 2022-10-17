@@ -53,6 +53,12 @@ export const ChatInfoTitle = styled.div`
 export const ChatInfoContent = styled.div`
   font-size: 14px;
   font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
 `;
 
 export const ChatTimeInfo = styled.div`

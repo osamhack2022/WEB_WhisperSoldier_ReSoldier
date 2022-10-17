@@ -14,8 +14,11 @@ const ChatListContainer = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
-  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
   ${media.tablet`
+  max-width : inherit;
+  min-width : inherit;
   width:50%;`}
   ${media.mobile`
   width: 100%;

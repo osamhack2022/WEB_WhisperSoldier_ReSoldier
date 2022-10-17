@@ -13,8 +13,10 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import { StartFirstChat } from "../../store/ChatStore";
 import {
   CommentBox,
   CommentButtonBox,
@@ -60,6 +62,8 @@ const PostCommentElement = ({
 
   const { query, collection, getDocs, where, addDoc, serverTimestamp } =
     dbFunction;
+
+  const setStartFirstChat = useSetRecoilState(StartFirstChat);
 
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
@@ -134,7 +138,7 @@ const PostCommentElement = ({
     const checkSnapshot = await getDocs(checkQuery);
     if (checkSnapshot.docs.length === 0) {
       console.log("새 채팅방을 생성");
-      await addDoc(collection(dbService, "ChatPair"), {
+      const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
         is_report_and_block: false,
         member_ids:
@@ -148,9 +152,19 @@ const PostCommentElement = ({
           sent_timestamp: serverTimestamp(),
         },
       });
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: newChatRef.id,
+      }));
       navigate("/message");
     } else {
       console.log("기존 채팅방 존재");
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: checkSnapshot.docs[0].id,
+      }));
       navigate("/message");
     }
   };

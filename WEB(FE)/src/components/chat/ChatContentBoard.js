@@ -15,9 +15,17 @@ import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { getDoc } from "firebase/firestore";
 import styled from "styled-components";
+import ChatContentOptionMenu from "./ChatContentOptionMenu";
 
 const ChatCotentBoardBlock = styled.div`
   margin: 10px;
+`;
+
+const RightMoreMenuButtonBox = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
 `;
 
 const ChatContentBoard = ({
@@ -142,6 +150,7 @@ const ChatContentBoard = ({
 
   useEffect(() => {
     //scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    setChats([]);
     if (currentChatPair !== "") {
       const q = query(
         collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
@@ -184,57 +193,66 @@ const ChatContentBoard = ({
   }, [currentChatPair]);
 
   useEffect(() => {
-    scrollRef.current.scrollIntoView({
-      block: "end",
-      inline: "nearest",
-    });
+    if (currentChatPair !== "") {
+      scrollRef.current.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+      });
+    }
   }, [chats]);
 
   return (
     <ChatContentContainer>
-      <ChatContentHeaderBox>
-        <MyInfoIconBox
-          myProfileImg={currentChatWithUser.profileImg}
-        ></MyInfoIconBox>
-        <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
-        <button onClick={onChatPairDeleteClick}>채팅방 삭제하기</button>
-      </ChatContentHeaderBox>
-      <ChatContentBox>
-        {chats.length !== 0 ? (
-          chats.map((msg) => (
-            <ChatContentElement
-              key={msg.id}
-              msg={msg}
-              isMe={msg.sent_by === currentUserUid}
-            ></ChatContentElement>
-          ))
-        ) : currentChatPair !== "" ? (
-          <div>아직 채팅이 없습니다. 채팅을 시작해보세요</div>
-        ) : (
-          <>
-            <div>선택된 대화가 없습니다.</div>
-            <div>대화 목록을 선택해주세요.</div>
-          </>
-        )}
-        <ChatCotentBoardBlock ref={scrollRef}></ChatCotentBoardBlock>
-      </ChatContentBox>
-
-      <ChatInputBox>
-        <ChatInput
-          className="autoTextarea"
-          name="message"
-          type="text"
-          onChange={onChange}
-          value={chatInput.message}
-          placeholder="메시지를 입력하세요"
-          isErr={errorChatInfo.isErr}
-          autoFocus
-          maxLength={2000}
-          onInput={autoResizeTextarea}
-          onKeyUp={onKeyUp}
-        ></ChatInput>
-        <SendMessageButton onChatSubmit={onChatSubmit}></SendMessageButton>
-      </ChatInputBox>
+      {currentChatPair !== "" ? (
+        <>
+          <ChatContentHeaderBox>
+            <MyInfoIconBox
+              myProfileImg={currentChatWithUser.profileImg}
+            ></MyInfoIconBox>
+            <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
+            <RightMoreMenuButtonBox>
+              <ChatContentOptionMenu
+                onChatPairDeleteClick={onChatPairDeleteClick}
+              />
+            </RightMoreMenuButtonBox>
+          </ChatContentHeaderBox>
+          <ChatContentBox>
+            {chats.length !== 0 ? (
+              chats.map((msg) => (
+                <ChatContentElement
+                  key={msg.id}
+                  msg={msg}
+                  isMe={msg.sent_by === currentUserUid}
+                ></ChatContentElement>
+              ))
+            ) : (
+              <div>아직 채팅이 없습니다. 채팅을 시작해보세요</div>
+            )}
+            <ChatCotentBoardBlock ref={scrollRef} />
+          </ChatContentBox>
+          <ChatInputBox>
+            <ChatInput
+              className="autoTextarea"
+              name="message"
+              type="text"
+              onChange={onChange}
+              value={chatInput.message}
+              placeholder="메시지를 입력하세요"
+              isErr={errorChatInfo.isErr}
+              autoFocus
+              maxLength={2000}
+              onInput={autoResizeTextarea}
+              onKeyUp={onKeyUp}
+            ></ChatInput>
+            <SendMessageButton onChatSubmit={onChatSubmit} />
+          </ChatInputBox>
+        </>
+      ) : (
+        <>
+          <div>선택된 대화가 없습니다.</div>
+          <div>대화 목록을 선택해주세요.</div>
+        </>
+      )}
     </ChatContentContainer>
   );
 };

@@ -12,8 +12,9 @@ import {
   PostChatButton,
   ReportButton,
 } from "../common/Buttons";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
+import { StartFirstChat } from "../../store/ChatStore";
 
 export const WriteUserButtonContainer = ({
   toggleEditing,
@@ -117,6 +118,7 @@ export const OtherUserButtonContainer = ({
   } = dbFunction;
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+  const setStartFirstChat = useSetRecoilState(StartFirstChat);
 
   const toggleLike = async () => {
     const { uid: currentUserUid } = JSON.parse(
@@ -195,7 +197,7 @@ export const OtherUserButtonContainer = ({
     }
     const checkSnapshot = await getDocs(checkQuery);
     if (checkSnapshot.docs.length === 0) {
-      await addDoc(collection(dbService, "ChatPair"), {
+      const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
         is_report_and_block: false,
         member_ids:
@@ -209,9 +211,19 @@ export const OtherUserButtonContainer = ({
           sent_timestamp: serverTimestamp(),
         },
       });
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: newChatRef.id,
+      }));
       navigate("/message");
     } else {
       console.log("기존 채팅방 존재");
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: checkSnapshot.docs[0].id,
+      }));
       navigate("/message");
     }
   };

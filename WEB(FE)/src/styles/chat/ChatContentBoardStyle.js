@@ -20,6 +20,7 @@ export const ChatContentContainer = styled.div`
 `;
 
 export const ChatContentHeaderBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
