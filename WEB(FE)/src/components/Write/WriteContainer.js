@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 
-const WriteContainer = ({ state, onChange, tagState, onChangeTagState, tag, setTag, onClick, errorWritePostInfo }) => {
+const WriteContainer = ({ state, onChange, onClick, errorWritePostInfo }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
   const goBack = () => {
@@ -24,10 +24,6 @@ const WriteContainer = ({ state, onChange, tagState, onChangeTagState, tag, setT
         <WritePostBox
           state={state}
           onChange={onChange}
-          tag={tag}
-          setTag={setTag}
-          tagState={tagState}
-          onChangeTagState={onChangeTagState}
           onClick={onClick}
           errorWritePostInfo={errorWritePostInfo}
         ></WritePostBox>

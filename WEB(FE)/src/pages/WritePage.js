@@ -9,8 +9,10 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../store/PostStore";
 
 const WritePage = () => {
-  const [state, onChange] = useForm({ postContent: "" });
-  const [tagState, onChangeTagState] = useForm({ postTag: "" });
+  const [state, onChange] = useForm({
+    postContent: "",
+    postTag: "",
+  });
   const [errorWritePostInfo, setErrorWritePostInfo] = useState({
     isError: false,
   });
@@ -32,20 +34,20 @@ const WritePage = () => {
           like_count: 0,
           comment_count: 0,
           post_rep_accept: false,
-          tag_name: tagState.postTag,
+          tag_name: state.postTag,
           text: state.postContent,
         });
         console.log("Document written with ID: ", docRef.id);
 				
 				// 태그가 없을 경우에는 따로 Tag 컬렉션에 추가하지 않는다.
-				if (tagState.postTag !== "") {
+				if (state.postTag !== "") {
           const querySnapshot = await getDocs(query(collection(dbService, "Tag"),
-            where("tag_name", "==", tagState.postTag)
+            where("tag_name", "==", state.postTag)
           ));
 					if (querySnapshot.docs.length === 0) {
 						const tagDocRef = await addDoc(collection(dbService, "Tag"), {
 							tag_count: 1,
-							tag_name: tagState.postTag,
+							tag_name: state.postTag,
 						});
 						console.log("Tag added to collection with ID: ", tagDocRef.id);
 					} else {
@@ -78,8 +80,6 @@ const WritePage = () => {
       <WriteContainer
         state={state}
         onChange={onChange}
-        tagState={tagState}
-        onChangeTagState={onChangeTagState}
         errorWritePostInfo={errorWritePostInfo}
         onClick={onClick}
       ></WriteContainer>
