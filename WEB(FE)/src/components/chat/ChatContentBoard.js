@@ -23,8 +23,8 @@ const ChatCotentBoardBlock = styled.div`
 const ChatContentBoard = ({
   currentChatPair,
   setCurrentChatPair,
-  chattingWith,
-  setChattingWith,
+  currentChatWithUser,
+  setCurrentChatWithUser,
 }) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
@@ -55,12 +55,10 @@ const ChatContentBoard = ({
       "정말로 채팅방을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."
     );
     if (check) {
-      console.log(currentChatPair);
       //getCurrentChatPair("", ""); //과연 이곳에 위치한게 맞을까?
       const chatMessageSnap = await getDocs(
         query(collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`))
       );
-      console.log(chatMessageSnap);
       chatMessageSnap.forEach((chatMsgDoc) => {
         deleteDoc(
           doc(
@@ -76,7 +74,11 @@ const ChatContentBoard = ({
       setChats([]);
       //getCurrentChatPair("", ""); //결국은 이곳에 위치를 해야될듯.... -> 그리고 이 함수를 굳이 여기서 쓸 필요가 없음
       setCurrentChatPair("");
-      setChattingWith("");
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        nickname: "",
+        profileImg: "",
+      }));
     }
   };
   const onChatSubmit = (e = null) => {
@@ -90,7 +92,6 @@ const ChatContentBoard = ({
       }, 3000);
     } else {
       if (currentChatPair !== "") {
-        console.log("CurrenChatPair : ", currentChatPair);
         //submit chat to database
         addDoc(
           collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
@@ -164,9 +165,12 @@ const ChatContentBoard = ({
               ...msg.data(),
             }));
             setChats(chatsArray);
-            // console.log("updating recentMesage");
             setCurrentChatPair("");
-            setChattingWith("");
+            setCurrentChatWithUser((prev) => ({
+              ...prev,
+              nickname: "",
+              profileImg: "",
+            }));
           }
         });
       });
@@ -189,8 +193,10 @@ const ChatContentBoard = ({
   return (
     <ChatContentContainer>
       <ChatContentHeaderBox>
-        <MyInfoIconBox></MyInfoIconBox>
-        <ChatContentText>{chattingWith}</ChatContentText>
+        <MyInfoIconBox
+          myProfileImg={currentChatWithUser.profileImg}
+        ></MyInfoIconBox>
+        <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
         <button onClick={onChatPairDeleteClick}>채팅방 삭제하기</button>
       </ChatContentHeaderBox>
       <ChatContentBox>

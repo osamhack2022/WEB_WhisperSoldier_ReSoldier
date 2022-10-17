@@ -6,7 +6,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { IsUpdatePostList, PostInfo } from "../store/PostStore";
 import { useAndSetForm } from "../modules/useForm.js";
 import PostContentContainer from "../components/postContent/PostContentContainer";
-import { addDoc, serverTimestamp } from "firebase/firestore";
 import { whisperSodlierSessionKey } from "../lib/Const";
 
 const PostPage = () => {

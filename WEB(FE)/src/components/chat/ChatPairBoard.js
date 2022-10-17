@@ -38,9 +38,9 @@ const ChatListTitleText = styled.div`
 `;
 
 const ChatPairBoard = ({
-  setCurrentChatPair,
   toggleShowChatContent,
-  setChattingWith,
+  setCurrentChatPair,
+  setCurrentChatWithUser,
 }) => {
   const currentUserInfo = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
@@ -58,33 +58,23 @@ const ChatPairBoard = ({
   } = dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
 
-  const getCurrentChatPair = async (pairId, members) => {
+  const getCurrentChatPair = async (pairId, chatWithUser) => {
     setCurrentChatPair(pairId);
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      nickname: chatWithUser.nickname,
+      profileImg: chatWithUser.profileImg,
+    }));
 
     //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
-    if (pairId !== "") {
-      const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
-      const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
-      console.log("chatPairReadByArray: ", chatPairReadByArray);
-      //읽었는지 여부 업데이트
-      if (chatPairReadByArray.includes(currentUserInfo.uid)) {
-        console.log("already read");
-      } else {
-        console.log("updating recentMesage");
-        updateDoc(doc(dbService, "ChatPair", pairId), {
-          "recentMessage.read_by": arrayUnion(currentUserInfo.uid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
-        });
-      }
-    }
-    if (members !== "") {
-      console.log("Members: ", members);
-      currentUserInfo.uid === members[0].member_id
-        ? setChattingWith(members[1].member_displayname)
-        : currentUserInfo.uid === members[1].member_id
-        ? setChattingWith(members[0].member_displayname)
-        : console.log("오류입니다");
+    const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
+    const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
+    //읽었는지 여부 업데이트
+    if (chatPairReadByArray.includes(currentUserInfo.uid)) {
     } else {
-      setChattingWith("");
+      updateDoc(doc(dbService, "ChatPair", pairId), {
+        "recentMessage.read_by": arrayUnion(currentUserInfo.uid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+      });
     }
   };
 
@@ -99,13 +89,13 @@ const ChatPairBoard = ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("chatPairArray: ", chatPairArray);
       setChatPairs(chatPairArray);
     });
     return () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <ChatListContainer>
       <ChatListTitleBox>
@@ -114,7 +104,7 @@ const ChatPairBoard = ({
         </ChatListTitleText>
       </ChatListTitleBox>
       {chatPairs.length !== 0 ? (
-        chatPairs.map((pair, index) => (
+        chatPairs.map((pair) => (
           <ChatPairElement
             key={pair.id}
             //onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}
@@ -122,18 +112,10 @@ const ChatPairBoard = ({
             toggleShowChatContent={toggleShowChatContent}
             pair={pair}
             currentUserUid={currentUserInfo.uid}
-            index={index}
             isNewMessage={
               pair.recentMessage.read_by !== undefined
                 ? !pair.recentMessage.read_by.includes(currentUserInfo.uid)
                 : false
-            }
-            isNewMessageTest={
-              pair.recentMessage.read_by !== undefined
-                ? pair.recentMessage.read_by.includes(
-                    "qezdqWPqnzLpubc1dYft4b5tJ6q2"
-                  )
-                : "doesnt exist"
             }
           ></ChatPairElement>
         ))

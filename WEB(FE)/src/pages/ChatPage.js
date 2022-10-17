@@ -25,23 +25,27 @@ const ChatContainer = styled.div`
 `;
 
 const ChatPage = () => {
-  const [currentChatPair, setCurrentChatPair] = useState("");
-  const [chattingWith, setChattingWith] = useState("");
-
   const isTablet = useMediaQuery({ query: TabletQuery });
   const [showChatContent, setSHowChatContent] = useState(false);
 
   const toggleShowChatContent = () => {
     setSHowChatContent(!showChatContent);
   };
+
+  const [currentChatPair, setCurrentChatPair] = useState("");
+  const [currentChatWithUser, setCurrentChatWithUser] = useState({
+    nickname: "",
+    profileImg: "",
+  });
+  //const [chattingWith, setChattingWith] = useState("");
+
   return (
     <ChatContainer>
       {(isTablet || !showChatContent) && (
         <ChatPairBoard
           toggleShowChatContent={toggleShowChatContent}
           setCurrentChatPair={setCurrentChatPair}
-          setChattingWith={setChattingWith}
-          currentChatPair={currentChatPair}
+          setCurrentChatWithUser={setCurrentChatWithUser}
         ></ChatPairBoard>
       )}
       {!isTablet && showChatContent && (
@@ -59,8 +63,8 @@ const ChatPage = () => {
         <ChatContentBoard
           currentChatPair={currentChatPair}
           setCurrentChatPair={setCurrentChatPair}
-          chattingWith={chattingWith}
-          setChattingWith={setChattingWith}
+          currentChatWithUser={currentChatWithUser}
+          setCurrentChatWithUser={setCurrentChatWithUser}
         ></ChatContentBoard>
       )}
     </ChatContainer>
