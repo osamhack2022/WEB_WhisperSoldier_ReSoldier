@@ -33,7 +33,7 @@ const PostContentTitle = ({
         )}
       </PostUserBox>
       <div>
-        &nbsp;&nbsp;# {postInfo.tag_name}
+        &nbsp;&nbsp;{postInfo.tag_name!=="" ? `#${postInfo.tag_name}` : null}
       </div>
       {postInfo.created_timestamp ? (
         <>
