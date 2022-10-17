@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { dbService } from "../lib/FStore";
 
@@ -10,7 +10,7 @@ const TagPage = () => {
   const [isNextTagExist, setIsNextTagExist] = useState(false);
   const [isShowContainer, setIsShowContainer] = useState(false);
 
-	const snapshotToPosts = (snapshot) => {
+	const snapshotToTags = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
         const tagObj = {
@@ -27,61 +27,59 @@ const TagPage = () => {
 		const firstSnapshot = await getDocs(
 			query(collection(dbService, "Tag"),
 				orderBy("tag_count", "desc"),
-				//startAfter(),
+				where("tag_count", ">", 0),
 				limit(20),
 			)
 		);
 		setNextTagSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
-		snapshotToPosts(firstSnapshot);
+		snapshotToTags(firstSnapshot);
 		if (firstSnapshot.docs.length < 20) {
 		  setIsNextTagExist(false);
 		} else {
 		  try {
-			const nextPostsSnapshot = await getDocs(
+			const nextTagsSnapshot = await getDocs(
 				query(collection(dbService, "Tag"),
 					orderBy("tag_count", "desc"),
+					where("tag_count", ">", 0),
 					startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
 					limit(1),
 				)
 			);
-			if (nextPostsSnapshot.docs.length === 0) {
-			  console.log("no more post data!");
+			if (nextTagsSnapshot.docs.length === 0) {
 			  setIsNextTagExist(false);
 			} else {
 			  setIsNextTagExist(true);
-			  console.log("more post data exist!");
 			}
 		  } catch (e) {
-			console.log("error with get Post!");
+			console.log("Error with getting tags!");
 		  }
 		}
 	};
-	
+
 		const moveNext = async () => {
 			const querySnapshot = await getDocs(
 				query(collection(dbService, "Tag"),
 					orderBy("tag_count", "desc"),
+					where("tag_count", ">", 0),
 					startAfter(nextTagSnapshot),
 					limit(20),
 				)
 			);
 			setNextTagSnapshot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-	
 			const afterSnapshot = await getDocs(
 				query(collection(dbService, "Tag"),
 					orderBy("tag_count", "desc"),
+					where("tag_count", ">", 0),
 					startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
 					limit(1),
 				)
 			);
-	
-			//setCountCurrentPost((prev) => prev + 10);
 			if (afterSnapshot.docs.length === 0) {
 				setIsNextTagExist(false);
 			} else {
 				setIsNextTagExist(true);
 			}
-			snapshotToPosts(querySnapshot);
+			snapshotToTags(querySnapshot);
 		};
 		const onClick = async (e) => {
 			e.preventDefault();
@@ -94,8 +92,8 @@ const TagPage = () => {
 		<>
 			<div>태그 페이지</div>
 			{tags.length !== 0 ? (
-              tags.map((tagDoc) => (
-								<div key={tagDoc.id} tagDoc={tagDoc}>#{tagDoc.tag_name}, {tagDoc.tag_count}개 Post</div>
+              tags.map((tagdoc) => (
+								<div key={tagdoc.id} tagdoc={tagdoc}>#{tagdoc.tag_name}, {tagdoc.tag_count} More</div>
               ))
             ) : (
               <div>잠시만 기다려 주세요</div>
@@ -103,7 +101,10 @@ const TagPage = () => {
 			{isNextTagExist && (
         <button onClick={onClick}>20개 더 보기</button>
 			)}
-			
+			<div>해당 태그를 가진 Tag들</div>
+			<div>
+
+			</div>
 		</>
 
 	)
