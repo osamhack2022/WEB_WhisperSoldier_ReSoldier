@@ -2,6 +2,7 @@ import { collection, getDocs, limit, orderBy, query, startAfter, where } from "f
 import { useEffect, useState } from "react";
 import { dbService } from "../lib/FStore";
 import SelectTagPostBoard from "../components/tag/SelectTagPostBoard";
+import { GetTagQuery } from "../modules/GetTagQuery";
 
 const TagPage = () => {
 
@@ -41,10 +42,13 @@ const TagPage = () => {
 
 	const getFirst = async () => {
 		const firstSnapshot = await getDocs(
-			query(collection(dbService, "Tag"),
+			/* query(collection(dbService, "Tag"),
 				orderBy("tag_count", "desc"),
 				where("tag_count", ">", 0),
 				limit(20),
+			) */
+			GetTagQuery(
+				"Tag", "tag_count", "tag_count", ">", 0, 20
 			)
 		);
 		setNextTagSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
@@ -54,12 +58,13 @@ const TagPage = () => {
 		} else {
 		  try {
 			const nextTagsSnapshot = await getDocs(
-				query(collection(dbService, "Tag"),
+				/* query(collection(dbService, "Tag"),
 					orderBy("tag_count", "desc"),
 					where("tag_count", ">", 0),
 					startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
 					limit(1),
-				)
+				) */
+				GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, firstSnapshot.docs[firstSnapshot.docs.length - 1], 1)
 			);
 			if (nextTagsSnapshot.docs.length === 0) {
 			  setIsNextTagExist(false);
