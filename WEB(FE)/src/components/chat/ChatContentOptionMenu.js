@@ -1,18 +1,51 @@
-import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import styled from "@emotion/styled";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+import { useState } from "react";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
 
 const ITEM_HEIGHT = 48;
 
+const ChatOptionMenuItem = styled(MenuItem)({
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  fontFamily: "IBM Plex Sans KR, sans-serif",
+  fontWeight: "500",
+  fontSize: "14px",
+  width: "120px",
+});
+
 const ChatContentOptionMenu = ({ onChatPairDeleteClick }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
     setAnchorEl(null);
   };
 
@@ -39,16 +72,39 @@ const ChatContentOptionMenu = ({ onChatPairDeleteClick }) => {
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: "20ch",
+            width: "120px",
           },
         }}
       >
-        <MenuItem selected={true} onClick={onChatPairDeleteClick}>
+        <ChatOptionMenuItem onClick={handleClickOpenDialog}>
           채팅 나가기
-        </MenuItem>
-        <MenuItem selected={false} onClick={handleClose}>
+        </ChatOptionMenuItem>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <WsDialogTitle>
+            정말로 채팅방을 나가시겠습니까? <br />
+            채팅방 나가면 채팅 내역은 삭제 됩니다.
+          </WsDialogTitle>
+          <DialogActions>
+            <ConfirmButton onClick={handleCloseDialog} color="primary">
+              취소
+            </ConfirmButton>
+            <CancelButton
+              onClick={onChatPairDeleteClick}
+              color="primary"
+              autoFocus
+            >
+              나가기
+            </CancelButton>
+          </DialogActions>
+        </Dialog>
+        <ChatOptionMenuItem onClick={handleClose}>
           채팅 신고하기
-        </MenuItem>
+        </ChatOptionMenuItem>
       </Menu>
     </div>
   );

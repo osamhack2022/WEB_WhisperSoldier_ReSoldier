@@ -2,43 +2,13 @@ import { useEffect, useState } from "react";
 import ChatPairElement from "./ChatPairElement";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
-
-const ChatListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: fit-content;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  min-width: 300px;
-  max-width: 300px;
-  ${media.tablet`
-  max-width : inherit;
-  min-width : inherit;
-  width:50%;`}
-  ${media.mobile`
-  width: 100%;
-  `}
-`;
-
-const ChatListTitleBox = styled.div`
-  margin: 0px 0px 10px 0px;
-  padding: 10px;
-  height: fit-content;
-  border-bottom: 1px solid rgb(189, 189, 189);
-  width: 100%;
-`;
-
-const ChatListTitleText = styled.div`
-  font-size: 16px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.2;
-`;
+import {
+  ChatListContainer,
+  ChatListTitleBox,
+  ChatListTitleText,
+  LoadingBox,
+  NoChatListBox,
+} from "../../styles/chat/ChatPairBoardStyle";
 
 const ChatPairBoard = ({
   toggleShowChatContent,
@@ -60,6 +30,7 @@ const ChatPairBoard = ({
     arrayUnion,
   } = dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
+  const [firstLoading, setFirstLoading] = useState(true);
 
   const getCurrentChatPair = async (pairId, chatWithUser) => {
     setCurrentChatPair(pairId);
@@ -93,6 +64,8 @@ const ChatPairBoard = ({
         ...doc.data(),
       }));
       setChatPairs(chatPairArray);
+      console.log("언제마다 출력되는지 살펴봅시다.");
+      setFirstLoading(false);
     });
     return () => {
       unsubscribe();
@@ -106,7 +79,9 @@ const ChatPairBoard = ({
           {currentUserInfo.providerData[0].displayName}님의 채팅 목록
         </ChatListTitleText>
       </ChatListTitleBox>
-      {chatPairs.length !== 0 ? (
+      {firstLoading ? (
+        <LoadingBox />
+      ) : chatPairs.length !== 0 ? (
         chatPairs.map((pair) => (
           <ChatPairElement
             key={pair.id}
@@ -123,7 +98,7 @@ const ChatPairBoard = ({
           ></ChatPairElement>
         ))
       ) : (
-        <div>잠시만 기다려 주세요</div>
+        <NoChatListBox />
       )}
     </ChatListContainer>
   );

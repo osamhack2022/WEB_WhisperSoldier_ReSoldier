@@ -91,10 +91,6 @@ const ChatPage = () => {
     //eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   console.log(currentChatPair);
-  // }, [currentChatPair]);
-
   return (
     <ChatContainer>
       {(isTablet || !showChatContent) && (
@@ -121,6 +117,7 @@ const ChatPage = () => {
           setCurrentChatPair={setCurrentChatPair}
           currentChatWithUser={currentChatWithUser}
           setCurrentChatWithUser={setCurrentChatWithUser}
+          setSHowChatContent={setSHowChatContent}
         ></ChatContentBoard>
       )}
     </ChatContainer>

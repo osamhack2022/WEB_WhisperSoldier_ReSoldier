@@ -75,7 +75,7 @@ export const ChatInputBox = styled.div`
 export const ChatInput = styled.textarea`
   background-color: #fbfbfb;
   width: 80%;
-  height: 40px;
+  height: 38px;
   max-height: 70px;
   flex-grow: 1;
   margin-right: 10px;
@@ -123,5 +123,60 @@ export const SendMessageButton = ({ onChatSubmit }) => {
     <SendMessageButtonBox onClick={onChatSubmit}>
       <SendMessageIcon></SendMessageIcon>
     </SendMessageButtonBox>
+  );
+};
+
+const NoSelectBoxStyle = styled.div`
+  width: 100%;
+  height: 523px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NoSelectText = styled.div`
+  margin: 5px 0px;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+export const NoSelectBox = () => {
+  return (
+    <NoSelectBoxStyle>
+      <NoSelectText>선택된 채팅이 없습니다.</NoSelectText>
+      <NoSelectText>채팅 목록을 선택해주세요.</NoSelectText>
+    </NoSelectBoxStyle>
+  );
+};
+
+const LoadingBoxStyle = styled.div`
+  width: 100%;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoadingText = styled.div`
+  margin: 5px 0px;
+  font-size: 16px;
+  font-weight: 400;
+`;
+
+export const LoadingBox = () => {
+  return (
+    <LoadingBoxStyle>
+      <LoadingText>잠시만 기다려주세요</LoadingText>
+    </LoadingBoxStyle>
+  );
+};
+
+export const StartChatBox = () => {
+  return (
+    <LoadingBoxStyle>
+      <LoadingText>메시지를 입력하여 대화를 시작해보세요!</LoadingText>
+    </LoadingBoxStyle>
   );
 };
