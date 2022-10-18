@@ -1,6 +1,5 @@
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { dbService } from "../lib/FStore";
 import SelectTagPostBoard from "../components/tag/SelectTagPostBoard";
 
@@ -8,11 +7,26 @@ const TagPage = () => {
 
 	const [tags, setTags] = useState([]);
 	const [selectedTag, setSelectedTag] = useState("");
-	const [tagPosts, setTagPosts] = useState([]);
   const [nextTagSnapshot, setNextTagSnapshot] = useState({});
-  const [nextPostSnapshot, setNextPostSnapshot] = useState({});
-  const [isNextTagExist, setIsNextTagExist] = useState(false);
+	const [isNextTagExist, setIsNextTagExist] = useState(false);
 
+	const [tagPosts, setTagPosts] = useState([]);
+  const [nextTagPostSnapshot, setNextTagPostSnapshot] = useState({});
+	const [isNextTagPostExist, setIsNextTagPostExist] = useState(false);
+
+	
+	const snapshotToTagPosts = (snapshot) => {
+    if (snapshot) {
+      snapshot.forEach((doc) => {
+        const postObj = {
+          ...doc.data(),
+          id: doc.id,
+        };
+        setTagPosts((prev) => [...prev, postObj]);
+      });
+    }
+	};
+	
 	const snapshotToTags = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
@@ -20,25 +34,11 @@ const TagPage = () => {
           ...doc.data(),
           id: doc.id,
         };
-        console.log(tagObj);
         setTags((prev) => [...prev, tagObj]);
       });
     }
 	};
 
-	const snapshotToPosts = (snapshot) => {
-    if (snapshot) {
-      snapshot.forEach((doc) => {
-        const postObj = {
-          ...doc.data(),
-          id: doc.id,
-        };
-        console.log(postObj);
-        setTagPosts((prev) => [...prev, postObj]);
-      });
-    }
-	};
-	
 	const getFirst = async () => {
 		const firstSnapshot = await getDocs(
 			query(collection(dbService, "Tag"),
@@ -97,12 +97,7 @@ const TagPage = () => {
 			}
 			snapshotToTags(querySnapshot);
 		};
-		const onClickForMore = async (e) => {
-			e.preventDefault();
-			moveNext();
-		};
-	
-	const getTagPosts = async (tagName) => {
+	const getFirstTagPosts = async (tagName) => {
 		const firstSnapshot = await getDocs(
 			query(collection(dbService, "WorryPost"),
 				orderBy("created_timestamp", "desc"),
@@ -110,8 +105,8 @@ const TagPage = () => {
 				limit(10),
 			)
 		);
-		setNextPostSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
-		snapshotToPosts(firstSnapshot);
+		setNextTagPostSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
+		snapshotToTagPosts(firstSnapshot);
 		if (firstSnapshot.docs.length < 10) {
 		  setIsNextTagExist(false);
 		} else {
@@ -120,25 +115,52 @@ const TagPage = () => {
 				query(collection(dbService, "WorryPost"),
 				orderBy("created_timestamp", "desc"),
 				where("tag_name", "==", tagName),
+				startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
 				limit(10),
 			)
 			);
 			if (nextTagsSnapshot.docs.length === 0) {
-			  setIsNextTagExist(false);
+			  setIsNextTagPostExist(false);
 			} else {
-			  setIsNextTagExist(true);
+			  setIsNextTagPostExist(true);
 			}
 		  } catch (e) {
-			console.log("Error with getting tags!");
+			console.log("Error with getting posts with the tag!");
 		  }
 		}
 	}
-	
+
+	const moveNextTagPosts = async (tagName) => {
+		const querySnapshot = await getDocs(
+			query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", "desc"),
+				where("tag_name", "==", tagName),
+				startAfter(nextTagPostSnapshot),
+				limit(10),
+			)
+		);
+		setNextTagPostSnapshot(querySnapshot.docs[querySnapshot.docs.length - 1]);
+		const afterSnapshot = await getDocs(
+			query(collection(dbService, "WorryPost"),
+				orderBy("created_timestamp", "desc"),
+				where("tag_name", "==", tagName),
+				startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
+				limit(1),
+			)
+		);
+		if (afterSnapshot.docs.length === 0) {
+			setIsNextTagPostExist(false);
+		} else {
+			setIsNextTagPostExist(true);
+		}
+		snapshotToTagPosts(querySnapshot);
+	};
+
 	const selectTag = async (tagName) => {
 		setSelectedTag(tagName);
 		setTagPosts([]);
 		console.log("tagName: ", tagName);
-		getTagPosts(tagName);
+		getFirstTagPosts(tagName);
 	}
 	useEffect(() => {
 		getFirst();
@@ -154,26 +176,17 @@ const TagPage = () => {
               <div>잠시만 기다려 주세요</div>
 			)}
 			{isNextTagExist && (
-        <button onClick={onClickForMore}>20개 더 보기</button>
+				<button onClick={moveNext}>20개 더 보기</button>
 			)}
 
 
-			<SelectTagPostBoard></SelectTagPostBoard>
-			<div>
-				{selectedTag === "" ? <>태그를 선택해 주세요</> :
-					<>해당 태그를 가진 Post들</>
-				}
-				{(selectedTag !== "") && (tagPosts.length === 0) ? (
-							<div>포스트를 불러오는 중이거나 해당 태그의 포스트가 존재하지 않습니다.</div>
-            ) : (
-							tagPosts.map((tagpost) => (
-								<div key={tagpost.id}>
-									<br />
-									<Link  to={`/post/${tagpost.id}`}>{tagpost.text}</Link>
-								</div>
-							))
-			)}
-			</div>
+			<SelectTagPostBoard
+				selectedTag={selectedTag}
+				tagPosts={tagPosts}
+				isNextTagPostExist={isNextTagPostExist}
+				moveNextTagPosts={moveNextTagPosts}
+			></SelectTagPostBoard>
+			
 		</>
 
 	)
