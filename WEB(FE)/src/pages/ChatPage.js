@@ -12,6 +12,36 @@ import { dbService } from "../lib/FStore";
 import media from "../modules/MediaQuery";
 import { StartFirstChat } from "../store/ChatStore";
 
+const SuccesDeleteInfoTextBox = styled.div`
+  position: absolute;
+  z-index: 3;
+  font-size: 14px;
+  text-align: center;
+  top: 82px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 14px 10px 8px 10px;
+  border-radius: 5px;
+  height: 48px;
+  width: fit-content;
+  background-color: rgba(166, 86, 70, 10);
+  opacity: ${(props) => (props.success ? "0.9" : "0")};
+  visibility: ${(props) => (props.success ? "visible" : "hidden")};
+  /* display: ${(props) => (props.success ? "block" : "none")}; */
+  color: #ffffff;
+  transition: all 0.5s;
+  ${media.tablet`
+    padding: 14px 5px 16px 8px;
+    width: 250px;
+  `}
+  ${media.mobile`
+  top : 72px;
+  left : 5vw;
+  transform: inherit;
+  width: 90%;
+  `}
+`;
+
 const ChatContainer = styled.div`
   margin: 0px auto;
   width: 960px;
@@ -45,6 +75,11 @@ const ChatPage = () => {
   const [currentChatWithUser, setCurrentChatWithUser] = useState({
     nickname: "",
     profileImg: "",
+  });
+
+  const [successInfo, setSuccessInfo] = useState({
+    deleteProcess: false,
+    chatWithUserNickname: "",
   });
 
   const startChat = async () => {
@@ -93,6 +128,9 @@ const ChatPage = () => {
 
   return (
     <ChatContainer>
+      <SuccesDeleteInfoTextBox success={successInfo.deleteProcess}>
+        {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다
+      </SuccesDeleteInfoTextBox>
       {(isTablet || !showChatContent) && (
         <ChatPairBoard
           toggleShowChatContent={toggleShowChatContent}
@@ -118,6 +156,7 @@ const ChatPage = () => {
           currentChatWithUser={currentChatWithUser}
           setCurrentChatWithUser={setCurrentChatWithUser}
           setSHowChatContent={setSHowChatContent}
+          setSuccessInfo={setSuccessInfo}
         ></ChatContentBoard>
       )}
     </ChatContainer>
