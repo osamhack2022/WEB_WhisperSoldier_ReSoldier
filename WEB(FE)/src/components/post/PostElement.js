@@ -2,10 +2,12 @@ import { useSetRecoilState } from "recoil";
 import calTimeToString from "../../modules/CalTime";
 import { CurrentScrollPos, PostInfo } from "../../store/PostStore";
 import {
+  PostAdditionalInfoBox,
   PostElementBox,
   PostElementCommentCount,
   PostElementInfoBox,
   PostElementLikeCount,
+  PostElementTag,
   PostElementTime,
   PostElementTitle,
 } from "../../styles/post/PostElementStyle";
@@ -23,6 +25,7 @@ const PostElement = ({ post }) => {
       postContent: post.text,
       like_count: post.like_count,
       comment_count: post.comment_count,
+      tag_name: post.tag_name,
     }));
     setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);
@@ -38,9 +41,14 @@ const PostElement = ({ post }) => {
           {post.comment_count ? post.comment_count : "0"}
         </PostElementCommentCount>
       </PostElementInfoBox>
-      <PostElementTime>
-        {calTimeToString(post.created_timestamp)} {post.like_timestamp &&" | "+calTimeToString(post.like_timestamp)+"에 공감했습니다"}
-      </PostElementTime>
+      <PostAdditionalInfoBox>
+        <PostElementTime>
+          {calTimeToString(post.created_timestamp)}{" "}
+          {post.like_timestamp &&
+            " | " + calTimeToString(post.like_timestamp) + "에 공감했습니다"}
+        </PostElementTime>
+        <PostElementTag>{post.tag_name && `#${post.tag_name}`}</PostElementTag>
+      </PostAdditionalInfoBox>
     </PostElementBox>
   );
 };

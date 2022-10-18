@@ -3,6 +3,7 @@ import {
   MyInfoIconBox,
   PostContentBox,
   PostContentLikeCount,
+  PostContentTag,
   PostContentTiltleText,
   PostContentTime,
   PostUserBox,
@@ -34,6 +35,10 @@ const PostContentTitle = ({
       </PostUserBox>
       {postInfo.created_timestamp ? (
         <>
+          <PostContentTag>
+            {postInfo.tag_name && `#${postInfo.tag_name}`}
+          </PostContentTag>
+
           <PostContentTime>
             {postInfo.created_timestamp !== null
               ? postInfo.created_timestamp

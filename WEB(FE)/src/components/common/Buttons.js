@@ -12,6 +12,8 @@ import { MdOutlineCancel } from "react-icons/md";
 import { HiOutlineTrash } from "react-icons/hi";
 import { IoHeartDislikeOutline } from "react-icons/io5";
 import media from "../../modules/MediaQuery";
+import { useMediaQuery } from "react-responsive";
+import { TabletQuery } from "../../lib/Const";
 
 export const AuthButton = styled.button`
   height: 48px;
@@ -339,10 +341,10 @@ const BackButtonBlock = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 5px 0px;
-  padding-right: ${(props) => props.isMobile && "10px"};
-  margin-right: ${(props) => props.isMobile && "10px"};
+  padding-right: ${(props) => props.mobile && "10px"};
+  margin-right: ${(props) => props.mobile && "10px"};
   border-right: ${(props) =>
-    props.isMobile && !props.notRight && "1px solid #dcdcdc"};
+    props.mobile && !props.notRight && "1px solid #dcdcdc"};
   text-decoration: none;
   height: 30px;
   width: fit-content;
@@ -354,11 +356,12 @@ const BackButtonBlock = styled.div`
   }
 `;
 
-export const BackButton = ({ goBack, children, isMobile, notRight }) => {
+export const BackButton = ({ goBack, children, notRight }) => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
   return (
-    <BackButtonBlock onClick={goBack} isMobile={isMobile} notRight={notRight}>
+    <BackButtonBlock onClick={goBack} mobile={!isTablet} notRight={notRight}>
       <BackButtonImg></BackButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText isMobile={!isTablet}>{children}</CommonButtonText>
     </BackButtonBlock>
   );
 };

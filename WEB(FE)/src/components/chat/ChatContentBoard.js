@@ -100,7 +100,8 @@ const ChatContentBoard = ({
     if (e !== null) {
       e.preventDefault();
     }
-    if (chatInput.message.length === 0) {
+    if (chatInput.message.length === 0 || chatInput.message === "\n") {
+      setInput((prev) => ({ ...prev, message: "" }));
       setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
       setTimeout(() => {
         setErrorChatInfo((prev) => ({ ...prev, isErr: false }));

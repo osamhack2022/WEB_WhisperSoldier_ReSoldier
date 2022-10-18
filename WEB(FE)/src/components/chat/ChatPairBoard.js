@@ -64,7 +64,6 @@ const ChatPairBoard = ({
         ...doc.data(),
       }));
       setChatPairs(chatPairArray);
-      console.log("언제마다 출력되는지 살펴봅시다.");
       setFirstLoading(false);
     });
     return () => {

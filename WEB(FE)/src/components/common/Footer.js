@@ -1,4 +1,6 @@
+import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
+import { TabletQuery } from "../../lib/Const";
 
 const FooterBox = styled.footer`
   width: 100%;
@@ -31,18 +33,24 @@ const FooterBoxForMobile = styled.footer`
   align-items: center;
 `;
 
-
-const Footer = ({isTablet}) => {
+const Footer = () => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
   const curDate = new Date();
   return (
     <>
-      {isTablet?<FooterBox>
-        <FooterText>
-          copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
-        </FooterText>
-      </FooterBox>:<FooterBoxForMobile><FooterText>
-          copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
-        </FooterText></FooterBoxForMobile>}
+      {isTablet ? (
+        <FooterBox>
+          <FooterText>
+            copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
+          </FooterText>
+        </FooterBox>
+      ) : (
+        <FooterBoxForMobile>
+          <FooterText>
+            copyrightⓒ {curDate.getFullYear()} All rights reserved by ReSoldier
+          </FooterText>
+        </FooterBoxForMobile>
+      )}
     </>
   );
 };

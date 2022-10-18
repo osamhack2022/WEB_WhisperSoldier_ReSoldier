@@ -22,8 +22,17 @@ export const WriteUserButtonContainer = ({
   isMobile,
   postInfo,
 }) => {
-  const { doc, deleteDoc, collection, getDocs, orderBy, query, where } =
-    dbFunction;
+  const {
+    doc,
+    deleteDoc,
+    collection,
+    getDocs,
+    orderBy,
+    query,
+    where,
+    updateDoc,
+    increment,
+  } = dbFunction;
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const navigate = useNavigate();
@@ -34,6 +43,23 @@ export const WriteUserButtonContainer = ({
       await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
         alert("글이 삭제되었습니다.")
       );
+
+      const oldtagSnap = await getDocs(
+        query(
+          collection(dbService, "Tag"),
+          where("tag_name", "==", postInfo.tag_name)
+        )
+      );
+      if (oldtagSnap.docs.length === 0) {
+        console.log("Could not find Old Tag");
+      } else {
+        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+          tag_count: increment(-1),
+        });
+        console.log(
+          "Old Tag count incremented by -1 as the tag EXISTS in collection"
+        );
+      }
 
       /*삭제된 post 내 속한 댓글 삭제 */
       const querySnapshot = await getDocs(
