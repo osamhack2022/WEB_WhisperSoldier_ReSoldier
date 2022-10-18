@@ -2,7 +2,7 @@ import { collection, getDocs, limit, orderBy, query, startAfter, where } from "f
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { dbService } from "../lib/FStore";
-
+import SelectTagPostBoard from "../components/tag/SelectTagPostBoard";
 
 const TagPage = () => {
 
@@ -156,20 +156,22 @@ const TagPage = () => {
 			{isNextTagExist && (
         <button onClick={onClickForMore}>20개 더 보기</button>
 			)}
+
+
+			<SelectTagPostBoard></SelectTagPostBoard>
 			<div>
-				{selectedTag === "" ? <>태그를 선택해 주세요: {selectedTag}</> :
+				{selectedTag === "" ? <>태그를 선택해 주세요</> :
 					<>해당 태그를 가진 Post들</>
 				}
-				{tagPosts.length !== 0 ? (
-              tagPosts.map((tagpost) => (
+				{(selectedTag !== "") && (tagPosts.length === 0) ? (
+							<div>포스트를 불러오는 중이거나 해당 태그의 포스트가 존재하지 않습니다.</div>
+            ) : (
+							tagPosts.map((tagpost) => (
 								<div key={tagpost.id}>
-									<br />
 									<br />
 									<Link  to={`/post/${tagpost.id}`}>{tagpost.text}</Link>
 								</div>
-              ))
-            ) : (
-              <div>포스트를 불러오는 중이거나 해당 태그의 포스트가 존재하지 않습니다.</div>
+							))
 			)}
 			</div>
 		</>
