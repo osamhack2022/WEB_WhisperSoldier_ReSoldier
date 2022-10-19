@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 
@@ -96,6 +97,7 @@ const TagBox = () => {
             <TagContentRight>{tag[2]}</TagContentRight>
           </TagElement>
         ))}
+        <Link to={"/tags"}>태그 페이지로</Link>
       </TagContentBox>
     </TagBoxStyle>
   );

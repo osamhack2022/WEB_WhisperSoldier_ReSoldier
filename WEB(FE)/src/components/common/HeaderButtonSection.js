@@ -5,7 +5,7 @@ import { ChatButton, UserProfileButton, WritePostButton } from "./Buttons";
 
 const ButtonSection = styled.div`
   position: absolute;
-  right: 20px;
+  right: 0px;
   display: flex;
   flex-direction: row;
   align-items: center;

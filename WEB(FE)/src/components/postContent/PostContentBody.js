@@ -72,6 +72,13 @@ const PostContentBody = ({
             onChange={onChange}
           ></InputForm>
           <BottonLine></BottonLine>
+          <input
+            name="editTag"
+            value={state.editTag}
+            type="text"
+            required
+            onChange={onChange}
+          ></input>
         </>
       ) : !errorPostInfo ? (
         <PostContentText>{postInfo.postContent}</PostContentText>
