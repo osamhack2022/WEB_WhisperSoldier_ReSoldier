@@ -7,9 +7,7 @@ import {
 } from "../../styles/common/HomeContainerStyle";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
-// import DashBoardBox from "./DashBoardBox";
 import PostBox from "./PostBox";
-import { Link } from "react-router-dom";
 
 const HomeContainer = () => {
   return (
@@ -23,7 +21,6 @@ const HomeContainer = () => {
           <PostBox isLikeDesc={true}></PostBox>
         </HomeContentLowerBox>
       </HomeMainContentBox>
-
       <HomeSubContentBox>
         <TagBox></TagBox>
       </HomeSubContentBox>

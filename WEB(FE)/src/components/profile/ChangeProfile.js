@@ -20,7 +20,7 @@ import {
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   dbFunction,
   dbService,

@@ -51,7 +51,7 @@ const HeaderBox = styled.div`
   `}
 `;
 
-const Header = () => {
+const Header = ({ isAdmin }) => {
   const location = useLocation();
   const isTablet = useMediaQuery({ query: TabletQuery });
   return (
@@ -63,7 +63,7 @@ const Header = () => {
             {location.pathname !== "/search" && (
               <SearchSection toLink="/search"></SearchSection>
             )}
-            <HeaderButtonSection></HeaderButtonSection>
+            <HeaderButtonSection isAdmin={isAdmin}></HeaderButtonSection>
           </>
         )}
       </HeaderBox>

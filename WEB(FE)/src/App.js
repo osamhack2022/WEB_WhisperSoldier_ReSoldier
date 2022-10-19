@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 //import { useRecoilState, useRecoilValue } from "recoil";
 //import { UserInfo } from "./store/AuthStore";
 import HomePage from "./pages/HomePage";
@@ -14,89 +14,69 @@ import ResetPage from "./pages/ResetPage";
 import TagPage from "./pages/TagPage";
 import "./styles/App.css";
 import { useEffect, useState } from "react";
-import { authService, FApiKey } from "./lib/FAuth";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { authService } from "./lib/FAuth";
+import { onAuthStateChanged } from "firebase/auth";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
 import BoardPage from "./pages/BoardPage";
 import { whisperSodlierSessionKey } from "./lib/Const";
 import WelcomePage from "./pages/WelcomePage";
-import { useRecoilState } from "recoil";
-import { UserInfo } from "./store/AuthStore";
+// import { useRecoilState } from "recoil";
+// import { UserInfo } from "./store/AuthStore";
 import LoadPage from "./pages/LoadPage";
+import { dbFunction, dbService } from "./lib/FStore";
 
 const Body = styled.div`
   position: relative;
 `;
 
-/*각 페이지 라우트*/
 const App = () => {
-  const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  // const [userInfo, setUserInfo] = useRecoilState(UserInfo);
+  const { getDoc, doc } = dbFunction;
   const [sessionObj, setSessionObj] = useState(
     JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
   );
-  //const auth = authService.currentUser;
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const currentUserKey = JSON.parse(
-    sessionStorage.getItem(whisperSodlierSessionKey)
-  );
-  const location = useLocation();
-
-  /*
-  useEffect(() => {
-    console.log(auth);
-    if (auth) {
-      setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
+  const getAdmin = async () => {
+    const currentUserInfo = await getDoc(
+      doc(dbService, "User", sessionObj.uid)
+    );
+    if (currentUserInfo.data() && currentUserInfo.data().admin) {
+      setIsAdmin(true);
     }
-  }, [auth]);*/
+  };
 
   useEffect(() => {
-    onAuthStateChanged(authService, (u) => {
-      if (u) {
+    onAuthStateChanged(authService, (user) => {
+      if (user) {
         if (authService.currentUser.emailVerified) {
-          // setUserInfo((prev) => ({
-          //   ...prev,
-          //   emailChecked: true,
-          //   isLogin: true,
-          // }));
           setSessionObj(
             JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
           );
-        } else {
-          // setUserInfo((prev) => ({
-          //   ...prev,
-          //   emailChecked: false,
-          //   isLogin: true,
-          // }));
+          getAdmin();
         }
       } else {
-        //setUserInfo((prev) => ({ ...prev, isLogin: false }));
         setSessionObj(null);
+        setIsAdmin(false);
       }
     });
   }, []);
 
-  // useEffect(() => {
-  //   setSessionObj(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));
-  // }, []);
-
-  useEffect(() => {
-    if ("/" === location.pathname && userInfo.refresh) {
-      window.location.reload();
-      setUserInfo((prev) => ({ ...prev, refresh: false }));
-    }
-  }, [location]);
   return (
     <>
       {sessionObj ? (
         sessionObj.providerData[0].displayName ? (
           <Body>
-            <Header></Header>
+            <Header isAdmin={isAdmin}></Header>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/post/:id" element={<PostPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route
+                path="/profile"
+                element={<ProfilePage isAdmin={isAdmin} />}
+              />
               <Route path="/write" element={<WritePage />} />
               <Route path="/board" element={<BoardPage />} />
               <Route path="/search" element={<SearchPage />} />

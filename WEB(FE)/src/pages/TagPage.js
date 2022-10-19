@@ -63,11 +63,6 @@ const TagPage = () => {
 
   const getFirst = async () => {
     const firstSnapshot = await getDocs(
-      /* query(collection(dbService, "Tag"),
-				orderBy("tag_count", "desc"),
-				where("tag_count", ">", 0),
-				limit(20),
-			) */
       GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
     );
     setNextTagSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
@@ -77,12 +72,6 @@ const TagPage = () => {
     } else {
       try {
         const nextTagsSnapshot = await getDocs(
-          /* query(collection(dbService, "Tag"),
-					orderBy("tag_count", "desc"),
-					where("tag_count", ">", 0),
-					startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
-					limit(1),
-				) */
           GetTagQuery(
             "Tag",
             "tag_count",
