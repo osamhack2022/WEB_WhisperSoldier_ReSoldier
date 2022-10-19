@@ -3,6 +3,21 @@ import { dbService } from "../lib/FStore";
 import SelectTagPostBoard from "../components/tag/SelectTagPostBoard";
 import { GetTagQuery } from "../modules/GetTagQuery";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import media from "../modules/MediaQuery";
+
+export const TagContainerBox = styled.div`
+  margin: 0px auto;
+  width: 960px;
+  ${media.smallDesktop`
+    margin: inherit;
+    width: inherit;
+    padding: 0px 10vw;
+  `}
+  ${media.mobile`
+    padding: 0px 5vw;
+  `}
+`;
 
 const TagPage = () => {
 
@@ -171,7 +186,7 @@ const TagPage = () => {
 		getFirst();
 	}, [])
 	return (
-		<>
+		<TagContainerBox>
 			<div>태그 페이지</div>
 			{tags.length !== 0 ? (
               tags.map((tagdoc) => (
@@ -192,7 +207,7 @@ const TagPage = () => {
 				moveNextTagPosts={moveNextTagPosts}
 			></SelectTagPostBoard>
 			
-		</>
+		</TagContainerBox>
 
 	)
 }
