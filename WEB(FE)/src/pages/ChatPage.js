@@ -72,8 +72,23 @@ const ChatPage = () => {
   };
 
   const [currentChatPair, setCurrentChatPair] = useState("");
-  const [chattingWith, setChattingWith] = useState("");
-  const { getDoc, updateDoc, doc, arrayUnion } = dbFunction;
+  const [currentChatWithUser, setCurrentChatWithUser] = useState({
+    nickname: "",
+    profileImg: "",
+  });
+
+  const [successInfo, setSuccessInfo] = useState({
+    deleteProcess: false,
+    chatWithUserNickname: "",
+  });
+
+  const startChat = async () => {
+    setCurrentChatPair(startFirstChat.docUID);
+    const startChatDoc = await getDoc(
+      doc(dbService, "ChatPair", startFirstChat.docUID)
+    );
+
+    const startChatInfo = startChatDoc.data();
 
     let chatWithUserDoc;
     if (currentUserInfo.uid !== startChatInfo.member_ids[0]) {
