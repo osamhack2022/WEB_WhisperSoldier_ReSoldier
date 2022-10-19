@@ -11,6 +11,7 @@ import WritePage from "./pages/WritePage";
 import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
 import ResetPage from "./pages/ResetPage";
+import TagPage from "./pages/TagPage";
 import "./styles/App.css";
 import { useEffect, useState } from "react";
 import { authService, FApiKey } from "./lib/FAuth";

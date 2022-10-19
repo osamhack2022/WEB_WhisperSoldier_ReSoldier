@@ -71,6 +71,13 @@ const PostContentBody = ({
             required
             onChange={onChange}
           ></InputForm>
+          <input
+            name="editTag"
+            value={state.editTag}
+            type="text"
+            required
+            onChange={onChange}
+          ></input>
           <BottonLine></BottonLine>
           <input
             name="editTag"

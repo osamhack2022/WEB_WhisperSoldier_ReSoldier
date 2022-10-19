@@ -9,25 +9,24 @@ import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
 // import DashBoardBox from "./DashBoardBox";
 import PostBox from "./PostBox";
+import { Link } from "react-router-dom";
 
 const HomeContainer = () => {
   return (
     <HomeContainerBox>
       <HomeMainContentBox>
-      <HomeContentUpperBox>
-        <BannerBox></BannerBox>
-      </HomeContentUpperBox>
-      <HomeContentLowerBox>
-        <PostBox></PostBox>
-        <PostBox isLikeDesc={true}></PostBox>
-      </HomeContentLowerBox>
+        <HomeContentUpperBox>
+          <BannerBox></BannerBox>
+        </HomeContentUpperBox>
+        <HomeContentLowerBox>
+          <PostBox></PostBox>
+          <PostBox isLikeDesc={true}></PostBox>
+        </HomeContentLowerBox>
       </HomeMainContentBox>
 
       <HomeSubContentBox>
         <TagBox></TagBox>
       </HomeSubContentBox>
-      
-      
     </HomeContainerBox>
   );
 };
