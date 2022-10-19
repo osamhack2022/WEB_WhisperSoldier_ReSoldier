@@ -1,18 +1,12 @@
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  where,
-} from "firebase/firestore";
-import { dbService } from "../lib/FStore";
+import { dbFunction } from "../lib/FStore";
 import SelectTagPostBoard from "../components/tag/SelectTagPostBoard";
 import { GetTagQuery } from "../modules/GetTagQuery";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import media from "../modules/MediaQuery";
+import { SideOptionContainer } from "../styles/post/PostBoardStyle";
+import { SideOptionFormForPostBoard } from "../components/common/SideOptionForm";
+import getTimeDepth from "../modules/GetTimeDepth";
 
 export const TagContainerBox = styled.div`
   margin: 0px auto;
@@ -28,6 +22,7 @@ export const TagContainerBox = styled.div`
 `;
 
 const TagPage = () => {
+  const { getDocs } = dbFunction;
   const [tags, setTags] = useState([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [nextTagSnapshot, setNextTagSnapshot] = useState({});
@@ -36,6 +31,17 @@ const TagPage = () => {
   const [tagPosts, setTagPosts] = useState([]);
   const [nextTagPostSnapshot, setNextTagPostSnapshot] = useState({});
   const [isNextTagPostExist, setIsNextTagPostExist] = useState(false);
+
+  const [timeDepthValue, setTimeDepthValue] = useState("week");
+  const [timeDepthSelect, setTimeDepthSelect] = useState({
+    week: true,
+    month: false,
+    halfYear: false,
+    fullYear: false,
+    allTime: false,
+  });
+  const [isResultDesc, setIsResultDesc] = useState(true);
+  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 
   const snapshotToTagPosts = (snapshot) => {
     if (snapshot) {
@@ -68,7 +74,7 @@ const TagPage = () => {
 				where("tag_count", ">", 0),
 				limit(20),
 			) */
-      GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+      GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
     );
     setNextTagSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToTags(firstSnapshot);
@@ -83,15 +89,7 @@ const TagPage = () => {
 					startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
 					limit(1),
 				) */
-          GetTagQuery(
-            "Tag",
-            "tag_count",
-            "tag_count",
-            ">",
-            0,
-            firstSnapshot.docs[firstSnapshot.docs.length - 1],
-            1
-          )
+          GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 1, firstSnapshot.docs[firstSnapshot.docs.length - 1])
         );
         if (nextTagsSnapshot.docs.length === 0) {
           setIsNextTagExist(false);
@@ -106,23 +104,25 @@ const TagPage = () => {
 
   const moveNext = async () => {
     const querySnapshot = await getDocs(
-      query(
+      /* query(
         collection(dbService, "Tag"),
         orderBy("tag_count", "desc"),
         where("tag_count", ">", 0),
         startAfter(nextTagSnapshot),
         limit(20)
-      )
+      ) */
+      GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, nextTagSnapshot)
     );
     setNextTagSnapshot(querySnapshot.docs[querySnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
-      query(
+      /* query(
         collection(dbService, "Tag"),
         orderBy("tag_count", "desc"),
         where("tag_count", ">", 0),
         startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
         limit(1)
-      )
+      ) */
+      GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 1, querySnapshot.docs[querySnapshot.docs.length - 1])
     );
     if (afterSnapshot.docs.length === 0) {
       setIsNextTagExist(false);
@@ -131,14 +131,16 @@ const TagPage = () => {
     }
     snapshotToTags(querySnapshot);
   };
-  const getFirstTagPosts = async (tagName) => {
+
+  const getFirstTagPosts = async (tagName, descOrAsc, timeDepthString) => {
     const firstSnapshot = await getDocs(
-      query(
+      /* query(
         collection(dbService, "WorryPost"),
         orderBy("created_timestamp", "desc"),
         where("tag_name", "==", tagName),
         limit(10)
-      )
+      ) */
+      GetTagQuery("WorryPost", "created_timestamp", descOrAsc, "tag_name", "==", tagName, 10, null, getTimeDepth(timeDepthString))
     );
     setNextTagPostSnapshot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToTagPosts(firstSnapshot);
@@ -147,13 +149,14 @@ const TagPage = () => {
     } else {
       try {
         const nextTagsSnapshot = await getDocs(
-          query(
+          /* query(
             collection(dbService, "WorryPost"),
             orderBy("created_timestamp", "desc"),
             where("tag_name", "==", tagName),
             startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
             limit(10)
-          )
+          ) */
+          GetTagQuery("WorryPost", "created_timestamp", descOrAsc, "tag_name", "==", tagName, 10, firstSnapshot.docs[firstSnapshot.docs.length - 1], getTimeDepth(timeDepthString))
         );
         if (nextTagsSnapshot.docs.length === 0) {
           setIsNextTagPostExist(false);
@@ -166,25 +169,27 @@ const TagPage = () => {
     }
   };
 
-  const moveNextTagPosts = async (tagName) => {
+  const moveNextTagPosts = async (tagName, descOrAsc, timeDepthString) => {
     const querySnapshot = await getDocs(
-      query(
+      /* query(
         collection(dbService, "WorryPost"),
         orderBy("created_timestamp", "desc"),
         where("tag_name", "==", tagName),
         startAfter(nextTagPostSnapshot),
         limit(10)
-      )
+      ) */
+      GetTagQuery("WorryPost", "created_timestamp", descOrAsc, "tag_name", "==", tagName, 10, nextTagPostSnapshot, getTimeDepth(timeDepthString))
     );
     setNextTagPostSnapshot(querySnapshot.docs[querySnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
-      query(
+      /* query(
         collection(dbService, "WorryPost"),
         orderBy("created_timestamp", "desc"),
         where("tag_name", "==", tagName),
         startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
         limit(1)
-      )
+      ) */
+      GetTagQuery("WorryPost", "created_timestamp", descOrAsc, "tag_name", "==", tagName, 1, querySnapshot.docs[querySnapshot.docs.length - 1], getTimeDepth(timeDepthString))
     );
     if (afterSnapshot.docs.length === 0) {
       setIsNextTagPostExist(false);
@@ -193,12 +198,26 @@ const TagPage = () => {
     }
     snapshotToTagPosts(querySnapshot);
   };
+  const onSearchSubmit = async (e) => {
+    e.preventDefault();
+    if (selectedTag !== "") {
+      //setNotSearch(false);
+      //setLoading(true);
+      setTagPosts([]);
+      getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
+      //setResultList([]);
+      //setCurrentSearchCount(0);
+    } else {
+      console.log("아직 태그를 선택하지 않았습니다.")
+    }
+  };
+
 
   const selectTag = async (tagName) => {
     setSelectedTag(tagName);
     setTagPosts([]);
     console.log("tagName: ", tagName);
-    getFirstTagPosts(tagName);
+    getFirstTagPosts(tagName, orderDescOrAsc, timeDepthValue);
   };
   useEffect(() => {
     getFirst();
@@ -226,8 +245,22 @@ const TagPage = () => {
         tagPosts={tagPosts}
         isNextTagPostExist={isNextTagPostExist}
         moveNextTagPosts={moveNextTagPosts}
+        orderDescOrAsc={orderDescOrAsc}
+        timeDepthValue={timeDepthValue}
       ></SelectTagPostBoard>
+    <SideOptionContainer>
+    <SideOptionFormForPostBoard
+      onSearchSubmit={onSearchSubmit}
+      setTimeDepthValue={setTimeDepthValue}
+      timeDepthSelect={timeDepthSelect}
+      setTimeDepthSelect={setTimeDepthSelect}
+      isResultDesc={isResultDesc}
+      setIsResultDesc={setIsResultDesc}
+      setOrderDescOrAsc={setOrderDescOrAsc}
+    ></SideOptionFormForPostBoard>
+  </SideOptionContainer>
     </TagContainerBox>
+    
   );
 };
 

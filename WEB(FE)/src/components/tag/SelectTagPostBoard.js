@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const SelectTagPostBoard = ({selectedTag, tagPosts, isNextTagPostExist, moveNextTagPosts}) => {
+const SelectTagPostBoard = ({selectedTag, tagPosts, isNextTagPostExist, moveNextTagPosts, orderDescOrAsc, timeDepthValue}) => {
 	
 	
 	
@@ -21,7 +21,7 @@ const SelectTagPostBoard = ({selectedTag, tagPosts, isNextTagPostExist, moveNext
 						))
 			)}
 			{(isNextTagPostExist && (selectedTag !== "")) && (
-				<button onClick={() => moveNextTagPosts(selectedTag)}>10개 더 보기</button>
+				<button onClick={() => moveNextTagPosts(selectedTag, orderDescOrAsc, timeDepthValue)}>10개 더 보기</button>
 			)}
 		</div>
 	)
