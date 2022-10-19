@@ -3,6 +3,7 @@ import {
   MyInfoIconBox,
   PostContentBox,
   PostContentLikeCount,
+  PostContentTag,
   PostContentTiltleText,
   PostContentTime,
   PostUserBox,
@@ -32,8 +33,15 @@ const PostContentTitle = ({
           !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>
         )}
       </PostUserBox>
+      <div>
+        &nbsp;&nbsp;{postInfo.tag_name!=="" ? `#${postInfo.tag_name}` : null}
+      </div>
       {postInfo.created_timestamp ? (
         <>
+          <PostContentTag>
+            {postInfo.tag_name && `#${postInfo.tag_name}`}
+          </PostContentTag>
+
           <PostContentTime>
             {postInfo.created_timestamp !== null
               ? postInfo.created_timestamp

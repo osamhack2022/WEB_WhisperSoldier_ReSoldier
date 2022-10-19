@@ -84,6 +84,18 @@ export const PostContentTime = styled.div`
   font-weight: 400;
 `;
 
+export const PostContentTag = styled.div`
+  margin-left: 10px;
+  font-size: 12px;
+  text-align: right;
+  position: absolute;
+  right: 220px;
+  margin-right: 20px;
+  letter-spacing: -0.34px;
+  color: #4f4f4f;
+  font-weight: 400;
+`;
+
 const PostContentLikeIcon = styled(AiOutlineHeart)`
   height: 12px;
   width: 12px;

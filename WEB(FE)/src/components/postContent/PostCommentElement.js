@@ -13,8 +13,10 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import { StartFirstChat } from "../../store/ChatStore";
 import {
   CommentBox,
   CommentButtonBox,
@@ -54,6 +56,15 @@ const PostCommentElement = ({
   const [commentUserNickname, setCommentUserNickname] = useState("");
   const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
 
+  const { uid: currentUserUid } = JSON.parse(
+    sessionStorage.getItem(whisperSodlierSessionKey)
+  );
+
+  const { query, collection, getDocs, where, addDoc, serverTimestamp } =
+    dbFunction;
+
+  const setStartFirstChat = useSetRecoilState(StartFirstChat);
+
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
       collection(dbService, "CommentLike"),
@@ -63,10 +74,6 @@ const PostCommentElement = ({
   };
 
   const getIsLiked = async () => {
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
-
     const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false);
@@ -83,9 +90,6 @@ const PostCommentElement = ({
 
   const toggleLike = async () => {
     console.log("toggleLike - Comment");
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
     const commentDocRef = doc(dbService, "Comment", commentElement.id);
     if (isLikedByMe) {
       const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
@@ -117,15 +121,8 @@ const PostCommentElement = ({
   };
 
   const onClickChatButtonFromComment = async (e) => {
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
     e.preventDefault();
-    //아직은 따로 설정을 안해줘서 undefined인 모양이다 -> 원래 uid로 조회가 안되는듯!
-    const { query, collection, getDocs, where, addDoc, serverTimestamp } =
-      dbFunction;
     //채팅방이 이미 존재하는지 체크하기
-    console.log("commentElement commentor_id :", commentElement.commentor_id);
     let checkQuery;
     if (commentElement.commentor_id <= currentUserUid) {
       checkQuery = query(
@@ -140,34 +137,14 @@ const PostCommentElement = ({
     }
     const checkSnapshot = await getDocs(checkQuery);
     if (checkSnapshot.docs.length === 0) {
-      //만약 없다면, 새로 만들기
-      console.log("찾은 개수 0. 채팅방을 생성하기");
-      const commentorSnap = await getDoc(
-        doc(dbService, "User", commentElement.commentor_id)
-      );
-      const commentor_displayName = commentorSnap.data().nickname;
-      const currentUserSnap = await getDoc(
-        doc(dbService, "User", currentUserUid)
-      );
-      const currentUser_displayName = currentUserSnap.data().nickname;
-
-      await addDoc(collection(dbService, "ChatPair"), {
+      console.log("새 채팅방을 생성");
+      const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
         is_report_and_block: false,
         member_ids:
           commentElement.commentor_id <= currentUserUid
             ? [commentElement.commentor_id, currentUserUid]
             : [currentUserUid, commentElement.commentor_id],
-        members: [
-          {
-            member_displayname: commentor_displayName,
-            member_id: commentElement.commentor_id,
-          },
-          {
-            member_displayname: currentUser_displayName,
-            member_id: currentUserUid,
-          },
-        ],
         recentMessage: {
           message_text: null,
           read_by: [],
@@ -175,11 +152,19 @@ const PostCommentElement = ({
           sent_timestamp: serverTimestamp(),
         },
       });
-      console.log("채팅방 생성 완료. chatPage로 navigate...");
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: newChatRef.id,
+      }));
       navigate("/message");
     } else {
-      //있다면, 일단 채팅페이지로 navigate
-      console.log("찾았음! chatPage로 내비게이트");
+      console.log("기존 채팅방 존재");
+      setStartFirstChat((prev) => ({
+        ...prev,
+        exist: true,
+        docUID: checkSnapshot.docs[0].id,
+      }));
       navigate("/message");
     }
   };

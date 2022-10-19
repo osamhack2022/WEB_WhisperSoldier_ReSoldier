@@ -11,7 +11,7 @@ import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 const BannerBoxStyle = styled.div`
   padding: 0px;
   position: relative;
-  width: 710px;
+  width: 760px;
   height: 240px;
 
   background-color: #fbfbfb;

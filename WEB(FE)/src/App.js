@@ -11,6 +11,7 @@ import WritePage from "./pages/WritePage";
 import SearchPage from "./pages/SearchPage";
 import ChatPage from "./pages/ChatPage";
 import ResetPage from "./pages/ResetPage";
+import TagPage from "./pages/TagPage";
 import "./styles/App.css";
 import { useEffect, useState } from "react";
 import { authService, FApiKey } from "./lib/FAuth";
@@ -24,6 +25,7 @@ import WelcomePage from "./pages/WelcomePage";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "./store/AuthStore";
 import LoadPage from "./pages/LoadPage";
+import TagPage from "./pages/TagPage";
 
 const Body = styled.div`
   position: relative;
@@ -100,6 +102,7 @@ const App = () => {
               <Route path="/board" element={<BoardPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/message" element={<ChatPage />} />
+              <Route path="/tags" element={<TagPage />} />
             </Routes>
             <Footer></Footer>
           </Body>

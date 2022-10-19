@@ -9,6 +9,7 @@ export const PostInfo = atom({
     like_count: 0,
     comment_count: 0,
     postContent: "",
+    tag_name: "",
   },
 });
 

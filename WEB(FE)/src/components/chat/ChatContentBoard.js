@@ -9,19 +9,34 @@ import {
   ChatContentText,
   ChatInput,
   ChatInputBox,
+  LoadingBox,
+  NoSelectBox,
   SendMessageButton,
+  StartChatBox,
 } from "../../styles/chat/ChatContentBoardStyle";
 import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { getDoc } from "firebase/firestore";
+import styled from "styled-components";
+import ChatContentOptionMenu from "./ChatContentOptionMenu";
+
+const ChatCotentBoardBlock = styled.div`
+  margin: 10px;
+`;
+
+const RightMoreMenuButtonBox = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+`;
 
 const ChatContentBoard = ({
   currentChatPair,
-  getCurrentChatPair,
   setCurrentChatPair,
-  chattingWith,
-  setChattingWith,
+  currentChatWithUser,
+  setCurrentChatWithUser,
   setSHowChatContent,
+  setSuccessInfo,
 }) => {
   const { uid: currentUserUid } = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
@@ -45,42 +60,54 @@ const ChatContentBoard = ({
     addDoc,
     arrayUnion,
   } = dbFunction;
+  const [firstLoading, setFirstLoading] = useState(true);
 
   const onChatPairDeleteClick = async (e) => {
     e.preventDefault();
-    const check = window.confirm(
-      "정말로 채팅방을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."
+    //getCurrentChatPair("", ""); //과연 이곳에 위치한게 맞을까?
+    setSuccessInfo((prev) => ({
+      ...prev,
+      chatWithUserNickname: currentChatWithUser.nickname,
+    }));
+    const chatMessageSnap = await getDocs(
+      query(collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`))
     );
-    if (check) {
-      getCurrentChatPair("", "");
-      const chatMessageSnap = await getDocs(
-        query(collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`))
+    chatMessageSnap.forEach((chatMsgDoc) => {
+      deleteDoc(
+        doc(dbService, `ChatPair/${currentChatPair}/ChatMessage`, chatMsgDoc.id)
       );
-      chatMessageSnap.forEach((chatMsgDoc) => {
-        deleteDoc(
-          doc(
-            dbService,
-            `ChatPair/${currentChatPair}/ChatMessage`,
-            chatMsgDoc.id
-          )
-        );
-      });
-      await deleteDoc(doc(dbService, "ChatPair", currentChatPair)).then(
-        alert("채팅방이 삭제되었습니다.")
-      );
-      setChats([]);
-    }
+    });
+    await deleteDoc(doc(dbService, "ChatPair", currentChatPair));
+    setChats([]);
+    //getCurrentChatPair("", ""); //결국은 이곳에 위치를 해야될듯.... -> 그리고 이 함수를 굳이 여기서 쓸 필요가 없음
+    setCurrentChatPair("");
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      nickname: "",
+      profileImg: "",
+    }));
+    setSHowChatContent(false);
+    setSuccessInfo((prev) => ({ ...prev, deleteProcess: true }));
+    setTimeout(() => {
+      setSuccessInfo((prev) => ({
+        ...prev,
+        deleteProcess: false,
+        chatWithUserNickname: "",
+      }));
+    }, 3000);
   };
-  const onChatSubmit = (e) => {
-    e.preventDefault();
-    if (chatInput.message.length === 0) {
+  const onChatSubmit = (e = null) => {
+    if (e !== null) {
+      e.preventDefault();
+    }
+    if (chatInput.message.length === 0 || chatInput.message === "\n") {
+      setInput((prev) => ({ ...prev, message: "" }));
       setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
       setTimeout(() => {
         setErrorChatInfo((prev) => ({ ...prev, isErr: false }));
       }, 3000);
     } else {
       if (currentChatPair !== "") {
-        console.log("CurrenChatPair is not empty :) : ", currentChatPair);
         //submit chat to database
         addDoc(
           collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
@@ -116,18 +143,23 @@ const ChatContentBoard = ({
     }
   }, []);
 
-  const onKeyUp = useCallback((e) => {
+  const onKeyUp = (e) => {
     e.preventDefault();
     if (e.keyCode === 13) {
       if (!e.shiftKey) {
         // 메시지 전송 함수
+        onChatSubmit();
+        setTimeout(() => {
+          autoResizeTextarea();
+        }, 5);
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
-    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    //scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
 
+    setChats([]);
     if (currentChatPair !== "") {
       const q = query(
         collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
@@ -141,9 +173,9 @@ const ChatContentBoard = ({
               ...msg.data(),
             }));
             setChats(chatsArray);
-            console.log("updating recentMesage");
             updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-              "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+              "recentMessage.read_by": arrayUnion(currentUserUid),
+              // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
             });
           }
           if (change.type === "removed") {
@@ -152,61 +184,88 @@ const ChatContentBoard = ({
               ...msg.data(),
             }));
             setChats(chatsArray);
-            console.log("updating recentMesage");
-            getCurrentChatPair("", "");
+            setCurrentChatPair("");
+            setCurrentChatWithUser((prev) => ({
+              ...prev,
+              nickname: "",
+              profileImg: "",
+            }));
+            setSHowChatContent(false);
           }
         });
+        setFirstLoading(false);
       });
       return () => {
         unsubscribe();
+
+        // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       };
     } else {
       console.log("no selected chat pair");
     }
   }, [currentChatPair]);
 
+  useEffect(() => {
+    if (currentChatPair !== "") {
+      scrollRef.current.scrollIntoView({
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  }, [chats]);
+
   return (
     <ChatContentContainer>
-      <ChatContentHeaderBox>
-        <MyInfoIconBox></MyInfoIconBox>
-        <ChatContentText>{chattingWith}</ChatContentText>
-        <button onClick={onChatPairDeleteClick}>채팅방 삭제하기</button>
-      </ChatContentHeaderBox>
-      <ChatContentBox ref={scrollRef}>
-        {chats.length !== 0 ? (
-          chats.map((msg) => (
-            <ChatContentElement
-              key={msg.id}
-              msg={msg}
-              isMe={msg.sent_by === currentUserUid}
-            ></ChatContentElement>
-          ))
-        ) : currentChatPair !== "" ? (
-          <div>아직 채팅이 없습니다. 채팅을 시작해보세요</div>
-        ) : (
-          <>
-            <div>선택된 대화가 없습니다.</div>
-            <div>대화 목록을 선택해주세요.</div>
-          </>
-        )}
-      </ChatContentBox>
+      {currentChatPair !== "" ? (
+        <>
+          <ChatContentHeaderBox>
+            <MyInfoIconBox
+              myProfileImg={currentChatWithUser.profileImg}
+            ></MyInfoIconBox>
+            <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
+            <RightMoreMenuButtonBox>
+              <ChatContentOptionMenu
+                onChatPairDeleteClick={onChatPairDeleteClick}
+              />
+            </RightMoreMenuButtonBox>
+          </ChatContentHeaderBox>
+          <ChatContentBox>
+            {firstLoading ? (
+              <LoadingBox />
+            ) : chats.length !== 0 ? (
+              chats.map((msg) => (
+                <ChatContentElement
+                  key={msg.id}
+                  msg={msg}
+                  isMe={msg.sent_by === currentUserUid}
+                ></ChatContentElement>
+              ))
+            ) : (
+              <StartChatBox />
+            )}
 
-      <ChatInputBox>
-        <ChatInput
-          className="autoTextarea"
-          name="message"
-          type="text"
-          onChange={onChange}
-          value={chatInput.message}
-          placeholder="메시지를 입력하세요"
-          isErr={errorChatInfo.isErr}
-          autoFocus
-          maxLength={2000}
-          onInput={autoResizeTextarea}
-          onKeyUp={onKeyUp}
-        ></ChatInput>
-        <SendMessageButton onChatSubmit={onChatSubmit}></SendMessageButton>
-      </ChatInputBox>
+            <ChatCotentBoardBlock ref={scrollRef} />
+          </ChatContentBox>
+          <ChatInputBox>
+            <ChatInput
+              className="autoTextarea"
+              name="message"
+              type="text"
+              onChange={onChange}
+              value={chatInput.message}
+              placeholder="메시지를 입력하세요"
+              isErr={errorChatInfo.isErr}
+              autoFocus
+              maxLength={2000}
+              onInput={autoResizeTextarea}
+              onKeyUp={onKeyUp}
+            ></ChatInput>
+            <SendMessageButton onChatSubmit={onChatSubmit} />
+          </ChatInputBox>
+        </>
+      ) : (
+        <NoSelectBox />
+      )}
     </ChatContentContainer>
   );
 };

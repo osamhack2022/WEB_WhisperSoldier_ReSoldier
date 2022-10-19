@@ -1,14 +1,46 @@
-import { useCallback, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
-import { whisperSodlierSessionKey } from "../lib/Const";
-import { dbService, dbFunction } from "../lib/FStore";
 import { BackButton } from "../components/common/Buttons";
 import SideButtonBox from "../components/common/SideButtonBox";
-import { TabletQuery } from "../lib/Const";
+import { TabletQuery, whisperSodlierSessionKey } from "../lib/Const";
+import { dbService } from "../lib/FStore";
 import media from "../modules/MediaQuery";
+import { StartFirstChat } from "../store/ChatStore";
+
+const SuccesDeleteInfoTextBox = styled.div`
+  position: absolute;
+  z-index: 3;
+  font-size: 14px;
+  text-align: center;
+  top: 82px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 14px 10px 8px 10px;
+  border-radius: 5px;
+  height: 48px;
+  width: fit-content;
+  background-color: rgba(166, 86, 70, 10);
+  opacity: ${(props) => (props.success ? "0.9" : "0")};
+  visibility: ${(props) => (props.success ? "visible" : "hidden")};
+  /* display: ${(props) => (props.success ? "block" : "none")}; */
+  color: #ffffff;
+  transition: all 0.5s;
+  ${media.tablet`
+    padding: 14px 5px 16px 8px;
+    width: 250px;
+  `}
+  ${media.mobile`
+  top : 72px;
+  left : 5vw;
+  transform: inherit;
+  width: 90%;
+  `}
+`;
 
 const ChatContainer = styled.div`
   margin: 0px auto;
@@ -27,56 +59,68 @@ const ChatContainer = styled.div`
 `;
 
 const ChatPage = () => {
-  const [currentChatPair, setCurrentChatPair] = useState("");
-  const [chattingWith, setChattingWith] = useState("");
-  const { getDoc, updateDoc, doc, arrayUnion } = dbFunction;
+  const currentUserInfo = JSON.parse(
+    sessionStorage.getItem(whisperSodlierSessionKey)
+  );
 
-  const getCurrentChatPair = async (pairId, members) => {
-    const { uid: currentUserUid } = JSON.parse(
-      sessionStorage.getItem(whisperSodlierSessionKey)
-    );
-    console.log("pairId: ", pairId);
-    setCurrentChatPair(pairId);
-    //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
-    if (pairId !== "") {
-      const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
-      const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
-      console.log("chatPairReadByArray: ", chatPairReadByArray);
-      //읽었는지 여부 업데이트
-      if (chatPairReadByArray.includes(currentUserUid)) {
-        console.log("already read");
-      } else {
-        console.log("updating recentMesage");
-        updateDoc(doc(dbService, "ChatPair", pairId), {
-          "recentMessage.read_by": arrayUnion(currentUserUid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
-        });
-      }
-    }
-    if (members !== "") {
-      console.log("Members: ", members);
-      currentUserUid === members[0].member_id
-        ? setChattingWith(members[1].member_displayname)
-        : currentUserUid === members[1].member_id
-        ? setChattingWith(members[0].member_displayname)
-        : console.log("오류입니다");
-    } else {
-      setChattingWith("");
-    }
-  };
   const isTablet = useMediaQuery({ query: TabletQuery });
-  const [showChatContent, setSHowChatContent] = useState(true);
+  const [showChatContent, setSHowChatContent] = useState(false);
+  const [startFirstChat, setStartFirstChat] = useRecoilState(StartFirstChat);
 
   const toggleShowChatContent = () => {
     setSHowChatContent(!showChatContent);
   };
+
+  const [currentChatPair, setCurrentChatPair] = useState("");
+  const [chattingWith, setChattingWith] = useState("");
+  const { getDoc, updateDoc, doc, arrayUnion } = dbFunction;
+
+    let chatWithUserDoc;
+    if (currentUserInfo.uid !== startChatInfo.member_ids[0]) {
+      chatWithUserDoc = await getDoc(
+        doc(dbService, "User", startChatInfo.member_ids[0])
+      );
+    } else {
+      chatWithUserDoc = await getDoc(
+        doc(dbService, "User", startChatInfo.member_ids[1])
+      );
+    }
+
+    if (chatWithUserDoc.data()) {
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        nickname: chatWithUserDoc.data().nickname,
+        profileImg: chatWithUserDoc.data().profileImg,
+      }));
+    } else {
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        nickname: "알 수 없는 사용자",
+        profileImg: "",
+      }));
+    }
+  };
+
+  useEffect(() => {
+    console.log(startFirstChat);
+    if (startFirstChat.exist) {
+      startChat();
+      setSHowChatContent(true);
+      setStartFirstChat((prev) => ({ ...prev, exist: false, docUID: "" }));
+    }
+    //eslint-disable-next-line
+  }, []);
+
   return (
     <ChatContainer>
+      <SuccesDeleteInfoTextBox success={successInfo.deleteProcess}>
+        {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다
+      </SuccesDeleteInfoTextBox>
       {(isTablet || !showChatContent) && (
         <ChatPairBoard
           toggleShowChatContent={toggleShowChatContent}
-          getCurrentChatPair={getCurrentChatPair}
           setCurrentChatPair={setCurrentChatPair}
-          currentChatPair={currentChatPair}
+          setCurrentChatWithUser={setCurrentChatWithUser}
         ></ChatPairBoard>
       )}
       {!isTablet && showChatContent && (
@@ -93,10 +137,11 @@ const ChatPage = () => {
       {(isTablet || showChatContent) && (
         <ChatContentBoard
           currentChatPair={currentChatPair}
-          getCurrentChatPair={getCurrentChatPair}
           setCurrentChatPair={setCurrentChatPair}
-          chattingWith={chattingWith}
-          setChattingWith={setChattingWith}
+          currentChatWithUser={currentChatWithUser}
+          setCurrentChatWithUser={setCurrentChatWithUser}
+          setSHowChatContent={setSHowChatContent}
+          setSuccessInfo={setSuccessInfo}
         ></ChatContentBoard>
       )}
     </ChatContainer>

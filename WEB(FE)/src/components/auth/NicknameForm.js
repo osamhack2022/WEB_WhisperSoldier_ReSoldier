@@ -13,7 +13,6 @@ import {
   AuthErrorButton,
   FindPasswordButton,
   FindPasswordButtonContainer,
-  FindPasswordButtonsContainer,
 } from "../common/Buttons";
 import { AuthInputBox } from "../common/InputBox";
 import { FirstComment } from "../common/Logos";
@@ -58,16 +57,9 @@ const NicknameForm = ({ setNicknameStep }) => {
           displayName: inputValue.nickname,
         })
           .then(() => {
-            // Profile updated!
-            // ...
             console.log("닉네임 설정 성공");
-
-            setNicknameStep(false);
-            // window.location.reload();
           })
           .catch((error) => {
-            // An error occurred
-            // ...
             console.log(error);
           });
       } else {

@@ -14,7 +14,6 @@ import {
   storageFunction,
   storageService,
 } from "../../lib/FStore";
-import { UserInfo } from "../../store/AuthStore";
 import { FirstComment } from "../common/Logos";
 import AuthTemplate from "./AuthTemplate";
 import { Button } from "@mui/material";

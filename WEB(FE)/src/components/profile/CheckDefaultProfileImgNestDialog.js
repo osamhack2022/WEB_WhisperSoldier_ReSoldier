@@ -16,7 +16,7 @@ import { SetDefaultProfileImgButton } from "../../styles/profile/ChangeProfileSt
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { updateDoc } from "firebase/firestore";
 
-const ConfirmButton = styled(Button)({
+export const ConfirmButton = styled(Button)({
   color: "#0d552c",
   fontFamily: "IBM Plex Sans KR, sans-serif",
   fontWeight: "400",
@@ -28,7 +28,7 @@ const ConfirmButton = styled(Button)({
   },
 });
 
-const CancelButton = styled(Button)({
+export const CancelButton = styled(Button)({
   color: "#a65646",
   fontFamily: "IBM Plex Sans KR, sans-serif",
   fontWeight: "400",
@@ -49,8 +49,7 @@ const CheckDefaultProfileImgDialog = ({
 }) => {
   const [open, setOpen] = useState(false);
   const { ref, deleteObject } = storageFunction;
-  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
-    dbFunction;
+  const { doc } = dbFunction;
 
   const handleClickOpen = () => {
     setOpen(true);

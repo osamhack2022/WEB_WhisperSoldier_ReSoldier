@@ -15,16 +15,12 @@ import {
   NicknameTextBox,
   SectionBox,
   SectionTitle,
-  UploadProfileImgButton,
   ConfirmUploadImgButton,
-  WthdrawButton,
 } from "../../styles/profile/ChangeProfileStyle";
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { UpdateProfileInfo } from "../../store/ProfileStore";
 import {
   dbFunction,
   dbService,
@@ -32,13 +28,8 @@ import {
   storageService,
 } from "../../lib/FStore";
 import { updateDoc } from "firebase/firestore";
-//import styled from "styled-components";
-import media from "../../modules/MediaQuery";
-import { UserInfo } from "../../store/AuthStore";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/system";
@@ -108,7 +99,6 @@ const ChangeProfile = ({
   myProfileImg,
   setMyProfileImg,
 }) => {
-  // console.log(JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)));/
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
   const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
     dbFunction;
@@ -120,10 +110,7 @@ const ChangeProfile = ({
     isErrNickname: false,
     isProfileImg: false,
   });
-  // const [myProfileImg, setMyProfileImg] = useState(
-  //   JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
-  //     .photoURL
-  // );
+
   const [errMeg, setErrMsg] = useState({
     errNicknameMsg: "",
     errProfileImgMsg: "",
@@ -140,7 +127,6 @@ const ChangeProfile = ({
 
   const [profileImg, setProfileImg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  //const onSetUserImg = async () => {};
 
   const onSetNickName = async () => {
     if (currentNickname.nickname.length !== 0) {
@@ -169,10 +155,7 @@ const ChangeProfile = ({
             displayName: currentNickname.nickname,
           })
             .then(() => {
-              // Profile updated!
-              // ...
               console.log("닉네임 변경 성공");
-              // alert("닉네임 변경을 성공했습니다.");
               setUserName(currentNickname.nickname);
               setSuccessInfo((prev) => ({ ...prev, nickname: true }));
               setTimeout(() => {
@@ -180,8 +163,6 @@ const ChangeProfile = ({
               }, 3000);
             })
             .catch((error) => {
-              // An error occurred
-              // ...
               console.log(error);
             });
         } else {
@@ -208,15 +189,12 @@ const ChangeProfile = ({
   };
 
   const onFileChange = (e) => {
-    //console.log(e.target.files);
     const {
       target: { files },
     } = e;
     const theFile = files[0];
     const reader = new FileReader();
-    // reader.readAsDataURL(theFile);
     reader.onloadend = (finishedEvent) => {
-      //console.log(finishedEvent);
       const {
         currentTarget: { result },
       } = finishedEvent;
@@ -248,13 +226,10 @@ const ChangeProfile = ({
           photoURL: profileImgUrl,
         })
           .then(() => {
-            // Profile updated!
-            // ...
             if (myProfileImg) {
               deleteObject(ref(storageService, myProfileImg));
             }
             console.log("프로필 사진 변경 성공");
-            // alert("닉네임 변경을 성공했습니다.");
             updateDoc(
               doc(
                 dbService,
@@ -275,8 +250,6 @@ const ChangeProfile = ({
             }, 3000);
           })
           .catch((error) => {
-            // An error occurred
-            // ...
             console.log(error);
           });
       } catch (e) {
@@ -289,8 +262,6 @@ const ChangeProfile = ({
         setErrProfileInfo({ isProfileImg: false });
       }, 3000);
     }
-
-    //setUpdateProfileInfo(true);
   };
 
   return (
@@ -317,10 +288,6 @@ const ChangeProfile = ({
           ) : (
             <MyInfoIcon></MyInfoIcon>
           )}
-
-          {/* <ChangeProfileImgButton isMarginLeft={true}>
-            사진 변경하기
-          </ChangeProfileImgButton> */}
           <ChnageProfileImgButton onClick={handleOpen}>
             프로필 사진 변경
           </ChnageProfileImgButton>

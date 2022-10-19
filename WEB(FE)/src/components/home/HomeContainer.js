@@ -2,24 +2,31 @@ import {
   HomeContainerBox,
   HomeContentLowerBox,
   HomeContentUpperBox,
+  HomeMainContentBox,
+  HomeSubContentBox,
 } from "../../styles/common/HomeContainerStyle";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
-import DashBoardBox from "./DashBoardBox";
+// import DashBoardBox from "./DashBoardBox";
 import PostBox from "./PostBox";
+import { Link } from "react-router-dom";
 
 const HomeContainer = () => {
   return (
     <HomeContainerBox>
-      <HomeContentUpperBox>
-        <BannerBox></BannerBox>
-        <DashBoardBox></DashBoardBox>
-      </HomeContentUpperBox>
-      <HomeContentLowerBox>
-        <PostBox></PostBox>
-        <PostBox isLikeDesc={true}></PostBox>
+      <HomeMainContentBox>
+        <HomeContentUpperBox>
+          <BannerBox></BannerBox>
+        </HomeContentUpperBox>
+        <HomeContentLowerBox>
+          <PostBox></PostBox>
+          <PostBox isLikeDesc={true}></PostBox>
+        </HomeContentLowerBox>
+      </HomeMainContentBox>
+
+      <HomeSubContentBox>
         <TagBox></TagBox>
-      </HomeContentLowerBox>
+      </HomeSubContentBox>
     </HomeContainerBox>
   );
 };

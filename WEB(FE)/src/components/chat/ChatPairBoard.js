@@ -2,136 +2,102 @@ import { useEffect, useState } from "react";
 import ChatPairElement from "./ChatPairElement";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
-import { arrayUnion, serverTimestamp } from "firebase/firestore";
-
-const ChatListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: fit-content;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  width: 300px;
-  ${media.tablet`
-  width:50%;`}
-  ${media.mobile`
-  width: 100%;
-  `}
-`;
-
-const ChatListTitleBox = styled.div`
-  margin: 0px 0px 10px 0px;
-  padding: 10px;
-  height: fit-content;
-  border-bottom: 1px solid rgb(189, 189, 189);
-  width: 100%;
-`;
-
-const ChatListTitleText = styled.div`
-  font-size: 16px;
-  text-align: center;
-  font-weight: 600;
-  line-height: 1.2;
-`;
+import {
+  ChatListContainer,
+  ChatListTitleBox,
+  ChatListTitleText,
+  LoadingBox,
+  NoChatListBox,
+} from "../../styles/chat/ChatPairBoardStyle";
 
 const ChatPairBoard = ({
-  getCurrentChatPair,
-  setCurrentChatPair,
-  currentChatPair,
   toggleShowChatContent,
+  setCurrentChatPair,
+  setCurrentChatWithUser,
 }) => {
-  const { uid: currentUserUid } = JSON.parse(
+  const currentUserInfo = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
-  const { query, collection, orderBy, onSnapshot, where, doc, updateDoc } =
-    dbFunction;
+  const {
+    query,
+    collection,
+    orderBy,
+    onSnapshot,
+    where,
+    doc,
+    updateDoc,
+    getDoc,
+    arrayUnion,
+  } = dbFunction;
   const [chatPairs, setChatPairs] = useState([]);
-  console.log("currentUserUid: ", currentUserUid);
-  console.log("chatPairs: ", chatPairs);
-  /* const onClickTestButton = () => {
-    const docRef = doc(dbService, "ChatPair", "YWZl68ZRzIFXhdYECb4b");
-    updateDoc(docRef, {
-      recentMessage: {
-        message_text: "이 문자열이 보인다면 테스트가 성공했을겁니다아마도",
-        read_by: arrayUnion(currentUserUid), // 반대는 arrayRemove()
-        sent_by: currentUserUid,
-        sent_timestamp: serverTimestamp(),
-      }
-    });
-  } */
+  const [firstLoading, setFirstLoading] = useState(true);
+
+  const getCurrentChatPair = async (pairId, chatWithUser) => {
+    setCurrentChatPair(pairId);
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      nickname: chatWithUser.nickname,
+      profileImg: chatWithUser.profileImg,
+    }));
+
+    //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
+    const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
+    const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
+    //읽었는지 여부 업데이트
+    if (chatPairReadByArray.includes(currentUserInfo.uid)) {
+    } else {
+      updateDoc(doc(dbService, "ChatPair", pairId), {
+        "recentMessage.read_by": arrayUnion(currentUserInfo.uid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+      });
+    }
+  };
+
   useEffect(() => {
     const chatPairQuery = query(
       collection(dbService, "ChatPair"),
       orderBy("recentMessage.sent_timestamp", "desc"),
-      where("member_ids", "array-contains", currentUserUid)
+      where("member_ids", "array-contains", currentUserInfo.uid)
     );
     const unsubscribe = onSnapshot(chatPairQuery, (snapshot) => {
       const chatPairArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("chatPairArray: ", chatPairArray);
       setChatPairs(chatPairArray);
+      setFirstLoading(false);
     });
-    /* onSnapshot(chatPairQuery, (snapshot) => {
-      setChatPairs([]);
-      snapshot.forEach((doc) => {
-        const chatPairObj = {
-          ...doc.data(),
-          id: doc.id,
-        };
-        if (doc.data().sent_timestamp !== null) {
-          setChatPairs((prev) => [...prev, chatPairObj]);
-        }
-      
-      });
-    }) */
-
-    /* const chatMessageQuery = query(
-      collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`)
-    )
-    onSnapshot(chatMessageQuery, (snapshot) => {
-      if (snapshot.docs.length === 0) {
-      }
-    }); */
     return () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <ChatListContainer>
       <ChatListTitleBox>
-        <ChatListTitleText>{"내 채팅(가칭) 리스트"}</ChatListTitleText>
+        <ChatListTitleText>
+          {currentUserInfo.providerData[0].displayName}님의 채팅 목록
+        </ChatListTitleText>
       </ChatListTitleBox>
-      {chatPairs.length !== 0 ? (
-        chatPairs.map((pair, index) => (
+      {firstLoading ? (
+        <LoadingBox />
+      ) : chatPairs.length !== 0 ? (
+        chatPairs.map((pair) => (
           <ChatPairElement
             key={pair.id}
             //onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}
             getCurrentChatPair={getCurrentChatPair}
+            toggleShowChatContent={toggleShowChatContent}
             pair={pair}
-            currentUserUid={currentUserUid}
-            index={index}
+            currentUserUid={currentUserInfo.uid}
             isNewMessage={
               pair.recentMessage.read_by !== undefined
-                ? !pair.recentMessage.read_by.includes(currentUserUid)
+                ? !pair.recentMessage.read_by.includes(currentUserInfo.uid)
                 : false
-            }
-            isNewMessageTest={
-              pair.recentMessage.read_by !== undefined
-                ? pair.recentMessage.read_by.includes(
-                    "qezdqWPqnzLpubc1dYft4b5tJ6q2"
-                  )
-                : "doesnt exist"
             }
           ></ChatPairElement>
         ))
       ) : (
-        <div>잠시만 기다려 주세요</div>
+        <NoChatListBox />
       )}
     </ChatListContainer>
   );

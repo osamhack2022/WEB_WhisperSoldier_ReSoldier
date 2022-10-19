@@ -19,6 +19,12 @@ export const WriteContainerBox = styled.div`
   `}
 `;
 
+export const MainContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const SideOptionContainer = styled.div`
   margin-left: 10px;
   height: fit-content;

@@ -105,3 +105,17 @@ export const PostElementInfoBox = styled.div`
   flex-direction: row;
   margin: 3px 0px;
 `;
+
+export const PostAdditionalInfoBox = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const PostElementTag = styled.div`
+  margin-left: 10px;
+  font-size: 12px;
+  text-align: left;
+  letter-spacing: 0.48px;
+  color: #bdbdbd;
+  font-weight: 400;
+`;
