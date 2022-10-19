@@ -25,7 +25,6 @@ import WelcomePage from "./pages/WelcomePage";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "./store/AuthStore";
 import LoadPage from "./pages/LoadPage";
-import TagPage from "./pages/TagPage";
 
 const Body = styled.div`
   position: relative;
