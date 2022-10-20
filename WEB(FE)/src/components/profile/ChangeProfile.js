@@ -334,7 +334,7 @@ const ChangeProfile = ({
                 <ConfirmUploadImgButton
                   onClick={onUploadProfileImg}
                   error={errProfileInfo.isProfileImg}
-                  loading={isLoading}
+                  isloading={isLoading}
                 >
                   {errProfileInfo.isProfileImg
                     ? errMeg.errProfileImgMsg

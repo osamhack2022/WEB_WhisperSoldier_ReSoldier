@@ -2,6 +2,7 @@ import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 
 export const HomeContainerBox = styled.div`
+  position: relative;
   margin: 0px auto;
   width: 960px;
   display: flex;
@@ -21,16 +22,16 @@ export const HomeContainerBox = styled.div`
 `;
 
 export const HomeMainContentBox = styled.div`
-flex-grow :1;
-width : 510px;
-${media.tablet`
+  flex-grow: 1;
+  width: 510px;
+  ${media.tablet`
     width : 100%
   `}
 `;
 
 export const HomeSubContentBox = styled.div`
-width : 200px;
-${media.tablet`
+  width: 200px;
+  ${media.tablet`
     width : 100%;
   `}
 `;

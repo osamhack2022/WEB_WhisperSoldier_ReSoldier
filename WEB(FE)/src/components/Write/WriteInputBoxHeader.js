@@ -1,6 +1,13 @@
 import { BsPencilSquare } from "react-icons/bs";
 import styled from "styled-components";
 import { WritePostTitle } from "./WriteComponent";
+import { Dialog, DialogActions } from "@mui/material";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+import { useState } from "react";
 
 const WritePostButtonShape = styled.button`
   position: relative;
@@ -64,16 +71,57 @@ export const WritePostHeaderBox = styled.div`
   justify-content: space-between;
 `;
 
-const WritePostHeader = ({ onClick, errorWritePostInfo }) => {
+const WritePostHeader = ({
+  onClick,
+  errorWritePostInfo,
+  state,
+  setErrorWritePostInfo,
+}) => {
+  const [openDialogForWritePost, setOpenDialogForWritePost] = useState(false);
+  const handleClickOpenDialogForWritePost = () => {
+    if (state.postContent.length === 0) {
+      setErrorWritePostInfo((prev) => ({ ...prev, isError: true }));
+      setTimeout(() => {
+        setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
+      }, 3000);
+    } else {
+      setOpenDialogForWritePost(true);
+    }
+  };
+
+  const handleCloseDialogForWritePost = () => {
+    setOpenDialogForWritePost(false);
+  };
   return (
     <WritePostHeaderBox>
       <WritePostTitle>고민 작성하기</WritePostTitle>
       <WritePostButton
-        onClick={onClick}
+        onClick={handleClickOpenDialogForWritePost}
         errorWritePostInfo={errorWritePostInfo}
       >
         {errorWritePostInfo ? "내용을 입력해 주세요" : "작성완료"}
       </WritePostButton>
+      <Dialog
+        open={openDialogForWritePost}
+        onClose={handleCloseDialogForWritePost}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <WsDialogTitle>고민 작성 완료하시겠습니까?</WsDialogTitle>
+        <DialogActions>
+          <CancelButton
+            // onClick={}
+            onClick={handleCloseDialogForWritePost}
+            color="primary"
+            autoFocus
+          >
+            취소
+          </CancelButton>
+          <ConfirmButton color="primary" onClick={onClick}>
+            작성완료
+          </ConfirmButton>
+        </DialogActions>
+      </Dialog>
     </WritePostHeaderBox>
   );
 };

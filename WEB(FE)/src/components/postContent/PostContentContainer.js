@@ -99,69 +99,56 @@ const PostContentContainer = ({ isAdmin }) => {
         setErrorEditInfo(false);
       }, 3000);
     } else {
-      const check = window.confirm("정말로 수정하시겠습니까?");
-      if (check) {
-        await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-          text: state.editContent,
-          tag_name: state.editTag,
-        })
-          .then(
-            setPostInfo((prev) => ({
-              ...prev,
-              postContent: state.editContent,
-              tag_name: state.editTag,
-            }))
-          )
-          .then(alert("수정되었습니다."))
-          .then(setEditing(false));
+      await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+        text: state.editContent,
+        tag_name: state.editTag,
+      })
+        .then(
+          setPostInfo((prev) => ({
+            ...prev,
+            postContent: state.editContent,
+            tag_name: state.editTag,
+          }))
+        )
+        .then(setEditing(false));
 
-        const oldtagSnap = await getDocs(
+      const oldtagSnap = await getDocs(
+        query(
+          collection(dbService, "Tag"),
+          where("tag_name", "==", postInfo.tag_name)
+        )
+      );
+      if (oldtagSnap.docs.length !== 0) {
+        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+          tag_count: increment(-1),
+        });
+      }
+
+      if (state.editTag !== "") {
+        const newTagSnap = await getDocs(
           query(
             collection(dbService, "Tag"),
-            where("tag_name", "==", postInfo.tag_name)
+            where("tag_name", "==", state.editTag)
           )
         );
-        if (oldtagSnap.docs.length === 0) {
-          console.log("Could not find Old Tag");
-        } else {
-          updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
-            tag_count: increment(-1),
+        if (newTagSnap.docs.length === 0) {
+          await addDoc(collection(dbService, "Tag"), {
+            tag_count: 1,
+            tag_name: state.editTag,
           });
-          console.log(
-            "Old Tag count incremented by -1 as the tag EXISTS in collection"
-          );
+        } else {
+          updateDoc(doc(dbService, "Tag", newTagSnap.docs[0].id), {
+            tag_count: increment(1),
+          });
         }
-
-        if (state.editTag !== "") {
-          const newTagSnap = await getDocs(
-            query(
-              collection(dbService, "Tag"),
-              where("tag_name", "==", state.editTag)
-            )
-          );
-          if (newTagSnap.docs.length === 0) {
-            const tagDocRef = await addDoc(collection(dbService, "Tag"), {
-              tag_count: 1,
-              tag_name: state.editTag,
-            });
-            console.log("Tag added to collection with ID: ", tagDocRef.id);
-          } else {
-            updateDoc(doc(dbService, "Tag", newTagSnap.docs[0].id), {
-              tag_count: increment(1),
-            });
-            console.log(
-              "Tag count incremented by 1 as the tag EXISTS in collection"
-            );
-          }
-        }
-
-        setIsUpdatePostList((prev) => ({
-          ...prev,
-          searchPage: true,
-          newestPage: true,
-          popularPage: true,
-        }));
       }
+
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        searchPage: true,
+        newestPage: true,
+        popularPage: true,
+      }));
     }
   };
 

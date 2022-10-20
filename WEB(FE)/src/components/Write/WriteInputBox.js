@@ -7,9 +7,9 @@ import { authService } from "../../lib/FAuth";
 import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
+import { ProcessInfoStore } from "../../store/SuccessStore";
 
 const InputBox = styled.div`
-  //margin-left: 10px;
   margin-top: 10px;
   padding: 20px;
   height: 500px;
@@ -18,8 +18,6 @@ const InputBox = styled.div`
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
   ${media.mobile`
-  //margin-top: 10px;
-  //margin-left: inherit;
   width: inherit;
   `}
 `;
@@ -62,61 +60,53 @@ const WritePostBox = ({ navigate }) => {
     isError: false,
   });
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+  const setProcessInfoStore = useSetRecoilState(ProcessInfoStore);
 
   const onClick = async (e) => {
     e.preventDefault();
-    if (state.postContent.length === 0) {
-      setErrorWritePostInfo((prev) => ({ ...prev, isError: true }));
-      setTimeout(() => {
-        setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
-      }, 3000);
-    } else {
-      try {
-        const docRef = await addDoc(collection(dbService, "WorryPost"), {
-          created_timestamp: serverTimestamp(),
-          creator_id: authService.currentUser.uid,
-          like_count: 0,
-          comment_count: 0,
-          post_rep_accept: false,
-          tag_name: state.postTag.replace(/ /g, ""),
-          text: state.postContent,
-        });
+    try {
+      await addDoc(collection(dbService, "WorryPost"), {
+        created_timestamp: serverTimestamp(),
+        creator_id: authService.currentUser.uid,
+        like_count: 0,
+        comment_count: 0,
+        post_rep_accept: false,
+        tag_name: state.postTag.replace(/ /g, ""),
+        text: state.postContent,
+      });
 
-        if (state.postTag) {
-          const querySnapshot = await getDocs(
-            query(
-              collection(dbService, "Tag"),
-              where("tag_name", "==", state.postTag.replace(/ /g, ""))
-            )
-          );
-          if (querySnapshot.docs.length === 0) {
-            const tagDocRef = await addDoc(collection(dbService, "Tag"), {
-              tag_count: 1,
-              tag_name: state.postTag.replace(/ /g, ""),
-            });
-            console.log("Tag added to collection with ID: ", tagDocRef.id);
-          } else {
-            updateDoc(doc(dbService, "Tag", querySnapshot.docs[0].id), {
-              tag_count: increment(1),
-            });
-            console.log(
-              "Tag count incremented by 1 as the tag EXISTS in collection"
-            );
-          }
+      if (state.postTag) {
+        const querySnapshot = await getDocs(
+          query(
+            collection(dbService, "Tag"),
+            where("tag_name", "==", state.postTag.replace(/ /g, ""))
+          )
+        );
+        if (querySnapshot.docs.length === 0) {
+          await addDoc(collection(dbService, "Tag"), {
+            tag_count: 1,
+            tag_name: state.postTag.replace(/ /g, ""),
+          });
+        } else {
+          updateDoc(doc(dbService, "Tag", querySnapshot.docs[0].id), {
+            tag_count: increment(1),
+          });
         }
-
-        alert("고민이 정상적으로 업로드되었습니다.");
-
-        setIsUpdatePostList((prev) => ({
-          ...prev,
-          searchPage: true,
-          newestPage: true,
-          popularPage: true,
-        }));
-        navigate("/");
-      } catch (error) {
-        console.log("Error adding document: ", error);
       }
+
+      setProcessInfoStore((prev) => ({
+        ...prev,
+        finishWritePost: true,
+      }));
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        searchPage: true,
+        newestPage: true,
+        popularPage: true,
+      }));
+      navigate("/");
+    } catch (error) {
+      console.log("Error adding document: ", error);
     }
   };
   return (
@@ -124,6 +114,8 @@ const WritePostBox = ({ navigate }) => {
       <WritePostHeader
         onClick={onClick}
         errorWritePostInfo={errorWritePostInfo.isError}
+        state={state}
+        setErrorWritePostInfo={setErrorWritePostInfo}
       ></WritePostHeader>
       <InputForm
         name="postContent"

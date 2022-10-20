@@ -237,12 +237,12 @@ export const ConfirmUploadImgButton = styled.div`
   margin: 10px 0px 5px 0px;
   position: relative;
   padding: 5px 10px;
-  color: ${(props) => (props.loading ? "#003000" : "#ffffff")};
+  color: ${(props) => (props.isloading ? "#003000" : "#ffffff")};
   height: 31px;
   width: ${(props) =>
-    props.error ? "180px" : props.loading ? "140px" : "140px"};
+    props.error ? "180px" : props.isloading ? "140px" : "140px"};
   background-color: ${(props) =>
-    props.error ? "#a65646" : props.loading ? "#C8C8C8" : "rgb(26, 117, 65)"};
+    props.error ? "#a65646" : props.isloading ? "#C8C8C8" : "rgb(26, 117, 65)"};
   font-weight: 500;
   font-size: 11px;
   text-align: center;
@@ -250,7 +250,7 @@ export const ConfirmUploadImgButton = styled.div`
   border-radius: 25px;
   margin-left: ${(props) => (props.isMarginLeft ? "10px" : "0px")};
   cursor: ${(props) =>
-    props.error ? "default" : props.loading ? "default" : "pointer"};
+    props.error ? "default" : props.isloading ? "default" : "pointer"};
   border: ${(props) =>
     props.error
       ? "1px solid rgb(166, 86, 70)"
@@ -262,9 +262,9 @@ export const ConfirmUploadImgButton = styled.div`
   white-space: nowrap;
   &:hover {
     background: ${(props) =>
-      props.error ? "#a65646" : props.loading ? "#C8C8C8" : "#0d552c"};
+      props.error ? "#a65646" : props.isloading ? "#C8C8C8" : "#0d552c"};
     color: ${(props) =>
-      props.error ? "#ffffff" : props.loading ? "#003000" : "#ffffff"};
+      props.error ? "#ffffff" : props.isloading ? "#003000" : "#ffffff"};
   }
 `;
 

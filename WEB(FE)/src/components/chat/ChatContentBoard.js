@@ -85,7 +85,7 @@ const ChatContentBoard = ({
       nickname: "",
       profileImg: "",
       blocked : false,
-    blockedByMe : false,
+      blockedByMe : false,
     }));
     setSHowChatContent(false);
     setSuccessInfo((prev) => ({ ...prev, deleteProcess: true }));
@@ -93,7 +93,6 @@ const ChatContentBoard = ({
       setSuccessInfo((prev) => ({
         ...prev,
         deleteProcess: false,
-        chatWithUserNickname: "",
       }));
     }, 3000);
   };
@@ -104,12 +103,22 @@ const ChatContentBoard = ({
     await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
       is_report_and_block : currentUserUid
     });
-    console.log("채팅이 차단되었습니다.");
     setCurrentChatWithUser((prev) => ({
       ...prev,
       blocked : true,
-    blockedByMe : true,
+      blockedByMe : true,
     }));
+    setSuccessInfo((prev) => ({
+      ...prev,
+      chatWithUserNickname: currentChatWithUser.nickname,
+      blockProcess: true
+    }));
+    setTimeout(() => {
+      setSuccessInfo((prev) => ({
+        ...prev,
+        blockProcess: false,
+      }));
+    }, 3000);
     
   }
 
@@ -119,12 +128,22 @@ const ChatContentBoard = ({
     await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
       is_report_and_block : ""
     });
-    console.log("채팅이 차단이 해제되었습니다.");
     setCurrentChatWithUser((prev) => ({
       ...prev,
       blocked : false,
-    blockedByMe : false,
+      blockedByMe : false,
     }));
+    setSuccessInfo((prev) => ({
+      ...prev,
+      chatWithUserNickname: currentChatWithUser.nickname,
+      unblockProcess: true
+    }));
+    setTimeout(() => {
+      setSuccessInfo((prev) => ({
+        ...prev,
+        unblockProcess: false,
+      }));
+    }, 3000);
   }
 
   const onChatSubmit = async (e = null) => {
@@ -139,6 +158,7 @@ const ChatContentBoard = ({
         blockedByMe : false,
       }));
       setInput({ message: "" });
+      reSizeTextarea();
     }
     else{
       if (chatInput.message.length === 0 || chatInput.message === "\n") {
@@ -149,7 +169,6 @@ const ChatContentBoard = ({
         }, 3000);
       } else {
         if (currentChatPair !== "") {
-          //submit chat to database
           addDoc(
             collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
             {
@@ -158,19 +177,17 @@ const ChatContentBoard = ({
               sent_timestamp: serverTimestamp(),
             }
           ).then(console.log("adding successful"));
-          //update recentMessage
+
           updateDoc(doc(dbService, "ChatPair", currentChatPair), {
             recentMessage: {
               message_text: chatInput.message,
-              read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+              read_by: [currentUserUid],
               sent_by: currentUserUid,
               sent_timestamp: serverTimestamp(),
             },
           });
           setInput({ message: "" });
           reSizeTextarea();
-        } else {
-          console.log("You have not selected a user to chat with!");
         }
       }
     }
@@ -180,7 +197,7 @@ const ChatContentBoard = ({
     let textarea = document.querySelector(".autoTextarea");
 
     if (textarea) {
-      textarea.style.height = "40px";
+      textarea.style.height = "38px";
       let height = textarea.scrollHeight; // 높이
       textarea.style.height = `${height}px`;
     }
@@ -190,7 +207,7 @@ const ChatContentBoard = ({
     let textarea = document.querySelector(".autoTextarea");
 
     if (textarea) {
-      textarea.style.height = "40px";
+      textarea.style.height = "38px";
     }
   }, []);
 
@@ -266,19 +283,19 @@ const ChatContentBoard = ({
     //eslint-disable-next-line
   }, [chats]);
 
-  useEffect(()=>{
-    console.log(currentChatWithUser.blocked, currentChatWithUser.blockedByMe)
-    if(currentChatWithUser.blocked){
-      if(currentChatWithUser.blockedByMe){
-        console.log("나의 의해 차단된 채팅입니다");
-      }
-      else{
-        console.log("상대방에 의해 차단된 채팅입니다");
-      }
-    }else{
-      console.log("차단되지 않은 채팅방입니다.");
-    }
-  },[currentChatWithUser]);
+  // useEffect(()=>{
+  //   console.log(currentChatWithUser.blocked, currentChatWithUser.blockedByMe)
+  //   if(currentChatWithUser.blocked){
+  //     if(currentChatWithUser.blockedByMe){
+  //       console.log("나의 의해 차단된 채팅입니다");
+  //     }
+  //     else{
+  //       console.log("상대방에 의해 차단된 채팅입니다");
+  //     }
+  //   }else{
+  //     console.log("차단되지 않은 채팅방입니다.");
+  //   }
+  // },[currentChatWithUser]);
 
   return (
     <ChatContentContainer>

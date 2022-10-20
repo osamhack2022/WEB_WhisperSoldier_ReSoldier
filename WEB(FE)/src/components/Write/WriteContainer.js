@@ -1,47 +1,70 @@
 import { useNavigate } from "react-router-dom";
 import {
   MainContentContainer,
+  SideButtonBoxForWritePage,
+  SideOptionFormBox,
+  TagBoxTitleForSideBox,
+  TagElementForSideBox,
   WriteContainerBox,
+  TagContentLeftForSideBox,
 } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
-import SideButtonBox from "../common/SideButtonBox";
-import { SideOptionForm } from "../common/SideOptionForm";
+// import SideButtonBox from "../common/SideButtonBox";
+// import { SideOptionForm } from "../common/SideOptionForm";
 import WritePostBox from "./WriteInputBox";
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
+import { TagContentBox } from "../../styles/home/PopularTagBoxStyle";
+import { dbFunction } from "../../lib/FStore";
+import { useEffect, useState } from "react";
+import { GetTagQuery } from "../../modules/GetTagQuery";
 
-const ButtonContainerForTest = styled.div`
-  display: flex;
-  //flex-direction: column;
-  flex-direction: row;
-  /* justify-content: center; */
-  justify-content: flex-start;
-  /* align-items: center; */
-  align-items: inherit;
-  height: fit-content;
-  /* width: 110px; */
-  width: 100%;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  padding: 0px 0px 0px 20px;
-  margin-top: ${(props) => props.isNotTop && "10px"};
-  transition: all 0.5s;
-  ${media.mobile`
-  //flex-direction: row;
-  //justify-content: flex-start;
-  /* align-items : inherit; */
-  /* width: 100%; */
-  padding: 0px 0px 0px 10px;
-  `}
-`;
+const SideOptionForm = () => {
+  const { getDocs } = dbFunction;
+  const [tagList, setTagList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const SideButtonBoxForTest = ({ children, isNotTop }) => {
+  const getTop20Tag = async () => {
+    try {
+      const top20TagSnapshot = await getDocs(
+        GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+      );
+      top20TagSnapshot.forEach((tag) => {
+        const tagObj = {
+          ...tag.data(),
+          id: tag.id,
+        };
+        setTagList((prev) => [...prev, tagObj]);
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setTagList([]);
+    getTop20Tag();
+    //eslint-disable-next-line
+  }, []);
   return (
-    <ButtonContainerForTest isNotTop={isNotTop}>
-      {children}
-    </ButtonContainerForTest>
+    <SideOptionFormBox>
+      <TagBoxTitleForSideBox>인기 고민 태그</TagBoxTitleForSideBox>
+      <TagContentBox>
+        {loading ? (
+          <div>잠시만 기다려 주새요</div>
+        ) : (
+          <>
+            {tagList.map((tag) => (
+              <TagElementForSideBox key={tag.id}>
+                <TagContentLeftForSideBox>
+                  #{tag.tag_name}
+                </TagContentLeftForSideBox>
+              </TagElementForSideBox>
+            ))}
+          </>
+        )}
+      </TagContentBox>
+    </SideOptionFormBox>
   );
 };
 
@@ -54,11 +77,11 @@ const WriteContainer = () => {
   return (
     <WriteContainerBox>
       <MainContentContainer>
-        <SideButtonBoxForTest>
+        <SideButtonBoxForWritePage>
           <BackButton goBack={goBack} notRight={true}>
             뒤로가기
           </BackButton>
-        </SideButtonBoxForTest>
+        </SideButtonBoxForWritePage>
 
         <WritePostBox navigate={navigate} />
       </MainContentContainer>

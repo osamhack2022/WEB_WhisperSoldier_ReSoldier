@@ -19,7 +19,7 @@ export const TagBoxStyle = styled.div`
 `;
 
 export const TagBoxTitle = styled.div`
-  font-size: 14x;
+  font-size: 16px;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
@@ -47,6 +47,7 @@ export const TagElement = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   padding: 7px 0px;
 
   text-decoration: none;
@@ -70,7 +71,7 @@ export const TagContentLeft = styled.div`
 
 export const TagContentRight = styled.div`
   width: fit-content;
-  font-size: 14px;
+  font-size: 12x;
   text-align: right;
 `;
 
