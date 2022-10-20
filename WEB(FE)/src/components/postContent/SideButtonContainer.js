@@ -1,10 +1,6 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import { updateProfile } from "firebase/auth";
 import {
   DeletePostButton,
   EditPostButton,
@@ -12,7 +8,7 @@ import {
   PostChatButton,
   ReportButton,
 } from "../common/Buttons";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { StartFirstChat } from "../../store/ChatStore";
 
@@ -137,7 +133,6 @@ export const OtherUserButtonContainer = ({
     deleteDoc,
     collection,
     getDocs,
-    getDoc,
     query,
     where,
     serverTimestamp,
@@ -225,7 +220,7 @@ export const OtherUserButtonContainer = ({
     if (checkSnapshot.docs.length === 0) {
       const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
-        is_report_and_block: false,
+        is_report_and_block: "",
         member_ids:
           postInfo.creator_id <= currentUserUid
             ? [postInfo.creator_id, currentUserUid]

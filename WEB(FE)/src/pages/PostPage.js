@@ -1,7 +1,7 @@
 import PostContentContainer from "../components/postContent/PostContentContainer";
 
-const PostPage = () => {
-  return <PostContentContainer></PostContentContainer>;
+const PostPage = ({isAdmin}) => {
+  return <PostContentContainer isAdmin={isAdmin}></PostContentContainer>;
 };
 
 export default PostPage;

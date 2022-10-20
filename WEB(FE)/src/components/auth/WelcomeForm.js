@@ -192,6 +192,7 @@ const WelcomeForm = () => {
           .then(() => {
             console.log("닉네임 설정 성공");
             navigate("/", { replace: true });
+            console.log("WelcomeForm.js 에서 새로고침");
             window.location.reload();
           })
           .catch((error) => {

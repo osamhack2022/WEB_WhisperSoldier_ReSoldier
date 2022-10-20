@@ -8,3 +8,4 @@ export const SmallDesktopQuery = `(min-width:900px)`;
 export const TabletQuery = `(min-width:768px)`;
 
 export const whisperSodlierSessionKey = `firebase:authUser:${FApiKey}:[DEFAULT]`;
+export const adminSessionKey = `firebase:admin:${FApiKey}:[DEFAULT]`;

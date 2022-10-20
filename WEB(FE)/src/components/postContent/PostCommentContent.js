@@ -29,6 +29,7 @@ const PostCommentContent = ({
   isTablet,
   setIsLoadingComments,
   isLoadingComments,
+  isAdmin,
 }) => {
   useEffect(() => {
     getPostComments();
@@ -48,6 +49,7 @@ const PostCommentContent = ({
             created_timestamp={comment.created_timestamp}
             getPostComments={getPostComments}
             isTablet={isTablet}
+            isAdmin={isAdmin}
           ></PostCommentElement>
         ))
       ) : (

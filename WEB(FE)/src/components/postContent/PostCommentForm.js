@@ -28,11 +28,6 @@ const PostCommentTextarea = styled.textarea`
   }
 `;
 
-// const BottonLine = styled.div`
-//   margin: 1px 0px;
-//   border-top: 1px solid #bdbdbd;
-// `;
-
 const WriteCommentButtonShape = styled.button`
   margin-top: 5px;
   position: relative;

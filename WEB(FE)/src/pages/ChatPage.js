@@ -75,6 +75,8 @@ const ChatPage = () => {
   const [currentChatWithUser, setCurrentChatWithUser] = useState({
     nickname: "",
     profileImg: "",
+    blocked : false,
+    blockedByMe : false,
   });
 
   const [successInfo, setSuccessInfo] = useState({

@@ -26,7 +26,7 @@ import {
   WriteUserButtonContainer,
 } from "./SideButtonContainer";
 
-const PostContentContainer = () => {
+const PostContentContainer = ({ isAdmin }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
   const goBack = () => {
@@ -80,7 +80,6 @@ const PostContentContainer = () => {
     );
 
     const querySnapshot = await getDocs(likeCheckQuery);
-    console.log(querySnapshot);
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false);
     } else {
@@ -228,10 +227,11 @@ const PostContentContainer = () => {
     <PostContentContainerBox>
       <SideButtonContainer>
         <SideButtonBox>
-          <BackButton goBack={goBack} isMobile={!isTablet}>
+          <BackButton goBack={goBack} isMobile={isTablet ? "false" : "true"}>
             뒤로가기
           </BackButton>
-          {!isTablet &&
+          {!isAdmin &&
+            !isTablet &&
             postInfo.created_timestamp &&
             authService.currentUser &&
             (authService.currentUser.uid === postInfo.creator_id ? (
@@ -239,11 +239,11 @@ const PostContentContainer = () => {
                 editing={editing}
                 postInfo={postInfo}
                 toggleEditing={toggleEditing}
-                isMobile={!isTablet}
+                isMobile={isTablet ? "false" : "true"}
               ></WriteUserButtonContainer>
             ) : (
               <OtherUserButtonContainer
-                isMobile={!isTablet}
+                isMobile={isTablet ? "false" : "true"}
                 isLikedByMe={isLikedByMe}
                 setIsLikedByMe={setIsLikedByMe}
                 postInfo={postInfo}
@@ -252,7 +252,7 @@ const PostContentContainer = () => {
             ))}
         </SideButtonBox>
 
-        {isTablet && postInfo.created_timestamp ? (
+        {!isAdmin && isTablet && postInfo.created_timestamp ? (
           <SideButtonBox isNotTop={true}>
             {authService.currentUser ? (
               authService.currentUser.uid === postInfo.creator_id ? (
@@ -301,6 +301,7 @@ const PostContentContainer = () => {
             setState={setState}
             onChange={onChange}
             isTablet={isTablet}
+            isAdmin={isAdmin}
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>

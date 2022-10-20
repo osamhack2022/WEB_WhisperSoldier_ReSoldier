@@ -6,7 +6,6 @@ const FooterBox = styled.footer`
   width: 100%;
   height: 90px;
   margin-top: 20px;
-  /*margin-bottom: 50px;*/
   padding: 20px 10vw;
   display: flex;
   flex-direction: column;
@@ -26,7 +25,6 @@ const FooterBoxForMobile = styled.footer`
   width: 100%;
   height: 90px;
   margin: 20px 0px 50px 0px;
-  /*margin-bottom: 50px;*/
   padding: 20px 10vw;
   display: flex;
   flex-direction: column;

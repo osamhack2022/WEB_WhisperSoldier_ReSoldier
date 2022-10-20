@@ -7,6 +7,8 @@ export const getSelectObj = (prev, select) => {
       myComment: false,
       likePost: false,
       likeComment: false,
+      reportedPost: false,
+      reportedComment: false,
     };
   } else if (select === "myPost") {
     return {
@@ -16,6 +18,8 @@ export const getSelectObj = (prev, select) => {
       myComment: false,
       likePost: false,
       likeComment: false,
+      reportedPost: false,
+      reportedComment: false,
     };
   } else if (select === "myComment") {
     return {
@@ -25,6 +29,8 @@ export const getSelectObj = (prev, select) => {
       myComment: true,
       likePost: false,
       likeComment: false,
+      reportedPost: false,
+      reportedComment: false,
     };
   } else if (select === "likePost") {
     return {
@@ -34,6 +40,8 @@ export const getSelectObj = (prev, select) => {
       myComment: false,
       likePost: true,
       likeComment: false,
+      reportedPost: false,
+      reportedComment: false,
     };
   } else if (select === "likeComment") {
     return {
@@ -43,6 +51,30 @@ export const getSelectObj = (prev, select) => {
       myComment: false,
       likePost: false,
       likeComment: true,
+      reportedPost: false,
+      reportedComment: false,
+    };
+  } else if (select === "reportedPost") {
+    return {
+      ...prev,
+      profile: false,
+      myPost: false,
+      myComment: false,
+      likePost: false,
+      likeComment: false,
+      reportedPost: true,
+      reportedComment: false,
+    };
+  } else if (select === "reportedComment") {
+    return {
+      ...prev,
+      profile: false,
+      myPost: false,
+      myComment: false,
+      likePost: false,
+      likeComment: false,
+      reportedPost: false,
+      reportedComment: true,
     };
   }
 };

@@ -1,16 +1,3 @@
-import {
-  deleteDoc,
-  updateDoc,
-  doc,
-  query,
-  collection,
-  where,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-  increment,
-  getDoc,
-} from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -25,7 +12,6 @@ import {
   CommentTimeText,
   CommentTitle,
   CommentUserBox,
-  CommentUserIcon,
   CommentUserText,
   DeleteCommentButton,
   EditComfirmButton,
@@ -43,6 +29,7 @@ const PostCommentElement = ({
   getPostComments,
   created_timestamp,
   isTablet,
+  isAdmin,
 }) => {
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
@@ -60,8 +47,19 @@ const PostCommentElement = ({
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
 
-  const { query, collection, getDocs, where, addDoc, serverTimestamp } =
-    dbFunction;
+  const {
+    query,
+    collection,
+    getDocs,
+    where,
+    addDoc,
+    serverTimestamp,
+    deleteDoc,
+    updateDoc,
+    doc,
+    increment,
+    getDoc,
+  } = dbFunction;
 
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
 
@@ -140,7 +138,7 @@ const PostCommentElement = ({
       console.log("새 채팅방을 생성");
       const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
-        is_report_and_block: false,
+        is_report_and_block: "",
         member_ids:
           commentElement.commentor_id <= currentUserUid
             ? [commentElement.commentor_id, currentUserUid]
@@ -185,7 +183,6 @@ const PostCommentElement = ({
         comment_count: increment(-1),
       });
       getPostComments(false, true);
-      // 댓글창 업데이트 (isAddingComments = false, isDeletingComments = true)
     }
   };
 
@@ -229,13 +226,11 @@ const PostCommentElement = ({
     if (userDoc.data()) {
       setCommentUserNickname(userDoc.data().nickname);
       setCommentUserProfileImg(userDoc.data().profileImg);
-      console.log(userDoc.data().profileImg);
     }
   };
 
   useEffect(() => {
     getIsLiked();
-    console.log(commentElement);
     setCountLikeInComment(commentElement.like_count);
     getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
@@ -265,47 +260,48 @@ const PostCommentElement = ({
           onCommentChange={onCommentChange}
         ></CommentELementEditBox>
       )}
-      {isOwner ? (
-        <CommentButtonBox>
-          <EditCommentButton
-            toggleEditing={toggleCommentEditing}
-            editing={isEditingComment}
-            isMobile={!isTablet}
-          ></EditCommentButton>
-          {isEditingComment ? (
-            <EditComfirmButton
-              onCommentChange={onCommentEditAndSubmit}
-              editCommentErrorInfo={editCommentErrorInfo}
+      {!isAdmin &&
+        (isOwner ? (
+          <CommentButtonBox>
+            <EditCommentButton
+              toggleEditing={toggleCommentEditing}
+              editing={isEditingComment}
               isMobile={!isTablet}
-            ></EditComfirmButton>
-          ) : (
-            <DeleteCommentButton
-              onDeleteClick={onDeleteCommentClick}
+            ></EditCommentButton>
+            {isEditingComment ? (
+              <EditComfirmButton
+                onCommentChange={onCommentEditAndSubmit}
+                editCommentErrorInfo={editCommentErrorInfo}
+                isMobile={!isTablet}
+              ></EditComfirmButton>
+            ) : (
+              <DeleteCommentButton
+                onDeleteClick={onDeleteCommentClick}
+                isMobile={!isTablet}
+              ></DeleteCommentButton>
+            )}
+          </CommentButtonBox>
+        ) : (
+          <CommentButtonBox>
+            <LikeCommentButton
+              toggleLike={toggleLike}
               isMobile={!isTablet}
-            ></DeleteCommentButton>
-          )}
-        </CommentButtonBox>
-      ) : (
-        <CommentButtonBox>
-          <LikeCommentButton
-            toggleLike={toggleLike}
-            isMobile={!isTablet}
-            isLikedByMe={isLikedByMe}
-          >
-            {isLikedByMe ? "공감 취소하기" : "공감하기"}
-          </LikeCommentButton>
-          <PostChatCommentButton
-            toLink="/"
-            isMobile={!isTablet}
-            onClickChatButtonFromComment={onClickChatButtonFromComment}
-          >
-            채팅하기
-          </PostChatCommentButton>
-          <ReportCommentButton toLink="/" isMobile={!isTablet}>
-            신고하기
-          </ReportCommentButton>
-        </CommentButtonBox>
-      )}
+              isLikedByMe={isLikedByMe}
+            >
+              {isLikedByMe ? "공감 취소하기" : "공감하기"}
+            </LikeCommentButton>
+            <PostChatCommentButton
+              toLink="/"
+              isMobile={!isTablet}
+              onClickChatButtonFromComment={onClickChatButtonFromComment}
+            >
+              채팅하기
+            </PostChatCommentButton>
+            <ReportCommentButton toLink="/" isMobile={!isTablet}>
+              신고하기
+            </ReportCommentButton>
+          </CommentButtonBox>
+        ))}
     </CommentBox>
   );
 };
