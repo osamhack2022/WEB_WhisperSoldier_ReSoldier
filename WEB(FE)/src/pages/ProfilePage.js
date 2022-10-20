@@ -191,7 +191,7 @@ const ProfilePage = ({ isAdmin }) => {
                 <PrimaryMenuButton onClick={onReportedPost}>
                   신고된 글
                 </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onReportedComment}>
+                <PrimaryMenuButton onClick={onReportedComment} bottom={true}>
                   신고된 댓글
                 </PrimaryMenuButton>
               </>
@@ -230,35 +230,38 @@ const ProfilePage = ({ isAdmin }) => {
         </SideButtonBox>
       )}
 
-      {(isTablet || showContent) && !isAdmin ? (
-        <ProfileCotentContainer>
-          {currentPage.profile && (
-            <ChangeProfile
-              setUserName={setUserName}
-              setUpdateProfileInfo={setUpdateProfileInfo}
-              myProfileImg={myProfileImg}
-              setMyProfileImg={setMyProfileImg}
-            ></ChangeProfile>
-          )}
-          {currentPage.myPost && <MyPostBoard></MyPostBoard>}
-          {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
-          {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
-          {currentPage.likeComment && <MyCommentLikeBoard></MyCommentLikeBoard>}
-        </ProfileCotentContainer>
-      ) : (
-        <ProfileCotentContainer>
-          {currentPage.profile && (
-            <ChangeProfile
-              setUserName={setUserName}
-              setUpdateProfileInfo={setUpdateProfileInfo}
-              myProfileImg={myProfileImg}
-              setMyProfileImg={setMyProfileImg}
-            ></ChangeProfile>
-          )}
-          {currentPage.reportedPost && <ReportedPost></ReportedPost>}
-          {currentPage.reportComment && <ReportedComment></ReportedComment>}
-        </ProfileCotentContainer>
-      )}
+      {(isTablet || showContent) &&
+        (!isAdmin ? (
+          <ProfileCotentContainer>
+            {currentPage.profile && (
+              <ChangeProfile
+                setUserName={setUserName}
+                setUpdateProfileInfo={setUpdateProfileInfo}
+                myProfileImg={myProfileImg}
+                setMyProfileImg={setMyProfileImg}
+              ></ChangeProfile>
+            )}
+            {currentPage.myPost && <MyPostBoard></MyPostBoard>}
+            {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
+            {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
+            {currentPage.likeComment && (
+              <MyCommentLikeBoard></MyCommentLikeBoard>
+            )}
+          </ProfileCotentContainer>
+        ) : (
+          <ProfileCotentContainer>
+            {currentPage.profile && (
+              <ChangeProfile
+                setUserName={setUserName}
+                setUpdateProfileInfo={setUpdateProfileInfo}
+                myProfileImg={myProfileImg}
+                setMyProfileImg={setMyProfileImg}
+              ></ChangeProfile>
+            )}
+            {currentPage.reportedPost && <ReportedPost></ReportedPost>}
+            {currentPage.reportedComment && <ReportedComment></ReportedComment>}
+          </ProfileCotentContainer>
+        ))}
     </ProfileContainer>
   );
 };

@@ -27,7 +27,6 @@ const HeaderBox = styled.div`
   box-sizing: content-box;
   border-radius: 5px;
   margin: 0px auto;
-  /* padding: 0px auto; */
   width: 960px;
   height: 72px;
   display: flex;
@@ -67,7 +66,7 @@ const Header = ({ isAdmin }) => {
           </>
         )}
       </HeaderBox>
-      {!isTablet && <Navigation></Navigation>}
+      {!isTablet && <Navigation isAdmin={isAdmin}></Navigation>}
     </HeaderContainer>
   );
 };

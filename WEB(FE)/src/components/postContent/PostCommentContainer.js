@@ -13,6 +13,7 @@ const PostCommentContainer = ({
   setState,
   onChange,
   isTablet,
+  isAdmin,
 }) => {
   const {
     doc,
@@ -129,6 +130,7 @@ const PostCommentContainer = ({
         isTablet={isTablet}
         setIsLoadingComments={setIsLoadingComments}
         isLoadingComments={isLoadingComments}
+        isAdmin={isAdmin}
       ></PostCommentContent>
     </>
   );

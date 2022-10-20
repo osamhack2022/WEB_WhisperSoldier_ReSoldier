@@ -28,7 +28,10 @@ const ChatOptionMenuItem = styled(MenuItem)({
   width: "120px",
 });
 
-const ChatContentOptionMenu = ({ onChatPairDeleteClick }) => {
+const ChatContentOptionMenu = ({
+  onChatPairDeleteClick,
+  onBlockChatPairClick,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -102,7 +105,7 @@ const ChatContentOptionMenu = ({ onChatPairDeleteClick }) => {
             </CancelButton>
           </DialogActions>
         </Dialog>
-        <ChatOptionMenuItem onClick={handleClose}>
+        <ChatOptionMenuItem onClick={onBlockChatPairClick}>
           채팅 신고하기
         </ChatOptionMenuItem>
       </Menu>

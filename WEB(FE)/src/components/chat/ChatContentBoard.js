@@ -64,7 +64,6 @@ const ChatContentBoard = ({
 
   const onChatPairDeleteClick = async (e) => {
     e.preventDefault();
-    //getCurrentChatPair("", ""); //과연 이곳에 위치한게 맞을까?
     setSuccessInfo((prev) => ({
       ...prev,
       chatWithUserNickname: currentChatWithUser.nickname,
@@ -79,7 +78,6 @@ const ChatContentBoard = ({
     });
     await deleteDoc(doc(dbService, "ChatPair", currentChatPair));
     setChats([]);
-    //getCurrentChatPair("", ""); //결국은 이곳에 위치를 해야될듯.... -> 그리고 이 함수를 굳이 여기서 쓸 필요가 없음
     setCurrentChatPair("");
     setCurrentChatWithUser((prev) => ({
       ...prev,
@@ -96,6 +94,18 @@ const ChatContentBoard = ({
       }));
     }, 3000);
   };
+
+  const onBlockChatPairClick = async (e) =>{
+    e.preventDefault();
+
+    await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+      is_report_and_block : currentUserUid
+    });
+
+  }
+
+
+
   const onChatSubmit = (e = null) => {
     if (e !== null) {
       e.preventDefault();
@@ -157,9 +167,18 @@ const ChatContentBoard = ({
   };
 
   useEffect(() => {
-    //scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
     setChats([]);
+    if(currentChatWithUser.blocked){
+      if(currentChatWithUser.blockByMe){
+        console.log("나의 의해 차단된 채팅입니다");
+      }
+      else{
+        console.log("상대방에 의해 차단된 채팅입니다");
+      }
+    }else{
+      console.log("차단되지 않은 채팅방입니다.");
+    }
+
     if (currentChatPair !== "") {
       const q = query(
         collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
@@ -197,12 +216,11 @@ const ChatContentBoard = ({
       });
       return () => {
         unsubscribe();
-
-        // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       };
     } else {
       console.log("no selected chat pair");
     }
+    //eslint-disable-next-line
   }, [currentChatPair]);
 
   useEffect(() => {
@@ -212,6 +230,7 @@ const ChatContentBoard = ({
         inline: "nearest",
       });
     }
+    //eslint-disable-next-line
   }, [chats]);
 
   return (
@@ -226,6 +245,7 @@ const ChatContentBoard = ({
             <RightMoreMenuButtonBox>
               <ChatContentOptionMenu
                 onChatPairDeleteClick={onChatPairDeleteClick}
+                onBlockChatPairClick={onBlockChatPairClick}
               />
             </RightMoreMenuButtonBox>
           </ChatContentHeaderBox>

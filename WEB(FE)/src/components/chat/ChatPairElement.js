@@ -47,7 +47,7 @@ const ChatPairElement = ({
   const { doc, getDoc } = dbFunction;
 
   const clickChatPairBox = () => {
-    getCurrentChatPair(pair.id, chatWithUser);
+    getCurrentChatPair(pair.id, chatWithUser, pair.is_report_and_block);
     toggleShowChatContent();
   };
 
@@ -80,6 +80,7 @@ const ChatPairElement = ({
 
   useEffect(() => {
     getChatWithUserInfo();
+    //eslint-disable-next-line
   }, []);
 
   return (

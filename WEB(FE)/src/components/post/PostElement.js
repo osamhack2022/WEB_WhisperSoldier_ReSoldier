@@ -40,9 +40,6 @@ const PostElement = ({ post }) => {
         <PostElementCommentCount>
           {post.comment_count ? post.comment_count : "0"}
         </PostElementCommentCount>
-        <div>
-          {post.tag_name!=="" ? `#${post.tag_name}` : null}
-        </div>
       </PostElementInfoBox>
       <PostAdditionalInfoBox>
         <PostElementTime>

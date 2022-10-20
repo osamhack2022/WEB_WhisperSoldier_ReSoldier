@@ -20,33 +20,21 @@ import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import styled from "styled-components";
 import BoardPage from "./pages/BoardPage";
-import { whisperSodlierSessionKey } from "./lib/Const";
+import { adminSessionKey, whisperSodlierSessionKey } from "./lib/Const";
 import WelcomePage from "./pages/WelcomePage";
-// import { useRecoilState } from "recoil";
-// import { UserInfo } from "./store/AuthStore";
 import LoadPage from "./pages/LoadPage";
-import { dbFunction, dbService } from "./lib/FStore";
 
 const Body = styled.div`
   position: relative;
 `;
 
 const App = () => {
-  // const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const { getDoc, doc } = dbFunction;
   const [sessionObj, setSessionObj] = useState(
     JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
   );
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const getAdmin = async () => {
-    const currentUserInfo = await getDoc(
-      doc(dbService, "User", sessionObj.uid)
-    );
-    if (currentUserInfo.data() && currentUserInfo.data().admin) {
-      setIsAdmin(true);
-    }
-  };
+  const [isAdmin, setIsAdmin] = useState(
+    JSON.parse(sessionStorage.getItem(adminSessionKey))
+  );
 
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
@@ -55,7 +43,6 @@ const App = () => {
           setSessionObj(
             JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
           );
-          getAdmin();
         }
       } else {
         setSessionObj(null);
@@ -68,23 +55,29 @@ const App = () => {
     <>
       {sessionObj ? (
         sessionObj.providerData[0].displayName ? (
-          <Body>
-            <Header isAdmin={isAdmin}></Header>
+          isAdmin ? (
+            <Body>
+              <Header isAdmin={isAdmin.admin}></Header>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/post/:id" element={<PostPage isAdmin={isAdmin.admin}/>} />
+                <Route
+                  path="/profile"
+                  element={<ProfilePage isAdmin={isAdmin.admin} />}
+                />
+                <Route path="/write" element={<WritePage />} />
+                <Route path="/board" element={<BoardPage />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/message" element={<ChatPage />} />
+                <Route path="/tags" element={<TagPage />} />
+              </Routes>
+              <Footer></Footer>
+            </Body>
+          ) : (
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/post/:id" element={<PostPage />} />
-              <Route
-                path="/profile"
-                element={<ProfilePage isAdmin={isAdmin} />}
-              />
-              <Route path="/write" element={<WritePage />} />
-              <Route path="/board" element={<BoardPage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/message" element={<ChatPage />} />
-              <Route path="/tags" element={<TagPage />} />
+              <Route path="/" element={<LoadPage />}></Route>
             </Routes>
-            <Footer></Footer>
-          </Body>
+          )
         ) : (
           <Routes>
             <Route path="/welcome" element={<WelcomePage />} />

@@ -1,6 +1,6 @@
 import ChangePasswordForm from "./ChangePasswordForm";
 
-import { useAndSetForm, useForm } from "../../modules/useForm";
+import { useForm } from "../../modules/useForm";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import {
   AuthInputBox,
@@ -100,9 +100,8 @@ const ChangeProfile = ({
   setMyProfileImg,
 }) => {
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
-  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
-    dbFunction;
-  const [currentNickname, setCurrentNickname, onChange] = useAndSetForm({
+  const { doc, getDocs, query, collection, where } = dbFunction;
+  const [currentNickname, onChange] = useForm({
     nickname: JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
       .providerData[0].displayName,
   });

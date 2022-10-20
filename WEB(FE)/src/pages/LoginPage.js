@@ -7,23 +7,22 @@ import {
 import { authService } from "../lib/FAuth";
 import LoginForm from "../components/auth/LoginForm";
 import { useForm } from "../modules/useForm";
-// import { useSetRecoilState } from "recoil";
-// import { UserInfo } from "../store/AuthStore";
 import { useState } from "react";
+import { dbFunction, dbService } from "../lib/FStore";
+import { adminSessionKey } from "../lib/Const";
 
 const LoginPage = () => {
   const [state, onChange] = useForm({
     email: "",
     password: "",
   });
-  //const setUserInfo = useSetRecoilState(UserInfo);
   const [loginErrorInfo, setLoginErrorInfo] = useState({
     isErr: false,
     isEmailError: false,
     errMsg: "",
     isLoading: false,
   });
-
+  const { getDoc, doc } = dbFunction;
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
@@ -58,14 +57,27 @@ const LoginPage = () => {
           }));
         }, 3000);
       } else {
-        console.log("[LoginPage.js] : 로그인 정상]");
-        console.log(authService);
         if (authService.currentUser.displayName === null) {
           navigate("/welcome", { replace: true });
         } else {
+          const currentUserInfo = await getDoc(
+            doc(dbService, "User", authService.currentUser.uid)
+          );
+          if (currentUserInfo.data() && currentUserInfo.data().admin) {
+            console.log("관리자 계정");
+            sessionStorage.setItem(
+              adminSessionKey,
+              JSON.stringify({ admin: true, id: authService.currentUser.uid })
+            );
+          } else {
+            sessionStorage.setItem(
+              adminSessionKey,
+              JSON.stringify({ admin: false, id: "" })
+            );
+          }
           navigate("/", { replace: true });
+          window.location.reload();
         }
-        //setUserInfo((prev) => ({ ...prev, emailChecked: true, isLogin: true }));
       }
     } catch (e) {
       switch (e.code) {

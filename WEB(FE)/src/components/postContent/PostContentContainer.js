@@ -26,7 +26,7 @@ import {
   WriteUserButtonContainer,
 } from "./SideButtonContainer";
 
-const PostContentContainer = () => {
+const PostContentContainer = ({isAdmin}) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
   const goBack = () => {
@@ -231,7 +231,7 @@ const PostContentContainer = () => {
           <BackButton goBack={goBack} isMobile={!isTablet}>
             뒤로가기
           </BackButton>
-          {!isTablet &&
+          {!isAdmin &&!isTablet &&
             postInfo.created_timestamp &&
             authService.currentUser &&
             (authService.currentUser.uid === postInfo.creator_id ? (
@@ -252,7 +252,7 @@ const PostContentContainer = () => {
             ))}
         </SideButtonBox>
 
-        {isTablet && postInfo.created_timestamp ? (
+        {!isAdmin &&isTablet && postInfo.created_timestamp ? (
           <SideButtonBox isNotTop={true}>
             {authService.currentUser ? (
               authService.currentUser.uid === postInfo.creator_id ? (
@@ -301,6 +301,7 @@ const PostContentContainer = () => {
             setState={setState}
             onChange={onChange}
             isTablet={isTablet}
+            isAdmin={isAdmin}
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>
