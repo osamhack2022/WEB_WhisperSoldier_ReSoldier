@@ -151,7 +151,7 @@ export const CommentButtonBox = styled.div`
 `;
 
 const CommonButtonText = styled.div`
-  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
+  font-size: ${(props) => (props.mobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -216,7 +216,7 @@ export const EditCommentButton = ({ toggleEditing, editing, isMobile }) => {
       ) : (
         <EditButtonImg></EditButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {editing ? "취소하기" : "수정하기"}
       </CommonButtonText>
     </EditButtonBlock>
@@ -258,7 +258,9 @@ export const DeleteCommentButton = ({ onDeleteClick, isMobile }) => {
   return (
     <DeletePostButtonBlock onClick={onDeleteClick}>
       <DeletePostButtonImg></DeletePostButtonImg>
-      <CommonButtonText isMobile={isMobile}>삭제하기</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        삭제하기
+      </CommonButtonText>
     </DeletePostButtonBlock>
   );
 };
@@ -310,13 +312,15 @@ export const LikeCommentButton = ({
   isLikedByMe,
 }) => {
   return (
-    <LikeButtonBlock isMobile={isMobile} onClick={toggleLike}>
+    <LikeButtonBlock mobile={isMobile ? "true" : "false"} onClick={toggleLike}>
       {isLikedByMe ? (
         <DisLikeButtonImg></DisLikeButtonImg>
       ) : (
         <LikeButtonImg></LikeButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </LikeButtonBlock>
   );
 };
@@ -351,11 +355,21 @@ const PostChatButtonBlock = styled(Link)`
   }
 `;
 
-export const PostChatCommentButton = ({ toLink, children, isMobile, onClickChatButtonFromComment }) => {
+export const PostChatCommentButton = ({
+  toLink,
+  children,
+  isMobile,
+  onClickChatButtonFromComment,
+}) => {
   return (
-    <PostChatButtonBlock /* to={toLink} */ onClick={onClickChatButtonFromComment} isMobile={isMobile}>
+    <PostChatButtonBlock
+      /* to={toLink} */ onClick={onClickChatButtonFromComment}
+      mobile={isMobile ? "true" : "false"}
+    >
       <PostChatButtonImg></PostChatButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </PostChatButtonBlock>
   );
 };
@@ -391,9 +405,11 @@ const ReportButtonBlock = styled(Link)`
 
 export const ReportCommentButton = ({ toLink, children, isMobile }) => {
   return (
-    <ReportButtonBlock to={toLink} isMobile={isMobile}>
+    <ReportButtonBlock to={toLink} mobile={isMobile ? "true" : "false"}>
       <ReportButtonImg></ReportButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </ReportButtonBlock>
   );
 };
@@ -440,7 +456,7 @@ const EditErrorButtonIcon = styled(IoWarningOutline)`
 `;
 
 const EditErrorButtonText = styled.div`
-  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
+  font-size: ${(props) => (props.mobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -480,14 +496,16 @@ export const EditComfirmButton = ({
   return editCommentErrorInfo ? (
     <EditErrorButtonBlock>
       <EditErrorButtonIcon></EditErrorButtonIcon>
-      <EditErrorButtonText isMobile={isMobile}>
+      <EditErrorButtonText mobile={isMobile ? "true" : "false"}>
         내용을 입력해주세요
       </EditErrorButtonText>
     </EditErrorButtonBlock>
   ) : (
     <EditComfirmButtonBlock onClick={onCommentChange}>
       <EditComfirmButtonImg></EditComfirmButtonImg>
-      <CommonButtonText isMobile={isMobile}>수정완료</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        수정완료
+      </CommonButtonText>
     </EditComfirmButtonBlock>
   );
 };

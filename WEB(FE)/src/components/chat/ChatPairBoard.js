@@ -48,6 +48,7 @@ const ChatPairBoard = ({
 
     if(isBlocked){
       if(isBlocked === currentUserInfo.uid){
+        console.log(isBlocked, "차단함(나)");
         setCurrentChatWithUser((prev) => ({
           ...prev,
           nickname: chatWithUser.nickname,
@@ -57,6 +58,7 @@ const ChatPairBoard = ({
         }));
       }
       else{
+        console.log(isBlocked, "차단함");
         setCurrentChatWithUser((prev) => ({
           ...prev,
           nickname: chatWithUser.nickname,

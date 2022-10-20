@@ -17,7 +17,7 @@ import {
 import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import styled from "styled-components";
-import ChatContentOptionMenu from "./ChatContentOptionMenu";
+import {ChatContentOptionMenu, ChatContentOptionMenuBlockByMe} from "./ChatContentOptionMenu";
 
 const ChatCotentBoardBlock = styled.div`
   margin: 10px;
@@ -59,6 +59,7 @@ const ChatContentBoard = ({
     serverTimestamp,
     addDoc,
     arrayUnion,
+    getDoc
   } = dbFunction;
   const [firstLoading, setFirstLoading] = useState(true);
 
@@ -83,6 +84,8 @@ const ChatContentBoard = ({
       ...prev,
       nickname: "",
       profileImg: "",
+      blocked : false,
+    blockedByMe : false,
     }));
     setSHowChatContent(false);
     setSuccessInfo((prev) => ({ ...prev, deleteProcess: true }));
@@ -101,44 +104,74 @@ const ChatContentBoard = ({
     await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
       is_report_and_block : currentUserUid
     });
-
+    console.log("채팅이 차단되었습니다.");
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      blocked : true,
+    blockedByMe : true,
+    }));
+    
   }
 
+  const onUnBlockChatPairClick = async (e) => {
+    e.preventDefault();
 
+    await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+      is_report_and_block : ""
+    });
+    console.log("채팅이 차단이 해제되었습니다.");
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      blocked : false,
+    blockedByMe : false,
+    }));
+  }
 
-  const onChatSubmit = (e = null) => {
+  const onChatSubmit = async (e = null) => {
     if (e !== null) {
       e.preventDefault();
     }
-    if (chatInput.message.length === 0 || chatInput.message === "\n") {
-      setInput((prev) => ({ ...prev, message: "" }));
-      setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
-      setTimeout(() => {
-        setErrorChatInfo((prev) => ({ ...prev, isErr: false }));
-      }, 3000);
-    } else {
-      if (currentChatPair !== "") {
-        //submit chat to database
-        addDoc(
-          collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
-          {
-            message_text: chatInput.message,
-            sent_by: currentUserUid,
-            sent_timestamp: serverTimestamp(),
-          }
-        ).then(console.log("adding successful"));
-        //update recentMessage
-        updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-          recentMessage: {
-            message_text: chatInput.message,
-            read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
-            sent_by: currentUserUid,
-            sent_timestamp: serverTimestamp(),
-          },
-        });
-        setInput({ message: "" });
+    const chatPairSnap = await getDoc(doc(dbService, "ChatPair", currentChatPair));
+    if(chatPairSnap.data().is_report_and_block){
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        blocked : true,
+        blockedByMe : false,
+      }));
+      setInput({ message: "" });
+    }
+    else{
+      if (chatInput.message.length === 0 || chatInput.message === "\n") {
+        setInput((prev) => ({ ...prev, message: "" }));
+        setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
+        setTimeout(() => {
+          setErrorChatInfo((prev) => ({ ...prev, isErr: false }));
+        }, 3000);
       } else {
-        console.log("You have not selected a user to chat with!");
+        if (currentChatPair !== "") {
+          //submit chat to database
+          addDoc(
+            collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
+            {
+              message_text: chatInput.message,
+              sent_by: currentUserUid,
+              sent_timestamp: serverTimestamp(),
+            }
+          ).then(console.log("adding successful"));
+          //update recentMessage
+          updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+            recentMessage: {
+              message_text: chatInput.message,
+              read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+              sent_by: currentUserUid,
+              sent_timestamp: serverTimestamp(),
+            },
+          });
+          setInput({ message: "" });
+          reSizeTextarea();
+        } else {
+          console.log("You have not selected a user to chat with!");
+        }
       }
     }
   };
@@ -150,6 +183,14 @@ const ChatContentBoard = ({
       textarea.style.height = "40px";
       let height = textarea.scrollHeight; // 높이
       textarea.style.height = `${height}px`;
+    }
+  }, []);
+
+  const reSizeTextarea = useCallback(() => {
+    let textarea = document.querySelector(".autoTextarea");
+
+    if (textarea) {
+      textarea.style.height = "40px";
     }
   }, []);
 
@@ -168,22 +209,12 @@ const ChatContentBoard = ({
 
   useEffect(() => {
     setChats([]);
-    if(currentChatWithUser.blocked){
-      if(currentChatWithUser.blockByMe){
-        console.log("나의 의해 차단된 채팅입니다");
-      }
-      else{
-        console.log("상대방에 의해 차단된 채팅입니다");
-      }
-    }else{
-      console.log("차단되지 않은 채팅방입니다.");
-    }
-
     if (currentChatPair !== "") {
       const q = query(
         collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
         orderBy("sent_timestamp", "asc")
       );
+
       const unsubscribe = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === ("added" || "modified")) {
@@ -214,6 +245,8 @@ const ChatContentBoard = ({
         });
         setFirstLoading(false);
       });
+      console.log(currentChatWithUser);
+    
       return () => {
         unsubscribe();
       };
@@ -233,6 +266,20 @@ const ChatContentBoard = ({
     //eslint-disable-next-line
   }, [chats]);
 
+  useEffect(()=>{
+    console.log(currentChatWithUser.blocked, currentChatWithUser.blockedByMe)
+    if(currentChatWithUser.blocked){
+      if(currentChatWithUser.blockedByMe){
+        console.log("나의 의해 차단된 채팅입니다");
+      }
+      else{
+        console.log("상대방에 의해 차단된 채팅입니다");
+      }
+    }else{
+      console.log("차단되지 않은 채팅방입니다.");
+    }
+  },[currentChatWithUser]);
+
   return (
     <ChatContentContainer>
       {currentChatPair !== "" ? (
@@ -243,10 +290,14 @@ const ChatContentBoard = ({
             ></MyInfoIconBox>
             <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
             <RightMoreMenuButtonBox>
-              <ChatContentOptionMenu
+              {currentChatWithUser.blocked? currentChatWithUser.blockedByMe && <ChatContentOptionMenuBlockByMe
+              onChatPairDeleteClick={onChatPairDeleteClick}
+              onUnBlockChatPairClick={onUnBlockChatPairClick}
+              />:<ChatContentOptionMenu
                 onChatPairDeleteClick={onChatPairDeleteClick}
                 onBlockChatPairClick={onBlockChatPairClick}
-              />
+              />}
+              
             </RightMoreMenuButtonBox>
           </ChatContentHeaderBox>
           <ChatContentBox>
@@ -266,22 +317,36 @@ const ChatContentBoard = ({
 
             <ChatCotentBoardBlock ref={scrollRef} />
           </ChatContentBox>
-          <ChatInputBox>
+          {
+            !currentChatWithUser.blocked ?
+            (<ChatInputBox>
+              <ChatInput
+                className="autoTextarea"
+                name="message"
+                type="text"
+                onChange={onChange}
+                value={chatInput.message}
+                placeholder="메시지를 입력하세요"
+                isErr={errorChatInfo.isErr}
+                autoFocus
+                maxLength={2000}
+                onInput={autoResizeTextarea}
+                onKeyUp={onKeyUp}
+              ></ChatInput>
+              <SendMessageButton onChatSubmit={onChatSubmit} />
+            </ChatInputBox>) : <ChatInputBox>
             <ChatInput
-              className="autoTextarea"
-              name="message"
-              type="text"
-              onChange={onChange}
-              value={chatInput.message}
-              placeholder="메시지를 입력하세요"
-              isErr={errorChatInfo.isErr}
-              autoFocus
-              maxLength={2000}
-              onInput={autoResizeTextarea}
-              onKeyUp={onKeyUp}
-            ></ChatInput>
-            <SendMessageButton onChatSubmit={onChatSubmit} />
-          </ChatInputBox>
+                className="autoTextarea"
+                name="block"
+                type="text"
+                value=""
+                placeholder="차단된 채팅입니다."
+                disabled
+              ></ChatInput>
+              <SendMessageButton blocked="true"/>
+            </ChatInputBox>
+          }
+          
         </>
       ) : (
         <NoSelectBox />

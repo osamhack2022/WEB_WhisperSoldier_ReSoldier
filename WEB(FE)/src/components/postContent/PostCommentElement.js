@@ -226,13 +226,11 @@ const PostCommentElement = ({
     if (userDoc.data()) {
       setCommentUserNickname(userDoc.data().nickname);
       setCommentUserProfileImg(userDoc.data().profileImg);
-      console.log(userDoc.data().profileImg);
     }
   };
 
   useEffect(() => {
     getIsLiked();
-    console.log(commentElement);
     setCountLikeInComment(commentElement.like_count);
     getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
