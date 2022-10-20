@@ -121,7 +121,7 @@ const ChatContentBoard = ({
         updateDoc(doc(dbService, "ChatPair", currentChatPair), {
           recentMessage: {
             message_text: chatInput.message,
-            read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+            read_by: [currentUserUid],
             sent_by: currentUserUid,
             sent_timestamp: serverTimestamp(),
           },
@@ -175,7 +175,6 @@ const ChatContentBoard = ({
             setChats(chatsArray);
             updateDoc(doc(dbService, "ChatPair", currentChatPair), {
               "recentMessage.read_by": arrayUnion(currentUserUid),
-              // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
             });
           }
           if (change.type === "removed") {

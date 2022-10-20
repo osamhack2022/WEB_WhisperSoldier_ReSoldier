@@ -47,7 +47,7 @@ const ChatPairBoard = ({
     if (chatPairReadByArray.includes(currentUserInfo.uid)) {
     } else {
       updateDoc(doc(dbService, "ChatPair", pairId), {
-        "recentMessage.read_by": arrayUnion(currentUserInfo.uid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+        "recentMessage.read_by": arrayUnion(currentUserInfo.uid),
       });
     }
   };

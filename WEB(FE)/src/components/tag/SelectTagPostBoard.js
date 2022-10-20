@@ -16,7 +16,7 @@ const SelectTagPostBoard = ({selectedTag, tagPosts, isNextTagPostExist, moveNext
 						tagPosts.map((tagpost) => (
 							<div key={tagpost.id}>
 								<br />
-								<Link  to={`/post/${tagpost.id}`}>{tagpost.text}</Link>
+								<Link to={`/post/${tagpost.id}`}>{tagpost.text}</Link>
 							</div>
 						))
 			)}

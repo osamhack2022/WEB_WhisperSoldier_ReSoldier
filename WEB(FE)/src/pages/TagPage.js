@@ -201,12 +201,8 @@ const TagPage = () => {
   const onSearchSubmit = async (e) => {
     e.preventDefault();
     if (selectedTag !== "") {
-      //setNotSearch(false);
-      //setLoading(true);
       setTagPosts([]);
       getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
-      //setResultList([]);
-      //setCurrentSearchCount(0);
     } else {
       console.log("아직 태그를 선택하지 않았습니다.")
     }
