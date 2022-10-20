@@ -23,7 +23,7 @@ const TagBox = () => {
   const getTop20Tag = async () => {
     try {
       const top20TagSnapshot = await getDocs(
-        GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+        GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20)
       );
       top20TagSnapshot.forEach((tag) => {
         const tagObj = {

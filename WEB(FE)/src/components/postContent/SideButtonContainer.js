@@ -263,7 +263,7 @@ export const OtherUserButtonContainer = ({
       >
         채팅하기
       </PostChatButton>
-      <ReportButton toLink="/" isMobile={isMobile}>
+      <ReportButton /* onClick={onClickReportPost} */ toLink="/" isMobile={isMobile}>
         신고하기
       </ReportButton>
     </>

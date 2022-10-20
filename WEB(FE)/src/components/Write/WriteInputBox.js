@@ -77,6 +77,7 @@ const WritePostBox = ({ navigate }) => {
           creator_id: authService.currentUser.uid,
           like_count: 0,
           comment_count: 0,
+          post_report: false,
           post_rep_accept: false,
           tag_name: state.postTag.replace(/ /g, ""),
           text: state.postContent,

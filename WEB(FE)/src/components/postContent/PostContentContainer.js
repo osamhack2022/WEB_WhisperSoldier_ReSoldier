@@ -196,6 +196,8 @@ const PostContentContainer = ({ isAdmin }) => {
           .toLocaleString(),
         id: contentObj.id,
         like_count: contentObj.like_count,
+        post_rep_accept: contentObj.post_rep_accept,
+        post_report: contentObj.post_report,
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
