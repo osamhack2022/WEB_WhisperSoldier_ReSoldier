@@ -252,14 +252,15 @@ export const OtherUserButtonContainer = ({
       navigate("/message");
     }
   };
-  const getIsReported = async (currentPostID = null) => {
-    if (!currentPostID) {
-      currentPostID = postInfo.id;
-    }
-    const reportCheckSnap = await getDoc(doc(dbService, "WorryPost", currentPostID));
+  const getReportStatuses = async () => {
+    const reportCheckSnap = await getDoc(doc(dbService, "WorryPost", postInfo.id));
     if (reportCheckSnap.data().post_report) {
       console.log("이미 신고된 포스트임");
       setIsReported(true);
+    }
+    if (reportCheckSnap.data().post_rep_accept) {
+      console.log("블라인드된 포스트임")
+      setIsReportAccepted(true);
     }
   }
   const onClickReportPost = async (e) => {
@@ -277,7 +278,7 @@ export const OtherUserButtonContainer = ({
     };
   };
   useEffect(() => {
-    getIsReported();
+    getReportStatuses();
   }, [])
   return (
     <>
