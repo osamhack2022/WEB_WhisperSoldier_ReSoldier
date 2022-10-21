@@ -11,6 +11,7 @@ import {
 import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { StartFirstChat } from "../../store/ChatStore";
+import { useEffect, useState } from "react";
 
 export const WriteUserButtonContainer = ({
   toggleEditing,
@@ -133,6 +134,7 @@ export const OtherUserButtonContainer = ({
     deleteDoc,
     collection,
     getDocs,
+    getDoc,
     query,
     where,
     serverTimestamp,
@@ -140,6 +142,9 @@ export const OtherUserButtonContainer = ({
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
+
+  const [isReported, setIsReported] = useState(false);
+  const [isReportAccepted, setIsReportAccepted] = useState(false);
 
   const toggleLike = async () => {
     const { uid: currentUserUid } = JSON.parse(
@@ -201,7 +206,6 @@ export const OtherUserButtonContainer = ({
       sessionStorage.getItem(whisperSodlierSessionKey)
     );
     e.preventDefault();
-    //아직은 따로 설정을 안해줘서 undefined인 모양이다 -> 원래 uid로 조회가 안되는듯!
 
     //채팅방이 이미 존재하는지 체크하기
     let checkQuery;
@@ -248,7 +252,33 @@ export const OtherUserButtonContainer = ({
       navigate("/message");
     }
   };
-
+  const getIsReported = async (currentPostID = null) => {
+    if (!currentPostID) {
+      currentPostID = postInfo.id;
+    }
+    const reportCheckSnap = await getDoc(doc(dbService, "WorryPost", currentPostID));
+    if (reportCheckSnap.data().post_report) {
+      console.log("이미 신고된 포스트임");
+      setIsReported(true);
+    }
+  }
+  const onClickReportPost = async (e) => {
+    if (isReported) {
+      alert("이미 누군가에 의해 신고된 Post입니다.");
+    } else {
+      updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+        "post_report": true,
+      })
+        .then(setPostInfo((prev) => ({
+          ...prev,
+          post_report: true
+        })))
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."));
+    };
+  };
+  useEffect(() => {
+    getIsReported();
+  }, [])
   return (
     <>
       <LikeButton
@@ -263,8 +293,8 @@ export const OtherUserButtonContainer = ({
       >
         채팅하기
       </PostChatButton>
-      <ReportButton /* onClick={onClickReportPost} */ toLink="/" isMobile={isMobile}>
-        신고하기
+      <ReportButton onClickReportPost={onClickReportPost} isMobile={isMobile}>
+        {isReported ? '신고가 접수됨' : '신고하기'}
       </ReportButton>
     </>
   );

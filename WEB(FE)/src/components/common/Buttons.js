@@ -512,9 +512,9 @@ const ReportButtonBlock = styled(Link)`
   }
 `;
 
-export const ReportButton = ({ toLink, children, isMobile }) => {
+export const ReportButton = ({ children, isMobile, onClickReportPost }) => {
   return (
-    <ReportButtonBlock to={toLink} mobile={isMobile ? "true" : "false"}>
+    <ReportButtonBlock onClick={onClickReportPost} mobile={isMobile ? "true" : "false"}>
       <ReportButtonImg></ReportButtonImg>
       <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {children}
