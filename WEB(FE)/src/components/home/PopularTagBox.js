@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dbFunction } from "../../lib/FStore";
+import CalTagCount from "../../modules/CalTagCount";
 import { GetTagQuery } from "../../modules/GetTagQuery";
 import {
   MoreTagButton,
@@ -23,7 +24,7 @@ const TagBox = () => {
   const getTop20Tag = async () => {
     try {
       const top20TagSnapshot = await getDocs(
-        GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+        GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20)
       );
       top20TagSnapshot.forEach((tag) => {
         const tagObj = {
@@ -58,8 +59,8 @@ const TagBox = () => {
           <>
             {tagList.map((tag) => (
               <TagElement key={tag.id}>
-                <TagContentLeft>{tag.tag_name}</TagContentLeft>
-                <TagContentRight>{tag.tag_count}</TagContentRight>
+                <TagContentLeft>#{tag.tag_name}</TagContentLeft>
+                <TagContentRight>{CalTagCount(tag.tag_count)}</TagContentRight>
               </TagElement>
             ))}
             <MoreTagButton>

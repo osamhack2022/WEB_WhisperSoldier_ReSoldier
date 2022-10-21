@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import {
@@ -17,7 +18,6 @@ import {
   CancelButton,
   ConfirmButton,
 } from "../profile/CheckDefaultProfileImgNestDialog";
-import { useState } from "react";
 import { ProcessInfoStore } from "../../store/SuccessStore";
 
 export const WriteUserButtonContainer = ({
@@ -172,6 +172,7 @@ export const OtherUserButtonContainer = ({
     deleteDoc,
     collection,
     getDocs,
+    getDoc,
     query,
     where,
     serverTimestamp,
@@ -179,6 +180,9 @@ export const OtherUserButtonContainer = ({
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
+
+  const [isReported, setIsReported] = useState(false);
+  const [isReportAccepted, setIsReportAccepted] = useState(false);
 
   const toggleLike = async () => {
     const { uid: currentUserUid } = JSON.parse(
@@ -302,6 +306,41 @@ export const OtherUserButtonContainer = ({
     onClickChatButtonFromPost();
   };
 
+  const getReportStatuses = async () => {
+    const reportCheckSnap = await getDoc(
+      doc(dbService, "WorryPost", postInfo.id)
+    );
+    if (reportCheckSnap.data().post_report) {
+      console.log("이미 신고된 포스트임");
+      setIsReported(true);
+    }
+    if (reportCheckSnap.data().post_rep_accept) {
+      console.log("블라인드된 포스트임");
+      setIsReportAccepted(true);
+    }
+  };
+
+  const onClickReportPost = async (e) => {
+    if (isReported) {
+      alert("이미 누군가에 의해 신고된 Post입니다.");
+    } else {
+      updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+        post_report: true,
+      })
+        .then(
+          setPostInfo((prev) => ({
+            ...prev,
+            post_report: true,
+          }))
+        )
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
+        .then(setIsReported(true));
+    }
+  };
+  useEffect(() => {
+    getReportStatuses();
+  }, []);
+
   return (
     <>
       <LikeButton
@@ -339,8 +378,8 @@ export const OtherUserButtonContainer = ({
         </DialogActions>
       </Dialog>
 
-      <ReportButton toLink="/" isMobile={isMobile}>
-        신고하기
+      <ReportButton onClickReportPost={onClickReportPost} isMobile={isMobile}>
+        {isReported ? "신고가 접수됨" : "신고하기"}
       </ReportButton>
     </>
   );

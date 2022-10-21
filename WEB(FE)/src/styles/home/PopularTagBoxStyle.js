@@ -48,7 +48,7 @@ export const TagElement = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 7px 0px;
+  padding: 5px 0px;
 
   text-decoration: none;
   letter-spacing: 1px;
@@ -76,8 +76,9 @@ export const TagContentLeft = styled.div`
 
 export const TagContentRight = styled.div`
   width: fit-content;
-  font-size: 12x;
+  font-size: 12px;
   text-align: right;
+  color: #bdbdbd;
 `;
 
 export const MoreTagButton = styled.div`

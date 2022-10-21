@@ -6,11 +6,14 @@ import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar } from "./InputBox";
 
 const SearchBox = styled(Link)`
+  position: absolute;
   display: flex;
   flex-direction: row;
   align-items: center;
   text-decoration: none;
-  margin-left: 115px;
+  /* margin-left: 115px; */
+  left: 50%;
+  transform: translate(-50%, 0%);
   cursor: default;
   ${media.smallDesktop`
     margin-left : inherit;

@@ -5,7 +5,7 @@ import PostCommentElement from "./PostCommentElement";
 
 const PostCommentBox = styled.div`
   margin: 10px 0px 0px 00px;
-  padding: 10px 20px;
+  padding: 10px 10px;
   width: 100%;
   height: fit-content;
   background-color: #fbfbfb;

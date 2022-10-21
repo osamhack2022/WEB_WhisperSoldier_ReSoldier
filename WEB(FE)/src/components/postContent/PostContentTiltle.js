@@ -109,7 +109,9 @@ const PostContentTitle = ({
       {postInfo.created_timestamp && !editing ? (
         <>
           <PostContentTag>
-            {postInfo.tag_name && `#${postInfo.tag_name}`}
+            {!postInfo.post_rep_accept &&
+              postInfo.tag_name &&
+              `#${postInfo.tag_name}`}
           </PostContentTag>
         </>
       ) : (

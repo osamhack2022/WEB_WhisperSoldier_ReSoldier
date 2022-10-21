@@ -23,6 +23,8 @@ const PostElement = ({ post, nonAdditionalInfo }) => {
       created_timestamp: post.created_timestamp.toDate().toLocaleString(),
       id: post.id,
       postContent: post.text,
+      post_report: post.post_report,
+      post_rep_accept: post.post_rep_accept,
       like_count: post.like_count,
       comment_count: post.comment_count,
       tag_name: post.tag_name,
@@ -33,7 +35,7 @@ const PostElement = ({ post, nonAdditionalInfo }) => {
   return (
     <PostElementBox>
       <PostElementTitle to={`/post/${post.id}`} onClick={() => onClick(post)}>
-        {post.text}
+        {!post.post_rep_accept ? post.text : "블라인드된 포스트입니다."}
       </PostElementTitle>
 
       {!nonAdditionalInfo && (
@@ -51,7 +53,9 @@ const PostElement = ({ post, nonAdditionalInfo }) => {
           {post.like_timestamp &&
             " | " + calTimeToString(post.like_timestamp) + "에 공감했습니다"}
         </PostElementTime>
-        <PostElementTag>{post.tag_name && `#${post.tag_name}`}</PostElementTag>
+        <PostElementTag>
+          {post.tag_name && !post.post_rep_accept && `#${post.tag_name}`}
+        </PostElementTag>
       </PostAdditionalInfoBox>
     </PostElementBox>
   );

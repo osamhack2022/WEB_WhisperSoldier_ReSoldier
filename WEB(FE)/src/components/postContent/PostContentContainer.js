@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
@@ -48,6 +48,9 @@ const PostContentContainer = ({ isAdmin }) => {
 
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+
+  const location = useLocation();
+  // console.log(location);
 
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
@@ -197,6 +200,8 @@ const PostContentContainer = ({ isAdmin }) => {
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
+        post_report: contentObj.post_report,
+        post_rep_accept: contentObj.post_rep_accept,
       }));
       setState((prev) => ({
         ...prev,
@@ -228,8 +233,16 @@ const PostContentContainer = ({ isAdmin }) => {
       getIsLiked();
       getPostUserNickname();
     }
+    console.log(postInfo);
     // eslint-disable-next-line
   }, [postInfo]);
+
+  useEffect(() => {
+    if (postInfo.id !== id) {
+      getContent();
+    }
+    //eslint-disable-next-line
+  }, [location]);
 
   return (
     <PostContentContainerBox>
@@ -267,6 +280,7 @@ const PostContentContainer = ({ isAdmin }) => {
             {!isAdmin &&
               postInfo.created_timestamp &&
               authService.currentUser &&
+              !postInfo.post_rep_accept &&
               (authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer
                   editing={editing}

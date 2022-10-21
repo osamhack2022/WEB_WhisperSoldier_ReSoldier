@@ -8,6 +8,8 @@ export const PostInfo = atom({
     id: "",
     like_count: 0,
     comment_count: 0,
+    post_rep_accept: false,
+    post_report: false,
     postContent: "",
     tag_name: "",
   },

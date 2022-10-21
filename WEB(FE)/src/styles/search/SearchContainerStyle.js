@@ -37,7 +37,9 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 275px;
+  /* margin-left: 275px; */
+  left: 50%;
+  transform: translate(-50%, 0%);
   top: -67px;
   ${media.smallDesktop`
     margin-left: inherit;

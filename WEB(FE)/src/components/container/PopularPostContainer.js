@@ -70,6 +70,8 @@ const PostElement = ({ post }) => {
       created_timestamp: post.created_timestamp.toDate().toLocaleString(),
       id: post.id,
       postContent: post.text,
+      post_report: post.post_report,
+      post_rep_accept: post.post_rep_accept,
       like_count: post.like_count,
       comment_count: post.comment_count,
       tag_name: post.tag_name,

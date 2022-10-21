@@ -52,6 +52,9 @@ const PostCommentElement = ({
 
   const navigate = useNavigate();
 
+  const [isReported, setIsReported] = useState(false);
+  const [isReportAccepted, setIsReportAccepted] = useState(false);
+
   const [commentUserNickname, setCommentUserNickname] = useState("");
   const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
 
@@ -285,8 +288,34 @@ const PostCommentElement = ({
     }
   };
 
+  const getReportStatuses = async () => {
+    const reportCheckSnap = await getDoc(
+      doc(dbService, "Comment", commentElement.id)
+    );
+    if (reportCheckSnap.data().comment_report) {
+      console.log("이미 신고된 댓글임");
+      setIsReported(true);
+    }
+    if (reportCheckSnap.data().comment_rep_accept) {
+      console.log("블라인드된 댓글임");
+      setIsReportAccepted(true);
+    }
+  };
+  const onClickReportComment = async () => {
+    if (isReported) {
+      alert("이미 누군가에 의해 신고된 댓글입니다.");
+    } else {
+      updateDoc(doc(dbService, "Comment", commentElement.id), {
+        comment_report: true,
+      })
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
+        .then(setIsReported(true));
+    }
+  };
+
   useEffect(() => {
     getIsLiked();
+    getReportStatuses();
     setCountLikeInComment(commentElement.like_count);
     getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
@@ -437,8 +466,11 @@ const PostCommentElement = ({
               </DialogActions>
             </Dialog>
 
-            <ReportCommentButton toLink="/" isMobile={!isTablet}>
-              신고하기
+            <ReportCommentButton
+              onClick={onClickReportComment}
+              isMobile={!isTablet}
+            >
+              {isReported ? "신고가 접수됨" : "신고하기"}
             </ReportCommentButton>
           </CommentButtonBox>
         ))}

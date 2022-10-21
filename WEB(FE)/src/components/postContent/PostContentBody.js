@@ -49,7 +49,10 @@ const PostContentBody = ({
             </TagInputBox>
           </>
         ) : (
-          !errorPostInfo && (
+          !errorPostInfo &&
+          (postInfo.post_rep_accept ? (
+            "해당 포스트는 관리자에 의해 블라인드 처리되었습니다."
+          ) : (
             <>
               <PostContentText>{postInfo.postContent}</PostContentText>
               <PostContentInfoBox>
@@ -62,7 +65,7 @@ const PostContentBody = ({
                 </PostContentLikeCount>
               </PostContentInfoBox>
             </>
-          )
+          ))
         ))}
     </PostContentBox>
   );
