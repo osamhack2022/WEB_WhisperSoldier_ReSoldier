@@ -102,22 +102,7 @@ const ReportedPost = () => {
     e.preventDefault();
     setReportedPosts([]);
     getFirstReportedPosts(orderDescOrAsc, timeDepthValue);
-    
   };
-  /* const onAcceptReport = async (documentId) => {
-    await updateDoc(doc(dbService, "WorryPost", documentId), {
-      post_rep_accept: true,
-    })
-    setReportedPosts(reportedPosts.filter((post) => (post.id !== documentId)));
-    console.log("AcceptDocumentId: ", documentId);
-  }
-  const onDenyReport = async (documentId) => {
-    await updateDoc(doc(dbService, "WorryPost", documentId), {
-      post_report: false,
-    })
-    setReportedPosts(reportedPosts.filter((post) => (post.id !== documentId)));
-    console.log("DenyDocumentId: ", documentId);
-  } */
   const onAcceptOrDenyReport = async (documentId, isAccept) => {
     if (isAccept) {
       await updateDoc(doc(dbService, "WorryPost", documentId), {

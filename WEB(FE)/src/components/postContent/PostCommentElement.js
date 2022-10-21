@@ -234,11 +234,11 @@ const PostCommentElement = ({
   const getReportStatuses = async () => {
     const reportCheckSnap = await getDoc(doc(dbService, "Comment", commentElement.id));
     if (reportCheckSnap.data().comment_report) {
-      console.log("이미 신고된 포스트임");
+      console.log("이미 신고된 댓글임");
       setIsReported(true);
     }
     if (reportCheckSnap.data().comment_rep_accept) {
-      console.log("블라인드된 포스트임")
+      console.log("블라인드된 댓글임")
       setIsReportAccepted(true);
     }
   }
@@ -279,14 +279,17 @@ const PostCommentElement = ({
         </PostContentLikeCount>
       </CommentTitle>
       {!isEditingComment ? (
-        <CommentText>{commentElement.comment_text}</CommentText>
+        <CommentText>{commentElement.comment_rep_accept ?
+          ("관리자에 의해 블라인드 처리된 댓글입니다."
+          ) : (
+          commentElement.comment_text)}</CommentText>
       ) : (
         <CommentELementEditBox
           newComment={newComment}
           onCommentChange={onCommentChange}
         ></CommentELementEditBox>
       )}
-      {!isAdmin &&
+      {!isAdmin && !commentElement.comment_rep_accept &&
         (isOwner ? (
           <CommentButtonBox>
             <EditCommentButton
