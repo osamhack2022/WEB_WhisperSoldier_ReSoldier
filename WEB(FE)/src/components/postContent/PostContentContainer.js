@@ -236,6 +236,7 @@ const PostContentContainer = ({ isAdmin }) => {
             !isTablet &&
             postInfo.created_timestamp &&
             authService.currentUser &&
+            !postInfo.post_rep_accept &&
             (authService.currentUser.uid === postInfo.creator_id ? (
               <WriteUserButtonContainer
                 editing={editing}
@@ -254,7 +255,7 @@ const PostContentContainer = ({ isAdmin }) => {
             ))}
         </SideButtonBox>
 
-        {!isAdmin && isTablet && postInfo.created_timestamp ? (
+        {!isAdmin && isTablet && !postInfo.post_rep_accept && postInfo.created_timestamp ? (
           <SideButtonBox isNotTop={true}>
             {authService.currentUser ? (
               authService.currentUser.uid === postInfo.creator_id ? (

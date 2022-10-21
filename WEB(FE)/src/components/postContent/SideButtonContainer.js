@@ -274,7 +274,9 @@ export const OtherUserButtonContainer = ({
           ...prev,
           post_report: true
         })))
-        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."));
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
+        .then(setIsReported(true));
+
     };
   };
   useEffect(() => {

@@ -88,7 +88,7 @@ const PostContentBody = ({
           ></input>
         </>
       ) : !errorPostInfo ? (
-        <PostContentText>{postInfo.postContent}</PostContentText>
+        (postInfo.post_rep_accept) ? ("해당 포스트는 관리자에 의해 블라인드 처리되었습니다.") : <PostContentText>{postInfo.postContent}</PostContentText>
       ) : (
         <PostContentErrorText>
           찾으려는 포스트가 존재하지 않습니다.
