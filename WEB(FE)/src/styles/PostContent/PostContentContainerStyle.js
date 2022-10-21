@@ -18,7 +18,7 @@ export const PostContentContainerBox = styled.div`
 `;
 
 export const SideButtonContainer = styled.div`
-  width: 110px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   ${media.mobile`
@@ -28,6 +28,7 @@ export const SideButtonContainer = styled.div`
 `;
 
 export const PostContentBodyContainer = styled.div`
+  position: relative;
   margin-left: 10px;
   flex-grow: 1;
   ${media.smallDesktop`
@@ -38,4 +39,13 @@ export const PostContentBodyContainer = styled.div`
   margin-top : 10px;
   width: inherit;
   `}
+`;
+
+export const PostContentBodyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  padding: 5px 20px 5px 20px;
+  border: 1px solid rgb(189, 189, 189);
 `;

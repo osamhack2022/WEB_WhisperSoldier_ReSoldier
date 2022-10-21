@@ -12,7 +12,7 @@ import {
   PostElementTitle,
 } from "../../styles/post/PostElementStyle";
 
-const PostElement = ({ post }) => {
+const PostElement = ({ post, nonAdditionalInfo }) => {
   const setPostInfo = useSetRecoilState(PostInfo);
   const setCurrentScrollPos = useSetRecoilState(CurrentScrollPos);
 
@@ -35,12 +35,16 @@ const PostElement = ({ post }) => {
       <PostElementTitle to={`/post/${post.id}`} onClick={() => onClick(post)}>
         {post.text}
       </PostElementTitle>
-      <PostElementInfoBox>
-        <PostElementLikeCount>{post.like_count}</PostElementLikeCount>
-        <PostElementCommentCount>
-          {post.comment_count ? post.comment_count : "0"}
-        </PostElementCommentCount>
-      </PostElementInfoBox>
+
+      {!nonAdditionalInfo && (
+        <PostElementInfoBox>
+          <PostElementLikeCount>{post.like_count}</PostElementLikeCount>
+          <PostElementCommentCount>
+            {post.comment_count ? post.comment_count : "0"}
+          </PostElementCommentCount>
+        </PostElementInfoBox>
+      )}
+
       <PostAdditionalInfoBox>
         <PostElementTime>
           {calTimeToString(post.created_timestamp)}{" "}

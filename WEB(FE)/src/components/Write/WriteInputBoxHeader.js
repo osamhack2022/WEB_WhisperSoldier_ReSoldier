@@ -1,6 +1,5 @@
 import { BsPencilSquare } from "react-icons/bs";
 import styled from "styled-components";
-import { WritePostTitle } from "./WriteComponent";
 import { Dialog, DialogActions } from "@mui/material";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import {
@@ -8,6 +7,15 @@ import {
   ConfirmButton,
 } from "../profile/CheckDefaultProfileImgNestDialog";
 import { useState } from "react";
+
+const WritePostTitle = styled.div`
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0.64px;
+  color: #000000;
+  background-color: rgba(0, 0, 0, 0);
+  font-weight: 700;
+`;
 
 const WritePostButtonShape = styled.button`
   position: relative;

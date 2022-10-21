@@ -28,7 +28,7 @@ export const CommentBox = styled.div`
 export const CommentTitle = styled.div`
   display: flex;
   margin-top: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -43,7 +43,7 @@ export const CommentUserBox = styled.div`
 `;
 
 export const CommentUserText = styled.div`
-  margin-left: 5px;
+  margin-left: 10px;
   font-size: 13px;
   font-weight: 600;
   font-stretch: normal;
@@ -84,8 +84,8 @@ const CommentUserIconShape = styled.div`
 `;
 
 const MyInfoIcon = styled(FaUserCircle)`
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   color: #555555;
 `;
 
@@ -103,7 +103,7 @@ export const MyInfoIconBox = ({ commentUserProfileImg }) => {
         <Avatar
           alt="userImg"
           src={commentUserProfileImg}
-          sx={{ width: 40, height: 40 }}
+          sx={{ width: 30, height: 30 }}
         />
       ) : (
         <MyInfoIcon></MyInfoIcon>
@@ -121,9 +121,7 @@ export const CommentUserIcon = () => {
 };
 
 export const CommentTimeText = styled.div`
-  position: absolute;
-  right: 60px;
-  margin-right: 10px;
+  margin-right: 20px;
   font-size: 12px;
   text-align: right;
   letter-spacing: -0.34px;
@@ -133,7 +131,6 @@ export const CommentTimeText = styled.div`
 
 export const CommentText = styled.div`
   white-space: pre-wrap;
-  margin-bottom: 10px;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -604,3 +601,10 @@ export const CommentContentLikeCount = ({ children, isMyLike }) => {
     </CommentContentLikeBox>
   );
 };
+
+export const CommentInfoBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 15px 0px 10px 0px;
+`;

@@ -1,5 +1,3 @@
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
 import WritePostHeader from "./WriteInputBoxHeader";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
@@ -8,40 +6,14 @@ import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { ProcessInfoStore } from "../../store/SuccessStore";
-
-const InputBox = styled.div`
-  margin-top: 10px;
-  padding: 20px;
-  height: 500px;
-  flex-grow: 1;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  ${media.mobile`
-  width: inherit;
-  `}
-`;
-
-const InputForm = styled.textarea`
-  background-color: #fbfbfb;
-  width: 100%;
-  height: 350px;
-  white-space: pre-wrap;
-  border: none;
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const BottonLine = styled.div`
-  margin: 5px 0px;
-  border-top: 1px solid #bdbdbd;
-`;
-
-const TagInputBox = styled.div`
-  margin-top: 10px;
-`;
+import {
+  BottonLine,
+  InputBox,
+  InputForm,
+  TagInput,
+  TagInputBox,
+  TagInputBoxTitle,
+} from "../../styles/write/WriteInputBoxStyle";
 
 const WritePostBox = ({ navigate }) => {
   const {
@@ -127,13 +99,14 @@ const WritePostBox = ({ navigate }) => {
       ></InputForm>
       <BottonLine />
       <TagInputBox>
-        <input
+        <TagInput
           name="postTag"
-          placeholder="태그를 정의해주세요"
+          placeholder="고민 글에 태그를 추가해보세요!"
           type="text"
           value={state.postTag}
           onChange={onChange}
-        ></input>
+        ></TagInput>
+        <TagInputBoxTitle>#{state.postTag.replace(/ /g, "")}</TagInputBoxTitle>
       </TagInputBox>
     </InputBox>
   );

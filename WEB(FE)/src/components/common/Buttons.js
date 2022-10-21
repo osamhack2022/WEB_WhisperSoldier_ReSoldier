@@ -350,6 +350,7 @@ const BackButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${BackButtonImg} {
     color: #003000;
     transform: scale(1.1);

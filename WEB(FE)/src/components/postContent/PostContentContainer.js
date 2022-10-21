@@ -8,6 +8,7 @@ import { dbFunction, dbService } from "../../lib/FStore";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
+  PostContentBodyBox,
   PostContentBodyContainer,
   PostContentContainerBox,
   SideButtonContainer,
@@ -15,9 +16,9 @@ import {
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
-import PopularPostContainer from "../container/PopularPostContainer";
+import RecentPostContainer from "../container/PopularPostContainer";
 import RecommandTagContainer from "../container/RecommandTagContainer";
-import InputTagContainer from "./InputTageContainer";
+import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
 import PostContentBody from "./PostContentBody";
 import PostContentTitle from "./PostContentTiltle";
@@ -212,75 +213,56 @@ const PostContentContainer = ({ isAdmin }) => {
 
   return (
     <PostContentContainerBox>
-      <SideButtonContainer>
-        <SideButtonBox>
-          <BackButton goBack={goBack} isMobile={isTablet ? "false" : "true"}>
-            뒤로가기
-          </BackButton>
-          {!isAdmin &&
-            !isTablet &&
-            postInfo.created_timestamp &&
-            authService.currentUser &&
-            (authService.currentUser.uid === postInfo.creator_id ? (
-              <WriteUserButtonContainer
-                editing={editing}
-                postInfo={postInfo}
-                toggleEditing={toggleEditing}
-                isMobile={isTablet ? "false" : "true"}
-              ></WriteUserButtonContainer>
-            ) : (
-              <OtherUserButtonContainer
-                isMobile={isTablet ? "false" : "true"}
-                isLikedByMe={isLikedByMe}
-                setIsLikedByMe={setIsLikedByMe}
-                postInfo={postInfo}
-                setPostInfo={setPostInfo}
-              ></OtherUserButtonContainer>
-            ))}
-        </SideButtonBox>
-
-        {!isAdmin && isTablet && postInfo.created_timestamp ? (
-          <SideButtonBox isNotTop={true}>
-            {authService.currentUser ? (
-              authService.currentUser.uid === postInfo.creator_id ? (
+      <PostContentBodyContainer>
+        <SideButtonContainer>
+          <SideButtonBox>
+            <BackButton goBack={goBack} isMobile={isTablet ? "false" : "true"}>
+              뒤로가기
+            </BackButton>
+            {!isAdmin &&
+              postInfo.created_timestamp &&
+              authService.currentUser &&
+              (authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer
                   editing={editing}
                   postInfo={postInfo}
                   toggleEditing={toggleEditing}
+                  isMobile={isTablet ? "false" : "true"}
                 ></WriteUserButtonContainer>
               ) : (
                 <OtherUserButtonContainer
-                  postInfo={postInfo}
+                  isMobile={isTablet ? "false" : "true"}
                   isLikedByMe={isLikedByMe}
-                  setPostInfo={setPostInfo}
                   setIsLikedByMe={setIsLikedByMe}
+                  postInfo={postInfo}
+                  setPostInfo={setPostInfo}
                 ></OtherUserButtonContainer>
-              )
-            ) : (
-              <></>
-            )}
+              ))}
           </SideButtonBox>
-        ) : (
-          <></>
-        )}
-      </SideButtonContainer>
-      <PostContentBodyContainer>
-        <PostContentTitle
-          postInfo={postInfo}
-          errorPostInfo={errorPostInfo}
-          isMyLike={isLikedByMe}
-          postUserNickname={postUserNickname}
-          postUserProfileImg={postUserProfileImg}
-        ></PostContentTitle>
-        <PostContentBody
-          postInfo={postInfo}
-          state={state}
-          onChange={onChange}
-          editing={editing}
-          onClick={onClick}
-          errorPostInfo={errorPostInfo}
-          errorEditInfo={errorEditInfo}
-        ></PostContentBody>
+        </SideButtonContainer>
+
+        <PostContentBodyBox>
+          <PostContentTitle
+            editing={editing}
+            postInfo={postInfo}
+            errorPostInfo={errorPostInfo}
+            postUserNickname={postUserNickname}
+            postUserProfileImg={postUserProfileImg}
+            onClick={onClick}
+            errorEditInfo={errorEditInfo}
+          ></PostContentTitle>
+          <PostContentBody
+            postInfo={postInfo}
+            state={state}
+            onChange={onChange}
+            editing={editing}
+            onClick={onClick}
+            isMyLike={isLikedByMe}
+            errorPostInfo={errorPostInfo}
+            errorEditInfo={errorEditInfo}
+          ></PostContentBody>
+        </PostContentBodyBox>
+
         {postInfo.created_timestamp && !editing && (
           <PostCommentContainer
             postInfo={postInfo}
@@ -296,11 +278,11 @@ const PostContentContainer = ({ isAdmin }) => {
         {postInfo.created_timestamp ? (
           editing ? (
             <>
-              <InputTagContainer></InputTagContainer>
-              <RecommandTagContainer></RecommandTagContainer>
+              {/* <RecommandTagContainer></RecommandTagContainer> */}
+              <SideOptionForm />
             </>
           ) : (
-            <PopularPostContainer></PopularPostContainer>
+            <RecentPostContainer></RecentPostContainer>
           )
         ) : (
           <></>

@@ -18,7 +18,7 @@ import { dbFunction } from "../../lib/FStore";
 import { useEffect, useState } from "react";
 import { GetTagQuery } from "../../modules/GetTagQuery";
 
-const SideOptionForm = () => {
+export const SideOptionForm = () => {
   const { getDocs } = dbFunction;
   const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -66,7 +66,6 @@ const PostBoard = () => {
           ...doc.data(),
           id: doc.id,
         };
-        console.log(postObj);
         setPosts((prev) => [...prev, postObj]);
         setPostsRecoil((prev) => [...prev, postObj]);
       });

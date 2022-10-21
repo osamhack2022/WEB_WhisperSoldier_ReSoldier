@@ -17,7 +17,10 @@ import {
 import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import styled from "styled-components";
-import {ChatContentOptionMenu, ChatContentOptionMenuBlockByMe} from "./ChatContentOptionMenu";
+import {
+  ChatContentOptionMenu,
+  ChatContentOptionMenuBlockByMe,
+} from "./ChatContentOptionMenu";
 
 const ChatCotentBoardBlock = styled.div`
   margin: 10px;
@@ -59,7 +62,7 @@ const ChatContentBoard = ({
     serverTimestamp,
     addDoc,
     arrayUnion,
-    getDoc
+    getDoc,
   } = dbFunction;
   const [firstLoading, setFirstLoading] = useState(true);
 
@@ -84,8 +87,8 @@ const ChatContentBoard = ({
       ...prev,
       nickname: "",
       profileImg: "",
-      blocked : false,
-      blockedByMe : false,
+      blocked: false,
+      blockedByMe: false,
     }));
     setSHowChatContent(false);
     setSuccessInfo((prev) => ({ ...prev, deleteProcess: true }));
@@ -97,21 +100,21 @@ const ChatContentBoard = ({
     }, 3000);
   };
 
-  const onBlockChatPairClick = async (e) =>{
+  const onBlockChatPairClick = async (e) => {
     e.preventDefault();
 
     await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-      is_report_and_block : currentUserUid
+      is_report_and_block: currentUserUid,
     });
     setCurrentChatWithUser((prev) => ({
       ...prev,
-      blocked : true,
-      blockedByMe : true,
+      blocked: true,
+      blockedByMe: true,
     }));
     setSuccessInfo((prev) => ({
       ...prev,
       chatWithUserNickname: currentChatWithUser.nickname,
-      blockProcess: true
+      blockProcess: true,
     }));
     setTimeout(() => {
       setSuccessInfo((prev) => ({
@@ -119,24 +122,23 @@ const ChatContentBoard = ({
         blockProcess: false,
       }));
     }, 3000);
-    
-  }
+  };
 
   const onUnBlockChatPairClick = async (e) => {
     e.preventDefault();
 
     await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-      is_report_and_block : ""
+      is_report_and_block: "",
     });
     setCurrentChatWithUser((prev) => ({
       ...prev,
-      blocked : false,
-      blockedByMe : false,
+      blocked: false,
+      blockedByMe: false,
     }));
     setSuccessInfo((prev) => ({
       ...prev,
       chatWithUserNickname: currentChatWithUser.nickname,
-      unblockProcess: true
+      unblockProcess: true,
     }));
     setTimeout(() => {
       setSuccessInfo((prev) => ({
@@ -144,23 +146,24 @@ const ChatContentBoard = ({
         unblockProcess: false,
       }));
     }, 3000);
-  }
+  };
 
   const onChatSubmit = async (e = null) => {
     if (e !== null) {
       e.preventDefault();
     }
-    const chatPairSnap = await getDoc(doc(dbService, "ChatPair", currentChatPair));
-    if(chatPairSnap.data().is_report_and_block){
+    const chatPairSnap = await getDoc(
+      doc(dbService, "ChatPair", currentChatPair)
+    );
+    if (chatPairSnap.data().is_report_and_block) {
       setCurrentChatWithUser((prev) => ({
         ...prev,
-        blocked : true,
-        blockedByMe : false,
+        blocked: true,
+        blockedByMe: false,
       }));
       setInput({ message: "" });
       reSizeTextarea();
-    }
-    else{
+    } else {
       if (chatInput.message.length === 0 || chatInput.message === "\n") {
         setInput((prev) => ({ ...prev, message: "" }));
         setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
@@ -263,7 +266,7 @@ const ChatContentBoard = ({
         setFirstLoading(false);
       });
       console.log(currentChatWithUser);
-    
+
       return () => {
         unsubscribe();
       };
@@ -283,20 +286,6 @@ const ChatContentBoard = ({
     //eslint-disable-next-line
   }, [chats]);
 
-  // useEffect(()=>{
-  //   console.log(currentChatWithUser.blocked, currentChatWithUser.blockedByMe)
-  //   if(currentChatWithUser.blocked){
-  //     if(currentChatWithUser.blockedByMe){
-  //       console.log("나의 의해 차단된 채팅입니다");
-  //     }
-  //     else{
-  //       console.log("상대방에 의해 차단된 채팅입니다");
-  //     }
-  //   }else{
-  //     console.log("차단되지 않은 채팅방입니다.");
-  //   }
-  // },[currentChatWithUser]);
-
   return (
     <ChatContentContainer>
       {currentChatPair !== "" ? (
@@ -307,14 +296,19 @@ const ChatContentBoard = ({
             ></MyInfoIconBox>
             <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
             <RightMoreMenuButtonBox>
-              {currentChatWithUser.blocked? currentChatWithUser.blockedByMe && <ChatContentOptionMenuBlockByMe
-              onChatPairDeleteClick={onChatPairDeleteClick}
-              onUnBlockChatPairClick={onUnBlockChatPairClick}
-              />:<ChatContentOptionMenu
-                onChatPairDeleteClick={onChatPairDeleteClick}
-                onBlockChatPairClick={onBlockChatPairClick}
-              />}
-              
+              {currentChatWithUser.blocked ? (
+                currentChatWithUser.blockedByMe && (
+                  <ChatContentOptionMenuBlockByMe
+                    onChatPairDeleteClick={onChatPairDeleteClick}
+                    onUnBlockChatPairClick={onUnBlockChatPairClick}
+                  />
+                )
+              ) : (
+                <ChatContentOptionMenu
+                  onChatPairDeleteClick={onChatPairDeleteClick}
+                  onBlockChatPairClick={onBlockChatPairClick}
+                />
+              )}
             </RightMoreMenuButtonBox>
           </ChatContentHeaderBox>
           <ChatContentBox>
@@ -334,9 +328,8 @@ const ChatContentBoard = ({
 
             <ChatCotentBoardBlock ref={scrollRef} />
           </ChatContentBox>
-          {
-            !currentChatWithUser.blocked ?
-            (<ChatInputBox>
+          {!currentChatWithUser.blocked ? (
+            <ChatInputBox>
               <ChatInput
                 className="autoTextarea"
                 name="message"
@@ -351,8 +344,10 @@ const ChatContentBoard = ({
                 onKeyUp={onKeyUp}
               ></ChatInput>
               <SendMessageButton onChatSubmit={onChatSubmit} />
-            </ChatInputBox>) : <ChatInputBox>
-            <ChatInput
+            </ChatInputBox>
+          ) : (
+            <ChatInputBox>
+              <ChatInput
                 className="autoTextarea"
                 name="block"
                 type="text"
@@ -360,10 +355,9 @@ const ChatContentBoard = ({
                 placeholder="차단된 채팅입니다."
                 disabled
               ></ChatInput>
-              <SendMessageButton blocked="true"/>
+              <SendMessageButton blocked="true" />
             </ChatInputBox>
-          }
-          
+          )}
         </>
       ) : (
         <NoSelectBox />

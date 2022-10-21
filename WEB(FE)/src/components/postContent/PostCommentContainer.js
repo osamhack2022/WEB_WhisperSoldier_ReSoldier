@@ -118,12 +118,15 @@ const PostCommentContainer = ({
 
   return (
     <>
-      <PostCommentForm
-        state={state}
-        onChange={onChange}
-        onCommentSubmit={onCommentSubmit}
-        errorCommentInfo={errorCommentInfo}
-      ></PostCommentForm>
+      {!isAdmin && (
+        <PostCommentForm
+          state={state}
+          onChange={onChange}
+          onCommentSubmit={onCommentSubmit}
+          errorCommentInfo={errorCommentInfo}
+        ></PostCommentForm>
+      )}
+
       <PostCommentContent
         postComments={postComments}
         getPostComments={getPostComments}

@@ -54,7 +54,7 @@ export const SideButtonBoxForWritePage = ({ children, isNotTop }) => {
 export const SideOptionContainer = styled.div`
   margin-left: 10px;
   height: fit-content;
-  width: 190px;
+  width: 220px;
   ${media.mobile`
     margin-left: inherit;
     margin-top: 10px;
@@ -111,4 +111,9 @@ export const TagContentLeftForSideBox = styled.div`
   width: fit-content;
   font-size: 13px;
   text-align: left;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;

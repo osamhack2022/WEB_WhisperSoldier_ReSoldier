@@ -2,54 +2,55 @@ import {
   LoadingText,
   MyInfoIconBox,
   PostContentBox,
-  PostContentLikeCount,
   PostContentTag,
   PostContentTiltleText,
-  PostContentTime,
   PostUserBox,
-  UserProfileImg,
+  WritePostTitle,
 } from "../../styles/PostContent/PostContentTitleStyle";
+import { WritePostButton } from "../Write/WriteInputBoxHeader";
 
 const PostContentTitle = ({
+  editing,
   postInfo,
   errorPostInfo,
-  isMyLike,
   postUserNickname,
   postUserProfileImg,
+  onClick,
+  errorEditInfo,
 }) => {
   return (
-    <PostContentBox>
+    <PostContentBox editing={editing}>
       <PostUserBox>
         {postInfo.created_timestamp ? (
-          <>
-            <MyInfoIconBox
-              postUserProfileImg={postUserProfileImg}
-            ></MyInfoIconBox>
-            <PostContentTiltleText>
-              {postUserNickname.length > 0 ? postUserNickname : "닉네임 없음"}
-            </PostContentTiltleText>
-          </>
+          editing ? (
+            <>
+              <WritePostTitle>고민 수정하기</WritePostTitle>
+              <WritePostButton
+                onClick={onClick}
+                errorWritePostInfo={errorEditInfo}
+              >
+                {errorEditInfo ? "내용을 입력해 주세요" : "작성완료"}
+              </WritePostButton>
+            </>
+          ) : (
+            <>
+              <MyInfoIconBox
+                postUserProfileImg={postUserProfileImg}
+              ></MyInfoIconBox>
+              <PostContentTiltleText>
+                {postUserNickname.length > 0 ? postUserNickname : "닉네임 없음"}
+              </PostContentTiltleText>
+            </>
+          )
         ) : (
           !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>
         )}
       </PostUserBox>
-      <div>
-        &nbsp;&nbsp;{postInfo.tag_name!=="" ? `#${postInfo.tag_name}` : null}
-      </div>
-      {postInfo.created_timestamp ? (
+      {postInfo.created_timestamp && !editing ? (
         <>
           <PostContentTag>
             {postInfo.tag_name && `#${postInfo.tag_name}`}
           </PostContentTag>
-
-          <PostContentTime>
-            {postInfo.created_timestamp !== null
-              ? postInfo.created_timestamp
-              : ""}
-          </PostContentTime>
-          <PostContentLikeCount isMyLike={isMyLike}>
-            {postInfo.like_count}
-          </PostContentLikeCount>
         </>
       ) : (
         <></>

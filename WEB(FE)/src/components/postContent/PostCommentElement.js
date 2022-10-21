@@ -8,6 +8,7 @@ import {
   CommentBox,
   CommentButtonBox,
   CommentELementEditBox,
+  CommentInfoBox,
   CommentText,
   CommentTimeText,
   CommentTitle,
@@ -21,7 +22,11 @@ import {
   PostChatCommentButton,
   ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
-import { PostContentLikeCount } from "../../styles/PostContent/PostContentTitleStyle";
+import { PostContentLikeCount } from "../../styles/PostContent/PostContentBodyStyle";
+import {
+  CommentMoreOptionMenu,
+  CommentMoreOptionMenuForMe,
+} from "./CommentMoreOptionMenu";
 
 const PostCommentElement = ({
   commentElement,
@@ -247,10 +252,12 @@ const PostCommentElement = ({
             {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
           </CommentUserText>
         </CommentUserBox>
-        <CommentTimeText>{created_timestamp}</CommentTimeText>
-        <PostContentLikeCount isMyLike={isLikedByMe}>
-          {countLikeInComment}
-        </PostContentLikeCount>
+        {!isAdmin &&
+          (isOwner ? (
+            <CommentMoreOptionMenuForMe></CommentMoreOptionMenuForMe>
+          ) : (
+            <CommentMoreOptionMenu></CommentMoreOptionMenu>
+          ))}
       </CommentTitle>
       {!isEditingComment ? (
         <CommentText>{commentElement.comment_text}</CommentText>
@@ -260,6 +267,13 @@ const PostCommentElement = ({
           onCommentChange={onCommentChange}
         ></CommentELementEditBox>
       )}
+      <CommentInfoBox>
+        <CommentTimeText>{created_timestamp}</CommentTimeText>
+        <PostContentLikeCount isMyLike={isLikedByMe}>
+          {countLikeInComment}
+        </PostContentLikeCount>
+      </CommentInfoBox>
+
       {!isAdmin &&
         (isOwner ? (
           <CommentButtonBox>
