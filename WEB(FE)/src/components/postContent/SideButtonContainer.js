@@ -161,6 +161,8 @@ export const OtherUserButtonContainer = ({
   postInfo,
   setPostInfo,
   setIsLikedByMe,
+  setAlertInfo,
+  postUserNickname,
 }) => {
   const navigate = useNavigate();
   const {
@@ -207,7 +209,10 @@ export const OtherUserButtonContainer = ({
         }))
       );
       setIsLikedByMe(false);
-      console.log("Subtracted");
+      setAlertInfo((prev) => ({ ...prev, subLikePost: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, subLikePost: false }));
+      }, 3000);
     } else {
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count + 1,
@@ -222,8 +227,6 @@ export const OtherUserButtonContainer = ({
         user_id: currentUserUid,
         created_timestamp: serverTimestamp(),
       }).then(setIsLikedByMe(true));
-      console.log("Added");
-      console.log(postInfo.id);
     }
     setIsUpdatePostList((prev) => ({
       ...prev,
@@ -231,13 +234,16 @@ export const OtherUserButtonContainer = ({
       newestPage: true,
       popularPage: true,
     }));
+    setAlertInfo((prev) => ({ ...prev, addLikePost: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, addLikePost: false }));
+    }, 3000);
   };
 
-  const onClickChatButtonFromPost = async (e) => {
+  const onClickChatButtonFromPost = async () => {
     const { uid: currentUserUid } = JSON.parse(
       sessionStorage.getItem(whisperSodlierSessionKey)
     );
-    e.preventDefault();
 
     let checkQuery;
     if (postInfo.creator_id <= currentUserUid) {
@@ -284,6 +290,20 @@ export const OtherUserButtonContainer = ({
     }
   };
 
+  const [openDialogForStartChat, setOpenDialogForStartChat] = useState(false);
+  const handleClickOpenDialogForStartChat = () => {
+    setOpenDialogForStartChat(true);
+  };
+
+  const handleCloseDialogForStartChat = () => {
+    setOpenDialogForStartChat(false);
+  };
+
+  const onStartChat = () => {
+    setOpenDialogForStartChat(false);
+    onClickChatButtonFromPost();
+  };
+
   return (
     <>
       <LikeButton
@@ -294,10 +314,33 @@ export const OtherUserButtonContainer = ({
 
       <PostChatButton
         isMobile={isMobile}
-        onClickChatButtonFromPost={onClickChatButtonFromPost}
+        onClickChatButtonFromPost={handleClickOpenDialogForStartChat}
       >
         채팅하기
       </PostChatButton>
+      <Dialog
+        open={openDialogForStartChat}
+        onClose={handleCloseDialogForStartChat}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <WsDialogTitle>
+          {postUserNickname ? postUserNickname : "익명"}와 채팅하시겠습니까?
+        </WsDialogTitle>
+        <DialogActions>
+          <CancelButton
+            onClick={handleCloseDialogForStartChat}
+            color="primary"
+            autoFocus
+          >
+            취소
+          </CancelButton>
+          <ConfirmButton color="primary" onClick={onStartChat}>
+            채팅 시작
+          </ConfirmButton>
+        </DialogActions>
+      </Dialog>
+
       <ReportButton toLink="/" isMobile={isMobile}>
         신고하기
       </ReportButton>

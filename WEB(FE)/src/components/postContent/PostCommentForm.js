@@ -1,11 +1,15 @@
 import { Dialog, DialogActions } from "@mui/material";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
+import { dbFunction, dbService } from "../../lib/FStore";
+import { authService } from "../../lib/FAuth";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import {
   CancelButton,
   ConfirmButton,
 } from "../profile/CheckDefaultProfileImgNestDialog";
+import { useSetRecoilState } from "recoil";
+import { IsUpdatePostList } from "../../store/PostStore";
 
 const PostCommentFormBox = styled.div`
   margin: 10px 0px 0px 0px;
@@ -79,13 +83,27 @@ export const WriteCommentButton = ({ onClick, errorCommentInfo, children }) => {
 
 const PostCommentForm = ({
   state,
+  setState,
   onChange,
-  onCommentSubmit,
   errorCommentInfo,
   setCommentInfo,
+  postInfo,
+  setAlertInfo,
+  getPostComments,
 }) => {
+  const {
+    doc,
+    addDoc,
+    updateDoc,
+    collection,
+    serverTimestamp,
+
+    increment,
+  } = dbFunction;
   const [openDialogForCreateComment, setOpenDialogForCreateComment] =
     useState(false);
+  const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+
   const handleClickOpenDialogForCreateComment = () => {
     if (state.comment.length === 0) {
       setCommentInfo(true);
@@ -115,6 +133,39 @@ const PostCommentForm = ({
       textarea.style.height = `${height}px`;
     }
   }, []);
+
+  const onCommentSubmit = async () => {
+    try {
+      await addDoc(collection(dbService, "Comment"), {
+        commentor_id: authService.currentUser.uid,
+        associated_post_id: postInfo.id,
+        comment_text: state.comment,
+        comment_report: false,
+        comment_rep_accept: false,
+        like_count: 0,
+        created_timestamp: serverTimestamp(),
+      });
+      const updateRef = doc(dbService, "WorryPost", postInfo.id);
+      await updateDoc(updateRef, {
+        comment_count: increment(1),
+      });
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        searchPage: true,
+        newestPage: true,
+        popularPage: true,
+      }));
+      setState((prev) => ({ ...prev, comment: "" }));
+      setAlertInfo((prev) => ({ ...prev, createComment: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, createComment: false }));
+      }, 3000);
+      getPostComments(true);
+    } catch (error) {
+      console.log("Error adding comment: ", error);
+    }
+  };
+
   return (
     <PostCommentFormBox>
       <PostCommentTextarea

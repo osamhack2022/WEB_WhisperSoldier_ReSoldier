@@ -296,6 +296,7 @@ const LikeButtonBlock = styled.div`
   align-items: center;
   transition: all 0.2s;
   margin-right: 10px;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
     color: #000000;
     transform: scale(1.1);

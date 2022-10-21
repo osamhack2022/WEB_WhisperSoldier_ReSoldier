@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import styled from "styled-components";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
+import media from "../../modules/MediaQuery";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -68,6 +70,8 @@ const PostContentContainer = ({ isAdmin }) => {
   const [alertInfo, setAlertInfo] = useState({
     editPost: false,
     createComment: false,
+    addLikePost: false,
+    subLikePost: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -223,6 +227,12 @@ const PostContentContainer = ({ isAdmin }) => {
       <NicknameTextBox success={alertInfo.createComment}>
         댓글을 작성했습니다.
       </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.addLikePost}>
+        포스트를 공감했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.subLikePost}>
+        포스트 공감을 취소했습니다.
+      </NicknameTextBox>
       <PostContentBodyContainer>
         <SideButtonContainer>
           <SideButtonBox>
@@ -246,6 +256,8 @@ const PostContentContainer = ({ isAdmin }) => {
                   setIsLikedByMe={setIsLikedByMe}
                   postInfo={postInfo}
                   setPostInfo={setPostInfo}
+                  setAlertInfo={setAlertInfo}
+                  postUserNickname={postUserNickname}
                 ></OtherUserButtonContainer>
               ))}
           </SideButtonBox>

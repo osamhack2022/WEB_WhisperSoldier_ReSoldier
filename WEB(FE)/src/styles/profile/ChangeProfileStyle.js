@@ -117,7 +117,7 @@ export const ChangeNickNameBox = styled.div`
 // };
 
 export const NicknameTextBox = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 3;
   font-size: 14px;
   text-align: center;

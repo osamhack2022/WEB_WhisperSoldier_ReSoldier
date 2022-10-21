@@ -15,11 +15,11 @@ import TagBox from "./PopularTagBox";
 import PostBox from "./PostBox";
 
 const AlertTextBox = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 3;
   font-size: 14px;
   text-align: center;
-  top: 0;
+  top: 82px;
   left: 50%;
   transform: translate(-50%, 0%);
   padding: 14px 27px 8px 27px;

@@ -24,6 +24,7 @@ const NoCommentText = styled.div`
 `;
 
 const PostCommentContent = ({
+  setPostComments,
   getPostComments,
   postComments,
   isTablet,
@@ -32,8 +33,10 @@ const PostCommentContent = ({
   isAdmin,
 }) => {
   useEffect(() => {
+    setPostComments([]);
     getPostComments();
     setIsLoadingComments(true);
+    //eslint-disable-next-line
   }, []);
 
   return (
