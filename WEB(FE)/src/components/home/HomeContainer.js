@@ -26,7 +26,8 @@ const AlertTextBox = styled.div`
   border-radius: 5px;
   height: 48px;
   width: 350px;
-  background-color: rgba(65, 129, 177, 10);
+  background-color: ${(props) =>
+    props.redcolor ? "rgba(166, 86, 70, 10)" : "rgba(65, 129, 177, 10)"};
   opacity: ${(props) => (props.success ? "0.9" : "0")};
   visibility: ${(props) => (props.success ? "visible" : "hidden")};
   color: #ffffff;
@@ -47,6 +48,7 @@ const HomeContainer = () => {
   const [processInfo, setProcessInfoStore] = useRecoilState(ProcessInfoStore);
   const [alertState, setAlertState] = useState({
     writePost: false,
+    deletePost: false,
   });
 
   useEffect(() => {
@@ -59,6 +61,15 @@ const HomeContainer = () => {
         }));
         setAlertState((prev) => ({ ...prev, writePost: false }));
       }, 3000);
+    } else if (processInfo.finishDeletePost) {
+      setAlertState((prev) => ({ ...prev, deletePost: true }));
+      setTimeout(() => {
+        setProcessInfoStore((prev) => ({
+          ...prev,
+          finishDeletePost: false,
+        }));
+        setAlertState((prev) => ({ ...prev, deletePost: false }));
+      }, 3000);
     }
     //eslint-disable-next-line
   }, [processInfo]);
@@ -66,6 +77,9 @@ const HomeContainer = () => {
     <HomeContainerBox>
       <AlertTextBox success={alertState.writePost}>
         고민 포스트를 성공적으로 업로드랬습니다.
+      </AlertTextBox>
+      <AlertTextBox success={alertState.deletePost} redcolor="true">
+        고민 포스트를 삭제했습니다.
       </AlertTextBox>
       <HomeMainContentBox>
         <HomeContentUpperBox>

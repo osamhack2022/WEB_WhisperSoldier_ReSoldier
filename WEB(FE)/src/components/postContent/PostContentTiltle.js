@@ -1,13 +1,21 @@
+import { Dialog, DialogActions } from "@mui/material";
+import { useState } from "react";
 import {
+  EditHeaderFlexBox,
   LoadingText,
   MyInfoIconBox,
   PostContentBox,
   PostContentTag,
   PostContentTiltleText,
   PostUserBox,
+  WritePostButton,
   WritePostTitle,
 } from "../../styles/PostContent/PostContentTitleStyle";
-import { WritePostButton } from "../Write/WriteInputBoxHeader";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
 
 const PostContentTitle = ({
   editing,
@@ -17,21 +25,68 @@ const PostContentTitle = ({
   postUserProfileImg,
   onClick,
   errorEditInfo,
+  state,
+  setErrorEditInfo,
 }) => {
+  const [openDialogForEditPost, setOpenDialogForEditPost] = useState(false);
+  const handleClickOpenDialogForEditPost = () => {
+    if (state.editContent.length === 0) {
+      setErrorEditInfo(true);
+      setTimeout(() => {
+        setErrorEditInfo(false);
+      }, 3000);
+    } else {
+      setOpenDialogForEditPost(true);
+    }
+  };
+
+  const handleCloseDialogForEditPost = () => {
+    setOpenDialogForEditPost(false);
+  };
+
+  const editPostClickAndClose = () => {
+    onClick();
+    setOpenDialogForEditPost(false);
+  };
+
   return (
     <PostContentBox editing={editing}>
       <PostUserBox>
         {postInfo.created_timestamp ? (
           editing ? (
-            <>
+            <EditHeaderFlexBox>
               <WritePostTitle>고민 수정하기</WritePostTitle>
               <WritePostButton
-                onClick={onClick}
+                onClick={handleClickOpenDialogForEditPost}
                 errorWritePostInfo={errorEditInfo}
               >
-                {errorEditInfo ? "내용을 입력해 주세요" : "작성완료"}
+                {errorEditInfo ? "내용을 입력해 주세요" : "수정완료"}
               </WritePostButton>
-            </>
+              <Dialog
+                open={openDialogForEditPost}
+                onClose={handleCloseDialogForEditPost}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <WsDialogTitle>고민 수정 완료하시겠습니까?</WsDialogTitle>
+                <DialogActions>
+                  <CancelButton
+                    // onClick={}
+                    onClick={handleCloseDialogForEditPost}
+                    color="primary"
+                    autoFocus
+                  >
+                    취소
+                  </CancelButton>
+                  <ConfirmButton
+                    color="primary"
+                    onClick={editPostClickAndClose}
+                  >
+                    수정완료
+                  </ConfirmButton>
+                </DialogActions>
+              </Dialog>
+            </EditHeaderFlexBox>
           ) : (
             <>
               <MyInfoIconBox

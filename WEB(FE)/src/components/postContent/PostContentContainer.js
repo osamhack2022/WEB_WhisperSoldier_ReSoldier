@@ -13,11 +13,11 @@ import {
   PostContentContainerBox,
   SideButtonContainer,
 } from "../../styles/PostContent/PostContentContainerStyle";
+import { NicknameTextBox } from "../../styles/profile/ChangeProfileStyle";
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
 import RecentPostContainer from "../container/PopularPostContainer";
-import RecommandTagContainer from "../container/RecommandTagContainer";
 import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
 import PostContentBody from "./PostContentBody";
@@ -65,6 +65,11 @@ const PostContentContainer = ({ isAdmin }) => {
   const [postUserNickname, setPostUserNickname] = useState("");
   const [postUserProfileImg, setPostUserProfileImg] = useState("");
 
+  const [alertInfo, setAlertInfo] = useState({
+    editPost: false,
+    createComment: false,
+  });
+
   const getIsLiked = async (currentPostInfo = null) => {
     const { uid: currentUserUid } = JSON.parse(
       sessionStorage.getItem(whisperSodlierSessionKey)
@@ -92,65 +97,64 @@ const PostContentContainer = ({ isAdmin }) => {
     setEditing((prev) => !prev);
   };
 
-  const onClick = async (e) => {
-    e.preventDefault();
-    if (state.editContent.length === 0) {
-      setErrorEditInfo(true);
-      setTimeout(() => {
-        setErrorEditInfo(false);
-      }, 3000);
-    } else {
-      await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-        text: state.editContent,
-        tag_name: state.editTag,
-      })
-        .then(
-          setPostInfo((prev) => ({
-            ...prev,
-            postContent: state.editContent,
-            tag_name: state.editTag,
-          }))
-        )
-        .then(setEditing(false));
+  const onEditPostClick = async () => {
+    await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+      text: state.editContent,
+      tag_name: state.editTag.replace(/ /g, ""),
+    });
+    const currentTag = postInfo.tag_name;
+    const nextTag = state.editTag.replace(/ /g, "");
 
-      const oldtagSnap = await getDocs(
-        query(
-          collection(dbService, "Tag"),
-          where("tag_name", "==", postInfo.tag_name)
-        )
-      );
-      if (oldtagSnap.docs.length !== 0) {
+    if (nextTag !== currentTag) {
+      if (currentTag.length !== 0) {
+        const oldtagSnap = await getDocs(
+          query(
+            collection(dbService, "Tag"),
+            where("tag_name", "==", postInfo.tag_name)
+          )
+        );
         updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
           tag_count: increment(-1),
         });
       }
 
-      if (state.editTag !== "") {
-        const newTagSnap = await getDocs(
-          query(
-            collection(dbService, "Tag"),
-            where("tag_name", "==", state.editTag)
-          )
+      if (nextTag.length !== 0) {
+        const nextTagSnap = await getDocs(
+          query(collection(dbService, "Tag"), where("tag_name", "==", nextTag))
         );
-        if (newTagSnap.docs.length === 0) {
+        if (nextTagSnap.docs.length === 0) {
           await addDoc(collection(dbService, "Tag"), {
             tag_count: 1,
-            tag_name: state.editTag,
+            tag_name: nextTag,
           });
         } else {
-          updateDoc(doc(dbService, "Tag", newTagSnap.docs[0].id), {
+          await updateDoc(doc(dbService, "Tag", nextTagSnap.docs[0].id), {
             tag_count: increment(1),
           });
         }
       }
-
-      setIsUpdatePostList((prev) => ({
-        ...prev,
-        searchPage: true,
-        newestPage: true,
-        popularPage: true,
-      }));
     }
+
+    setPostInfo((prev) => ({
+      ...prev,
+      postContent: state.editContent,
+      tag_name: nextTag,
+    }));
+
+    setEditing(false);
+
+    setIsUpdatePostList((prev) => ({
+      ...prev,
+      searchPage: true,
+      newestPage: true,
+      popularPage: true,
+    }));
+
+    setAlertInfo((prev) => ({ ...prev, editPost: true }));
+    setTimeout(
+      () => setAlertInfo((prev) => ({ ...prev, editPost: false })),
+      3000
+    );
   };
 
   const getPostUserNickname = async (refreshData = null) => {
@@ -213,6 +217,12 @@ const PostContentContainer = ({ isAdmin }) => {
 
   return (
     <PostContentContainerBox>
+      <NicknameTextBox success={alertInfo.editPost}>
+        포스트를 수정했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.createComment}>
+        댓글을 작성했습니다.
+      </NicknameTextBox>
       <PostContentBodyContainer>
         <SideButtonContainer>
           <SideButtonBox>
@@ -248,18 +258,18 @@ const PostContentContainer = ({ isAdmin }) => {
             errorPostInfo={errorPostInfo}
             postUserNickname={postUserNickname}
             postUserProfileImg={postUserProfileImg}
-            onClick={onClick}
+            onClick={onEditPostClick}
             errorEditInfo={errorEditInfo}
+            state={state}
+            setErrorEditInfo={setErrorEditInfo}
           ></PostContentTitle>
           <PostContentBody
             postInfo={postInfo}
             state={state}
             onChange={onChange}
             editing={editing}
-            onClick={onClick}
             isMyLike={isLikedByMe}
             errorPostInfo={errorPostInfo}
-            errorEditInfo={errorEditInfo}
           ></PostContentBody>
         </PostContentBodyBox>
 
@@ -271,6 +281,7 @@ const PostContentContainer = ({ isAdmin }) => {
             onChange={onChange}
             isTablet={isTablet}
             isAdmin={isAdmin}
+            setAlertInfo={setAlertInfo}
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>

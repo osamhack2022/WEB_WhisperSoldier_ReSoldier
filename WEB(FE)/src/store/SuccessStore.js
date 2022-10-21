@@ -4,5 +4,6 @@ export const ProcessInfoStore = atom({
   key: "ProcessInfoStore",
   default: {
     finishWritePost: false,
+    finishDeletePost: false,
   },
 });

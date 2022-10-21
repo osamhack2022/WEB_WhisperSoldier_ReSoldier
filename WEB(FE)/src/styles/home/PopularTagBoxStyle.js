@@ -67,6 +67,11 @@ export const TagContentLeft = styled.div`
   width: fit-content;
   font-size: 14px;
   text-align: left;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
 export const TagContentRight = styled.div`

@@ -1,5 +1,11 @@
-import { useCallback } from "react";
+import { Dialog, DialogActions } from "@mui/material";
+import { useCallback, useState } from "react";
 import styled from "styled-components";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
 
 const PostCommentFormBox = styled.div`
   margin: 10px 0px 0px 0px;
@@ -76,7 +82,30 @@ const PostCommentForm = ({
   onChange,
   onCommentSubmit,
   errorCommentInfo,
+  setCommentInfo,
 }) => {
+  const [openDialogForCreateComment, setOpenDialogForCreateComment] =
+    useState(false);
+  const handleClickOpenDialogForCreateComment = () => {
+    if (state.comment.length === 0) {
+      setCommentInfo(true);
+      setTimeout(() => {
+        setCommentInfo(false);
+      }, 3000);
+    } else {
+      setOpenDialogForCreateComment(true);
+    }
+  };
+
+  const handleCloseDialogForCreateComment = () => {
+    setOpenDialogForCreateComment(false);
+  };
+
+  const onCreatComment = () => {
+    onCommentSubmit();
+    setOpenDialogForCreateComment(false);
+  };
+
   const autoResizeTextarea = useCallback(() => {
     let textarea = document.querySelector(".autoTextarea");
 
@@ -98,13 +127,32 @@ const PostCommentForm = ({
         maxLength={2000}
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
-      {/* <BottonLine></BottonLine> */}
       <WriteCommentButton
-        onClick={onCommentSubmit}
+        onClick={handleClickOpenDialogForCreateComment}
         errorCommentInfo={errorCommentInfo}
       >
         {errorCommentInfo ? "내용을 입력해주세요" : "댓글 작성하기"}
       </WriteCommentButton>
+      <Dialog
+        open={openDialogForCreateComment}
+        onClose={handleCloseDialogForCreateComment}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <WsDialogTitle>댓글을 작성하시겠습니까?</WsDialogTitle>
+        <DialogActions>
+          <CancelButton
+            onClick={handleCloseDialogForCreateComment}
+            color="primary"
+            autoFocus
+          >
+            취소
+          </CancelButton>
+          <ConfirmButton color="primary" onClick={onCreatComment}>
+            댓글 작성
+          </ConfirmButton>
+        </DialogActions>
+      </Dialog>
     </PostCommentFormBox>
   );
 };

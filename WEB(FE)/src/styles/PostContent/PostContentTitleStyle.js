@@ -1,11 +1,11 @@
 import { RiUser3Line } from "react-icons/ri";
-
+import { BsPencilSquare } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import styled from "styled-components";
 import Avatar from "@mui/material/Avatar";
 
 export const WritePostTitle = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   letter-spacing: 0.64px;
   color: #000000;
@@ -28,6 +28,7 @@ export const PostContentBox = styled.div`
 
 export const PostUserBox = styled.div`
   display: flex;
+  width: fit-content;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -129,3 +130,62 @@ export const MyInfoIconBox = ({ postUserProfileImg }) => {
     </MyInfoIconBoxStyle>
   );
 };
+
+const WritePostButtonShape = styled.button`
+  position: absolute;
+  right: 0px;
+  padding: 0px 10px;
+  color: #ffffff;
+  height: 28px;
+  width: ${(props) => (props.error ? "120px" : "90px")};
+  background-color: ${(props) => (props.error ? "#a65646" : "#1a7541")};
+  font-weight: 500;
+  font-size: 11px;
+  text-align: right;
+  text-decoration: none;
+  border-radius: 25px;
+  cursor: ${(props) => (props.error ? "default" : "pointer")};
+  border: ${(props) =>
+    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
+  transition: all 0.5s;
+  white-space: nowrap;
+  &:hover {
+    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
+    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
+  }
+
+  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
+
+  @keyframes vibration {
+    from {
+      transform: rotate(1deg);
+    }
+    to {
+      transform: rotate(-1deg);
+    }
+  }
+`;
+
+const WritPostIcon = styled(BsPencilSquare)`
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(0%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+`;
+
+export const WritePostButton = ({ onClick, children, errorWritePostInfo }) => {
+  return (
+    <WritePostButtonShape onClick={onClick} error={errorWritePostInfo}>
+      {!errorWritePostInfo && <WritPostIcon></WritPostIcon>} {children}
+    </WritePostButtonShape>
+  );
+};
+
+export const EditHeaderFlexBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;

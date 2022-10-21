@@ -14,6 +14,7 @@ const PostCommentContainer = ({
   onChange,
   isTablet,
   isAdmin,
+  setAlertInfo,
 }) => {
   const {
     doc,
@@ -81,38 +82,34 @@ const PostCommentContainer = ({
   };
 
   const onCommentSubmit = async () => {
-    if (state.comment.length === 0) {
-      setCommentInfo(true);
+    try {
+      await addDoc(collection(dbService, "Comment"), {
+        commentor_id: authService.currentUser.uid,
+        associated_post_id: postInfo.id,
+        comment_text: state.comment,
+        comment_report: false,
+        comment_rep_accept: false,
+        like_count: 0,
+        created_timestamp: serverTimestamp(),
+      });
+      const updateRef = doc(dbService, "WorryPost", postInfo.id);
+      await updateDoc(updateRef, {
+        comment_count: increment(1),
+      });
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        searchPage: true,
+        newestPage: true,
+        popularPage: true,
+      }));
+      setState((prev) => ({ ...prev, comment: "" }));
+      setAlertInfo((prev) => ({ ...prev, createComment: true }));
       setTimeout(() => {
-        setCommentInfo(false);
+        setAlertInfo((prev) => ({ ...prev, createComment: false }));
       }, 3000);
-    } else {
-      try {
-        await addDoc(collection(dbService, "Comment"), {
-          commentor_id: authService.currentUser.uid,
-          associated_post_id: postInfo.id,
-          comment_text: state.comment,
-          comment_report: false,
-          comment_rep_accept: false,
-          like_count: 0,
-          created_timestamp: serverTimestamp(),
-        });
-        const updateRef = doc(dbService, "WorryPost", postInfo.id);
-        await updateDoc(updateRef, {
-          comment_count: increment(1),
-        });
-        setIsUpdatePostList((prev) => ({
-          ...prev,
-          searchPage: true,
-          newestPage: true,
-          popularPage: true,
-        }));
-        alert("댓글이 정상적으로 업로드되었습니다.");
-        setState((prev) => ({ ...prev, comment: "" }));
-        getPostComments(true);
-      } catch (error) {
-        console.log("Error adding comment: ", error);
-      }
+      getPostComments(true);
+    } catch (error) {
+      console.log("Error adding comment: ", error);
     }
   };
 
@@ -124,6 +121,7 @@ const PostCommentContainer = ({
           onChange={onChange}
           onCommentSubmit={onCommentSubmit}
           errorCommentInfo={errorCommentInfo}
+          setCommentInfo={setCommentInfo}
         ></PostCommentForm>
       )}
 

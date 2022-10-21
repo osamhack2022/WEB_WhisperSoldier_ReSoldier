@@ -11,6 +11,14 @@ import {
 import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { StartFirstChat } from "../../store/ChatStore";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import { Dialog, DialogActions } from "@mui/material";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+import { useState } from "react";
+import { ProcessInfoStore } from "../../store/SuccessStore";
 
 export const WriteUserButtonContainer = ({
   toggleEditing,
@@ -31,76 +39,82 @@ export const WriteUserButtonContainer = ({
   } = dbFunction;
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+  const setProcessInfoStore = useSetRecoilState(ProcessInfoStore);
   const navigate = useNavigate();
   const onDeleteClick = async (e) => {
-    const check = window.confirm("정말로 글을 삭제하시겠습니까?");
-    if (check) {
-      console.log(`deleting ${postInfo.id}`);
-      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-        alert("글이 삭제되었습니다.")
-      );
-
-      const oldtagSnap = await getDocs(
-        query(
-          collection(dbService, "Tag"),
-          where("tag_name", "==", postInfo.tag_name)
-        )
-      );
-      if (oldtagSnap.docs.length === 0) {
-        console.log("Could not find Old Tag");
-      } else {
-        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
-          tag_count: increment(-1),
-        });
-        console.log(
-          "Old Tag count incremented by -1 as the tag EXISTS in collection"
-        );
-      }
-
-      /*삭제된 post 내 속한 댓글 삭제 */
-      const querySnapshot = await getDocs(
-        query(
-          collection(dbService, "Comment"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      querySnapshot.forEach((comment) => {
-        deleteDoc(doc(dbService, "Comment", comment.id));
+    await deleteDoc(doc(dbService, "WorryPost", postInfo.id));
+    const oldtagSnap = await getDocs(
+      query(
+        collection(dbService, "Tag"),
+        where("tag_name", "==", postInfo.tag_name)
+      )
+    );
+    if (oldtagSnap.docs.length === 0) {
+      console.log("Could not find Old Tag");
+    } else {
+      updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+        tag_count: increment(-1),
       });
-
-      /* 삭제된 post의 공감 삭제 */
-      const queryLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "PostLike"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "PostLike", like.id));
-      });
-
-      const queryCommentLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "CommentLike"),
-          where("associated_comment_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryCommentLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "CommentLike", like.id));
-      });
-
-      setIsUpdatePostList((prev) => ({
-        ...prev,
-        searchPage: true,
-        newestPage: true,
-        popularPage: true,
-      }));
-      navigate("/");
     }
+
+    /*삭제된 post 내 속한 댓글 삭제 */
+    const querySnapshot = await getDocs(
+      query(
+        collection(dbService, "Comment"),
+        where("associated_post_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    querySnapshot.forEach((comment) => {
+      deleteDoc(doc(dbService, "Comment", comment.id));
+    });
+
+    /* 삭제된 post의 공감 삭제 */
+    const queryLikeSnapshot = await getDocs(
+      query(
+        collection(dbService, "PostLike"),
+        where("associated_post_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    queryLikeSnapshot.forEach((like) => {
+      deleteDoc(doc(dbService, "PostLike", like.id));
+    });
+
+    const queryCommentLikeSnapshot = await getDocs(
+      query(
+        collection(dbService, "CommentLike"),
+        where("associated_comment_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    queryCommentLikeSnapshot.forEach((like) => {
+      deleteDoc(doc(dbService, "CommentLike", like.id));
+    });
+
+    setIsUpdatePostList((prev) => ({
+      ...prev,
+      searchPage: true,
+      newestPage: true,
+      popularPage: true,
+    }));
+
+    setProcessInfoStore((prev) => ({
+      ...prev,
+      finishDeletePost: true,
+    }));
+    navigate("/");
   };
+
+  const [openDialogForDeletePost, setOpenDialogForDeletePost] = useState(false);
+  const handleClickOpenDialogForDeletePost = () => {
+    setOpenDialogForDeletePost(true);
+  };
+
+  const handleCloseDialogForDeletePost = () => {
+    setOpenDialogForDeletePost(false);
+  };
+
   return (
     <>
       <EditPostButton
@@ -109,10 +123,33 @@ export const WriteUserButtonContainer = ({
         isMobile={isMobile}
       ></EditPostButton>
       {!editing && (
-        <DeletePostButton
-          onDeleteClick={onDeleteClick}
-          isMobile={isMobile}
-        ></DeletePostButton>
+        <>
+          <DeletePostButton
+            onDeleteClick={handleClickOpenDialogForDeletePost}
+            isMobile={isMobile}
+          ></DeletePostButton>
+          <Dialog
+            open={openDialogForDeletePost}
+            onClose={handleCloseDialogForDeletePost}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <WsDialogTitle>포스트를 삭제 하시겠습니까?</WsDialogTitle>
+            <DialogActions>
+              <ConfirmButton
+                // onClick={}
+                onClick={handleCloseDialogForDeletePost}
+                color="primary"
+                autoFocus
+              >
+                취소
+              </ConfirmButton>
+              <CancelButton color="primary" onClick={onDeleteClick}>
+                삭제
+              </CancelButton>
+            </DialogActions>
+          </Dialog>
+        </>
       )}
     </>
   );
@@ -201,9 +238,7 @@ export const OtherUserButtonContainer = ({
       sessionStorage.getItem(whisperSodlierSessionKey)
     );
     e.preventDefault();
-    //아직은 따로 설정을 안해줘서 undefined인 모양이다 -> 원래 uid로 조회가 안되는듯!
 
-    //채팅방이 이미 존재하는지 체크하기
     let checkQuery;
     if (postInfo.creator_id <= currentUserUid) {
       checkQuery = query(

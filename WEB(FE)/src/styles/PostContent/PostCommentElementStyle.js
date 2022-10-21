@@ -130,14 +130,17 @@ export const CommentTimeText = styled.div`
 `;
 
 export const CommentText = styled.div`
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
+  width: 100%;
   line-height: 1.29;
   letter-spacing: 0.56px;
   text-align: left;
   color: #000;
+  word-break: break-all;
+  white-space: pre-wrap;
 `;
 
 export const CommentButtonBox = styled.div`

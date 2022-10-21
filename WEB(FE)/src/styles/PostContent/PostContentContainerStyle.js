@@ -29,7 +29,6 @@ export const SideButtonContainer = styled.div`
 
 export const PostContentBodyContainer = styled.div`
   position: relative;
-  margin-left: 10px;
   flex-grow: 1;
   ${media.smallDesktop`
   height: fit-content;
