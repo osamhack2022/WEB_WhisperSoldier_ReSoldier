@@ -1,5 +1,6 @@
 import { Dialog, DialogActions } from "@mui/material";
 import { useState } from "react";
+import { PostContentErrorText } from "../../styles/PostContent/PostContentBodyStyle";
 import {
   EditHeaderFlexBox,
   LoadingText,
@@ -97,8 +98,12 @@ const PostContentTitle = ({
               </PostContentTiltleText>
             </>
           )
+        ) : !errorPostInfo ? (
+          <LoadingText>잠시만 기다려주세요</LoadingText>
         ) : (
-          !errorPostInfo && <LoadingText>잠시만 기다려주세요</LoadingText>
+          <PostContentErrorText>
+            찾으려는 포스트가 존재하지 않습니다.
+          </PostContentErrorText>
         )}
       </PostUserBox>
       {postInfo.created_timestamp && !editing ? (

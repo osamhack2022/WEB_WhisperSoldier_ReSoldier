@@ -128,7 +128,8 @@ export const NicknameTextBox = styled.div`
   border-radius: 5px;
   height: 48px;
   width: 350px;
-  background-color: rgba(65, 129, 177, 10);
+  background-color: ${(props) =>
+    props.redcolor ? "rgba(166, 86, 70, 10)" : "rgba(65, 129, 177, 10)"};
   opacity: ${(props) => (props.success ? "0.9" : "0")};
   visibility: ${(props) => (props.success ? "visible" : "hidden")};
   /* display: ${(props) => (props.success ? "block" : "none")}; */

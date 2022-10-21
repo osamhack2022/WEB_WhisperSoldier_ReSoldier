@@ -87,6 +87,8 @@ const PostCommentContainer = ({
         setIsLoadingComments={setIsLoadingComments}
         isLoadingComments={isLoadingComments}
         isAdmin={isAdmin}
+        setAlertInfo={setAlertInfo}
+        postInfo={postInfo}
       ></PostCommentContent>
     </>
   );

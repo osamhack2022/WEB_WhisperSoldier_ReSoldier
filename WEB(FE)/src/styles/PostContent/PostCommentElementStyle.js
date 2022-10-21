@@ -16,7 +16,7 @@ import Avatar from "@mui/material/Avatar";
 
 export const CommentBox = styled.div`
   position: relative;
-  padding: 7px;
+  padding: 10px 10px 5px 10px;
   height: fit-content;
   width: 100%;
   display: flex;
@@ -27,7 +27,6 @@ export const CommentBox = styled.div`
 
 export const CommentTitle = styled.div`
   display: flex;
-  margin-top: 10px;
   margin-bottom: 10px;
   flex-direction: row;
   justify-content: space-between;
@@ -134,6 +133,7 @@ export const CommentText = styled.div`
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
+  font-size: 13px;
   width: 100%;
   line-height: 1.29;
   letter-spacing: 0.56px;
@@ -189,6 +189,7 @@ const EditButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover
     ${CommonButtonText},
     &:hover
@@ -243,6 +244,7 @@ const DeletePostButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${DeletePostButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -435,6 +437,7 @@ const EditComfirmButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${EditComfirmButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -493,7 +496,6 @@ export const EditComfirmButton = ({
   editCommentErrorInfo,
   isMobile,
 }) => {
-  console.log(editCommentErrorInfo);
   return editCommentErrorInfo ? (
     <EditErrorButtonBlock>
       <EditErrorButtonIcon></EditErrorButtonIcon>
@@ -517,15 +519,12 @@ const CommentElementTextArea = styled.textarea`
   max-height: 30vh;
   white-space: pre-wrap;
   border: none;
+  border-bottom: 1px solid #bdbdbd;
   resize: none;
+  margin-bottom: 5px;
   &:focus {
     outline: none;
   }
-`;
-
-const BottonLine = styled.div`
-  margin: 1px 0px;
-  border-top: 1px solid #bdbdbd;
 `;
 
 export const CommentELementEditBox = ({ newComment, onCommentChange }) => {
@@ -547,7 +546,6 @@ export const CommentELementEditBox = ({ newComment, onCommentChange }) => {
         maxLength={2000}
         onInput={autoResizeTextarea}
       ></CommentElementTextArea>
-      <BottonLine></BottonLine>
     </>
   );
 };
@@ -610,5 +608,5 @@ export const CommentInfoBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 15px 0px 10px 0px;
+  margin: 10px 0px 10px 0px;
 `;

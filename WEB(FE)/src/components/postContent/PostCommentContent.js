@@ -31,13 +31,22 @@ const PostCommentContent = ({
   setIsLoadingComments,
   isLoadingComments,
   isAdmin,
+  setAlertInfo,
+  postInfo,
 }) => {
   useEffect(() => {
     setPostComments([]);
     getPostComments();
     setIsLoadingComments(true);
     //eslint-disable-next-line
-  }, []);
+  }, [postInfo.id]);
+
+  // useEffect(() => {
+  //   setPostComments([]);
+  //   getPostComments();
+  //   setIsLoadingComments(true);
+  //   //eslint-disable-next-line
+  // }, [postInfo]);
 
   return (
     <PostCommentBox>
@@ -53,6 +62,7 @@ const PostCommentContent = ({
             getPostComments={getPostComments}
             isTablet={isTablet}
             isAdmin={isAdmin}
+            setAlertInfo={setAlertInfo}
           ></PostCommentElement>
         ))
       ) : (

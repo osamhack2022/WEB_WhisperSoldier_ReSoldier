@@ -35,7 +35,7 @@ export const PostContentErrorText = styled.div`
   letter-spacing: 0.56px;
   color: #1d1d1d;
   white-space: pre-wrap;
-  font-weight: 400;
+  font-weight: 600;
 `;
 
 export const InputForm = styled.textarea`

@@ -1,3 +1,4 @@
+import { Dialog, DialogActions } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -23,10 +24,15 @@ import {
   ReportCommentButton,
 } from "../../styles/PostContent/PostCommentElementStyle";
 import { PostContentLikeCount } from "../../styles/PostContent/PostContentBodyStyle";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import {
-  CommentMoreOptionMenu,
-  CommentMoreOptionMenuForMe,
-} from "./CommentMoreOptionMenu";
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+// import {
+//   CommentMoreOptionMenu,
+//   CommentMoreOptionMenuForMe,
+// } from "./CommentMoreOptionMenu";
 
 const PostCommentElement = ({
   commentElement,
@@ -35,6 +41,7 @@ const PostCommentElement = ({
   created_timestamp,
   isTablet,
   isAdmin,
+  setAlertInfo,
 }) => {
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
@@ -68,6 +75,52 @@ const PostCommentElement = ({
 
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
 
+  const [openDialogForDeleteComment, setOpenDialogForDeleteComment] =
+    useState(false);
+  const handleClickOpenDialogForDeleteComment = () => {
+    setOpenDialogForDeleteComment(true);
+  };
+
+  const handleCloseDialogForDeleteComment = () => {
+    setOpenDialogForDeleteComment(false);
+  };
+
+  const [openDialogForStartChat, setOpenDialogForStartChat] = useState(false);
+  const handleClickOpenDialogForStartChat = () => {
+    setOpenDialogForStartChat(true);
+  };
+
+  const handleCloseDialogForStartChat = () => {
+    setOpenDialogForStartChat(false);
+  };
+
+  const onStartChat = () => {
+    setOpenDialogForStartChat(false);
+    onClickChatButtonFromComment();
+  };
+
+  const [openDialogForEditComment, setOpenDialogForEditComment] =
+    useState(false);
+  const handleClickOpenDialogForEditComment = () => {
+    if (newComment.length === 0) {
+      setEditCommentErrorInfo(true);
+      setTimeout(() => {
+        setEditCommentErrorInfo(false);
+      }, 3000);
+    } else {
+      setOpenDialogForEditComment(true);
+    }
+  };
+
+  const handleCloseDialogForEditComment = () => {
+    setOpenDialogForEditComment(false);
+  };
+
+  const onEditCommentClick = () => {
+    setOpenDialogForEditComment(false);
+    onCommentEditAndSubmit();
+  };
+
   const getLikeCheckQuery = (currentUserUid) => {
     return query(
       collection(dbService, "CommentLike"),
@@ -97,12 +150,16 @@ const PostCommentElement = ({
     if (isLikedByMe) {
       const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
       if (querySnapshot.docs.length === 0) {
-        console.log("you have not liked this yet.");
+        // console.log("you have not liked this yet.");
       } else {
         querySnapshot.forEach((like) => {
           deleteDoc(doc(dbService, "CommentLike", like.id));
         });
       }
+      setAlertInfo((prev) => ({ ...prev, subLikeComment: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, subLikeComment: false }));
+      }, 3000);
       setIsLikedByMe(false);
       setCountLikeInComment((prev) => prev - 1);
     } else {
@@ -112,8 +169,12 @@ const PostCommentElement = ({
         created_timestamp: serverTimestamp(),
       });
       setIsLikedByMe(true);
-      console.log("Liked");
+      // console.log("Liked");
       setCountLikeInComment((prev) => prev + 1);
+      setAlertInfo((prev) => ({ ...prev, addLikeComment: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, addLikeComment: false }));
+      }, 3000);
     }
     const afterLikeActionSnapshot = await getDocs(
       getLikeCheckQuery(currentUserUid)
@@ -123,8 +184,7 @@ const PostCommentElement = ({
     });
   };
 
-  const onClickChatButtonFromComment = async (e) => {
-    e.preventDefault();
+  const onClickChatButtonFromComment = async () => {
     //채팅방이 이미 존재하는지 체크하기
     let checkQuery;
     if (commentElement.commentor_id <= currentUserUid) {
@@ -173,22 +233,21 @@ const PostCommentElement = ({
   };
 
   const onDeleteCommentClick = async () => {
-    const check = window.confirm("정말로 댓글을 삭제하시겠습니까?");
-    if (check) {
-      console.log(`deleting ${commentElement.id}`);
-      await deleteDoc(doc(dbService, "Comment", commentElement.id)).then(
-        alert("댓글이 삭제되었습니다.")
-      );
-      const updateRef = doc(
-        dbService,
-        "WorryPost",
-        commentElement.associated_post_id
-      );
-      await updateDoc(updateRef, {
-        comment_count: increment(-1),
-      });
-      getPostComments(false, true);
-    }
+    console.log(`deleting ${commentElement.id}`);
+    await deleteDoc(doc(dbService, "Comment", commentElement.id));
+    const updateRef = doc(
+      dbService,
+      "WorryPost",
+      commentElement.associated_post_id
+    );
+    await updateDoc(updateRef, {
+      comment_count: increment(-1),
+    });
+    getPostComments(false, true);
+    setAlertInfo((prev) => ({ ...prev, deleteComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, deleteComment: false }));
+    }, 3000);
   };
 
   const toggleCommentEditing = () => {
@@ -198,24 +257,16 @@ const PostCommentElement = ({
     setIsEditingComment((prev) => !prev);
   };
 
-  const onCommentEditAndSubmit = async (e) => {
-    e.preventDefault();
-    console.log("newComment.lenght === 0", newComment.length === 0);
-    if (newComment.length === 0) {
-      setEditCommentErrorInfo(true);
-      setTimeout(() => {
-        setEditCommentErrorInfo(false);
-      }, 3000);
-    } else {
-      const check = window.confirm("정말로 댓글을 수정하시겠습니까?");
-      if (check) {
-        await updateDoc(doc(dbService, "Comment", commentElement.id), {
-          comment_text: newComment,
-        }).then(alert("댓글을 수정하였습니다."));
-        setIsEditingComment(false);
-        getPostComments(false, true);
-      }
-    }
+  const onCommentEditAndSubmit = async () => {
+    await updateDoc(doc(dbService, "Comment", commentElement.id), {
+      comment_text: newComment,
+    });
+    setIsEditingComment(false);
+    getPostComments(false, true);
+    setAlertInfo((prev) => ({ ...prev, editComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, editComment: false }));
+    }, 3000);
   };
 
   const onCommentChange = (e) => {
@@ -252,12 +303,12 @@ const PostCommentElement = ({
             {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
           </CommentUserText>
         </CommentUserBox>
-        {!isAdmin &&
+        {/* {!isAdmin &&
           (isOwner ? (
             <CommentMoreOptionMenuForMe></CommentMoreOptionMenuForMe>
           ) : (
             <CommentMoreOptionMenu></CommentMoreOptionMenu>
-          ))}
+          ))} */}
       </CommentTitle>
       {!isEditingComment ? (
         <CommentText>{commentElement.comment_text}</CommentText>
@@ -267,12 +318,14 @@ const PostCommentElement = ({
           onCommentChange={onCommentChange}
         ></CommentELementEditBox>
       )}
-      <CommentInfoBox>
-        <CommentTimeText>{created_timestamp}</CommentTimeText>
-        <PostContentLikeCount isMyLike={isLikedByMe}>
-          {countLikeInComment}
-        </PostContentLikeCount>
-      </CommentInfoBox>
+      {!isEditingComment && (
+        <CommentInfoBox>
+          <CommentTimeText>{created_timestamp}</CommentTimeText>
+          <PostContentLikeCount isMyLike={isLikedByMe}>
+            {countLikeInComment}
+          </PostContentLikeCount>
+        </CommentInfoBox>
+      )}
 
       {!isAdmin &&
         (isOwner ? (
@@ -283,16 +336,65 @@ const PostCommentElement = ({
               isMobile={!isTablet}
             ></EditCommentButton>
             {isEditingComment ? (
-              <EditComfirmButton
-                onCommentChange={onCommentEditAndSubmit}
-                editCommentErrorInfo={editCommentErrorInfo}
-                isMobile={!isTablet}
-              ></EditComfirmButton>
+              <>
+                <EditComfirmButton
+                  onCommentChange={handleClickOpenDialogForEditComment}
+                  editCommentErrorInfo={editCommentErrorInfo}
+                  isMobile={!isTablet}
+                ></EditComfirmButton>
+                <Dialog
+                  open={openDialogForEditComment}
+                  onClose={handleCloseDialogForEditComment}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <WsDialogTitle>댓글을 수정 하시겠습니까?</WsDialogTitle>
+                  <DialogActions>
+                    <CancelButton
+                      // onClick={}
+                      onClick={handleCloseDialogForEditComment}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </CancelButton>
+                    <ConfirmButton color="primary" onClick={onEditCommentClick}>
+                      수정하기
+                    </ConfirmButton>
+                  </DialogActions>
+                </Dialog>
+              </>
             ) : (
-              <DeleteCommentButton
-                onDeleteClick={onDeleteCommentClick}
-                isMobile={!isTablet}
-              ></DeleteCommentButton>
+              <>
+                <DeleteCommentButton
+                  onDeleteClick={handleClickOpenDialogForDeleteComment}
+                  isMobile={!isTablet}
+                ></DeleteCommentButton>
+                <Dialog
+                  open={openDialogForDeleteComment}
+                  onClose={handleCloseDialogForDeleteComment}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <WsDialogTitle>댓글을 삭제 하시겠습니까?</WsDialogTitle>
+                  <DialogActions>
+                    <ConfirmButton
+                      // onClick={}
+                      onClick={handleCloseDialogForDeleteComment}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </ConfirmButton>
+                    <CancelButton
+                      color="primary"
+                      onClick={onDeleteCommentClick}
+                    >
+                      삭제
+                    </CancelButton>
+                  </DialogActions>
+                </Dialog>
+              </>
             )}
           </CommentButtonBox>
         ) : (
@@ -307,10 +409,34 @@ const PostCommentElement = ({
             <PostChatCommentButton
               toLink="/"
               isMobile={!isTablet}
-              onClickChatButtonFromComment={onClickChatButtonFromComment}
+              onClickChatButtonFromComment={handleClickOpenDialogForStartChat}
             >
               채팅하기
             </PostChatCommentButton>
+            <Dialog
+              open={openDialogForStartChat}
+              onClose={handleCloseDialogForStartChat}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <WsDialogTitle>
+                {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
+                와 채팅하시겠습니까?
+              </WsDialogTitle>
+              <DialogActions>
+                <CancelButton
+                  onClick={handleCloseDialogForStartChat}
+                  color="primary"
+                  autoFocus
+                >
+                  취소
+                </CancelButton>
+                <ConfirmButton color="primary" onClick={onStartChat}>
+                  채팅 시작
+                </ConfirmButton>
+              </DialogActions>
+            </Dialog>
+
             <ReportCommentButton toLink="/" isMobile={!isTablet}>
               신고하기
             </ReportCommentButton>

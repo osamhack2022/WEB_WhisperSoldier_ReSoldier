@@ -202,12 +202,11 @@ export const OtherUserButtonContainer = ({
       }
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count - 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count - 1,
-        }))
-      );
+      }).then;
+      setPostInfo((prev) => ({
+        ...prev,
+        like_count: postInfo.like_count - 1,
+      }));
       setIsLikedByMe(false);
       setAlertInfo((prev) => ({ ...prev, subLikePost: true }));
       setTimeout(() => {
@@ -216,17 +215,20 @@ export const OtherUserButtonContainer = ({
     } else {
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count + 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count + 1,
-        }))
-      );
+      }).then;
+      setPostInfo((prev) => ({
+        ...prev,
+        like_count: postInfo.like_count + 1,
+      }));
       await addDoc(collection(dbService, "PostLike"), {
         associated_post_id: postInfo.id,
         user_id: currentUserUid,
         created_timestamp: serverTimestamp(),
       }).then(setIsLikedByMe(true));
+      setAlertInfo((prev) => ({ ...prev, addLikePost: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, addLikePost: false }));
+      }, 3000);
     }
     setIsUpdatePostList((prev) => ({
       ...prev,
@@ -234,10 +236,6 @@ export const OtherUserButtonContainer = ({
       newestPage: true,
       popularPage: true,
     }));
-    setAlertInfo((prev) => ({ ...prev, addLikePost: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, addLikePost: false }));
-    }, 3000);
   };
 
   const onClickChatButtonFromPost = async () => {

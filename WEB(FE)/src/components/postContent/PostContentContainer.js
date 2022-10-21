@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import styled from "styled-components";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import media from "../../modules/MediaQuery";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -69,9 +67,13 @@ const PostContentContainer = ({ isAdmin }) => {
 
   const [alertInfo, setAlertInfo] = useState({
     editPost: false,
-    createComment: false,
     addLikePost: false,
     subLikePost: false,
+    createComment: false,
+    editComment: false,
+    deleteComment: false,
+    addLikeComment: false,
+    subComment: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -209,6 +211,16 @@ const PostContentContainer = ({ isAdmin }) => {
     }
   };
 
+  // useEffect(() => {
+  //   if (postInfo.created_timestamp === null) {
+  //     getContent();
+  //   } else {
+  //     getIsLiked();
+  //     getPostUserNickname();
+  //   }
+  //   // eslint-disable-next-line
+  // }, []);
+
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
@@ -217,7 +229,7 @@ const PostContentContainer = ({ isAdmin }) => {
       getPostUserNickname();
     }
     // eslint-disable-next-line
-  }, []);
+  }, [postInfo]);
 
   return (
     <PostContentContainerBox>
@@ -233,6 +245,19 @@ const PostContentContainer = ({ isAdmin }) => {
       <NicknameTextBox success={alertInfo.subLikePost}>
         포스트 공감을 취소했습니다.
       </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.deleteComment} redcolor="true">
+        댓글을 삭제했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.editComment}>
+        댓글을 수정했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.addLikeComment}>
+        댓글을 공감했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.subLikeComment}>
+        댓글 공감을 취소했습니다.
+      </NicknameTextBox>
+
       <PostContentBodyContainer>
         <SideButtonContainer>
           <SideButtonBox>
@@ -301,7 +326,6 @@ const PostContentContainer = ({ isAdmin }) => {
         {postInfo.created_timestamp ? (
           editing ? (
             <>
-              {/* <RecommandTagContainer></RecommandTagContainer> */}
               <SideOptionForm />
             </>
           ) : (
