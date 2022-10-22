@@ -52,6 +52,8 @@ const PostElement = ({ post, nonAdditionalInfo }) => {
           {calTimeToString(post.created_timestamp)}{" "}
           {post.like_timestamp &&
             " | " + calTimeToString(post.like_timestamp) + "에 공감했습니다"}
+          {post.report_timestamp &&
+            " | " + calTimeToString(post.report_timestamp) + "에 신고했습니다"}
         </PostElementTime>
         <PostElementTag>
           {post.tag_name && !post.post_rep_accept && `#${post.tag_name}`}

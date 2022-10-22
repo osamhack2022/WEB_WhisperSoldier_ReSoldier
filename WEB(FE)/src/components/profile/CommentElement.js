@@ -24,7 +24,11 @@ const CommentElement = ({ comment }) => {
         <PostElementLikeCount>{comment.like_count}</PostElementLikeCount>
       </PostElementInfoBox>
       <PostElementTime>
-        {calTimeToString(comment.created_timestamp)} {comment.like_timestamp &&" | "+calTimeToString(comment.like_timestamp)+"에 공감했습니다"}
+        {calTimeToString(comment.created_timestamp)}{" "}
+        {comment.like_timestamp &&
+          " | " + calTimeToString(comment.like_timestamp) + "에 공감했습니다"}
+        {comment.report_timestamp &&
+          " | " + calTimeToString(comment.report_timestamp) + "에 신고했습니다"}
       </PostElementTime>
     </PostElementBox>
   );

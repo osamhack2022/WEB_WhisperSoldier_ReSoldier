@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { dbFunction, dbService } from "../../lib/FStore";
 import {
   NicknameTextBox,
@@ -101,7 +100,7 @@ const ReportedComment = () => {
     const firstSnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", "desc"),
+        orderBy("report_timestamp", "desc"),
         where("comment_report", "==", true),
         limit(10)
       )
@@ -117,7 +116,7 @@ const ReportedComment = () => {
         const nextReportsSnapshot = await getDocs(
           query(
             collection(dbService, "Comment"),
-            orderBy("created_timestamp", "desc"),
+            orderBy("report_timestamp", "desc"),
             where("comment_report", "==", true),
             startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
             limit(1)
@@ -137,7 +136,7 @@ const ReportedComment = () => {
     const querySnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", "desc"),
+        orderBy("report_timestamp", "desc"),
         where("comment_report", "==", true),
         startAfter(nextReportCommentSnapshot),
         limit(10)
@@ -149,7 +148,7 @@ const ReportedComment = () => {
     const afterSnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", "desc"),
+        orderBy("report_timestamp", "desc"),
         where("comment_report", "==", true),
         startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
         limit(1)
@@ -180,6 +179,7 @@ const ReportedComment = () => {
   };
 
   useEffect(() => {
+    setReportedComments([]);
     getFirstReportedComments();
     //eslint-disable-next-line
   }, []);
@@ -238,8 +238,8 @@ const ReportedComment = () => {
                 <Dialog
                   open={openDialogForCancelReportComment}
                   onClose={handleCloseDialogForCancelReportComment}
-                  aria-labelledby="alert-dialog-reportComment"
-                  aria-describedby="alert-dialog-reportComment"
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
                 >
                   <WsDialogTitle>
                     댓글 신고 접수를 취소하시겠습니까?
