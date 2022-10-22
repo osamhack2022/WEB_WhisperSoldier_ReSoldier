@@ -29,10 +29,6 @@ import {
   CancelButton,
   ConfirmButton,
 } from "../profile/CheckDefaultProfileImgNestDialog";
-// import {
-//   CommentMoreOptionMenu,
-//   CommentMoreOptionMenuForMe,
-// } from "./CommentMoreOptionMenu";
 
 const PostCommentElement = ({
   commentElement,
@@ -43,6 +39,9 @@ const PostCommentElement = ({
   isAdmin,
   setAlertInfo,
 }) => {
+  const [currentReportInfo, setCurrentReportInfo] = useState(
+    commentElement.comment_report
+  );
   const [isEditingComment, setIsEditingComment] = useState(false);
   const [newComment, setNewComment] = useState(commentElement.comment_text);
   const [editCommentErrorInfo, setEditCommentErrorInfo] = useState(false);
@@ -51,9 +50,6 @@ const PostCommentElement = ({
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
   const navigate = useNavigate();
-
-  const [isReported, setIsReported] = useState(false);
-  const [isReportAccepted, setIsReportAccepted] = useState(false);
 
   const [commentUserNickname, setCommentUserNickname] = useState("");
   const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
@@ -122,6 +118,29 @@ const PostCommentElement = ({
   const onEditCommentClick = () => {
     setOpenDialogForEditComment(false);
     onCommentEditAndSubmit();
+  };
+
+  const [openDialogForReportComment, setOpenDialogForReportComment] =
+    useState(false);
+  const handleClickOpenDialogForReportComment = () => {
+    setOpenDialogForReportComment(true);
+  };
+  const handleCloseDialogForReportComment = () => {
+    setOpenDialogForReportComment(false);
+  };
+
+  const onReportCommentClick = () => {
+    setOpenDialogForReportComment(false);
+    reportComment();
+  };
+
+  const [openDialogForReportedComment, setOpenDialogForReportedComment] =
+    useState(false);
+  const handleClickOpenDialogForReportedComment = () => {
+    setOpenDialogForReportedComment(true);
+  };
+  const handleCloseDialogForReportedComment = () => {
+    setOpenDialogForReportedComment(false);
   };
 
   const getLikeCheckQuery = (currentUserUid) => {
@@ -288,34 +307,20 @@ const PostCommentElement = ({
     }
   };
 
-  const getReportStatuses = async () => {
-    const reportCheckSnap = await getDoc(
-      doc(dbService, "Comment", commentElement.id)
-    );
-    if (reportCheckSnap.data().comment_report) {
-      console.log("이미 신고된 댓글임");
-      setIsReported(true);
-    }
-    if (reportCheckSnap.data().comment_rep_accept) {
-      console.log("블라인드된 댓글임");
-      setIsReportAccepted(true);
-    }
-  };
-  const onClickReportComment = async () => {
-    if (isReported) {
-      alert("이미 누군가에 의해 신고된 댓글입니다.");
-    } else {
-      updateDoc(doc(dbService, "Comment", commentElement.id), {
-        comment_report: true,
-      })
-        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
-        .then(setIsReported(true));
-    }
+  const reportComment = async () => {
+    await updateDoc(doc(dbService, "Comment", commentElement.id), {
+      comment_report: true,
+      report_timestamp: serverTimestamp(),
+    });
+    setCurrentReportInfo(true);
+    setAlertInfo((prev) => ({ ...prev, reportComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportComment: false }));
+    }, 3000);
   };
 
   useEffect(() => {
     getIsLiked();
-    getReportStatuses();
     setCountLikeInComment(commentElement.like_count);
     getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line
@@ -332,15 +337,13 @@ const PostCommentElement = ({
             {commentUserNickname.length > 0 ? commentUserNickname : "익명"}
           </CommentUserText>
         </CommentUserBox>
-        {/* {!isAdmin &&
-          (isOwner ? (
-            <CommentMoreOptionMenuForMe></CommentMoreOptionMenuForMe>
-          ) : (
-            <CommentMoreOptionMenu></CommentMoreOptionMenu>
-          ))} */}
       </CommentTitle>
       {!isEditingComment ? (
-        <CommentText>{commentElement.comment_text}</CommentText>
+        <CommentText>
+          {commentElement.comment_rep_accept
+            ? "관리자에 의해 블라인드 처리된 댓글입니다."
+            : commentElement.comment_text}
+        </CommentText>
       ) : (
         <CommentELementEditBox
           newComment={newComment}
@@ -357,6 +360,7 @@ const PostCommentElement = ({
       )}
 
       {!isAdmin &&
+        !commentElement.comment_rep_accept &&
         (isOwner ? (
           <CommentButtonBox>
             <EditCommentButton
@@ -467,11 +471,54 @@ const PostCommentElement = ({
             </Dialog>
 
             <ReportCommentButton
-              onClick={onClickReportComment}
+              onClick={
+                currentReportInfo
+                  ? handleClickOpenDialogForReportedComment
+                  : handleClickOpenDialogForReportComment
+              }
               isMobile={!isTablet}
             >
-              {isReported ? "신고가 접수됨" : "신고하기"}
+              신고하기
             </ReportCommentButton>
+            {currentReportInfo ? (
+              <Dialog
+                open={openDialogForReportedComment}
+                onClose={handleCloseDialogForReportedComment}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <WsDialogTitle>이미 신고 접수된 댓글입니다.</WsDialogTitle>
+                <DialogActions>
+                  <ConfirmButton
+                    color="primary"
+                    onClick={handleCloseDialogForReportedComment}
+                  >
+                    확인
+                  </ConfirmButton>
+                </DialogActions>
+              </Dialog>
+            ) : (
+              <Dialog
+                open={openDialogForReportComment}
+                onClose={handleCloseDialogForReportComment}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <WsDialogTitle>댓글을 신고하시겠습니까?</WsDialogTitle>
+                <DialogActions>
+                  <ConfirmButton
+                    onClick={handleCloseDialogForReportComment}
+                    color="primary"
+                    autoFocus
+                  >
+                    취소
+                  </ConfirmButton>
+                  <CancelButton color="primary" onClick={onReportCommentClick}>
+                    신고
+                  </CancelButton>
+                </DialogActions>
+              </Dialog>
+            )}
           </CommentButtonBox>
         ))}
     </CommentBox>

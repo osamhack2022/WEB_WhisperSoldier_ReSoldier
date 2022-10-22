@@ -172,7 +172,6 @@ export const OtherUserButtonContainer = ({
     deleteDoc,
     collection,
     getDocs,
-    getDoc,
     query,
     where,
     serverTimestamp,
@@ -181,8 +180,41 @@ export const OtherUserButtonContainer = ({
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
 
-  const [isReported, setIsReported] = useState(false);
-  const [isReportAccepted, setIsReportAccepted] = useState(false);
+  const [openDialogForStartChat, setOpenDialogForStartChat] = useState(false);
+  const handleClickOpenDialogForStartChat = () => {
+    setOpenDialogForStartChat(true);
+  };
+
+  const handleCloseDialogForStartChat = () => {
+    setOpenDialogForStartChat(false);
+  };
+
+  const onStartChat = () => {
+    setOpenDialogForStartChat(false);
+    onClickChatButtonFromPost();
+  };
+
+  const [openDialogForReportPost, setOpenDialogForReportPost] = useState(false);
+  const handleClickOpenDialogForReportPost = () => {
+    setOpenDialogForReportPost(true);
+  };
+  const handleCloseDialogForReportPost = () => {
+    setOpenDialogForReportPost(false);
+  };
+
+  const onReportPostClick = () => {
+    setOpenDialogForReportPost(false);
+    reportPost();
+  };
+
+  const [openDialogForReportedPost, setOpenDialogForReportedPost] =
+    useState(false);
+  const handleClickOpenDialogForReportedPost = () => {
+    setOpenDialogForReportedPost(true);
+  };
+  const handleCloseDialogForReportedPost = () => {
+    setOpenDialogForReportedPost(false);
+  };
 
   const toggleLike = async () => {
     const { uid: currentUserUid } = JSON.parse(
@@ -282,7 +314,6 @@ export const OtherUserButtonContainer = ({
       }));
       navigate("/message");
     } else {
-      console.log("기존 채팅방 존재");
       setStartFirstChat((prev) => ({
         ...prev,
         exist: true,
@@ -292,54 +323,21 @@ export const OtherUserButtonContainer = ({
     }
   };
 
-  const [openDialogForStartChat, setOpenDialogForStartChat] = useState(false);
-  const handleClickOpenDialogForStartChat = () => {
-    setOpenDialogForStartChat(true);
-  };
-
-  const handleCloseDialogForStartChat = () => {
-    setOpenDialogForStartChat(false);
-  };
-
-  const onStartChat = () => {
-    setOpenDialogForStartChat(false);
-    onClickChatButtonFromPost();
-  };
-
-  const getReportStatuses = async () => {
-    const reportCheckSnap = await getDoc(
-      doc(dbService, "WorryPost", postInfo.id)
-    );
-    if (reportCheckSnap.data().post_report) {
-      console.log("이미 신고된 포스트임");
-      setIsReported(true);
-    }
-    if (reportCheckSnap.data().post_rep_accept) {
-      console.log("블라인드된 포스트임");
-      setIsReportAccepted(true);
-    }
-  };
-
-  const onClickReportPost = async (e) => {
-    if (isReported) {
-      alert("이미 누군가에 의해 신고된 Post입니다.");
-    } else {
-      updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+  const reportPost = async () => {
+    await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+      post_report: true,
+    }).then(
+      setPostInfo((prev) => ({
+        ...prev,
         post_report: true,
-      })
-        .then(
-          setPostInfo((prev) => ({
-            ...prev,
-            post_report: true,
-          }))
-        )
-        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
-        .then(setIsReported(true));
-    }
+        report_timestamp: serverTimestamp(),
+      }))
+    );
+    setAlertInfo((prev) => ({ ...prev, reportPost: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportPost: false }));
+    }, 3000);
   };
-  useEffect(() => {
-    getReportStatuses();
-  }, []);
 
   return (
     <>
@@ -378,9 +376,55 @@ export const OtherUserButtonContainer = ({
         </DialogActions>
       </Dialog>
 
-      <ReportButton onClickReportPost={onClickReportPost} isMobile={isMobile}>
-        {isReported ? "신고가 접수됨" : "신고하기"}
+      <ReportButton
+        onClick={
+          postInfo.post_report
+            ? handleClickOpenDialogForReportedPost
+            : handleClickOpenDialogForReportPost
+        }
+        isMobile={isMobile}
+      >
+        신고하기
       </ReportButton>
+      {postInfo.post_report ? (
+        <Dialog
+          open={openDialogForReportedPost}
+          onClose={handleCloseDialogForReportedPost}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <WsDialogTitle>이미 신고 접수된 포스트입니다.</WsDialogTitle>
+          <DialogActions>
+            <ConfirmButton
+              color="primary"
+              onClick={handleCloseDialogForReportedPost}
+            >
+              확인
+            </ConfirmButton>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        <Dialog
+          open={openDialogForReportPost}
+          onClose={handleCloseDialogForReportPost}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <WsDialogTitle>포스트를 신고하시겠습니까?</WsDialogTitle>
+          <DialogActions>
+            <ConfirmButton
+              onClick={handleCloseDialogForReportPost}
+              color="primary"
+              autoFocus
+            >
+              취소
+            </ConfirmButton>
+            <CancelButton color="primary" onClick={onReportPostClick}>
+              신고
+            </CancelButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 };

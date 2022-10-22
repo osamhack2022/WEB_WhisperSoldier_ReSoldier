@@ -77,6 +77,8 @@ const PostContentContainer = ({ isAdmin }) => {
     deleteComment: false,
     addLikeComment: false,
     subComment: false,
+    reportPost: false,
+    reportComment: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -233,7 +235,6 @@ const PostContentContainer = ({ isAdmin }) => {
       getIsLiked();
       getPostUserNickname();
     }
-    console.log(postInfo);
     // eslint-disable-next-line
   }, [postInfo]);
 
@@ -269,6 +270,12 @@ const PostContentContainer = ({ isAdmin }) => {
       </NicknameTextBox>
       <NicknameTextBox success={alertInfo.subLikeComment}>
         댓글 공감을 취소했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.reportPost}>
+        포스트 신고 접수되었습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.reportComment}>
+        댓글 신고 접수되었습니다.
       </NicknameTextBox>
 
       <PostContentBodyContainer>

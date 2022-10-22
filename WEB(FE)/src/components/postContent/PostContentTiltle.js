@@ -94,7 +94,7 @@ const PostContentTitle = ({
                 postUserProfileImg={postUserProfileImg}
               ></MyInfoIconBox>
               <PostContentTiltleText>
-                {postUserNickname.length > 0 ? postUserNickname : "닉네임 없음"}
+                {postUserNickname.length > 0 ? postUserNickname : "익명"}
               </PostContentTiltleText>
             </>
           )

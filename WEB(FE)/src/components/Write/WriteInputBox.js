@@ -1,5 +1,5 @@
 import WritePostHeader from "./WriteInputBoxHeader";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { authService } from "../../lib/FAuth";
 import { useForm } from "../../modules/useForm";
@@ -44,6 +44,7 @@ const WritePostBox = ({ navigate }) => {
         comment_count: 0,
         post_report: false,
         post_rep_accept: false,
+        report_timestamp: null,
         tag_name: state.postTag.replace(/ /g, ""),
         text: state.postContent,
       });
@@ -113,4 +114,4 @@ const WritePostBox = ({ navigate }) => {
   );
 };
 
-export default WritePostBox;
+export default React.memo(WritePostBox);

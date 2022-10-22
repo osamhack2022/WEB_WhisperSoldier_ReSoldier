@@ -406,9 +406,9 @@ const ReportButtonBlock = styled(Link)`
   }
 `;
 
-export const ReportCommentButton = ({ toLink, children, isMobile }) => {
+export const ReportCommentButton = ({ children, isMobile, onClick }) => {
   return (
-    <ReportButtonBlock to={toLink} mobile={isMobile ? "true" : "false"}>
+    <ReportButtonBlock onClick={onClick} mobile={isMobile ? "true" : "false"}>
       <ReportButtonImg></ReportButtonImg>
       <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {children}
@@ -608,5 +608,5 @@ export const CommentInfoBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px 5px 0px;
 `;
