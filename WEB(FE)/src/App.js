@@ -23,7 +23,7 @@ import BoardPage from "./pages/BoardPage";
 import { adminSessionKey, whisperSodlierSessionKey } from "./lib/Const";
 import WelcomePage from "./pages/WelcomePage";
 import LoadPage from "./pages/LoadPage";
-import TagBoard from "./pages/TagBoard";
+import TagBoard from "./pages/TagBoardPage";
 
 const Body = styled.div`
   position: relative;

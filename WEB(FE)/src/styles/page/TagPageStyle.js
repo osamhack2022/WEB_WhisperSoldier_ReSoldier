@@ -6,23 +6,37 @@ export const TagBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px 20px;
   height: fit-content;
   width: inherit;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
 `;
 
 export const TagBoxTitleBox = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #dcdcdc;
+  margin-bottom: 10px;
+  /* padding-bottom: 10px; */
+  /* border-bottom: 1px solid #dcdcdc; */
+  padding: 15px 20px;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
+  ${media.mobile`
+  padding: 10px 20px;
+  flex-direction : column;
+  justify-content: center;
+  `}
+`;
+
+export const TagBoxTitleUpperContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  ${media.mobile`
+    width : 100%;
+  `}
 `;
 
 export const TagBoxTitle = styled.div`
@@ -54,6 +68,10 @@ export const TagElementContainer = styled.div`
   display: flex;
   flex: row;
   flex-wrap: wrap;
+  padding: 10px 20px;
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  border: 1px solid rgb(189, 189, 189);
 `;
 
 export const TagNameBox = styled.div`

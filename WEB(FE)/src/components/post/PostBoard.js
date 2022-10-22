@@ -22,12 +22,12 @@ import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
 const PostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   //let { params } = useParams();
-  const location = useLocation();
+  // const location = useLocation();
   const { getDocs } = dbFunction;
 
   const [posts, setPosts] = useState([]);

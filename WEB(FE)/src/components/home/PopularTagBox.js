@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { dbFunction } from "../../lib/FStore";
 import CalTagCount from "../../modules/CalTagCount";
 import { GetTagQuery } from "../../modules/GetTagQuery";
+import { TagInfoStore } from "../../store/TagStore";
 import {
   MoreTagButton,
   MoreTagButtonText,
@@ -18,6 +20,8 @@ const TagBox = () => {
   const { getDocs } = dbFunction;
   const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const setTagInfo = useSetRecoilState(TagInfoStore);
 
   const navigate = useNavigate();
 
@@ -43,6 +47,17 @@ const TagBox = () => {
     navigate("/tags");
   };
 
+  const MoveToTagBoard = (tagDocs) => {
+    setTagInfo((prev) => ({
+      ...prev,
+      id: tagDocs.id,
+      name: tagDocs.tag_name,
+      count: tagDocs.tag_count,
+    }));
+    navigate(`/tag/${tagDocs.id}`);
+    //to={`/tag/${tagdoc.id}`}
+  };
+
   useEffect(() => {
     setTagList([]);
     getTop20Tag();
@@ -58,7 +73,7 @@ const TagBox = () => {
         ) : (
           <>
             {tagList.map((tag) => (
-              <TagElement key={tag.id}>
+              <TagElement key={tag.id} onClick={() => MoveToTagBoard(tag)}>
                 <TagContentLeft>#{tag.tag_name}</TagContentLeft>
                 <TagContentRight>{CalTagCount(tag.tag_count)}</TagContentRight>
               </TagElement>
