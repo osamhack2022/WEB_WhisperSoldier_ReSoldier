@@ -9,8 +9,6 @@ import {
   TagContentLeftForSideBox,
 } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
-// import SideButtonBox from "../common/SideButtonBox";
-// import { SideOptionForm } from "../common/SideOptionForm";
 import WritePostBox from "./WriteInputBox";
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { TagContentBox } from "../../styles/home/PopularTagBoxStyle";
@@ -26,7 +24,8 @@ export const SideOptionForm = () => {
   const getTop20Tag = async () => {
     try {
       const top20TagSnapshot = await getDocs(
-        GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+        // GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
+        GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
       );
       top20TagSnapshot.forEach((tag) => {
         const tagObj = {

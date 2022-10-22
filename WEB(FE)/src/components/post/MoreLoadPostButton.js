@@ -30,7 +30,7 @@ const MoreLoadPostButtonBox = styled.div`
   border: 1px solid rgb(189, 189, 189);
   cursor: pointer;
   transition: all 0.3s;
-  margin-left : ${(props)=>(props.marginLeft ? "10px" : "0px")};
+  margin-left: ${(props) => (props.marginLeft ? "10px" : "0px")};
   &:hover {
     background-color: #dcdcdc;
   }
@@ -40,10 +40,25 @@ const MoreLoadPostButtonBox = styled.div`
   `}
 `;
 
-const MoreLoadPostButton = ({ updatePostList, isMarginLeft, isComment }) => {
+const MoreLoadPostButton = ({
+  updatePostList,
+  isMarginLeft,
+  isComment,
+  tag,
+}) => {
   return (
-    <MoreLoadPostButtonBox name="moreLoadPostButton" onClick={updatePostList} marginLeft={isMarginLeft}>
-      <MoreLoadPostButtonText>{isComment?"댓글 10개 더 보기":"포스트 10개 더 보기"}</MoreLoadPostButtonText>
+    <MoreLoadPostButtonBox
+      name="moreLoadPostButton"
+      onClick={updatePostList}
+      marginLeft={isMarginLeft}
+    >
+      <MoreLoadPostButtonText>
+        {tag
+          ? "태그 20개 더보기"
+          : isComment
+          ? "댓글 10개 더 보기"
+          : "포스트 10개 더 보기"}
+      </MoreLoadPostButtonText>
       <DownIcon></DownIcon>
     </MoreLoadPostButtonBox>
   );

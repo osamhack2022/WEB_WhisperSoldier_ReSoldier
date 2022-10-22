@@ -23,6 +23,7 @@ import BoardPage from "./pages/BoardPage";
 import { adminSessionKey, whisperSodlierSessionKey } from "./lib/Const";
 import WelcomePage from "./pages/WelcomePage";
 import LoadPage from "./pages/LoadPage";
+import TagBoard from "./pages/TagBoard";
 
 const Body = styled.div`
   position: relative;
@@ -60,7 +61,10 @@ const App = () => {
               <Header isAdmin={isAdmin.admin}></Header>
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/post/:id" element={<PostPage isAdmin={isAdmin.admin}/>} />
+                <Route
+                  path="/post/:id"
+                  element={<PostPage isAdmin={isAdmin.admin} />}
+                />
                 <Route
                   path="/profile"
                   element={<ProfilePage isAdmin={isAdmin.admin} />}
@@ -70,6 +74,7 @@ const App = () => {
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/message" element={<ChatPage />} />
                 <Route path="/tags" element={<TagPage />} />
+                <Route path="/tag/:id" element={<TagBoard />} />
               </Routes>
               <Footer></Footer>
             </Body>

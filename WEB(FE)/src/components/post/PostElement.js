@@ -12,7 +12,7 @@ import {
   PostElementTitle,
 } from "../../styles/post/PostElementStyle";
 
-const PostElement = ({ post, nonAdditionalInfo }) => {
+const PostElement = ({ post, nonAdditionalInfo, admin }) => {
   const setPostInfo = useSetRecoilState(PostInfo);
   const setCurrentScrollPos = useSetRecoilState(CurrentScrollPos);
 
@@ -53,6 +53,7 @@ const PostElement = ({ post, nonAdditionalInfo }) => {
           {post.like_timestamp &&
             " | " + calTimeToString(post.like_timestamp) + "에 공감했습니다"}
           {post.report_timestamp &&
+            admin &&
             " | " + calTimeToString(post.report_timestamp) + "에 신고했습니다"}
         </PostElementTime>
         <PostElementTag>

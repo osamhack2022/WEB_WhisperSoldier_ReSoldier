@@ -230,7 +230,7 @@ const ReportedPost = () => {
           reportedPosts.map((document) => (
             <ReportPostElementBlock key={document.id}>
               <ReportPostContentBox>
-                <PostElement post={document}></PostElement>
+                <PostElement post={document} admin="true"></PostElement>
               </ReportPostContentBox>
 
               <ReportPostButtonBox>
