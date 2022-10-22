@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { dbFunction, dbService } from "../../lib/FStore";
-import getTimeDepth from "../../modules/GetTimeDepth";
-import { SideOptionContainer } from "../../styles/post/PostBoardStyle";
+import {
+  NicknameTextBox,
+  SectionTitle,
+} from "../../styles/profile/ChangeProfileStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
-import { SideOptionFormForPostBoard } from "../common/SideOptionForm";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
+import {
+  ReportPostButtonBox,
+  ReportPostContentBox,
+  ReportPostElementBlock,
+} from "../../styles/admin/ReportedPostStyle";
+import { CancelReportButton, PostBlindButton } from "./ReportedPost";
+import CommentElement from "../profile/CommentElement";
+import { Dialog, DialogActions } from "@mui/material";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
 
 const ReportedComment = () => {
   // Comment에서 쿼리해오기
@@ -25,16 +40,50 @@ const ReportedComment = () => {
   );
   const [isNextReportCommentExist, setIsNextReportCommentExist] =
     useState(false);
-  const [timeDepthValue, setTimeDepthValue] = useState("week");
-  const [timeDepthSelect, setTimeDepthSelect] = useState({
-    week: true,
-    month: false,
-    halfYear: false,
-    fullYear: false,
-    allTime: false,
+  const [alertInfo, setAlertInfo] = useState({
+    blindComment: false,
+    cancelReport: false,
   });
-  const [isResultDesc, setIsResultDesc] = useState(true);
-  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
+
+  const [openDialogForBlindComment, setOpenDialogForBlindComment] =
+    useState(false);
+  const handleClickOpenDialogForBlindComment = () => {
+    setOpenDialogForBlindComment(true);
+  };
+
+  const handleCloseDialogForBlindComment = () => {
+    setOpenDialogForBlindComment(false);
+  };
+
+  const onBlindComment = (currentDocId) => {
+    setOpenDialogForBlindComment(false);
+    onAcceptOrDenyReport(currentDocId, true);
+    setAlertInfo((prev) => ({ ...prev, blindComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, blindComment: false }));
+    }, 3000);
+  };
+
+  const [
+    openDialogForCancelReportComment,
+    setOpenDialogForCancelReportComment,
+  ] = useState(false);
+  const handleClickOpenDialogForCancelReportComment = () => {
+    setOpenDialogForCancelReportComment(true);
+  };
+
+  const handleCloseDialogForCancelReportComment = () => {
+    setOpenDialogForCancelReportComment(false);
+  };
+
+  const onCancelReportComment = (currentDocId) => {
+    setOpenDialogForCancelReportComment(false);
+    onAcceptOrDenyReport(currentDocId, false);
+    setAlertInfo((prev) => ({ ...prev, cancelReport: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, cancelReport: false }));
+    }, 3000);
+  };
 
   const snapshotToReportedComments = (snapshot) => {
     if (snapshot) {
@@ -48,16 +97,12 @@ const ReportedComment = () => {
     }
   };
 
-  const getFirstReportedComments = async (
-    descOrAsc = "desc",
-    timeDepthString = "week"
-  ) => {
+  const getFirstReportedComments = async () => {
     const firstSnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("created_timestamp", "desc"),
         where("comment_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         limit(10)
       )
     );
@@ -72,9 +117,8 @@ const ReportedComment = () => {
         const nextReportsSnapshot = await getDocs(
           query(
             collection(dbService, "Comment"),
-            orderBy("created_timestamp", descOrAsc),
+            orderBy("created_timestamp", "desc"),
             where("comment_report", "==", true),
-            where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
             startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
             limit(1)
           )
@@ -89,13 +133,12 @@ const ReportedComment = () => {
       }
     }
   };
-  const moveNextReportedComments = async (descOrAsc, timeDepthString) => {
+  const moveNextReportedComments = async () => {
     const querySnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("created_timestamp", "desc"),
         where("comment_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         startAfter(nextReportCommentSnapshot),
         limit(10)
       )
@@ -106,9 +149,8 @@ const ReportedComment = () => {
     const afterSnapshot = await getDocs(
       query(
         collection(dbService, "Comment"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("created_timestamp", "desc"),
         where("comment_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
         limit(1)
       )
@@ -120,11 +162,7 @@ const ReportedComment = () => {
     }
     snapshotToReportedComments(querySnapshot);
   };
-  const onSearchSubmit = async (e) => {
-    e.preventDefault();
-    setReportedComments([]);
-    getFirstReportedComments(orderDescOrAsc, timeDepthValue);
-  };
+
   const onAcceptOrDenyReport = async (commentId, isAccept) => {
     if (isAccept) {
       await updateDoc(doc(dbService, "Comment", commentId), {
@@ -139,52 +177,105 @@ const ReportedComment = () => {
     setReportedComments(
       reportedComments.filter((post) => post.id !== commentId)
     );
-    console.log("acceptOrDenyPostId: ", commentId);
   };
+
   useEffect(() => {
     getFirstReportedComments();
+    //eslint-disable-next-line
   }, []);
+
   return (
-    <ProfileCotentBox>
-      신고된 댓글
-      {reportedComments.length !== 0 ? (
-        reportedComments.map((comment) => (
-          <div key={comment.id}>
-            <Link to={`/post/${comment.associated_post_id}`}>
-              {comment.comment_text}
-            </Link>
-            <button onClick={() => onAcceptOrDenyReport(comment.id, true)}>
-              블라인드하기
-            </button>
-            <button onClick={() => onAcceptOrDenyReport(comment.id, false)}>
-              무시하기
-            </button>
-          </div>
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )}
+    <>
+      <NicknameTextBox success={alertInfo.blindComment} redcolor="true">
+        댓글을 블라인드 했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.cancelReport}>
+        댓글 신고 접수를 취소했습니다.
+      </NicknameTextBox>
+      <ProfileCotentBox>
+        <SectionTitle>신고된 댓글</SectionTitle>
+        {reportedComments.length !== 0 ? (
+          reportedComments.map((comment) => (
+            <ReportPostElementBlock key={comment.id}>
+              <ReportPostContentBox>
+                <CommentElement
+                  key={comment.id}
+                  comment={comment}
+                ></CommentElement>
+              </ReportPostContentBox>
+              <ReportPostButtonBox>
+                <PostBlindButton onClick={handleClickOpenDialogForBlindComment}>
+                  댓글 블라인드
+                </PostBlindButton>
+                <Dialog
+                  open={openDialogForBlindComment}
+                  onClose={handleCloseDialogForBlindComment}
+                  aria-labelledby="alert-dialog-report"
+                  aria-describedby="alert-dialog-report"
+                >
+                  <WsDialogTitle>댓글을 블라인드 하시겠습니까?</WsDialogTitle>
+                  <DialogActions>
+                    <ConfirmButton
+                      onClick={handleCloseDialogForBlindComment}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </ConfirmButton>
+                    <CancelButton
+                      color="primary"
+                      onClick={() => onBlindComment(comment.id)}
+                    >
+                      블라인드
+                    </CancelButton>
+                  </DialogActions>
+                </Dialog>
+                <CancelReportButton
+                  onClick={handleClickOpenDialogForCancelReportComment}
+                >
+                  신고 접수 취소
+                </CancelReportButton>
+                <Dialog
+                  open={openDialogForCancelReportComment}
+                  onClose={handleCloseDialogForCancelReportComment}
+                  aria-labelledby="alert-dialog-reportComment"
+                  aria-describedby="alert-dialog-reportComment"
+                >
+                  <WsDialogTitle>
+                    댓글 신고 접수를 취소하시겠습니까?
+                  </WsDialogTitle>
+                  <DialogActions>
+                    <CancelButton
+                      onClick={handleCloseDialogForCancelReportComment}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </CancelButton>
+                    <ConfirmButton
+                      color="primary"
+                      onClick={() => onCancelReportComment(comment.id)}
+                    >
+                      신고 접수 취소
+                    </ConfirmButton>
+                  </DialogActions>
+                </Dialog>
+              </ReportPostButtonBox>
+            </ReportPostElementBlock>
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
       {isNextReportCommentExist && (
-        <button
-          onClick={() =>
-            moveNextReportedComments(orderDescOrAsc, timeDepthValue)
-          }
+        <MoreLoadPostButton
+          updatePostList={moveNextReportedComments()}
+          isMarginLeft={true}
         >
           10개 더 보기
-        </button>
+        </MoreLoadPostButton>
       )}
-      <SideOptionContainer>
-        <SideOptionFormForPostBoard
-          onSearchSubmit={onSearchSubmit}
-          setTimeDepthValue={setTimeDepthValue}
-          timeDepthSelect={timeDepthSelect}
-          setTimeDepthSelect={setTimeDepthSelect}
-          isResultDesc={isResultDesc}
-          setIsResultDesc={setIsResultDesc}
-          setOrderDescOrAsc={setOrderDescOrAsc}
-        ></SideOptionFormForPostBoard>
-      </SideOptionContainer>
-    </ProfileCotentBox>
+    </>
   );
 };
 

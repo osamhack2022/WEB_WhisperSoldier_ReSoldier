@@ -1,13 +1,69 @@
+import styled from "@emotion/styled";
+import { Button, Dialog, DialogActions } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { dbFunction, dbService } from "../../lib/FStore";
-import getTimeDepth from "../../modules/GetTimeDepth";
-import { SideOptionContainer } from "../../styles/post/PostBoardStyle";
+import {
+  ReportPostButtonBox,
+  ReportPostContentBox,
+  ReportPostElementBlock,
+} from "../../styles/admin/ReportedPostStyle";
+import {
+  NicknameTextBox,
+  SectionTitle,
+} from "../../styles/profile/ChangeProfileStyle";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
-import { SideOptionFormForPostBoard } from "../common/SideOptionForm";
+import MoreLoadPostButton from "../post/MoreLoadPostButton";
+import PostElement from "../post/PostElement";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+
+export const PostBlindButton = styled(Button)({
+  position: "relative",
+  padding: "1px 8px",
+  color: "#A65646",
+  height: "31px",
+  width: "100px",
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  fontFamily: "IBM Plex Sans KR, sans-serif",
+  fontWeight: "500",
+  fontSize: "11px",
+  textAlign: "center",
+  textDecoration: "none",
+  borderRadius: "25px",
+  marginLeft: "10px",
+  border: "1px solid #A65646",
+  "&:hover": {
+    background: "#A65646",
+    color: "#ffffff",
+  },
+});
+
+export const CancelReportButton = styled(Button)({
+  margin: "10px 0px 0px 0px",
+  position: "relative",
+  padding: "1px 8px",
+  color: "#0d552c",
+  height: "31px",
+  width: "100px",
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  fontFamily: "IBM Plex Sans KR, sans-serif",
+  fontWeight: "500",
+  fontSize: "11px",
+  textAlign: "center",
+  textDecoration: "none",
+  borderRadius: "25px",
+  marginLeft: "10px",
+  border: "1px solid rgb(26, 117, 65)",
+  "&:hover": {
+    background: "#0d552c",
+    color: "#ffffff",
+  },
+});
 
 const ReportedPost = () => {
-  // WorryPost에서 쿼리해오기
   const {
     doc,
     getDocs,
@@ -22,16 +78,47 @@ const ReportedPost = () => {
   const [reportedPosts, setReportedPosts] = useState([]);
   const [nextReportPostSnapshot, setNextReportPostSnapshot] = useState({});
   const [isNextReportPostExist, setIsNextReportPostExist] = useState(false);
-  const [timeDepthValue, setTimeDepthValue] = useState("week");
-  const [timeDepthSelect, setTimeDepthSelect] = useState({
-    week: true,
-    month: false,
-    halfYear: false,
-    fullYear: false,
-    allTime: false,
+  const [alertInfo, setAlertInfo] = useState({
+    blindPost: false,
+    cancelReport: false,
   });
-  const [isResultDesc, setIsResultDesc] = useState(true);
-  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
+
+  const [openDialogForBlindPost, setOpenDialogForBlindPost] = useState(false);
+  const handleClickOpenDialogForBlindPost = () => {
+    setOpenDialogForBlindPost(true);
+  };
+
+  const handleCloseDialogForBlindPost = () => {
+    setOpenDialogForBlindPost(false);
+  };
+
+  const onBlindPost = (currentDocId) => {
+    setOpenDialogForBlindPost(false);
+    onAcceptOrDenyReport(currentDocId, true);
+    setAlertInfo((prev) => ({ ...prev, blindPost: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, blindPost: false }));
+    }, 3000);
+  };
+
+  const [openDialogForCancelReportPost, setOpenDialogForCancelReportPost] =
+    useState(false);
+  const handleClickOpenDialogForCancelReportPost = () => {
+    setOpenDialogForCancelReportPost(true);
+  };
+
+  const handleCloseDialogForCancelReportPost = () => {
+    setOpenDialogForCancelReportPost(false);
+  };
+
+  const onCancelReportPost = (currentDocId) => {
+    setOpenDialogForCancelReportPost(false);
+    onAcceptOrDenyReport(currentDocId, false);
+    setAlertInfo((prev) => ({ ...prev, cancelReport: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, cancelReport: false }));
+    }, 3000);
+  };
 
   const snapshotToReportedPosts = (snapshot) => {
     if (snapshot) {
@@ -45,16 +132,12 @@ const ReportedPost = () => {
     }
   };
 
-  const getFirstReportedPosts = async (
-    descOrAsc = "desc",
-    timeDepthString = "week"
-  ) => {
+  const getFirstReportedPosts = async () => {
     const firstSnapshot = await getDocs(
       query(
         collection(dbService, "WorryPost"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("report_timestamp", "desc"),
         where("post_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         limit(10)
       )
     );
@@ -69,9 +152,8 @@ const ReportedPost = () => {
         const nextReportsSnapshot = await getDocs(
           query(
             collection(dbService, "WorryPost"),
-            orderBy("created_timestamp", descOrAsc),
+            orderBy("report_timestamp", "desc"),
             where("post_report", "==", true),
-            where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
             startAfter(firstSnapshot.docs[firstSnapshot.docs.length - 1]),
             limit(1)
           )
@@ -86,13 +168,12 @@ const ReportedPost = () => {
       }
     }
   };
-  const moveNextReportedPosts = async (descOrAsc, timeDepthString) => {
+  const moveNextReportedPosts = async () => {
     const querySnapshot = await getDocs(
       query(
         collection(dbService, "WorryPost"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("report_timestamp", "desc"),
         where("post_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         startAfter(nextReportPostSnapshot),
         limit(10)
       )
@@ -103,9 +184,8 @@ const ReportedPost = () => {
     const afterSnapshot = await getDocs(
       query(
         collection(dbService, "WorryPost"),
-        orderBy("created_timestamp", descOrAsc),
+        orderBy("report_timestamp", "desc"),
         where("post_report", "==", true),
-        where("created_timestamp", ">=", getTimeDepth(timeDepthString)),
         startAfter(querySnapshot.docs[querySnapshot.docs.length - 1]),
         limit(1)
       )
@@ -117,17 +197,11 @@ const ReportedPost = () => {
     }
     snapshotToReportedPosts(querySnapshot);
   };
-  const onSearchSubmit = async (e) => {
-    e.preventDefault();
-    setReportedPosts([]);
-    getFirstReportedPosts(orderDescOrAsc, timeDepthValue);
-  };
+
   const onAcceptOrDenyReport = async (documentId, isAccept) => {
     if (isAccept) {
       await updateDoc(doc(dbService, "WorryPost", documentId), {
         post_rep_accept: true,
-        //블라인드를 해줄 때 post_report를 false로 해준 이유는
-        //한 번 블라인드 처리를 한 Post는 더이상 관리자 페이지에 안 뜨게 하도록 하기 위함
         post_report: false,
       });
     } else {
@@ -136,50 +210,102 @@ const ReportedPost = () => {
       });
     }
     setReportedPosts(reportedPosts.filter((post) => post.id !== documentId));
-    console.log("acceptOrDenyPostId: ", documentId);
   };
   useEffect(() => {
+    setReportedPosts([]);
     getFirstReportedPosts();
+    //eslint-disable-next-line
   }, []);
   return (
-    <ProfileCotentBox>
-      신고된 글
-      {reportedPosts.length !== 0 ? (
-        reportedPosts.map((document) => (
-          <div key={document.id}>
-            <Link to={`/post/${document.id}`}>
-              {document.text} #{document.tag_name}
-            </Link>
-            <button onClick={() => onAcceptOrDenyReport(document.id, true)}>
-              블라인드하기
-            </button>
-            <button onClick={() => onAcceptOrDenyReport(document.id, false)}>
-              무시하기
-            </button>
-          </div>
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )}
+    <>
+      <NicknameTextBox success={alertInfo.blindPost} redcolor="true">
+        포스트를 블라인드 했습니다.
+      </NicknameTextBox>
+      <NicknameTextBox success={alertInfo.cancelReport}>
+        포스트 신고 접수를 취소했습니다.
+      </NicknameTextBox>
+      <ProfileCotentBox>
+        <SectionTitle>신고된 글</SectionTitle>
+        {reportedPosts.length !== 0 ? (
+          reportedPosts.map((document) => (
+            <ReportPostElementBlock key={document.id}>
+              <ReportPostContentBox>
+                <PostElement post={document}></PostElement>
+              </ReportPostContentBox>
+
+              <ReportPostButtonBox>
+                <PostBlindButton onClick={handleClickOpenDialogForBlindPost}>
+                  포스트 블라인드
+                </PostBlindButton>
+                <Dialog
+                  open={openDialogForBlindPost}
+                  onClose={handleCloseDialogForBlindPost}
+                  aria-labelledby="alert-dialog-report"
+                  aria-describedby="alert-dialog-report"
+                >
+                  <WsDialogTitle>포스트를 블라인드 하시겠습니까?</WsDialogTitle>
+                  <DialogActions>
+                    <ConfirmButton
+                      onClick={handleCloseDialogForBlindPost}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </ConfirmButton>
+                    <CancelButton
+                      color="primary"
+                      onClick={() => onBlindPost(document.id)}
+                    >
+                      블라인드
+                    </CancelButton>
+                  </DialogActions>
+                </Dialog>
+                <CancelReportButton
+                  onClick={handleClickOpenDialogForCancelReportPost}
+                >
+                  신고 접수 취소
+                </CancelReportButton>
+                <Dialog
+                  open={openDialogForCancelReportPost}
+                  onClose={handleCloseDialogForCancelReportPost}
+                  aria-labelledby="alert-dialog-report"
+                  aria-describedby="alert-dialog-report"
+                >
+                  <WsDialogTitle>
+                    포스트 신고 접수를 취소하시겠습니까?
+                  </WsDialogTitle>
+                  <DialogActions>
+                    <CancelButton
+                      onClick={handleCloseDialogForCancelReportPost}
+                      color="primary"
+                      autoFocus
+                    >
+                      취소
+                    </CancelButton>
+                    <ConfirmButton
+                      color="primary"
+                      onClick={() => onCancelReportPost(document.id)}
+                    >
+                      신고 접수 취소
+                    </ConfirmButton>
+                  </DialogActions>
+                </Dialog>
+              </ReportPostButtonBox>
+            </ReportPostElementBlock>
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
       {isNextReportPostExist && (
-        <button
-          onClick={() => moveNextReportedPosts(orderDescOrAsc, timeDepthValue)}
+        <MoreLoadPostButton
+          updatePostList={moveNextReportedPosts}
+          isMarginLeft={true}
         >
           10개 더 보기
-        </button>
+        </MoreLoadPostButton>
       )}
-      <SideOptionContainer>
-        <SideOptionFormForPostBoard
-          onSearchSubmit={onSearchSubmit}
-          setTimeDepthValue={setTimeDepthValue}
-          timeDepthSelect={timeDepthSelect}
-          setTimeDepthSelect={setTimeDepthSelect}
-          isResultDesc={isResultDesc}
-          setIsResultDesc={setIsResultDesc}
-          setOrderDescOrAsc={setOrderDescOrAsc}
-        ></SideOptionFormForPostBoard>
-      </SideOptionContainer>
-    </ProfileCotentBox>
+    </>
   );
 };
 

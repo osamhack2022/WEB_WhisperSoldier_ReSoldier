@@ -202,11 +202,6 @@ export const OtherUserButtonContainer = ({
     setOpenDialogForReportPost(false);
   };
 
-  const onReportPostClick = () => {
-    setOpenDialogForReportPost(false);
-    reportPost();
-  };
-
   const [openDialogForReportedPost, setOpenDialogForReportedPost] =
     useState(false);
   const handleClickOpenDialogForReportedPost = () => {
@@ -214,6 +209,20 @@ export const OtherUserButtonContainer = ({
   };
   const handleCloseDialogForReportedPost = () => {
     setOpenDialogForReportedPost(false);
+  };
+
+  const onReportPostClick = () => {
+    console.log(openDialogForReportPost, openDialogForReportedPost);
+    setOpenDialogForReportPost(false);
+    reportPost();
+    setAlertInfo((prev) => ({ ...prev, reportPost: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportPost: false }));
+      setPostInfo((prev) => ({
+        ...prev,
+        post_report: true,
+      }));
+    }, 3000);
   };
 
   const toggleLike = async () => {
@@ -326,17 +335,8 @@ export const OtherUserButtonContainer = ({
   const reportPost = async () => {
     await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
       post_report: true,
-    }).then(
-      setPostInfo((prev) => ({
-        ...prev,
-        post_report: true,
-        report_timestamp: serverTimestamp(),
-      }))
-    );
-    setAlertInfo((prev) => ({ ...prev, reportPost: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, reportPost: false }));
-    }, 3000);
+      report_timestamp: serverTimestamp(),
+    });
   };
 
   return (
@@ -390,8 +390,8 @@ export const OtherUserButtonContainer = ({
         <Dialog
           open={openDialogForReportedPost}
           onClose={handleCloseDialogForReportedPost}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+          aria-labelledby="alert-dialog-reported"
+          aria-describedby="alert-dialog-reported"
         >
           <WsDialogTitle>이미 신고 접수된 포스트입니다.</WsDialogTitle>
           <DialogActions>
@@ -407,8 +407,8 @@ export const OtherUserButtonContainer = ({
         <Dialog
           open={openDialogForReportPost}
           onClose={handleCloseDialogForReportPost}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+          aria-labelledby="alert-dialog-report"
+          aria-describedby="alert-dialog-report"
         >
           <WsDialogTitle>포스트를 신고하시겠습니까?</WsDialogTitle>
           <DialogActions>
