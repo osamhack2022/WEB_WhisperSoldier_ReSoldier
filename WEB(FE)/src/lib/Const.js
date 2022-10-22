@@ -9,3 +9,5 @@ export const TabletQuery = `(min-width:768px)`;
 
 export const whisperSodlierSessionKey = `firebase:authUser:${FApiKey}:[DEFAULT]`;
 export const adminSessionKey = `firebase:admin:${FApiKey}:[DEFAULT]`;
+
+export const curseWords = ["대충욕테스트"];

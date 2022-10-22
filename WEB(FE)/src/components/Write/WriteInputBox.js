@@ -7,6 +7,7 @@ import { authService } from "../../lib/FAuth";
 import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
+import checkCurseWords from "../../modules/CheckCurseWord";
 
 const InputBox = styled.div`
   //margin-left: 10px;
@@ -65,11 +66,14 @@ const WritePostBox = ({ navigate }) => {
 
   const onClick = async (e) => {
     e.preventDefault();
+    const curseWord = checkCurseWords(state.postContent);
     if (state.postContent.length === 0) {
       setErrorWritePostInfo((prev) => ({ ...prev, isError: true }));
       setTimeout(() => {
         setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
       }, 3000);
+    } else if (curseWord) {
+      alert("욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다.");
     } else {
       try {
         const docRef = await addDoc(collection(dbService, "WorryPost"), {
