@@ -73,42 +73,49 @@ const PopularPostBoard = () => {
     setLikePostCountIndex(0); // setState는 비동기이기 때문에 while문같은 곳에 사용하면 안된다. 그러면 다른 방법을 찾아야된다. 
     // 
     while (likePostCountIndex < 10) { // while문을 돌릴 수 있는 다른 로직을 찾는 중이다.
-      let idx = 0
+      let idx = -1
       const rangeSnap = await getDocs(q);
       console.log("Length of rangeSnap: ", rangeSnap.docs.length); 
       /*처음 가져올때는, 전체 게시글이 10개 미만이 아닌 이상 무조건 10개를 가져오는게 맞다.*/
       if (rangeSnap) {
+        //console.log("THE snapshot: ", rangeSnap.docs)
         rangeSnap.forEach((doc) => {
           const postObj = {
             ...doc.data(),
             id: doc.id,
           };
+          console.log("THE snapshot from inside forEach: ", rangeSnap.docs)
           console.log("current timeDepth from date is: ", getTimeDepth(timeDepthValue));
           console.log("current doc timestamp is: ", postObj.created_timestamp);
+					idx = idx + 1;
           if (postObj.created_timestamp >= getTimeDepth(timeDepthValue) && likePostCountIndex < 10) {
             setPosts((prev) => [...prev, postObj]);
-            setPostsRecoil((prev) => [...prev, postObj]);
-            idx = idx + 1;
             console.log("after idx change");
-            console.log("현재까지 문서 중 기간 제한을 통과한 문서 개수: ", idx)
+            console.log("통과 해당 문서의 인덱스: ", idx)
             setLikePostCountIndex((prev) => (prev + 1));
             console.log("after FilterIndex change");
           }
           console.log("after IF");
         })
-          (idx !== 0 ? setNextLikeFilterPostSnapShot(rangeSnap.docs[idx - 1]) : setNextLikeFilterPostSnapShot(rangeSnap.docs[rangeSnap.docs.length - 1]))
-        console.log("NextFilterPost: ", nextLikeFliterPostSnapShot);
-      
-        //쿼리 업데이트
-        q = query(collection(dbService, "WorryPost"),
-          orderBy("like_count", "desc"),
-          orderBy("created_timestamp", orderDescOrAsc),
-          startAfter(nextLikeFliterPostSnapShot),
-          limit(10)
-        )
+				console.log("rangesnapshot's last 통과한 document: ", rangeSnap.docs[idx])
+        setNextLikeFilterPostSnapShot((prev) => rangeSnap.docs[idx]) // 함수형 동기처리 시도했으나 실패... 만약 다시 돌아오게 된다면 원인을 찾아보아야겠다
+        console.log("nextLikeFliterPostSnapShot: ", nextLikeFliterPostSnapShot);
       } else {
         // 가져올 스냅샷이 존재하지 않음
+        const skipSnapshot = await getDocs(query(collection(dbService, "WorryPost"),
+        orderBy("like_count", "desc"),
+        orderBy("created_timestamp", orderDescOrAsc),
+        limit(10)
+      ))
+        setNextLikeFilterPostSnapShot((prev) => {return rangeSnap.docs[rangeSnap.docs.length - 1]});
       }
+      //쿼리 업데이트
+      q = query(collection(dbService, "WorryPost"),
+      orderBy("like_count", "desc"),
+      orderBy("created_timestamp", orderDescOrAsc),
+      startAfter(nextLikeFliterPostSnapShot),
+      limit(10)
+      )
     }
   };
     // 테스트 통과하면 "다음 10개 보기"를 위해 nextLikeOrderPostsSnapshot 지정해주기
