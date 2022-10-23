@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { StartFirstChat } from "../../store/ChatStore";
 import {
   CommentBox,
@@ -198,12 +199,15 @@ const PostCommentElement = ({
 
   const onCommentEditAndSubmit = async (e) => {
     e.preventDefault();
+    const curseWord = checkCurseWord(newComment);
     console.log("newComment.lenght === 0", newComment.length === 0);
     if (newComment.length === 0) {
       setEditCommentErrorInfo(true);
       setTimeout(() => {
         setEditCommentErrorInfo(false);
       }, 3000);
+    } else if (curseWord) {
+      alert("욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다.");
     } else {
       const check = window.confirm("정말로 댓글을 수정하시겠습니까?");
       if (check) {

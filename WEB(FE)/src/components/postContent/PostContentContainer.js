@@ -5,6 +5,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -93,11 +94,14 @@ const PostContentContainer = ({ isAdmin }) => {
 
   const onClick = async (e) => {
     e.preventDefault();
+    const curseWord = checkCurseWord(state.editContent);
     if (state.editContent.length === 0) {
       setErrorEditInfo(true);
       setTimeout(() => {
         setErrorEditInfo(false);
       }, 3000);
+    } else if (curseWord) {
+      alert("욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다.");
     } else {
       const check = window.confirm("정말로 수정하시겠습니까?");
       if (check) {

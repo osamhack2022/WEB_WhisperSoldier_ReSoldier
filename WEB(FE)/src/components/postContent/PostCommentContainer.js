@@ -6,6 +6,7 @@ import PostCommentContent from "./PostCommentContent";
 import PostCommentForm from "./PostCommentForm";
 import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 
 const PostCommentContainer = ({
   postInfo,
@@ -81,11 +82,14 @@ const PostCommentContainer = ({
   };
 
   const onCommentSubmit = async () => {
+    const curseWord = checkCurseWord(state.comment);
     if (state.comment.length === 0) {
       setCommentInfo(true);
       setTimeout(() => {
         setCommentInfo(false);
       }, 3000);
+    } else if (curseWord) {
+      alert("욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다.");
     } else {
       try {
         await addDoc(collection(dbService, "Comment"), {
