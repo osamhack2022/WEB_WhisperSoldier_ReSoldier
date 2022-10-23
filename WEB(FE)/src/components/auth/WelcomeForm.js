@@ -113,7 +113,6 @@ const WelcomeForm = () => {
     const reader = new FileReader();
     // reader.readAsDataURL(theFile);
     reader.onloadend = (finishedEvent) => {
-      //console.log(finishedEvent);
       const {
         currentTarget: { result },
       } = finishedEvent;
@@ -154,8 +153,6 @@ const WelcomeForm = () => {
               photoURL: profileImgUrl,
             })
               .then(() => {
-                console.log("프로필 사진 변경 성공");
-                // alert("닉네임 변경을 성공했습니다.");
                 updateDoc(
                   doc(
                     dbService,

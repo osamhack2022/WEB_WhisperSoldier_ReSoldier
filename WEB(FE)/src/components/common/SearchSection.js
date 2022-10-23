@@ -1,9 +1,7 @@
 import { Alert, Grow } from "@mui/material";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
-import { useAndSetForm, useForm } from "../../modules/useForm";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar } from "./InputBox";
 
@@ -12,8 +10,6 @@ const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* text-decoration: none; */
-  /* margin-left: 115px; */
   left: 50%;
   transform: translate(-50%, 0%);
   cursor: default;
@@ -22,6 +18,12 @@ const SearchBox = styled.div`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0%);
+  `}
+  ${media.mobile`
+    margin-left : inherit;
+    position: relative;
+    left:inherit;
+    transform: inherit;
   `}
 `;
 
@@ -33,13 +35,8 @@ const AlertBox = styled.div`
   transform: translate(-50%, 0);
 `;
 
-const SearchSection = ({ navigate, inputValue, onChange }) => {
-  // const [state, onChange] = useForm({ searchWord: "" });
-  // const [inputValue, setInputChange, onChange] = useAndSetForm({
-  //   searchWord: "",
-  // });
+const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
   const [isInputError, setIsInputError] = useState(false);
-  // const navigate = useNavigate();
 
   const onSearchClick = (e) => {
     e.preventDefault();
@@ -68,7 +65,7 @@ const SearchSection = ({ navigate, inputValue, onChange }) => {
 
   return (
     <>
-      <SearchBox>
+      <SearchBox searchpage={searchpage ? "true" : "false"}>
         <SearchBar
           name="searchWord"
           type="search"

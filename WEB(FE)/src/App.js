@@ -22,6 +22,7 @@ import { adminSessionKey, whisperSodlierSessionKey } from "./lib/Const";
 import WelcomePage from "./pages/WelcomePage";
 import LoadPage from "./pages/LoadPage";
 import TagBoard from "./pages/TagBoardPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const Body = styled.div`
   position: relative;
@@ -81,6 +82,8 @@ const App = () => {
                 <Route path="/message" element={<ChatPage />} />
                 <Route path="/tags" element={<TagPage />} />
                 <Route path="/tag/:id" element={<TagBoard />} />
+                <Route path="*" element={<NotFoundPage />} />
+                <Route path="/notfound" element={<NotFoundPage />} />
               </Routes>
               <Footer></Footer>
             </Body>
