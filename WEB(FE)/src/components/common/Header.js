@@ -2,14 +2,15 @@ import styled from "styled-components";
 import { HeaderTitleContainer } from "../container/HeaderTitleContainer";
 import { HeaderButtonSection } from "./HeaderButtonSection";
 import SearchSection from "./SearchSection";
-
 import Navigation from "./Navigation";
-import { useLocation } from "react-router-dom";
 import media from "../../modules/MediaQuery";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
+import { useNavigate } from "react-router-dom";
+import { useAndSetForm } from "../../modules/useForm";
 
 const HeaderContainer = styled.header`
+  position: relative;
   width: 100%;
   height: fit-content;
   background-color: #fbfbfb;
@@ -31,7 +32,6 @@ const HeaderBox = styled.div`
   height: 72px;
   display: flex;
   align-items: center;
-
   ${media.smallDesktop`
     margin: 0px;
     box-sizing: border-box;
@@ -51,17 +51,25 @@ const HeaderBox = styled.div`
 `;
 
 const Header = ({ isAdmin }) => {
-  const location = useLocation();
   const isTablet = useMediaQuery({ query: TabletQuery });
+  const navigate = useNavigate();
+  const [inputValue, setInputChange, onChange] = useAndSetForm({
+    searchWord: "",
+  });
   return (
     <HeaderContainer>
       <HeaderBox>
-        <HeaderTitleContainer></HeaderTitleContainer>
+        <HeaderTitleContainer
+          navigate={navigate}
+          setInputChange={setInputChange}
+        ></HeaderTitleContainer>
         {isTablet && (
           <>
-            {location.pathname !== "/search" && (
-              <SearchSection toLink="/search"></SearchSection>
-            )}
+            <SearchSection
+              navigate={navigate}
+              inputValue={inputValue}
+              onChange={onChange}
+            ></SearchSection>
             <HeaderButtonSection isAdmin={isAdmin}></HeaderButtonSection>
           </>
         )}

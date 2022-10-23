@@ -1,8 +1,7 @@
-import styled from "@emotion/styled";
-import { Button, Dialog, DialogActions } from "@mui/material";
 import { useEffect, useState } from "react";
 import { dbFunction, dbService } from "../../lib/FStore";
 import {
+  InfoTextBox,
   ReportPostButtonBox,
   ReportPostContentBox,
   ReportPostElementBlock,
@@ -11,57 +10,11 @@ import {
   NicknameTextBox,
   SectionTitle,
 } from "../../styles/profile/ChangeProfileStyle";
-import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import PostElement from "../post/PostElement";
-import {
-  CancelButton,
-  ConfirmButton,
-} from "../profile/CheckDefaultProfileImgNestDialog";
-
-export const PostBlindButton = styled(Button)({
-  position: "relative",
-  padding: "1px 8px",
-  color: "#A65646",
-  height: "31px",
-  width: "100px",
-  backgroundColor: "rgba(0, 0, 0, 0)",
-  fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "500",
-  fontSize: "11px",
-  textAlign: "center",
-  textDecoration: "none",
-  borderRadius: "25px",
-  marginLeft: "10px",
-  border: "1px solid #A65646",
-  "&:hover": {
-    background: "#A65646",
-    color: "#ffffff",
-  },
-});
-
-export const CancelReportButton = styled(Button)({
-  margin: "10px 0px 0px 0px",
-  position: "relative",
-  padding: "1px 8px",
-  color: "#0d552c",
-  height: "31px",
-  width: "100px",
-  backgroundColor: "rgba(0, 0, 0, 0)",
-  fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "500",
-  fontSize: "11px",
-  textAlign: "center",
-  textDecoration: "none",
-  borderRadius: "25px",
-  marginLeft: "10px",
-  border: "1px solid rgb(26, 117, 65)",
-  "&:hover": {
-    background: "#0d552c",
-    color: "#ffffff",
-  },
-});
+import BlindDialog from "./BlindDialog";
+import CancelReportDialog from "./CancelReportDialog";
 
 const ReportedPost = () => {
   const {
@@ -75,6 +28,8 @@ const ReportedPost = () => {
     startAfter,
     updateDoc,
   } = dbFunction;
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNonExistReport, setIsNonExistReport] = useState(false);
   const [reportedPosts, setReportedPosts] = useState([]);
   const [nextReportPostSnapshot, setNextReportPostSnapshot] = useState({});
   const [isNextReportPostExist, setIsNextReportPostExist] = useState(false);
@@ -82,43 +37,6 @@ const ReportedPost = () => {
     blindPost: false,
     cancelReport: false,
   });
-
-  const [openDialogForBlindPost, setOpenDialogForBlindPost] = useState(false);
-  const handleClickOpenDialogForBlindPost = () => {
-    setOpenDialogForBlindPost(true);
-  };
-
-  const handleCloseDialogForBlindPost = () => {
-    setOpenDialogForBlindPost(false);
-  };
-
-  const onBlindPost = (currentDocId) => {
-    setOpenDialogForBlindPost(false);
-    onAcceptOrDenyReport(currentDocId, true);
-    setAlertInfo((prev) => ({ ...prev, blindPost: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, blindPost: false }));
-    }, 3000);
-  };
-
-  const [openDialogForCancelReportPost, setOpenDialogForCancelReportPost] =
-    useState(false);
-  const handleClickOpenDialogForCancelReportPost = () => {
-    setOpenDialogForCancelReportPost(true);
-  };
-
-  const handleCloseDialogForCancelReportPost = () => {
-    setOpenDialogForCancelReportPost(false);
-  };
-
-  const onCancelReportPost = (currentDocId) => {
-    setOpenDialogForCancelReportPost(false);
-    onAcceptOrDenyReport(currentDocId, false);
-    setAlertInfo((prev) => ({ ...prev, cancelReport: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, cancelReport: false }));
-    }, 3000);
-  };
 
   const snapshotToReportedPosts = (snapshot) => {
     if (snapshot) {
@@ -145,7 +63,9 @@ const ReportedPost = () => {
       firstSnapshot.docs[firstSnapshot.docs.length - 1]
     );
     snapshotToReportedPosts(firstSnapshot);
-    if (firstSnapshot.docs.length < 10) {
+    if (firstSnapshot.docs.length === 0) {
+      setIsNonExistReport(true);
+    } else if (firstSnapshot.docs.length < 10) {
       setIsNextReportPostExist(false);
     } else {
       try {
@@ -167,7 +87,9 @@ const ReportedPost = () => {
         console.log("Error with getting posts!");
       }
     }
+    setIsLoading(false);
   };
+
   const moveNextReportedPosts = async () => {
     const querySnapshot = await getDocs(
       query(
@@ -226,7 +148,11 @@ const ReportedPost = () => {
       </NicknameTextBox>
       <ProfileCotentBox>
         <SectionTitle>신고된 글</SectionTitle>
-        {reportedPosts.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : isNonExistReport || reportedPosts.length === 0 ? (
+          <InfoTextBox>신고된 포스트가 존재하지 않습니다.</InfoTextBox>
+        ) : (
           reportedPosts.map((document) => (
             <ReportPostElementBlock key={document.id}>
               <ReportPostContentBox>
@@ -234,67 +160,19 @@ const ReportedPost = () => {
               </ReportPostContentBox>
 
               <ReportPostButtonBox>
-                <PostBlindButton onClick={handleClickOpenDialogForBlindPost}>
-                  포스트 블라인드
-                </PostBlindButton>
-                <Dialog
-                  open={openDialogForBlindPost}
-                  onClose={handleCloseDialogForBlindPost}
-                  aria-labelledby="alert-dialog-report"
-                  aria-describedby="alert-dialog-report"
-                >
-                  <WsDialogTitle>포스트를 블라인드 하시겠습니까?</WsDialogTitle>
-                  <DialogActions>
-                    <ConfirmButton
-                      onClick={handleCloseDialogForBlindPost}
-                      color="primary"
-                      autoFocus
-                    >
-                      취소
-                    </ConfirmButton>
-                    <CancelButton
-                      color="primary"
-                      onClick={() => onBlindPost(document.id)}
-                    >
-                      블라인드
-                    </CancelButton>
-                  </DialogActions>
-                </Dialog>
-                <CancelReportButton
-                  onClick={handleClickOpenDialogForCancelReportPost}
-                >
-                  신고 접수 취소
-                </CancelReportButton>
-                <Dialog
-                  open={openDialogForCancelReportPost}
-                  onClose={handleCloseDialogForCancelReportPost}
-                  aria-labelledby="alert-dialog-report"
-                  aria-describedby="alert-dialog-report"
-                >
-                  <WsDialogTitle>
-                    포스트 신고 접수를 취소하시겠습니까?
-                  </WsDialogTitle>
-                  <DialogActions>
-                    <CancelButton
-                      onClick={handleCloseDialogForCancelReportPost}
-                      color="primary"
-                      autoFocus
-                    >
-                      취소
-                    </CancelButton>
-                    <ConfirmButton
-                      color="primary"
-                      onClick={() => onCancelReportPost(document.id)}
-                    >
-                      신고 접수 취소
-                    </ConfirmButton>
-                  </DialogActions>
-                </Dialog>
+                <BlindDialog
+                  onAcceptOrDenyReport={onAcceptOrDenyReport}
+                  setAlertInfo={setAlertInfo}
+                  document={document}
+                />
+                <CancelReportDialog
+                  onAcceptOrDenyReport={onAcceptOrDenyReport}
+                  setAlertInfo={setAlertInfo}
+                  document={document}
+                />
               </ReportPostButtonBox>
             </ReportPostElementBlock>
           ))
-        ) : (
-          <div>잠시만 기다려 주세요</div>
         )}
       </ProfileCotentBox>
       {isNextReportPostExist && (

@@ -1,6 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-//import { useRecoilState, useRecoilValue } from "recoil";
-//import { UserInfo } from "./store/AuthStore";
 import HomePage from "./pages/HomePage";
 import FirstPage from "./pages/FirstPage";
 import LoginPage from "./pages/LoginPage";
@@ -30,13 +28,16 @@ const Body = styled.div`
 `;
 
 const App = () => {
+  // session storage에 저장된 유저 로그인 정보 객체
   const [sessionObj, setSessionObj] = useState(
     JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
   );
+  // session storage에 저장된 관리자 유무 정보 객체
   const [isAdmin, setIsAdmin] = useState(
     JSON.parse(sessionStorage.getItem(adminSessionKey))
   );
 
+  //
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
@@ -54,8 +55,13 @@ const App = () => {
 
   return (
     <>
+      {/*각 페이지별 라우트 
+    - 로그인 정보 객체가 있을 경우 서비스 화면, 없을 경우 로그인 관련 화면을 보여준다. */}
       {sessionObj ? (
+        /*닉네임이 없을 경우 회원가입 후 첫 로그인으로 간주하여 초기 프로필 설정 페이지로 이동한다. 
+        이외의 경우 서비스 화면을 보여준다*/
         sessionObj.providerData[0].displayName ? (
+          /*관리자 정보 객체 정보가 생성된 후 서비스 화면을 보여주도록 한다.*/
           isAdmin ? (
             <Body>
               <Header isAdmin={isAdmin.admin}></Header>

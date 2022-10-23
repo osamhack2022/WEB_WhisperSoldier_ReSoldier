@@ -7,20 +7,25 @@ import getTimeDepth from "../modules/GetTimeDepth";
 import { useAndSetForm } from "../modules/useForm";
 import { IsUpdatePostList } from "../store/PostStore";
 import { ResultList, SearchInfo } from "../store/SearchStore";
+import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const SearchPage = () => {
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [searchInfo, setSearchInfo] = useRecoilState(SearchInfo);
   const [resultList, setResultList] = useRecoilState(ResultList);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
 
-  const [notSearch, setNotSearch] = useState(true);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
-  const [inputValue, setInputChange, onChange] = useAndSetForm({
-    searchInput: "",
-  });
-  const [isInputError, setIsInputError] = useState(false);
+  // console.log(searchParams.values());
+
+  // const [inputValue, setInputChange, onChange] = useAndSetForm({
+  //   searchInput: "",
+  // });
   const [currentSearchKeyword, setCurrentSearchKeyword] = useState("");
 
   const [searchResults, setSearchResults] = useState([]);
@@ -28,11 +33,7 @@ const SearchPage = () => {
   const [nextResultSnapshot, setNextPostSnapShot] = useState({});
   const [isNextResultExist, setIsNextResultExist] = useState(true);
   const [currentSearchCount, setCurrentSearchCount] = useState(0);
-  /*
-  const [sortOption, setSortOption] = useState({
-    timeDepthValue: "week",
-    order: "desc",
-  });*/
+
   const [timeDepthValue, setTimeDepthValue] = useState("week");
   const [timeDepthSelect, setTimeDepthSelect] = useState({
     week: true,
@@ -44,63 +45,15 @@ const SearchPage = () => {
   const [isResultDesc, setIsResultDesc] = useState(true);
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 
-  const onSearchSubmit = async (e) => {
-    e.preventDefault();
-    if (inputValue.searchInput.length !== 0) {
-      setNotSearch(false);
-      setLoading(true);
-      setSearchResults([]);
-      setResultList([]);
-      setCurrentSearchCount(0);
-      searchKeyWord(10, true);
-      setCurrentSearchKeyword(inputValue.searchInput);
-    } else {
-      setIsInputError(true);
-      setTimeout(() => {
-        setIsInputError(false);
-      }, 2000);
-    }
-  };
-
-  const onKeyUp = (e) => {
-    if (e.key === "Enter") {
-      if (inputValue.searchInput.length !== 0) {
-        setNotSearch(false);
-        setLoading(true);
-        setSearchResults([]);
-        setResultList([]);
-        setCurrentSearchCount(0);
-        searchKeyWord(10, true);
-        setCurrentSearchKeyword(inputValue.searchInput);
-      } else {
-        setIsInputError(true);
-        setTimeout(() => {
-          setIsInputError(false);
-        }, 2000);
-      }
-    }
-  };
-  /*
-  const onSearchInputChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSearchInput(value);
-  };
-*/
   const searchKeyWord = async (
     countSearchPost,
-    firstSearch = false,
-    updateKeyword = null
+    firstSearch
+    // updateKeyword = null
   ) => {
     /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
     let snapshot;
-    let keyword;
-    if (updateKeyword) {
-      keyword = updateKeyword;
-    } else {
-      keyword = inputValue.searchInput;
-    }
+    let keyword = searchParams.get("keyword");
+
     if (firstSearch) {
       snapshot = await getDocs(
         getSearchQuery(false, orderDescOrAsc, getTimeDepth(timeDepthValue))
@@ -123,7 +76,7 @@ const SearchPage = () => {
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
         const postTextToBeChecked = String(postObj.text);
-        //let isFullList = false;
+
         console.log(keyword, countSearchPost);
         if (postTextToBeChecked.includes(keyword)) {
           if (count < countSearchPost) {
@@ -183,7 +136,7 @@ const SearchPage = () => {
 
   const onClick = async (e) => {
     e.preventDefault();
-    await searchKeyWord(10);
+    await searchKeyWord(10, false);
   };
 
   const recoverSnapshot = async () => {
@@ -232,55 +185,62 @@ const SearchPage = () => {
     }
   };
 
+  const onSearchSubmit = async (e) => {
+    const currentKeyword = searchParams.get("keyword");
+    e.preventDefault();
+    setSearchResults([]);
+    setResultList([]);
+    setCurrentSearchCount(0);
+    searchKeyWord(10, true);
+    setCurrentSearchKeyword(currentKeyword);
+  };
+
   useEffect(() => {
-    if (isUpdatePostList.searchPage) {
-      console.log("[SearchPage.js] : refresh Search Result List");
-      setNotSearch(false);
-      setLoading(true);
-      searchKeyWord(10, true, searchInfo.searchKeyword);
-      setCurrentSearchCount(0);
-      setSearchResults([]);
-      setResultList([]);
-      setCurrentSearchKeyword(searchInfo.searchKeyword);
-      setInputChange((prev) => ({
-        ...prev,
-        searchInput: searchInfo.searchKeyword,
-      }));
-      setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
-    } else if (resultList.length > 0) {
-      console.log("[SearchPage.js] : set Search List Data from Global State");
-      console.log(searchInfo);
-      setNotSearch(false);
-      setInputChange((prev) => ({
-        ...prev,
-        searchInput: searchInfo.searchKeyword,
-      }));
-      setCurrentSearchCount(searchInfo.currentCountPosts);
+    // if (isUpdatePostList.searchPage) {
+    //   setLoading(true);
+    //   searchKeyWord(10, true, searchInfo.searchKeyword);
+    //   setCurrentSearchCount(0);
+    //   setSearchResults([]);
+    //   setResultList([]);
+    //   setCurrentSearchKeyword(searchInfo.searchKeyword);
+    //   // setInputChange((prev) => ({
+    //   //   ...prev,
+    //   //   searchInput: searchInfo.searchKeyword,
+    //   // }));
+    //   setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
+    // } else if (resultList.length > 0) {
+    //   // setInputChange((prev) => ({
+    //   //   ...prev,
+    //   //   searchInput: searchInfo.searchKeyword,
+    //   // }));
+    //   setCurrentSearchCount(searchInfo.currentCountPosts);
 
-      setCurrentSearchKeyword(searchInfo.searchKeyword);
-      //const timeDepth = invertNumtoTimeDepth(searchInfo.timeSettingValue);
-      setTimeDepthValue(searchInfo.timeSettingValue);
-      setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
+    //   setCurrentSearchKeyword(searchInfo.searchKeyword);
+    //   setTimeDepthValue(searchInfo.timeSettingValue);
+    //   setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
 
-      setIsResultDesc(searchInfo.descSettingValue);
-      setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
+    //   setIsResultDesc(searchInfo.descSettingValue);
+    //   setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
 
-      setSearchResults(resultList);
-      setCountResult(searchInfo.countResultPosts);
-      recoverSnapshot();
-    } else {
-      console.log("[SearchPage.js ]: else....");
-    }
+    //   setSearchResults(resultList);
+    //   setCountResult(searchInfo.countResultPosts);
+    //   recoverSnapshot();
+    // } else {
+    //   console.log("[SearchPage.js ]: else....");
+    // }
+
+    const currentKeyword = searchParams.get("keyword");
+    setSearchResults([]);
+    setResultList([]);
+    setCurrentSearchCount(0);
+    searchKeyWord(10, true);
+    setCurrentSearchKeyword(currentKeyword);
     // eslint-disable-next-line
-  }, []);
+  }, [searchParams.get("keyword")]);
 
   return (
     <SearchContainer
       onSearchSubmit={onSearchSubmit}
-      onKeyUp={onKeyUp}
-      inputValue={inputValue}
-      onChange={onChange}
-      isInputError={isInputError}
       currentSearchKeyword={currentSearchKeyword}
       countResult={countResult}
       currentSearchCount={currentSearchCount}
@@ -293,7 +253,6 @@ const SearchPage = () => {
       isResultDesc={isResultDesc}
       setIsResultDesc={setIsResultDesc}
       setOrderDescOrAsc={setOrderDescOrAsc}
-      notSearch={notSearch}
       isLoading={isLoading}
     ></SearchContainer>
   );

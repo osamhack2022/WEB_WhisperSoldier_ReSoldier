@@ -82,14 +82,16 @@ const PostElement = ({ post }) => {
   return (
     <PostElementBox>
       <PostElementTitle to={`/post/${post.id}`} onClick={() => onClick(post)}>
-        {post.text}
+        {!post.post_rep_accept ? post.text : "블라인드된 포스트입니다."}
       </PostElementTitle>
 
       <PostAdditionalInfoBox>
         <PostElementTime>
           {calTimeToString(post.created_timestamp)}{" "}
         </PostElementTime>
-        <PostElementTag>{post.tag_name && `#${post.tag_name}`}</PostElementTag>
+        <PostElementTag>
+          {post.tag_name && !post.post_rep_accept && `#${post.tag_name}`}
+        </PostElementTag>
       </PostAdditionalInfoBox>
     </PostElementBox>
   );

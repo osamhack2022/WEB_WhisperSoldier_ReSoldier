@@ -14,3 +14,10 @@ export const ReportPostButtonBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const InfoTextBox = styled.div`
+  margin: 10px 0px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+`;

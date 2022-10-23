@@ -215,8 +215,6 @@ const PostBoard = () => {
   };
 
   useEffect(() => {
-    console.log("[PostBoard.js-latest]", isUpdatePostList.newestPage);
-
     if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
       console.log("frsh or refresh data!");
       if (isUpdatePostList.newestPage) {

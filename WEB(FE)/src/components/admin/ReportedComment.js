@@ -7,18 +7,14 @@ import {
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import {
+  InfoTextBox,
   ReportPostButtonBox,
   ReportPostContentBox,
   ReportPostElementBlock,
 } from "../../styles/admin/ReportedPostStyle";
-import { CancelReportButton, PostBlindButton } from "./ReportedPost";
 import CommentElement from "../profile/CommentElement";
-import { Dialog, DialogActions } from "@mui/material";
-import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
-import {
-  CancelButton,
-  ConfirmButton,
-} from "../profile/CheckDefaultProfileImgNestDialog";
+import BlindDialog from "./BlindDialog";
+import CancelReportDialog from "./CancelReportDialog";
 
 const ReportedComment = () => {
   // Comment에서 쿼리해오기
@@ -33,6 +29,8 @@ const ReportedComment = () => {
     startAfter,
     updateDoc,
   } = dbFunction;
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNonExistReport, setIsNonExistReport] = useState(false);
   const [reportedComments, setReportedComments] = useState([]);
   const [nextReportCommentSnapshot, setNextReportCommentSnapshot] = useState(
     {}
@@ -43,46 +41,6 @@ const ReportedComment = () => {
     blindComment: false,
     cancelReport: false,
   });
-
-  const [openDialogForBlindComment, setOpenDialogForBlindComment] =
-    useState(false);
-  const handleClickOpenDialogForBlindComment = () => {
-    setOpenDialogForBlindComment(true);
-  };
-
-  const handleCloseDialogForBlindComment = () => {
-    setOpenDialogForBlindComment(false);
-  };
-
-  const onBlindComment = (currentDocId) => {
-    setOpenDialogForBlindComment(false);
-    onAcceptOrDenyReport(currentDocId, true);
-    setAlertInfo((prev) => ({ ...prev, blindComment: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, blindComment: false }));
-    }, 3000);
-  };
-
-  const [
-    openDialogForCancelReportComment,
-    setOpenDialogForCancelReportComment,
-  ] = useState(false);
-  const handleClickOpenDialogForCancelReportComment = () => {
-    setOpenDialogForCancelReportComment(true);
-  };
-
-  const handleCloseDialogForCancelReportComment = () => {
-    setOpenDialogForCancelReportComment(false);
-  };
-
-  const onCancelReportComment = (currentDocId) => {
-    setOpenDialogForCancelReportComment(false);
-    onAcceptOrDenyReport(currentDocId, false);
-    setAlertInfo((prev) => ({ ...prev, cancelReport: true }));
-    setTimeout(() => {
-      setAlertInfo((prev) => ({ ...prev, cancelReport: false }));
-    }, 3000);
-  };
 
   const snapshotToReportedComments = (snapshot) => {
     if (snapshot) {
@@ -109,7 +67,9 @@ const ReportedComment = () => {
       firstSnapshot.docs[firstSnapshot.docs.length - 1]
     );
     snapshotToReportedComments(firstSnapshot);
-    if (firstSnapshot.docs.length < 10) {
+    if (firstSnapshot.docs.length === 0) {
+      setIsNonExistReport(true);
+    } else if (firstSnapshot.docs.length < 10) {
       setIsNextReportCommentExist(false);
     } else {
       try {
@@ -131,7 +91,9 @@ const ReportedComment = () => {
         console.log("Error with getting posts!");
       }
     }
+    setIsLoading(false);
   };
+
   const moveNextReportedComments = async () => {
     const querySnapshot = await getDocs(
       query(
@@ -194,7 +156,11 @@ const ReportedComment = () => {
       </NicknameTextBox>
       <ProfileCotentBox>
         <SectionTitle>신고된 댓글</SectionTitle>
-        {reportedComments.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : isNonExistReport || reportedComments.length === 0 ? (
+          <InfoTextBox>신고된 댓글이 존재하지 않습니다.</InfoTextBox>
+        ) : (
           reportedComments.map((comment) => (
             <ReportPostElementBlock key={comment.id}>
               <ReportPostContentBox>
@@ -204,67 +170,21 @@ const ReportedComment = () => {
                 ></CommentElement>
               </ReportPostContentBox>
               <ReportPostButtonBox>
-                <PostBlindButton onClick={handleClickOpenDialogForBlindComment}>
-                  댓글 블라인드
-                </PostBlindButton>
-                <Dialog
-                  open={openDialogForBlindComment}
-                  onClose={handleCloseDialogForBlindComment}
-                  aria-labelledby="alert-dialog-report"
-                  aria-describedby="alert-dialog-report"
-                >
-                  <WsDialogTitle>댓글을 블라인드 하시겠습니까?</WsDialogTitle>
-                  <DialogActions>
-                    <ConfirmButton
-                      onClick={handleCloseDialogForBlindComment}
-                      color="primary"
-                      autoFocus
-                    >
-                      취소
-                    </ConfirmButton>
-                    <CancelButton
-                      color="primary"
-                      onClick={() => onBlindComment(comment.id)}
-                    >
-                      블라인드
-                    </CancelButton>
-                  </DialogActions>
-                </Dialog>
-                <CancelReportButton
-                  onClick={handleClickOpenDialogForCancelReportComment}
-                >
-                  신고 접수 취소
-                </CancelReportButton>
-                <Dialog
-                  open={openDialogForCancelReportComment}
-                  onClose={handleCloseDialogForCancelReportComment}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <WsDialogTitle>
-                    댓글 신고 접수를 취소하시겠습니까?
-                  </WsDialogTitle>
-                  <DialogActions>
-                    <CancelButton
-                      onClick={handleCloseDialogForCancelReportComment}
-                      color="primary"
-                      autoFocus
-                    >
-                      취소
-                    </CancelButton>
-                    <ConfirmButton
-                      color="primary"
-                      onClick={() => onCancelReportComment(comment.id)}
-                    >
-                      신고 접수 취소
-                    </ConfirmButton>
-                  </DialogActions>
-                </Dialog>
+                <BlindDialog
+                  onAcceptOrDenyReport={onAcceptOrDenyReport}
+                  setAlertInfo={setAlertInfo}
+                  document={comment}
+                  isComment="true"
+                />
+                <CancelReportDialog
+                  onAcceptOrDenyReport={onAcceptOrDenyReport}
+                  setAlertInfo={setAlertInfo}
+                  document={comment}
+                  isComment="true"
+                />
               </ReportPostButtonBox>
             </ReportPostElementBlock>
           ))
-        ) : (
-          <div>잠시만 기다려 주세요</div>
         )}
       </ProfileCotentBox>
       {isNextReportCommentExist && (

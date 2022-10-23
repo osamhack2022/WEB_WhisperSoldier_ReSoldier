@@ -13,13 +13,13 @@ import {
   PostContentContainerBox,
   SideButtonContainer,
 } from "../../styles/PostContent/PostContentContainerStyle";
-import { NicknameTextBox } from "../../styles/profile/ChangeProfileStyle";
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
 import RecentPostContainer from "../container/PopularPostContainer";
 import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
+import PostContentAlert from "./PostContentAlert";
 import PostContentBody from "./PostContentBody";
 import PostContentTitle from "./PostContentTiltle";
 import {
@@ -247,37 +247,7 @@ const PostContentContainer = ({ isAdmin }) => {
 
   return (
     <PostContentContainerBox>
-      <NicknameTextBox success={alertInfo.editPost}>
-        포스트를 수정했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.createComment}>
-        댓글을 작성했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.addLikePost}>
-        포스트를 공감했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.subLikePost}>
-        포스트 공감을 취소했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.deleteComment} redcolor="true">
-        댓글을 삭제했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.editComment}>
-        댓글을 수정했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.addLikeComment}>
-        댓글을 공감했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.subLikeComment}>
-        댓글 공감을 취소했습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.reportPost}>
-        포스트 신고 접수되었습니다.
-      </NicknameTextBox>
-      <NicknameTextBox success={alertInfo.reportComment}>
-        댓글 신고 접수되었습니다.
-      </NicknameTextBox>
-
+      <PostContentAlert alertInfo={alertInfo} />
       <PostContentBodyContainer>
         <SideButtonContainer>
           <SideButtonBox>
@@ -346,11 +316,9 @@ const PostContentContainer = ({ isAdmin }) => {
       <SideOptionContainer>
         {postInfo.created_timestamp ? (
           editing ? (
-            <>
-              <SideOptionForm />
-            </>
+            <SideOptionForm />
           ) : (
-            <RecentPostContainer></RecentPostContainer>
+            <RecentPostContainer />
           )
         ) : (
           <></>
