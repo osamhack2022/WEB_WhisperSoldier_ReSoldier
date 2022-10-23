@@ -7,6 +7,7 @@ import {
   ConfirmButton,
 } from "../profile/CheckDefaultProfileImgNestDialog";
 import { useState } from "react";
+import checkCurseWord from "../../modules/CheckCurseWord";
 
 const WritePostTitle = styled.div`
   font-size: 18px;
@@ -93,7 +94,14 @@ const WritePostHeader = ({
         setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
       }, 3000);
     } else {
-      setOpenDialogForWritePost(true);
+      const curseWord = checkCurseWord(state.postContent);
+      if (curseWord) {
+        alert(
+          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+        );
+      } else {
+        setOpenDialogForWritePost(true);
+      }
     }
   };
 

@@ -1,5 +1,6 @@
 import { Dialog, DialogActions } from "@mui/material";
 import { useState } from "react";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { PostContentErrorText } from "../../styles/PostContent/PostContentBodyStyle";
 import {
   EditHeaderFlexBox,
@@ -37,7 +38,14 @@ const PostContentTitle = ({
         setErrorEditInfo(false);
       }, 3000);
     } else {
-      setOpenDialogForEditPost(true);
+      const curseWord = checkCurseWord(state.editContent);
+      if (curseWord) {
+        alert(
+          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+        );
+      } else {
+        setOpenDialogForEditPost(true);
+      }
     }
   };
 
@@ -110,6 +118,7 @@ const PostContentTitle = ({
         <>
           <PostContentTag>
             {!postInfo.post_rep_accept &&
+              !postInfo.post_rep_accept &&
               postInfo.tag_name &&
               `#${postInfo.tag_name}`}
           </PostContentTag>

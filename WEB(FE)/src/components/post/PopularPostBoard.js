@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { dbFunction } from "../../lib/FStore";
+import { dbFunction, dbService } from "../../lib/FStore";
 import PostBoardTitleContainer from "./PostBoardTilteContainer";
 import PostBoardBodyContainer from "./PostBoardBodyContainer";
 import PostElement from "./PostElement";
@@ -23,12 +23,13 @@ import { TabletQuery } from "../../lib/Const";
 import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
 import { useLocation } from "react-router-dom";
+import { limit, orderBy, startAfter } from "firebase/firestore";
 
 const PopularPostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   //let { params } = useParams();
   const location = useLocation();
-  const { getDocs } = dbFunction;
+  const { getDocs, query, collection,  } = dbFunction;
 
   const [posts, setPosts] = useState([]);
   const [nextPostSnapShot, setNextPostSnapShot] = useState({});
@@ -58,7 +59,67 @@ const PopularPostBoard = () => {
   });
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
   const [isResultDesc, setIsResultDesc] = useState(true);
+  const [nextLikeFliterPostSnapShot, setNextLikeFilterPostSnapShot] = useState({});
+  const [isNextLikeOrderPostExist, setIsNextLikeOrderPostExist] = useState(false);
+  const [likePostCountIndex, setLikePostCountIndex] = useState(0);
 
+  const getFirstTen = async () => {
+    let q = query(collection(dbService, "WorryPost"),
+      orderBy("like_count", "desc"),
+      orderBy("created_timestamp", orderDescOrAsc),
+      limit(10)
+    )
+
+    setLikePostCountIndex(0); // setState는 비동기이기 때문에 while문같은 곳에 사용하면 안된다. 그러면 다른 방법을 찾아야된다. 
+    // 
+    while (likePostCountIndex < 10) { // while문을 돌릴 수 있는 다른 로직을 찾는 중이다.
+      let idx = -1
+      const rangeSnap = await getDocs(q);
+      console.log("Length of rangeSnap: ", rangeSnap.docs.length); 
+      /*처음 가져올때는, 전체 게시글이 10개 미만이 아닌 이상 무조건 10개를 가져오는게 맞다.*/
+      if (rangeSnap) {
+        //console.log("THE snapshot: ", rangeSnap.docs)
+        rangeSnap.forEach((doc) => {
+          const postObj = {
+            ...doc.data(),
+            id: doc.id,
+          };
+          console.log("THE snapshot from inside forEach: ", rangeSnap.docs)
+          console.log("current timeDepth from date is: ", getTimeDepth(timeDepthValue));
+          console.log("current doc timestamp is: ", postObj.created_timestamp);
+					idx = idx + 1;
+          if (postObj.created_timestamp >= getTimeDepth(timeDepthValue) && likePostCountIndex < 10) {
+            setPosts((prev) => [...prev, postObj]);
+            console.log("after idx change");
+            console.log("통과 해당 문서의 인덱스: ", idx)
+            setLikePostCountIndex((prev) => (prev + 1));
+            console.log("after FilterIndex change");
+          }
+          console.log("after IF");
+        })
+				console.log("rangesnapshot's last 통과한 document: ", rangeSnap.docs[idx])
+        setNextLikeFilterPostSnapShot((prev) => rangeSnap.docs[idx]) // 함수형 동기처리 시도했으나 실패... 만약 다시 돌아오게 된다면 원인을 찾아보아야겠다
+        console.log("nextLikeFliterPostSnapShot: ", nextLikeFliterPostSnapShot);
+      } else {
+        // 가져올 스냅샷이 존재하지 않음
+        const skipSnapshot = await getDocs(query(collection(dbService, "WorryPost"),
+        orderBy("like_count", "desc"),
+        orderBy("created_timestamp", orderDescOrAsc),
+        limit(10)
+      ))
+        setNextLikeFilterPostSnapShot((prev) => {return rangeSnap.docs[rangeSnap.docs.length - 1]});
+      }
+      //쿼리 업데이트
+      q = query(collection(dbService, "WorryPost"),
+      orderBy("like_count", "desc"),
+      orderBy("created_timestamp", orderDescOrAsc),
+      startAfter(nextLikeFliterPostSnapShot),
+      limit(10)
+      )
+    }
+  };
+    // 테스트 통과하면 "다음 10개 보기"를 위해 nextLikeOrderPostsSnapshot 지정해주기
+  
   const snapshotToPosts = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
@@ -66,15 +127,25 @@ const PopularPostBoard = () => {
           ...doc.data(),
           id: doc.id,
         };
-        setPosts((prev) => [...prev, postObj]);
-        setPostsRecoil((prev) => [...prev, postObj]);
-      });
+        console.log("current timeDepth from date is: ", getTimeDepth(timeDepthValue));
+        console.log("current doc timestamp is: ", postObj.created_timestamp);
+        if (postObj.created_timestamp >= getTimeDepth(timeDepthValue)) {
+          setPosts((prev) => [...prev, postObj]);
+          setPostsRecoil((prev) => [...prev, postObj]);
+        }
+        /* setPosts((prev) => [...prev, postObj]);
+        setPostsRecoil((prev) => [...prev, postObj]); */
+      }
+      );
+      ///console.log("TestTimestampPost: ", posts[0].created_timestamp);
+      /* setPosts(posts.filter((post) => (post.created_timestamp < getTimeDepth(timeDepthValue))));
+      setPostsRecoil(postsRecoil.filter((post) => (post.created_timestamp < getTimeDepth(timeDepthValue)))); */
     }
   };
 
   const getFirst = async () => {
     const firstSnapshot = await getDocs(
-      getSearchQuery(true, "desc", null, null, 10)
+      getSearchQuery(true, orderDescOrAsc, null, null, 10)
     );
     setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
     snapshotToPosts(firstSnapshot);
@@ -86,7 +157,7 @@ const PopularPostBoard = () => {
         const nextPostsSnapshot = await getDocs(
           getSearchQuery(
             true,
-            "desc",
+            orderDescOrAsc,
             null,
             firstSnapshot.docs[firstSnapshot.docs.length - 1],
             1
@@ -109,14 +180,14 @@ const PopularPostBoard = () => {
 
   const moveNext = async () => {
     const querySnapshot = await getDocs(
-      getSearchQuery(true, "desc", null, nextPostSnapShot, 10)
+      getSearchQuery(true, orderDescOrAsc, null, nextPostSnapShot, 10)
     );
     setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
     const afterSnapshot = await getDocs(
       getSearchQuery(
         true,
-        "desc",
+        orderDescOrAsc,
         null,
         querySnapshot.docs[querySnapshot.docs.length - 1],
         1
@@ -151,14 +222,14 @@ const PopularPostBoard = () => {
 
   const recoverPost = async () => {
     const recoverSnapshot = await getDocs(
-      getSearchQuery(true, "desc", null, null, countCurrentPost)
+      getSearchQuery(true, orderDescOrAsc, null, null, countCurrentPost)
     );
     console.log(recoverSnapshot);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
       getSearchQuery(
         true,
-        "desc",
+        orderDescOrAsc,
         null,
         recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
         1
@@ -200,7 +271,8 @@ const PopularPostBoard = () => {
         setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
         setCurrentScrollPos(0);
       }
-      getFirst();
+      //getFirst();
+      getFirstTen();
     } else {
       console.log("get global state!");
       setPosts(postsRecoil);

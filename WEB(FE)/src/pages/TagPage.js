@@ -236,8 +236,23 @@ const TagPage = () => {
         where("tag_name", "<=", state.postTag + "\uf8ff")
       )
     );
-    console.log(searchTagSnapshot);
   };
+  // const onSearchSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (selectedTag !== "") {
+  //     setTagPosts([]);
+  //     getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
+  //   } else {
+  //     console.log("아직 태그를 선택하지 않았습니다.")
+  //   }
+  // };
+
+  // const selectTag = async (tagName) => {
+  //   setSelectedTag(tagName);
+  //   setTagPosts([]);
+  //   console.log("tagName: ", tagName);
+  //   getFirstTagPosts(tagName);
+  // };
 
   const MoveToTagBoard = (tagDocs) => {
     setTagInfo((prev) => ({

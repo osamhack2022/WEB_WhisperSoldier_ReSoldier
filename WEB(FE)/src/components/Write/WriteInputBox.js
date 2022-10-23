@@ -6,6 +6,7 @@ import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { ProcessInfoStore } from "../../store/SuccessStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import {
   BottonLine,
   InputBox,

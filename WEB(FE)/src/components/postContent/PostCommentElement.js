@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { StartFirstChat } from "../../store/ChatStore";
 import {
   CommentBox,
@@ -50,6 +51,9 @@ const PostCommentElement = ({
   const [isLikedByMe, setIsLikedByMe] = useState(false);
 
   const navigate = useNavigate();
+
+  const [isReported, setIsReported] = useState(false);
+  const [isReportAccepted, setIsReportAccepted] = useState(false);
 
   const [commentUserNickname, setCommentUserNickname] = useState("");
   const [commentUserProfileImg, setCommentUserProfileImg] = useState("");
@@ -100,6 +104,7 @@ const PostCommentElement = ({
 
   const [openDialogForEditComment, setOpenDialogForEditComment] =
     useState(false);
+
   const handleClickOpenDialogForEditComment = () => {
     if (newComment.length === 0) {
       setEditCommentErrorInfo(true);
@@ -107,7 +112,14 @@ const PostCommentElement = ({
         setEditCommentErrorInfo(false);
       }, 3000);
     } else {
-      setOpenDialogForEditComment(true);
+      const curseWord = checkCurseWord(newComment);
+      if (curseWord) {
+        alert(
+          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+        );
+      } else {
+        setOpenDialogForEditComment(true);
+      }
     }
   };
 
@@ -306,6 +318,42 @@ const PostCommentElement = ({
       setCommentUserProfileImg(userDoc.data().profileImg);
     }
   };
+  const getReportStatuses = async () => {
+    const reportCheckSnap = await getDoc(
+      doc(dbService, "Comment", commentElement.id)
+    );
+    if (reportCheckSnap.data().comment_report) {
+      console.log("이미 신고된 댓글임");
+      setIsReported(true);
+    }
+    if (reportCheckSnap.data().comment_rep_accept) {
+      console.log("블라인드된 댓글임");
+      setIsReportAccepted(true);
+    }
+  };
+  const onClickReportComment = async () => {
+    if (isReported) {
+      alert("이미 누군가에 의해 신고된 댓글입니다.");
+    } else {
+      updateDoc(doc(dbService, "Comment", commentElement.id), {
+        comment_report: true,
+      })
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
+        .then(setIsReported(true));
+    }
+  };
+
+  const reportComment = async () => {
+    await updateDoc(doc(dbService, "Comment", commentElement.id), {
+      comment_report: true,
+      report_timestamp: serverTimestamp(),
+    });
+    setCurrentReportInfo(true);
+    setAlertInfo((prev) => ({ ...prev, reportComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportComment: false }));
+    }, 3000);
+  };
 
   const reportComment = async () => {
     await updateDoc(doc(dbService, "Comment", commentElement.id), {
@@ -321,6 +369,7 @@ const PostCommentElement = ({
 
   useEffect(() => {
     getIsLiked();
+    getReportStatuses();
     setCountLikeInComment(commentElement.like_count);
     getPostUserNickname(commentElement.commentor_id);
     // eslint-disable-next-line

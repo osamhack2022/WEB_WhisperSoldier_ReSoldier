@@ -10,6 +10,7 @@ import {
 } from "../profile/CheckDefaultProfileImgNestDialog";
 import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 
 const PostCommentFormBox = styled.div`
   margin: 10px 0px 0px 0px;
@@ -111,7 +112,14 @@ const PostCommentForm = ({
         setCommentInfo(false);
       }, 3000);
     } else {
-      setOpenDialogForCreateComment(true);
+      const curseWord = checkCurseWord(state.comment);
+      if (curseWord) {
+        alert(
+          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+        );
+      } else {
+        setOpenDialogForCreateComment(true);
+      }
     }
   };
 

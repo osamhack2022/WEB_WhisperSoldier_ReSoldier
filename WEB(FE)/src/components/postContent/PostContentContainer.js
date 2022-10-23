@@ -5,6 +5,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -199,6 +200,8 @@ const PostContentContainer = ({ isAdmin }) => {
           .toLocaleString(),
         id: contentObj.id,
         like_count: contentObj.like_count,
+        post_rep_accept: contentObj.post_rep_accept,
+        post_report: contentObj.post_report,
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
