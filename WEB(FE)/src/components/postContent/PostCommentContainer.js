@@ -1,11 +1,8 @@
 import { useState } from "react";
-import { authService } from "../../lib/FAuth";
 import { TimeStampToStr } from "../../modules/TimeStampToStr";
 import { dbService, dbFunction } from "../../lib/FStore";
 import PostCommentContent from "./PostCommentContent";
 import PostCommentForm from "./PostCommentForm";
-import { useSetRecoilState } from "recoil";
-import { IsUpdatePostList } from "../../store/PostStore";
 
 const PostCommentContainer = ({
   postInfo,
@@ -13,27 +10,15 @@ const PostCommentContainer = ({
   setState,
   onChange,
   isTablet,
+  isAdmin,
+  setAlertInfo,
 }) => {
-  const {
-    doc,
-    addDoc,
-    updateDoc,
-    collection,
-    serverTimestamp,
-    getDocs,
-    orderBy,
-    query,
-    where,
-    startAfter,
-    increment,
-  } = dbFunction;
+  const { collection, getDocs, orderBy, query, where, startAfter } = dbFunction;
 
   const [nextCommentSnapshot, setNextCommentSnapshot] = useState({});
   const [postComments, setPostComments] = useState([]);
   const [isLoadingComments, setIsLoadingComments] = useState(true);
   const [errorCommentInfo, setCommentInfo] = useState(false);
-
-  const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const getPostCommentQuery = (isAddingComments) => {
     if (!isAddingComments) {
@@ -79,56 +64,31 @@ const PostCommentContainer = ({
     setIsLoadingComments(false);
   };
 
-  const onCommentSubmit = async () => {
-    if (state.comment.length === 0) {
-      setCommentInfo(true);
-      setTimeout(() => {
-        setCommentInfo(false);
-      }, 3000);
-    } else {
-      try {
-        await addDoc(collection(dbService, "Comment"), {
-          commentor_id: authService.currentUser.uid,
-          associated_post_id: postInfo.id,
-          comment_text: state.comment,
-          comment_report: false,
-          comment_rep_accept: false,
-          like_count: 0,
-          created_timestamp: serverTimestamp(),
-        });
-        const updateRef = doc(dbService, "WorryPost", postInfo.id);
-        await updateDoc(updateRef, {
-          comment_count: increment(1),
-        });
-        setIsUpdatePostList((prev) => ({
-          ...prev,
-          searchPage: true,
-          newestPage: true,
-          popularPage: true,
-        }));
-        alert("댓글이 정상적으로 업로드되었습니다.");
-        setState((prev) => ({ ...prev, comment: "" }));
-        getPostComments(true);
-      } catch (error) {
-        console.log("Error adding comment: ", error);
-      }
-    }
-  };
-
   return (
     <>
-      <PostCommentForm
-        state={state}
-        onChange={onChange}
-        onCommentSubmit={onCommentSubmit}
-        errorCommentInfo={errorCommentInfo}
-      ></PostCommentForm>
+      {!isAdmin && (
+        <PostCommentForm
+          state={state}
+          setState={setState}
+          onChange={onChange}
+          errorCommentInfo={errorCommentInfo}
+          setCommentInfo={setCommentInfo}
+          postInfo={postInfo}
+          setAlertInfo={setAlertInfo}
+          getPostComments={getPostComments}
+        ></PostCommentForm>
+      )}
+
       <PostCommentContent
+        setPostComments={setPostComments}
         postComments={postComments}
         getPostComments={getPostComments}
         isTablet={isTablet}
         setIsLoadingComments={setIsLoadingComments}
         isLoadingComments={isLoadingComments}
+        isAdmin={isAdmin}
+        setAlertInfo={setAlertInfo}
+        postInfo={postInfo}
       ></PostCommentContent>
     </>
   );

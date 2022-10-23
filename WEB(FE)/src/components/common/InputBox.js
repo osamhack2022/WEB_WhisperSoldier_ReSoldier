@@ -31,7 +31,6 @@ export const SearchBar = styled.input`
   text-decoration: none;
   border: 1.5px solid rgb(0, 0, 0);
   transition: all 0.5s;
-  cursor: pointer;
   &:hover {
     background: #f6f6f6;
   }

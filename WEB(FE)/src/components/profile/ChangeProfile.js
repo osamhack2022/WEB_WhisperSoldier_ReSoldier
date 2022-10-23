@@ -1,6 +1,6 @@
 import ChangePasswordForm from "./ChangePasswordForm";
 
-import { useAndSetForm, useForm } from "../../modules/useForm";
+import { useForm } from "../../modules/useForm";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import {
   AuthInputBox,
@@ -20,7 +20,7 @@ import {
 import { authService } from "../../lib/FAuth";
 import { updateProfile } from "firebase/auth";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   dbFunction,
   dbService,
@@ -100,9 +100,8 @@ const ChangeProfile = ({
   setMyProfileImg,
 }) => {
   const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
-  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
-    dbFunction;
-  const [currentNickname, setCurrentNickname, onChange] = useAndSetForm({
+  const { doc, getDocs, query, collection, where } = dbFunction;
+  const [currentNickname, onChange] = useForm({
     nickname: JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
       .providerData[0].displayName,
   });
@@ -335,7 +334,7 @@ const ChangeProfile = ({
                 <ConfirmUploadImgButton
                   onClick={onUploadProfileImg}
                   error={errProfileInfo.isProfileImg}
-                  loading={isLoading}
+                  isloading={isLoading}
                 >
                   {errProfileInfo.isProfileImg
                     ? errMeg.errProfileImgMsg

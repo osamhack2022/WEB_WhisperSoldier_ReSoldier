@@ -1,10 +1,7 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
-import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import { updateProfile } from "firebase/auth";
 import {
   DeletePostButton,
   EditPostButton,
@@ -12,9 +9,16 @@ import {
   PostChatButton,
   ReportButton,
 } from "../common/Buttons";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { StartFirstChat } from "../../store/ChatStore";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import { Dialog, DialogActions } from "@mui/material";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+import { ProcessInfoStore } from "../../store/SuccessStore";
 
 export const WriteUserButtonContainer = ({
   toggleEditing,
@@ -35,76 +39,82 @@ export const WriteUserButtonContainer = ({
   } = dbFunction;
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+  const setProcessInfoStore = useSetRecoilState(ProcessInfoStore);
   const navigate = useNavigate();
   const onDeleteClick = async (e) => {
-    const check = window.confirm("정말로 글을 삭제하시겠습니까?");
-    if (check) {
-      console.log(`deleting ${postInfo.id}`);
-      await deleteDoc(doc(dbService, "WorryPost", postInfo.id)).then(
-        alert("글이 삭제되었습니다.")
-      );
-
-      const oldtagSnap = await getDocs(
-        query(
-          collection(dbService, "Tag"),
-          where("tag_name", "==", postInfo.tag_name)
-        )
-      );
-      if (oldtagSnap.docs.length === 0) {
-        console.log("Could not find Old Tag");
-      } else {
-        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
-          tag_count: increment(-1),
-        });
-        console.log(
-          "Old Tag count incremented by -1 as the tag EXISTS in collection"
-        );
-      }
-
-      /*삭제된 post 내 속한 댓글 삭제 */
-      const querySnapshot = await getDocs(
-        query(
-          collection(dbService, "Comment"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      querySnapshot.forEach((comment) => {
-        deleteDoc(doc(dbService, "Comment", comment.id));
+    await deleteDoc(doc(dbService, "WorryPost", postInfo.id));
+    const oldtagSnap = await getDocs(
+      query(
+        collection(dbService, "Tag"),
+        where("tag_name", "==", postInfo.tag_name)
+      )
+    );
+    if (oldtagSnap.docs.length === 0) {
+      console.log("Could not find Old Tag");
+    } else {
+      updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+        tag_count: increment(-1),
       });
-
-      /* 삭제된 post의 공감 삭제 */
-      const queryLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "PostLike"),
-          where("associated_post_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "PostLike", like.id));
-      });
-
-      const queryCommentLikeSnapshot = await getDocs(
-        query(
-          collection(dbService, "CommentLike"),
-          where("associated_comment_id", "==", postInfo.id),
-          orderBy("created_timestamp", "desc")
-        )
-      );
-      queryCommentLikeSnapshot.forEach((like) => {
-        deleteDoc(doc(dbService, "CommentLike", like.id));
-      });
-
-      setIsUpdatePostList((prev) => ({
-        ...prev,
-        searchPage: true,
-        newestPage: true,
-        popularPage: true,
-      }));
-      navigate("/");
     }
+
+    /*삭제된 post 내 속한 댓글 삭제 */
+    const querySnapshot = await getDocs(
+      query(
+        collection(dbService, "Comment"),
+        where("associated_post_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    querySnapshot.forEach((comment) => {
+      deleteDoc(doc(dbService, "Comment", comment.id));
+    });
+
+    /* 삭제된 post의 공감 삭제 */
+    const queryLikeSnapshot = await getDocs(
+      query(
+        collection(dbService, "PostLike"),
+        where("associated_post_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    queryLikeSnapshot.forEach((like) => {
+      deleteDoc(doc(dbService, "PostLike", like.id));
+    });
+
+    const queryCommentLikeSnapshot = await getDocs(
+      query(
+        collection(dbService, "CommentLike"),
+        where("associated_comment_id", "==", postInfo.id),
+        orderBy("created_timestamp", "desc")
+      )
+    );
+    queryCommentLikeSnapshot.forEach((like) => {
+      deleteDoc(doc(dbService, "CommentLike", like.id));
+    });
+
+    setIsUpdatePostList((prev) => ({
+      ...prev,
+      searchPage: true,
+      newestPage: true,
+      popularPage: true,
+    }));
+
+    setProcessInfoStore((prev) => ({
+      ...prev,
+      finishDeletePost: true,
+    }));
+    navigate("/");
   };
+
+  const [openDialogForDeletePost, setOpenDialogForDeletePost] = useState(false);
+  const handleClickOpenDialogForDeletePost = () => {
+    setOpenDialogForDeletePost(true);
+  };
+
+  const handleCloseDialogForDeletePost = () => {
+    setOpenDialogForDeletePost(false);
+  };
+
   return (
     <>
       <EditPostButton
@@ -113,10 +123,33 @@ export const WriteUserButtonContainer = ({
         isMobile={isMobile}
       ></EditPostButton>
       {!editing && (
-        <DeletePostButton
-          onDeleteClick={onDeleteClick}
-          isMobile={isMobile}
-        ></DeletePostButton>
+        <>
+          <DeletePostButton
+            onDeleteClick={handleClickOpenDialogForDeletePost}
+            isMobile={isMobile}
+          ></DeletePostButton>
+          <Dialog
+            open={openDialogForDeletePost}
+            onClose={handleCloseDialogForDeletePost}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <WsDialogTitle>포스트를 삭제 하시겠습니까?</WsDialogTitle>
+            <DialogActions>
+              <ConfirmButton
+                // onClick={}
+                onClick={handleCloseDialogForDeletePost}
+                color="primary"
+                autoFocus
+              >
+                취소
+              </ConfirmButton>
+              <CancelButton color="primary" onClick={onDeleteClick}>
+                삭제
+              </CancelButton>
+            </DialogActions>
+          </Dialog>
+        </>
       )}
     </>
   );
@@ -128,6 +161,8 @@ export const OtherUserButtonContainer = ({
   postInfo,
   setPostInfo,
   setIsLikedByMe,
+  setAlertInfo,
+  postUserNickname,
 }) => {
   const navigate = useNavigate();
   const {
@@ -145,6 +180,51 @@ export const OtherUserButtonContainer = ({
 
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setStartFirstChat = useSetRecoilState(StartFirstChat);
+
+  const [openDialogForStartChat, setOpenDialogForStartChat] = useState(false);
+  const handleClickOpenDialogForStartChat = () => {
+    setOpenDialogForStartChat(true);
+  };
+
+  const handleCloseDialogForStartChat = () => {
+    setOpenDialogForStartChat(false);
+  };
+
+  const onStartChat = () => {
+    setOpenDialogForStartChat(false);
+    onClickChatButtonFromPost();
+  };
+
+  const [openDialogForReportPost, setOpenDialogForReportPost] = useState(false);
+  const handleClickOpenDialogForReportPost = () => {
+    setOpenDialogForReportPost(true);
+  };
+  const handleCloseDialogForReportPost = () => {
+    setOpenDialogForReportPost(false);
+  };
+
+  const [openDialogForReportedPost, setOpenDialogForReportedPost] =
+    useState(false);
+  const handleClickOpenDialogForReportedPost = () => {
+    setOpenDialogForReportedPost(true);
+  };
+  const handleCloseDialogForReportedPost = () => {
+    setOpenDialogForReportedPost(false);
+  };
+
+  const onReportPostClick = () => {
+    console.log(openDialogForReportPost, openDialogForReportedPost);
+    setOpenDialogForReportPost(false);
+    reportPost();
+    setAlertInfo((prev) => ({ ...prev, reportPost: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportPost: false }));
+      setPostInfo((prev) => ({
+        ...prev,
+        post_report: true,
+      }));
+    }, 3000);
+  };
 
   const toggleLike = async () => {
     const { uid: currentUserUid } = JSON.parse(
@@ -168,30 +248,33 @@ export const OtherUserButtonContainer = ({
       }
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count - 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count - 1,
-        }))
-      );
+      }).then;
+      setPostInfo((prev) => ({
+        ...prev,
+        like_count: postInfo.like_count - 1,
+      }));
       setIsLikedByMe(false);
-      console.log("Subtracted");
+      setAlertInfo((prev) => ({ ...prev, subLikePost: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, subLikePost: false }));
+      }, 3000);
     } else {
       await updateDoc(postDocRef, {
         like_count: postInfo.like_count + 1,
-      }).then(
-        setPostInfo((prev) => ({
-          ...prev,
-          like_count: postInfo.like_count + 1,
-        }))
-      );
+      }).then;
+      setPostInfo((prev) => ({
+        ...prev,
+        like_count: postInfo.like_count + 1,
+      }));
       await addDoc(collection(dbService, "PostLike"), {
         associated_post_id: postInfo.id,
         user_id: currentUserUid,
         created_timestamp: serverTimestamp(),
       }).then(setIsLikedByMe(true));
-      console.log("Added");
-      console.log(postInfo.id);
+      setAlertInfo((prev) => ({ ...prev, addLikePost: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, addLikePost: false }));
+      }, 3000);
     }
     setIsUpdatePostList((prev) => ({
       ...prev,
@@ -201,14 +284,11 @@ export const OtherUserButtonContainer = ({
     }));
   };
 
-  const onClickChatButtonFromPost = async (e) => {
+  const onClickChatButtonFromPost = async () => {
     const { uid: currentUserUid } = JSON.parse(
       sessionStorage.getItem(whisperSodlierSessionKey)
     );
-    e.preventDefault();
-    //아직은 따로 설정을 안해줘서 undefined인 모양이다 -> 원래 uid로 조회가 안되는듯!
 
-    //채팅방이 이미 존재하는지 체크하기
     let checkQuery;
     if (postInfo.creator_id <= currentUserUid) {
       checkQuery = query(
@@ -225,7 +305,7 @@ export const OtherUserButtonContainer = ({
     if (checkSnapshot.docs.length === 0) {
       const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
-        is_report_and_block: false,
+        is_report_and_block: "",
         member_ids:
           postInfo.creator_id <= currentUserUid
             ? [postInfo.creator_id, currentUserUid]
@@ -244,7 +324,6 @@ export const OtherUserButtonContainer = ({
       }));
       navigate("/message");
     } else {
-      console.log("기존 채팅방 존재");
       setStartFirstChat((prev) => ({
         ...prev,
         exist: true,
@@ -252,6 +331,37 @@ export const OtherUserButtonContainer = ({
       }));
       navigate("/message");
     }
+  };
+  const getReportStatuses = async () => {
+    const reportCheckSnap = await getDoc(doc(dbService, "WorryPost", postInfo.id));
+    if (reportCheckSnap.data().post_report) {
+      console.log("이미 신고된 포스트임");
+      setIsReported(true);
+    }
+    if (reportCheckSnap.data().post_rep_accept) {
+      console.log("블라인드된 포스트임")
+      setIsReportAccepted(true);
+    }
+  }
+  const onClickReportPost = async (e) => {
+    if (isReported) {
+      alert("이미 누군가에 의해 신고된 Post입니다.");
+    } else {
+      updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+        "post_report": true,
+      })
+        .then(setPostInfo((prev) => ({
+          ...prev,
+          post_report: true
+        })))
+        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
+        .then(setIsReported(true));
+
+  const reportPost = async () => {
+    await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+      post_report: true,
+      report_timestamp: serverTimestamp(),
+    });
   };
 
   return (
@@ -264,13 +374,82 @@ export const OtherUserButtonContainer = ({
 
       <PostChatButton
         isMobile={isMobile}
-        onClickChatButtonFromPost={onClickChatButtonFromPost}
+        onClickChatButtonFromPost={handleClickOpenDialogForStartChat}
       >
         채팅하기
       </PostChatButton>
-      <ReportButton toLink="/" isMobile={isMobile}>
+      <Dialog
+        open={openDialogForStartChat}
+        onClose={handleCloseDialogForStartChat}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <WsDialogTitle>
+          {postUserNickname ? postUserNickname : "익명"}와 채팅하시겠습니까?
+        </WsDialogTitle>
+        <DialogActions>
+          <CancelButton
+            onClick={handleCloseDialogForStartChat}
+            color="primary"
+            autoFocus
+          >
+            취소
+          </CancelButton>
+          <ConfirmButton color="primary" onClick={onStartChat}>
+            채팅 시작
+          </ConfirmButton>
+        </DialogActions>
+      </Dialog>
+
+      <ReportButton
+        onClick={
+          postInfo.post_report
+            ? handleClickOpenDialogForReportedPost
+            : handleClickOpenDialogForReportPost
+        }
+        isMobile={isMobile}
+      >
         신고하기
       </ReportButton>
+      {postInfo.post_report ? (
+        <Dialog
+          open={openDialogForReportedPost}
+          onClose={handleCloseDialogForReportedPost}
+          aria-labelledby="alert-dialog-reported"
+          aria-describedby="alert-dialog-reported"
+        >
+          <WsDialogTitle>이미 신고 접수된 포스트입니다.</WsDialogTitle>
+          <DialogActions>
+            <ConfirmButton
+              color="primary"
+              onClick={handleCloseDialogForReportedPost}
+            >
+              확인
+            </ConfirmButton>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        <Dialog
+          open={openDialogForReportPost}
+          onClose={handleCloseDialogForReportPost}
+          aria-labelledby="alert-dialog-report"
+          aria-describedby="alert-dialog-report"
+        >
+          <WsDialogTitle>포스트를 신고하시겠습니까?</WsDialogTitle>
+          <DialogActions>
+            <ConfirmButton
+              onClick={handleCloseDialogForReportPost}
+              color="primary"
+              autoFocus
+            >
+              취소
+            </ConfirmButton>
+            <CancelButton color="primary" onClick={onReportPostClick}>
+              신고
+            </CancelButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 };

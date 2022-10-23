@@ -4,23 +4,26 @@ import { useRecoilState } from "recoil";
 import SearchContainer from "../components/search/SearchContainer";
 import { getSearchQuery, getTimeDepthObj } from "../modules/GetSearchQuery";
 import getTimeDepth from "../modules/GetTimeDepth";
-import { useAndSetForm } from "../modules/useForm";
 import { IsUpdatePostList } from "../store/PostStore";
 import { ResultList, SearchInfo } from "../store/SearchStore";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import { TabletQuery } from "../lib/Const";
+// import { useLocation } from "react-router-dom";
 
 const SearchPage = () => {
+  // const location = useLocation();
+  const isTablet = useMediaQuery({ query: TabletQuery });
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [searchInfo, setSearchInfo] = useRecoilState(SearchInfo);
   const [resultList, setResultList] = useRecoilState(ResultList);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
 
-  const [notSearch, setNotSearch] = useState(true);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
-  const [inputValue, setInputChange, onChange] = useAndSetForm({
-    searchInput: "",
-  });
-  const [isInputError, setIsInputError] = useState(false);
   const [currentSearchKeyword, setCurrentSearchKeyword] = useState("");
 
   const [searchResults, setSearchResults] = useState([]);
@@ -28,11 +31,7 @@ const SearchPage = () => {
   const [nextResultSnapshot, setNextPostSnapShot] = useState({});
   const [isNextResultExist, setIsNextResultExist] = useState(true);
   const [currentSearchCount, setCurrentSearchCount] = useState(0);
-  /*
-  const [sortOption, setSortOption] = useState({
-    timeDepthValue: "week",
-    order: "desc",
-  });*/
+
   const [timeDepthValue, setTimeDepthValue] = useState("week");
   const [timeDepthSelect, setTimeDepthSelect] = useState({
     week: true,
@@ -44,69 +43,21 @@ const SearchPage = () => {
   const [isResultDesc, setIsResultDesc] = useState(true);
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 
-  const onSearchSubmit = async (e) => {
-    e.preventDefault();
-    if (inputValue.searchInput.length !== 0) {
-      setNotSearch(false);
-      setLoading(true);
-      setSearchResults([]);
-      setResultList([]);
-      setCurrentSearchCount(0);
-      searchKeyWord(10, true);
-      setCurrentSearchKeyword(inputValue.searchInput);
-    } else {
-      setIsInputError(true);
-      setTimeout(() => {
-        setIsInputError(false);
-      }, 2000);
-    }
-  };
-
-  const onKeyUp = (e) => {
-    if (e.key === "Enter") {
-      if (inputValue.searchInput.length !== 0) {
-        setNotSearch(false);
-        setLoading(true);
-        setSearchResults([]);
-        setResultList([]);
-        setCurrentSearchCount(0);
-        searchKeyWord(10, true);
-        setCurrentSearchKeyword(inputValue.searchInput);
-      } else {
-        setIsInputError(true);
-        setTimeout(() => {
-          setIsInputError(false);
-        }, 2000);
-      }
-    }
-  };
-  /*
-  const onSearchInputChange = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setSearchInput(value);
-  };
-*/
-  const searchKeyWord = async (
+  const searchKeyword = async (
     countSearchPost,
-    firstSearch = false,
-    updateKeyword = null
+    firstSearch
+    // updateKeyword = null
   ) => {
-    /*현재 최신 post 순으로 정렬된 결과를 보여준다. */
     let snapshot;
-    let keyword;
-    if (updateKeyword) {
-      keyword = updateKeyword;
-    } else {
-      keyword = inputValue.searchInput;
-    }
+    const keyword = searchParams.get("keyword");
+
+    // 검색 후 첫 문서 탐색은 처음부터 탐색한다
     if (firstSearch) {
       snapshot = await getDocs(
         getSearchQuery(false, orderDescOrAsc, getTimeDepth(timeDepthValue))
       );
     } else {
-      console.log(nextResultSnapshot);
+      // 마지막 탐색 시점부터 탐색한다.
       snapshot = await getDocs(
         getSearchQuery(
           false,
@@ -116,15 +67,16 @@ const SearchPage = () => {
         )
       );
     }
-    if (snapshot) {
+
+    // 문서가 존재하는 경우
+    if (snapshot && snapshot.docs.length !== 0) {
       let count = 0;
       let totalCount = 0;
 
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
         const postTextToBeChecked = String(postObj.text);
-        //let isFullList = false;
-        console.log(keyword, countSearchPost);
+
         if (postTextToBeChecked.includes(keyword)) {
           if (count < countSearchPost) {
             setSearchResults((prev) => [...prev, postObj]);
@@ -135,7 +87,6 @@ const SearchPage = () => {
             count += 1;
             totalCount += 1;
             setNextPostSnapShot(snapshot.docs[i - 1]);
-            console.log(totalCount, snapshot.docs[i - 1]);
           } else {
             totalCount += 1;
           }
@@ -144,7 +95,6 @@ const SearchPage = () => {
       if (count > countSearchPost) {
         count -= 1;
       }
-      console.log("TotalCount: ", totalCount);
       if (totalCount <= countSearchPost) {
         setIsNextResultExist(false);
       } else {
@@ -179,11 +129,6 @@ const SearchPage = () => {
     }
 
     setLoading(false);
-  };
-
-  const onClick = async (e) => {
-    e.preventDefault();
-    await searchKeyWord(10);
   };
 
   const recoverSnapshot = async () => {
@@ -230,71 +175,80 @@ const SearchPage = () => {
     } else {
       setIsNextResultExist(false);
     }
+    setLoading(false);
+  };
+
+  const onSearchSubmit = async (e) => {
+    e.preventDefault();
+    const currentKeyword = searchParams.get("keyword");
+    if (currentKeyword) {
+      setSearchResults([]);
+      setResultList([]);
+      setCurrentSearchCount(0);
+      searchKeyword(10, true);
+      setCurrentSearchKeyword(currentKeyword);
+    } else {
+      navigate("/notfound", { replace: true });
+    }
   };
 
   useEffect(() => {
-    if (isUpdatePostList.searchPage) {
-      console.log("[SearchPage.js] : refresh Search Result List");
-      setNotSearch(false);
-      setLoading(true);
-      searchKeyWord(10, true, searchInfo.searchKeyword);
-      setCurrentSearchCount(0);
-      setSearchResults([]);
-      setResultList([]);
-      setCurrentSearchKeyword(searchInfo.searchKeyword);
-      setInputChange((prev) => ({
-        ...prev,
-        searchInput: searchInfo.searchKeyword,
-      }));
-      setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
-    } else if (resultList.length > 0) {
-      console.log("[SearchPage.js] : set Search List Data from Global State");
-      console.log(searchInfo);
-      setNotSearch(false);
-      setInputChange((prev) => ({
-        ...prev,
-        searchInput: searchInfo.searchKeyword,
-      }));
-      setCurrentSearchCount(searchInfo.currentCountPosts);
+    if (isTablet) {
+      const currentKeyword = searchParams.get("keyword");
 
-      setCurrentSearchKeyword(searchInfo.searchKeyword);
-      //const timeDepth = invertNumtoTimeDepth(searchInfo.timeSettingValue);
-      setTimeDepthValue(searchInfo.timeSettingValue);
-      setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
-
-      setIsResultDesc(searchInfo.descSettingValue);
-      setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
-
-      setSearchResults(resultList);
-      setCountResult(searchInfo.countResultPosts);
-      recoverSnapshot();
-    } else {
-      console.log("[SearchPage.js ]: else....");
+      if (currentKeyword) {
+        //param 값 (키워드)에 대해 포스트 검색
+        if (
+          searchInfo.searchKeyword === currentKeyword &&
+          resultList.length > 0 &&
+          !isUpdatePostList.searchPage
+        ) {
+          setCurrentSearchCount(searchInfo.currentCountPosts);
+          setCurrentSearchKeyword(currentKeyword);
+          setTimeDepthValue(searchInfo.timeSettingValue);
+          setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
+          setIsResultDesc(searchInfo.descSettingValue);
+          setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
+          setSearchResults(resultList);
+          setCountResult(searchInfo.countResultPosts);
+          recoverSnapshot();
+        } else {
+          setSearchResults([]);
+          setResultList([]);
+          setCurrentSearchCount(0);
+          searchKeyword(10, true);
+          setCurrentSearchKeyword(currentKeyword);
+          setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
+        }
+      } else {
+        // param 값이 null인 경우 오류 페이지로 이동
+        navigate("/notfound", { replace: true });
+      }
     }
     // eslint-disable-next-line
+  }, [searchParams.get("keyword")]);
+
+  useEffect(() => {
+    if (!isTablet) {
+    }
   }, []);
 
   return (
     <SearchContainer
       onSearchSubmit={onSearchSubmit}
-      onKeyUp={onKeyUp}
-      inputValue={inputValue}
-      onChange={onChange}
-      isInputError={isInputError}
       currentSearchKeyword={currentSearchKeyword}
       countResult={countResult}
       currentSearchCount={currentSearchCount}
       searchResults={searchResults}
       isNextResultExist={isNextResultExist}
-      onClick={onClick}
       setTimeDepthValue={setTimeDepthValue}
       timeDepthSelect={timeDepthSelect}
       setTimeDepthSelect={setTimeDepthSelect}
       isResultDesc={isResultDesc}
       setIsResultDesc={setIsResultDesc}
       setOrderDescOrAsc={setOrderDescOrAsc}
-      notSearch={notSearch}
       isLoading={isLoading}
+      searchKeyword={searchKeyword}
     ></SearchContainer>
   );
 };

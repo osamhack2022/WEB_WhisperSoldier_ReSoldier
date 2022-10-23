@@ -316,7 +316,7 @@ export const ChatButton = () => {
 
 // 뒤로가기 버튼
 const CommonButtonText = styled.div`
-  font-size: ${(props) => (props.isMobile ? "10px" : "12px")};
+  font-size: ${(props) => (props.mobile ? "10px" : "12px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -350,6 +350,7 @@ const BackButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${BackButtonImg} {
     color: #003000;
     transform: scale(1.1);
@@ -359,9 +360,15 @@ const BackButtonBlock = styled.div`
 export const BackButton = ({ goBack, children, notRight }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   return (
-    <BackButtonBlock onClick={goBack} mobile={!isTablet} notRight={notRight}>
+    <BackButtonBlock
+      onClick={goBack}
+      mobile={isTablet ? "false" : "true"}
+      notRight={notRight}
+    >
       <BackButtonImg></BackButtonImg>
-      <CommonButtonText isMobile={!isTablet}>{children}</CommonButtonText>
+      <CommonButtonText mobile={!isTablet ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </BackButtonBlock>
   );
 };
@@ -397,7 +404,8 @@ const LikeButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right: ${(props) => props.mobile && "10px"};
+  cursor: pointer;
   &:hover
     ${CommonButtonText},
     &:hover
@@ -414,13 +422,13 @@ const LikeButtonBlock = styled.div`
 
 export const LikeButton = ({ isMobile, toggleLike, isLikedByMe }) => {
   return (
-    <LikeButtonBlock onClick={toggleLike} isMobile={isMobile}>
+    <LikeButtonBlock onClick={toggleLike} mobile={isMobile ? "true" : "false"}>
       {isLikedByMe ? (
         <DisLikeButtonImg></DisLikeButtonImg>
       ) : (
         <LikeButtonImg></LikeButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {isLikedByMe ? "취소하기" : "공감하기"}
       </CommonButtonText>
     </LikeButtonBlock>
@@ -448,7 +456,8 @@ const PostChatButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right: ${(props) => props.mobile && "10px"};
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${PostChatButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -466,10 +475,12 @@ export const PostChatButton = ({
   return (
     <PostChatButtonBlock
       onClick={onClickChatButtonFromPost}
-      isMobile={isMobile}
+      mobile={isMobile ? "true" : "false"}
     >
       <PostChatButtonImg></PostChatButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </PostChatButtonBlock>
   );
 };
@@ -504,11 +515,13 @@ const ReportButtonBlock = styled(Link)`
   }
 `;
 
-export const ReportButton = ({ toLink, children, isMobile }) => {
+export const ReportButton = ({ children, isMobile, onClick }) => {
   return (
-    <ReportButtonBlock to={toLink} isMobile={isMobile}>
+    <ReportButtonBlock onClick={onClick} mobile={isMobile ? "true" : "false"}>
       <ReportButtonImg></ReportButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </ReportButtonBlock>
   );
 };
@@ -543,7 +556,8 @@ const EditButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right: ${(props) => props.mobile && "10px"};
+  cursor: pointer;
   &:hover
     ${CommonButtonText},
     &:hover
@@ -565,13 +579,16 @@ const EditButtonBlock = styled.div`
 
 export const EditPostButton = ({ toggleEditing, editing, isMobile }) => {
   return (
-    <EditButtonBlock onClick={toggleEditing} isMobile={isMobile}>
+    <EditButtonBlock
+      onClick={toggleEditing}
+      mobile={isMobile ? "true" : "false"}
+    >
       {editing ? (
         <CancelButtonImg></CancelButtonImg>
       ) : (
         <EditButtonImg></EditButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {editing ? "취소하기" : "수정하기"}
       </CommonButtonText>
     </EditButtonBlock>
@@ -598,7 +615,8 @@ const DeletePostButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
-  margin-right: ${(props) => props.isMobile && "10px"};
+  margin-right: ${(props) => props.mobile && "10px"};
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${DeletePostButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -612,9 +630,14 @@ const DeletePostButtonBlock = styled.div`
 
 export const DeletePostButton = ({ onDeleteClick, isMobile }) => {
   return (
-    <DeletePostButtonBlock onClick={onDeleteClick} isMobile={isMobile}>
+    <DeletePostButtonBlock
+      onClick={onDeleteClick}
+      mobile={isMobile ? "true" : "false"}
+    >
       <DeletePostButtonImg></DeletePostButtonImg>
-      <CommonButtonText isMobile={isMobile}>삭제하기</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        삭제하기
+      </CommonButtonText>
     </DeletePostButtonBlock>
   );
 };

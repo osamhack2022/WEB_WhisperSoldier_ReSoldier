@@ -32,23 +32,50 @@ const ChatPairBoard = ({
   const [chatPairs, setChatPairs] = useState([]);
   const [firstLoading, setFirstLoading] = useState(true);
 
-  const getCurrentChatPair = async (pairId, chatWithUser) => {
+  const getCurrentChatPair = async (pairId, chatWithUser, isBlocked) => {
     setCurrentChatPair(pairId);
-    setCurrentChatWithUser((prev) => ({
-      ...prev,
-      nickname: chatWithUser.nickname,
-      profileImg: chatWithUser.profileImg,
-    }));
+    
 
-    //chatPair의 recentMessage의 read_by에 arrayUnion으로 내 uid 추가 (만약 기존에 없을 시)
     const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
     const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
-    //읽었는지 여부 업데이트
+
     if (chatPairReadByArray.includes(currentUserInfo.uid)) {
     } else {
       updateDoc(doc(dbService, "ChatPair", pairId), {
-        "recentMessage.read_by": arrayUnion(currentUserInfo.uid), // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
+        "recentMessage.read_by": arrayUnion(currentUserInfo.uid),
       });
+    }
+
+    if(isBlocked){
+      if(isBlocked === currentUserInfo.uid){
+        console.log(isBlocked, "차단함(나)");
+        setCurrentChatWithUser((prev) => ({
+          ...prev,
+          nickname: chatWithUser.nickname,
+          profileImg: chatWithUser.profileImg,
+          blocked : true,
+          blockedByMe : true,
+        }));
+      }
+      else{
+        console.log(isBlocked, "차단함");
+        setCurrentChatWithUser((prev) => ({
+          ...prev,
+          nickname: chatWithUser.nickname,
+          profileImg: chatWithUser.profileImg,
+          blocked : true,
+          blockedByMe : false,
+        }));
+      }
+    }
+    else{
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        nickname: chatWithUser.nickname,
+        profileImg: chatWithUser.profileImg,
+        blocked : false,
+        blockedByMe : false,
+      }));
     }
   };
 
@@ -69,6 +96,7 @@ const ChatPairBoard = ({
     return () => {
       unsubscribe();
     };
+    //eslint-disable-next-line
   }, []);
 
   return (
@@ -84,7 +112,6 @@ const ChatPairBoard = ({
         chatPairs.map((pair) => (
           <ChatPairElement
             key={pair.id}
-            //onClick={() => getCurrentChatPair(pair.id, pair.members, currentUserUid)}
             getCurrentChatPair={getCurrentChatPair}
             toggleShowChatContent={toggleShowChatContent}
             pair={pair}

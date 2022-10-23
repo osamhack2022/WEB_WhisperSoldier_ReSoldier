@@ -96,7 +96,7 @@ export const ChatInput = styled.textarea`
 const SendMessageIcon = styled(BiSend)`
   width: 20px;
   height: 14px;
-  color: #1a7541;
+  color: ${(props) => (props.blocked ? "#4F4F4F" : "#1a7541")};
   transition: all 0.5s;
 `;
 
@@ -118,11 +118,31 @@ const SendMessageButtonBox = styled.div`
   }
 `;
 
-export const SendMessageButton = ({ onChatSubmit }) => {
+const BlockedMessageButtonBox = styled.div`
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #bdbdbd;
+  border: 1.5px solid #bdbdbd;
+  transition: all 0.5s;
+`;
+
+export const SendMessageButton = ({ onChatSubmit, blocked }) => {
   return (
-    <SendMessageButtonBox onClick={onChatSubmit}>
-      <SendMessageIcon></SendMessageIcon>
-    </SendMessageButtonBox>
+    <>
+      {blocked ? (
+        <BlockedMessageButtonBox>
+          <SendMessageIcon blocked={blocked} />
+        </BlockedMessageButtonBox>
+      ) : (
+        <SendMessageButtonBox onClick={onChatSubmit}>
+          <SendMessageIcon />
+        </SendMessageButtonBox>
+      )}
+    </>
   );
 };
 

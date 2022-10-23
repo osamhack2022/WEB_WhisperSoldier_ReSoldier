@@ -23,8 +23,8 @@ width: 100%;
 `;
 
 export const ChatListTitleBox = styled.div`
-  margin: 0px 0px 10px 0px;
-  padding: 10px;
+  margin: 10px 0px 5px 0px;
+  padding: 13px 0px 17px 0px;
   height: fit-content;
   border-bottom: 1px solid rgb(189, 189, 189);
   width: 100%;

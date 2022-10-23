@@ -14,12 +14,14 @@ const ButtonSection = styled.div`
   `}
 `;
 
-export const HeaderButtonSection = () => {
+export const HeaderButtonSection = ({ isAdmin }) => {
   const location = useLocation();
   return (
     <ButtonSection>
-      {location.pathname !== "/write" && <WritePostButton></WritePostButton>}
-      <ChatButton></ChatButton>
+      {!isAdmin && location.pathname !== "/write" && (
+        <WritePostButton></WritePostButton>
+      )}
+      {!isAdmin && <ChatButton></ChatButton>}
       <UserProfileButton></UserProfileButton>
     </ButtonSection>
   );

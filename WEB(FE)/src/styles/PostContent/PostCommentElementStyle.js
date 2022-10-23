@@ -16,7 +16,7 @@ import Avatar from "@mui/material/Avatar";
 
 export const CommentBox = styled.div`
   position: relative;
-  padding: 7px;
+  padding: 10px 10px 5px 10px;
   height: fit-content;
   width: 100%;
   display: flex;
@@ -27,8 +27,7 @@ export const CommentBox = styled.div`
 
 export const CommentTitle = styled.div`
   display: flex;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -43,7 +42,7 @@ export const CommentUserBox = styled.div`
 `;
 
 export const CommentUserText = styled.div`
-  margin-left: 5px;
+  margin-left: 10px;
   font-size: 13px;
   font-weight: 600;
   font-stretch: normal;
@@ -84,8 +83,8 @@ const CommentUserIconShape = styled.div`
 `;
 
 const MyInfoIcon = styled(FaUserCircle)`
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   color: #555555;
 `;
 
@@ -103,7 +102,7 @@ export const MyInfoIconBox = ({ commentUserProfileImg }) => {
         <Avatar
           alt="userImg"
           src={commentUserProfileImg}
-          sx={{ width: 40, height: 40 }}
+          sx={{ width: 30, height: 30 }}
         />
       ) : (
         <MyInfoIcon></MyInfoIcon>
@@ -121,9 +120,7 @@ export const CommentUserIcon = () => {
 };
 
 export const CommentTimeText = styled.div`
-  position: absolute;
-  right: 60px;
-  margin-right: 10px;
+  margin-right: 20px;
   font-size: 12px;
   text-align: right;
   letter-spacing: -0.34px;
@@ -132,15 +129,18 @@ export const CommentTimeText = styled.div`
 `;
 
 export const CommentText = styled.div`
-  white-space: pre-wrap;
-  margin-bottom: 10px;
+  /* white-space: pre-wrap; */
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1.29;
+  font-size: 13px;
+  width: 100%;
+  /* line-height: 1.29; */
   letter-spacing: 0.56px;
   text-align: left;
   color: #000;
+  word-break: break-all;
+  white-space: pre-wrap;
 `;
 
 export const CommentButtonBox = styled.div`
@@ -151,7 +151,7 @@ export const CommentButtonBox = styled.div`
 `;
 
 const CommonButtonText = styled.div`
-  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
+  font-size: ${(props) => (props.mobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -189,6 +189,7 @@ const EditButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover
     ${CommonButtonText},
     &:hover
@@ -216,7 +217,7 @@ export const EditCommentButton = ({ toggleEditing, editing, isMobile }) => {
       ) : (
         <EditButtonImg></EditButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
         {editing ? "취소하기" : "수정하기"}
       </CommonButtonText>
     </EditButtonBlock>
@@ -243,6 +244,7 @@ const DeletePostButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${DeletePostButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -258,7 +260,9 @@ export const DeleteCommentButton = ({ onDeleteClick, isMobile }) => {
   return (
     <DeletePostButtonBlock onClick={onDeleteClick}>
       <DeletePostButtonImg></DeletePostButtonImg>
-      <CommonButtonText isMobile={isMobile}>삭제하기</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        삭제하기
+      </CommonButtonText>
     </DeletePostButtonBlock>
   );
 };
@@ -294,6 +298,7 @@ const LikeButtonBlock = styled.div`
   align-items: center;
   transition: all 0.2s;
   margin-right: 10px;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${LikeButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -310,13 +315,15 @@ export const LikeCommentButton = ({
   isLikedByMe,
 }) => {
   return (
-    <LikeButtonBlock isMobile={isMobile} onClick={toggleLike}>
+    <LikeButtonBlock mobile={isMobile ? "true" : "false"} onClick={toggleLike}>
       {isLikedByMe ? (
         <DisLikeButtonImg></DisLikeButtonImg>
       ) : (
         <LikeButtonImg></LikeButtonImg>
       )}
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </LikeButtonBlock>
   );
 };
@@ -351,11 +358,21 @@ const PostChatButtonBlock = styled(Link)`
   }
 `;
 
-export const PostChatCommentButton = ({ toLink, children, isMobile, onClickChatButtonFromComment }) => {
+export const PostChatCommentButton = ({
+  toLink,
+  children,
+  isMobile,
+  onClickChatButtonFromComment,
+}) => {
   return (
-    <PostChatButtonBlock /* to={toLink} */ onClick={onClickChatButtonFromComment} isMobile={isMobile}>
+    <PostChatButtonBlock
+      /* to={toLink} */ onClick={onClickChatButtonFromComment}
+      mobile={isMobile ? "true" : "false"}
+    >
       <PostChatButtonImg></PostChatButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </PostChatButtonBlock>
   );
 };
@@ -389,11 +406,13 @@ const ReportButtonBlock = styled(Link)`
   }
 `;
 
-export const ReportCommentButton = ({ toLink, children, isMobile }) => {
+export const ReportCommentButton = ({ children, isMobile, onClick }) => {
   return (
-    <ReportButtonBlock to={toLink} isMobile={isMobile}>
+    <ReportButtonBlock onClick={onClick} mobile={isMobile ? "true" : "false"}>
       <ReportButtonImg></ReportButtonImg>
-      <CommonButtonText isMobile={isMobile}>{children}</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        {children}
+      </CommonButtonText>
     </ReportButtonBlock>
   );
 };
@@ -418,6 +437,7 @@ const EditComfirmButtonBlock = styled.div`
   width: fit-content;
   align-items: center;
   transition: all 0.2s;
+  cursor: pointer;
   &:hover ${CommonButtonText}, &:hover ${EditComfirmButtonImg} {
     color: #000000;
     transform: scale(1.1);
@@ -440,7 +460,7 @@ const EditErrorButtonIcon = styled(IoWarningOutline)`
 `;
 
 const EditErrorButtonText = styled.div`
-  font-size: ${(props) => (props.isMobile ? "10px" : "11px")};
+  font-size: ${(props) => (props.mobile ? "10px" : "11px")};
   text-align: center;
   letter-spacing: 0.48px;
   text-decoration: none;
@@ -476,18 +496,19 @@ export const EditComfirmButton = ({
   editCommentErrorInfo,
   isMobile,
 }) => {
-  console.log(editCommentErrorInfo);
   return editCommentErrorInfo ? (
     <EditErrorButtonBlock>
       <EditErrorButtonIcon></EditErrorButtonIcon>
-      <EditErrorButtonText isMobile={isMobile}>
+      <EditErrorButtonText mobile={isMobile ? "true" : "false"}>
         내용을 입력해주세요
       </EditErrorButtonText>
     </EditErrorButtonBlock>
   ) : (
     <EditComfirmButtonBlock onClick={onCommentChange}>
       <EditComfirmButtonImg></EditComfirmButtonImg>
-      <CommonButtonText isMobile={isMobile}>수정완료</CommonButtonText>
+      <CommonButtonText mobile={isMobile ? "true" : "false"}>
+        수정완료
+      </CommonButtonText>
     </EditComfirmButtonBlock>
   );
 };
@@ -498,15 +519,12 @@ const CommentElementTextArea = styled.textarea`
   max-height: 30vh;
   white-space: pre-wrap;
   border: none;
+  border-bottom: 1px solid #bdbdbd;
   resize: none;
+  margin-bottom: 5px;
   &:focus {
     outline: none;
   }
-`;
-
-const BottonLine = styled.div`
-  margin: 1px 0px;
-  border-top: 1px solid #bdbdbd;
 `;
 
 export const CommentELementEditBox = ({ newComment, onCommentChange }) => {
@@ -528,7 +546,6 @@ export const CommentELementEditBox = ({ newComment, onCommentChange }) => {
         maxLength={2000}
         onInput={autoResizeTextarea}
       ></CommentElementTextArea>
-      <BottonLine></BottonLine>
     </>
   );
 };
@@ -586,3 +603,10 @@ export const CommentContentLikeCount = ({ children, isMyLike }) => {
     </CommentContentLikeBox>
   );
 };
+
+export const CommentInfoBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 0px 5px 0px;
+`;

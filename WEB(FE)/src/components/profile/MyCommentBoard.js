@@ -89,27 +89,24 @@ const MyCommentBoard = () => {
   }, []);
   return (
     <>
-    <ProfileCotentBox>
-      <SectionTitle>작성한 댓글</SectionTitle>
-      {commentsCreated.length !== 0 ? (
-        commentsCreated.map((comment) => (
-          //<div key={comment.id}>
-          //<Link to={`/post/${comment.associated_post_id}`}>
-          //{comment.comment_text}
-          //</Link>
-          //<hr />
-          //</div>
-          <CommentElement key={comment.id} comment={comment}></CommentElement>
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )}
-    </ProfileCotentBox>
-    {isNextItemExist && (
-        <MoreLoadPostButton updatePostList={onNextMyComments} isMarginLeft={true} isComment={true}></MoreLoadPostButton>
+      <ProfileCotentBox>
+        <SectionTitle>작성한 댓글</SectionTitle>
+        {commentsCreated.length !== 0 ? (
+          commentsCreated.map((comment) => (
+            <CommentElement key={comment.id} comment={comment}></CommentElement>
+          ))
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
+      {isNextItemExist && (
+        <MoreLoadPostButton
+          updatePostList={onNextMyComments}
+          isMarginLeft={true}
+          isComment={true}
+        ></MoreLoadPostButton>
       )}
     </>
-
   );
 };
 

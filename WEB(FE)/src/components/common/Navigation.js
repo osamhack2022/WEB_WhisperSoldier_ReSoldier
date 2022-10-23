@@ -21,12 +21,12 @@ const NavigationBox = styled.div`
   z-index: 1;
 `;
 
-const Navigation = () => {
+const Navigation = ({ isAdmin }) => {
   return (
     <NavigationBox>
       <SearchNavButton toLink="/search"></SearchNavButton>
-      <WriteNavButton></WriteNavButton>
-      <ChatNavButton></ChatNavButton>
+      {!isAdmin && <WriteNavButton></WriteNavButton>}
+      {!isAdmin && <ChatNavButton></ChatNavButton>}
       <ProfileNavButton></ProfileNavButton>
     </NavigationBox>
   );

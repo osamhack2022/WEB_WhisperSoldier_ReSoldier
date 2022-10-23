@@ -26,21 +26,21 @@ const PostBoardTitleBox = styled.div`
   border: 1px solid rgb(189, 189, 189);
 `;
 
-const PostBoardMoreButton = styled(FiArrowDown)`
+export const PostBoardMoreButton = styled(FiArrowDown)`
   font-size: 16px;
   color: #4f4f4f;
   transition: all 0.3s;
   z-index: 2;
 `;
 
-const PostBoardMoreUpButton = styled(FiArrowUp)`
+export const PostBoardMoreUpButton = styled(FiArrowUp)`
   font-size: 16px;
   color: #4f4f4f;
   transition: all 0.3s;
   z-index: 2;
 `;
 
-const PostBoardMoreButtonText = styled.span`
+export const PostBoardMoreButtonText = styled.span`
   margin-right: 5px;
   font-size: 12px;
   text-align: center;
@@ -52,16 +52,16 @@ const PostBoardMoreButtonText = styled.span`
   transition: all 0.3s;
 `;
 
-const PostBoardMoreButtonBox = styled.div`
+export const PostBoardMoreButtonBox = styled.div`
   display: none;
   ${media.mobile`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 5px 0px;
+    /* margin: 5px 0px; */
     text-decoration: none;
-    height: 48px;
+    /* height: 48px; */
     width: 90px;
     align-items: center;
     transition: all 0.3s;

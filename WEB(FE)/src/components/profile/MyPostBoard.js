@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
@@ -90,23 +89,20 @@ const MyPostBoard = () => {
 
   return (
     <>
-    <ProfileCotentBox>
-      <SectionTitle>작성한 고민 글</SectionTitle>
-      {postsCreated.length !== 0 ? (
-        postsCreated.map((post) => (
-          // <div key={post.id}>
-          //   <Link to={`/post/${post.id}`}>{post.text}</Link>
-          <PostElement key={post.id} post={post}></PostElement>
-          /* <hr />
-          </div> */
-        ))
-      ) : (
-        <div>잠시만 기다려 주세요</div>
-      )}
+      <ProfileCotentBox>
+        <SectionTitle>작성한 고민 글</SectionTitle>
+        {postsCreated.length !== 0 ? (
+          postsCreated.map((post) => <PostElement key={post.id} post={post} />)
+        ) : (
+          <div>잠시만 기다려 주세요</div>
+        )}
+      </ProfileCotentBox>
       {isNextItemExist && (
-        <MoreLoadPostButton updatePostList={onNextMyPosts} isMarginLeft={true}></MoreLoadPostButton>
+        <MoreLoadPostButton
+          updatePostList={onNextMyPosts}
+          isMarginLeft={true}
+        ></MoreLoadPostButton>
       )}
-    </ProfileCotentBox>
     </>
   );
 };

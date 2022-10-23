@@ -14,7 +14,7 @@ import { StartFirstChat } from "../store/ChatStore";
 
 const SuccesDeleteInfoTextBox = styled.div`
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   font-size: 14px;
   text-align: center;
   top: 82px;
@@ -75,10 +75,14 @@ const ChatPage = () => {
   const [currentChatWithUser, setCurrentChatWithUser] = useState({
     nickname: "",
     profileImg: "",
+    blocked: false,
+    blockedByMe: false,
   });
 
   const [successInfo, setSuccessInfo] = useState({
     deleteProcess: false,
+    blockProcess: false,
+    unblockProcess: false,
     chatWithUserNickname: "",
   });
 
@@ -130,6 +134,12 @@ const ChatPage = () => {
     <ChatContainer>
       <SuccesDeleteInfoTextBox success={successInfo.deleteProcess}>
         {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다
+      </SuccesDeleteInfoTextBox>
+      <SuccesDeleteInfoTextBox success={successInfo.blockProcess}>
+        {successInfo.chatWithUserNickname}님과의 채팅을 차단했습니다
+      </SuccesDeleteInfoTextBox>
+      <SuccesDeleteInfoTextBox success={successInfo.unblockProcess}>
+        {successInfo.chatWithUserNickname}님과의 채팅을 차단해제했습니다
       </SuccesDeleteInfoTextBox>
       {(isTablet || !showChatContent) && (
         <ChatPairBoard

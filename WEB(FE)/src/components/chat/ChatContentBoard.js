@@ -17,7 +17,10 @@ import {
 import { dbService, dbFunction } from "../../lib/FStore";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import styled from "styled-components";
-import ChatContentOptionMenu from "./ChatContentOptionMenu";
+import {
+  ChatContentOptionMenu,
+  ChatContentOptionMenuBlockByMe,
+} from "./ChatContentOptionMenu";
 
 const ChatCotentBoardBlock = styled.div`
   margin: 10px;
@@ -59,12 +62,12 @@ const ChatContentBoard = ({
     serverTimestamp,
     addDoc,
     arrayUnion,
+    getDoc,
   } = dbFunction;
   const [firstLoading, setFirstLoading] = useState(true);
 
   const onChatPairDeleteClick = async (e) => {
     e.preventDefault();
-    //getCurrentChatPair("", ""); //과연 이곳에 위치한게 맞을까?
     setSuccessInfo((prev) => ({
       ...prev,
       chatWithUserNickname: currentChatWithUser.nickname,
@@ -79,12 +82,13 @@ const ChatContentBoard = ({
     });
     await deleteDoc(doc(dbService, "ChatPair", currentChatPair));
     setChats([]);
-    //getCurrentChatPair("", ""); //결국은 이곳에 위치를 해야될듯.... -> 그리고 이 함수를 굳이 여기서 쓸 필요가 없음
     setCurrentChatPair("");
     setCurrentChatWithUser((prev) => ({
       ...prev,
       nickname: "",
       profileImg: "",
+      blocked: false,
+      blockedByMe: false,
     }));
     setSHowChatContent(false);
     setSuccessInfo((prev) => ({ ...prev, deleteProcess: true }));
@@ -92,43 +96,102 @@ const ChatContentBoard = ({
       setSuccessInfo((prev) => ({
         ...prev,
         deleteProcess: false,
-        chatWithUserNickname: "",
       }));
     }, 3000);
   };
-  const onChatSubmit = (e = null) => {
+
+  const onBlockChatPairClick = async (e) => {
+    e.preventDefault();
+
+    await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+      is_report_and_block: currentUserUid,
+    });
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      blocked: true,
+      blockedByMe: true,
+    }));
+    setSuccessInfo((prev) => ({
+      ...prev,
+      chatWithUserNickname: currentChatWithUser.nickname,
+      blockProcess: true,
+    }));
+    setTimeout(() => {
+      setSuccessInfo((prev) => ({
+        ...prev,
+        blockProcess: false,
+      }));
+    }, 3000);
+  };
+
+  const onUnBlockChatPairClick = async (e) => {
+    e.preventDefault();
+
+    await updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+      is_report_and_block: "",
+    });
+    setCurrentChatWithUser((prev) => ({
+      ...prev,
+      blocked: false,
+      blockedByMe: false,
+    }));
+    setSuccessInfo((prev) => ({
+      ...prev,
+      chatWithUserNickname: currentChatWithUser.nickname,
+      unblockProcess: true,
+    }));
+    setTimeout(() => {
+      setSuccessInfo((prev) => ({
+        ...prev,
+        unblockProcess: false,
+      }));
+    }, 3000);
+  };
+
+  const onChatSubmit = async (e = null) => {
     if (e !== null) {
       e.preventDefault();
     }
-    if (chatInput.message.length === 0 || chatInput.message === "\n") {
-      setInput((prev) => ({ ...prev, message: "" }));
-      setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
-      setTimeout(() => {
-        setErrorChatInfo((prev) => ({ ...prev, isErr: false }));
-      }, 3000);
+    const chatPairSnap = await getDoc(
+      doc(dbService, "ChatPair", currentChatPair)
+    );
+    if (chatPairSnap.data().is_report_and_block) {
+      setCurrentChatWithUser((prev) => ({
+        ...prev,
+        blocked: true,
+        blockedByMe: false,
+      }));
+      setInput({ message: "" });
+      reSizeTextarea();
     } else {
-      if (currentChatPair !== "") {
-        //submit chat to database
-        addDoc(
-          collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
-          {
-            message_text: chatInput.message,
-            sent_by: currentUserUid,
-            sent_timestamp: serverTimestamp(),
-          }
-        ).then(console.log("adding successful"));
-        //update recentMessage
-        updateDoc(doc(dbService, "ChatPair", currentChatPair), {
-          recentMessage: {
-            message_text: chatInput.message,
-            read_by: [currentUserUid], // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
-            sent_by: currentUserUid,
-            sent_timestamp: serverTimestamp(),
-          },
-        });
-        setInput({ message: "" });
+      if (chatInput.message.length === 0 || chatInput.message === "\n") {
+        setInput((prev) => ({ ...prev, message: "" }));
+        setErrorChatInfo((prev) => ({ ...prev, isErr: true }));
+        setTimeout(() => {
+          setErrorChatInfo((prev) => ({ ...prev, isErr: false }));
+        }, 3000);
       } else {
-        console.log("You have not selected a user to chat with!");
+        if (currentChatPair !== "") {
+          addDoc(
+            collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
+            {
+              message_text: chatInput.message,
+              sent_by: currentUserUid,
+              sent_timestamp: serverTimestamp(),
+            }
+          ).then(console.log("adding successful"));
+
+          updateDoc(doc(dbService, "ChatPair", currentChatPair), {
+            recentMessage: {
+              message_text: chatInput.message,
+              read_by: [currentUserUid],
+              sent_by: currentUserUid,
+              sent_timestamp: serverTimestamp(),
+            },
+          });
+          setInput({ message: "" });
+          reSizeTextarea();
+        }
       }
     }
   };
@@ -137,9 +200,17 @@ const ChatContentBoard = ({
     let textarea = document.querySelector(".autoTextarea");
 
     if (textarea) {
-      textarea.style.height = "40px";
+      textarea.style.height = "38px";
       let height = textarea.scrollHeight; // 높이
       textarea.style.height = `${height}px`;
+    }
+  }, []);
+
+  const reSizeTextarea = useCallback(() => {
+    let textarea = document.querySelector(".autoTextarea");
+
+    if (textarea) {
+      textarea.style.height = "38px";
     }
   }, []);
 
@@ -157,14 +228,13 @@ const ChatContentBoard = ({
   };
 
   useEffect(() => {
-    //scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
     setChats([]);
     if (currentChatPair !== "") {
       const q = query(
         collection(dbService, `ChatPair/${currentChatPair}/ChatMessage`),
         orderBy("sent_timestamp", "asc")
       );
+
       const unsubscribe = onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === ("added" || "modified")) {
@@ -175,7 +245,6 @@ const ChatContentBoard = ({
             setChats(chatsArray);
             updateDoc(doc(dbService, "ChatPair", currentChatPair), {
               "recentMessage.read_by": arrayUnion(currentUserUid),
-              // 반대는 arrayRemove(), 본 사람 추가할때는 중복 추가 없도록 조치할것
             });
           }
           if (change.type === "removed") {
@@ -195,14 +264,15 @@ const ChatContentBoard = ({
         });
         setFirstLoading(false);
       });
+      console.log(currentChatWithUser);
+
       return () => {
         unsubscribe();
-
-        // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       };
     } else {
       console.log("no selected chat pair");
     }
+    //eslint-disable-next-line
   }, [currentChatPair]);
 
   useEffect(() => {
@@ -212,6 +282,7 @@ const ChatContentBoard = ({
         inline: "nearest",
       });
     }
+    //eslint-disable-next-line
   }, [chats]);
 
   return (
@@ -224,9 +295,19 @@ const ChatContentBoard = ({
             ></MyInfoIconBox>
             <ChatContentText>{currentChatWithUser.nickname}</ChatContentText>
             <RightMoreMenuButtonBox>
-              <ChatContentOptionMenu
-                onChatPairDeleteClick={onChatPairDeleteClick}
-              />
+              {currentChatWithUser.blocked ? (
+                currentChatWithUser.blockedByMe && (
+                  <ChatContentOptionMenuBlockByMe
+                    onChatPairDeleteClick={onChatPairDeleteClick}
+                    onUnBlockChatPairClick={onUnBlockChatPairClick}
+                  />
+                )
+              ) : (
+                <ChatContentOptionMenu
+                  onChatPairDeleteClick={onChatPairDeleteClick}
+                  onBlockChatPairClick={onBlockChatPairClick}
+                />
+              )}
             </RightMoreMenuButtonBox>
           </ChatContentHeaderBox>
           <ChatContentBox>
@@ -246,22 +327,36 @@ const ChatContentBoard = ({
 
             <ChatCotentBoardBlock ref={scrollRef} />
           </ChatContentBox>
-          <ChatInputBox>
-            <ChatInput
-              className="autoTextarea"
-              name="message"
-              type="text"
-              onChange={onChange}
-              value={chatInput.message}
-              placeholder="메시지를 입력하세요"
-              isErr={errorChatInfo.isErr}
-              autoFocus
-              maxLength={2000}
-              onInput={autoResizeTextarea}
-              onKeyUp={onKeyUp}
-            ></ChatInput>
-            <SendMessageButton onChatSubmit={onChatSubmit} />
-          </ChatInputBox>
+          {!currentChatWithUser.blocked ? (
+            <ChatInputBox>
+              <ChatInput
+                className="autoTextarea"
+                name="message"
+                type="text"
+                onChange={onChange}
+                value={chatInput.message}
+                placeholder="메시지를 입력하세요"
+                isErr={errorChatInfo.isErr}
+                autoFocus
+                maxLength={2000}
+                onInput={autoResizeTextarea}
+                onKeyUp={onKeyUp}
+              ></ChatInput>
+              <SendMessageButton onChatSubmit={onChatSubmit} />
+            </ChatInputBox>
+          ) : (
+            <ChatInputBox>
+              <ChatInput
+                className="autoTextarea"
+                name="block"
+                type="text"
+                value=""
+                placeholder="차단된 채팅입니다."
+                disabled
+              ></ChatInput>
+              <SendMessageButton blocked="true" />
+            </ChatInputBox>
+          )}
         </>
       ) : (
         <NoSelectBox />

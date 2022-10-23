@@ -3,22 +3,26 @@ import media from "../../modules/MediaQuery";
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* flex-direction: column; */
+  flex-direction: row;
+  /* justify-content: center; */
+  justify-content: flex-start;
   align-items: center;
   height: fit-content;
-  width: 110px;
+  width: 100%;
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
   margin-top: ${(props) => props.isNotTop && "10px"};
   transition: all 0.5s;
+  padding: 0px 0px 0px 20px;
+  margin-bottom: 10px;
   ${media.mobile`
-  flex-direction: row;
-  justify-content: flex-start;
+  /* flex-direction: row; */
+  /* justify-content: flex-start; */
   align-items : inherit;
   width: 100%;
-  padding: 0px 0px 0px 10px;
+  /* padding: 0px 0px 0px 10px; */
   `}
 `;
 

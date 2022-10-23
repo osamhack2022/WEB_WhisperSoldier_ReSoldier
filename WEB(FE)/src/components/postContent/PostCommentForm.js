@@ -1,5 +1,16 @@
-import { useCallback } from "react";
+import { Dialog, DialogActions } from "@mui/material";
+import { useCallback, useState } from "react";
 import styled from "styled-components";
+import { dbFunction, dbService } from "../../lib/FStore";
+import { authService } from "../../lib/FAuth";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "../profile/CheckDefaultProfileImgNestDialog";
+import { useSetRecoilState } from "recoil";
+import { IsUpdatePostList } from "../../store/PostStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 
 const PostCommentFormBox = styled.div`
   margin: 10px 0px 0px 0px;
@@ -27,11 +38,6 @@ const PostCommentTextarea = styled.textarea`
     outline: none;
   }
 `;
-
-// const BottonLine = styled.div`
-//   margin: 1px 0px;
-//   border-top: 1px solid #bdbdbd;
-// `;
 
 const WriteCommentButtonShape = styled.button`
   margin-top: 5px;
@@ -78,10 +84,54 @@ export const WriteCommentButton = ({ onClick, errorCommentInfo, children }) => {
 
 const PostCommentForm = ({
   state,
+  setState,
   onChange,
-  onCommentSubmit,
   errorCommentInfo,
+  setCommentInfo,
+  postInfo,
+  setAlertInfo,
+  getPostComments,
 }) => {
+  const {
+    doc,
+    addDoc,
+    updateDoc,
+    collection,
+    serverTimestamp,
+
+    increment,
+  } = dbFunction;
+  const [openDialogForCreateComment, setOpenDialogForCreateComment] =
+    useState(false);
+  const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
+
+  const handleClickOpenDialogForCreateComment = () => {
+    if (state.comment.length === 0) {
+      setCommentInfo(true);
+      setTimeout(() => {
+        setCommentInfo(false);
+      }, 3000);
+    } else {
+      const curseWord = checkCurseWord(state.comment);
+      if (curseWord) {
+        alert(
+          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+        );
+      } else {
+        setOpenDialogForCreateComment(true);
+      }
+    }
+  };
+
+  const handleCloseDialogForCreateComment = () => {
+    setOpenDialogForCreateComment(false);
+  };
+
+  const onCreatComment = () => {
+    onCommentSubmit();
+    setOpenDialogForCreateComment(false);
+  };
+
   const autoResizeTextarea = useCallback(() => {
     let textarea = document.querySelector(".autoTextarea");
 
@@ -91,6 +141,39 @@ const PostCommentForm = ({
       textarea.style.height = `${height}px`;
     }
   }, []);
+
+  const onCommentSubmit = async () => {
+    try {
+      await addDoc(collection(dbService, "Comment"), {
+        commentor_id: authService.currentUser.uid,
+        associated_post_id: postInfo.id,
+        comment_text: state.comment,
+        comment_report: false,
+        comment_rep_accept: false,
+        like_count: 0,
+        created_timestamp: serverTimestamp(),
+      });
+      const updateRef = doc(dbService, "WorryPost", postInfo.id);
+      await updateDoc(updateRef, {
+        comment_count: increment(1),
+      });
+      setIsUpdatePostList((prev) => ({
+        ...prev,
+        searchPage: true,
+        newestPage: true,
+        popularPage: true,
+      }));
+      setState((prev) => ({ ...prev, comment: "" }));
+      setAlertInfo((prev) => ({ ...prev, createComment: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, createComment: false }));
+      }, 3000);
+      getPostComments(true);
+    } catch (error) {
+      console.log("Error adding comment: ", error);
+    }
+  };
+
   return (
     <PostCommentFormBox>
       <PostCommentTextarea
@@ -103,13 +186,32 @@ const PostCommentForm = ({
         maxLength={2000}
         onInput={autoResizeTextarea}
       ></PostCommentTextarea>
-      {/* <BottonLine></BottonLine> */}
       <WriteCommentButton
-        onClick={onCommentSubmit}
+        onClick={handleClickOpenDialogForCreateComment}
         errorCommentInfo={errorCommentInfo}
       >
         {errorCommentInfo ? "내용을 입력해주세요" : "댓글 작성하기"}
       </WriteCommentButton>
+      <Dialog
+        open={openDialogForCreateComment}
+        onClose={handleCloseDialogForCreateComment}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <WsDialogTitle>댓글을 작성하시겠습니까?</WsDialogTitle>
+        <DialogActions>
+          <CancelButton
+            onClick={handleCloseDialogForCreateComment}
+            color="primary"
+            autoFocus
+          >
+            취소
+          </CancelButton>
+          <ConfirmButton color="primary" onClick={onCreatComment}>
+            댓글 작성
+          </ConfirmButton>
+        </DialogActions>
+      </Dialog>
     </PostCommentFormBox>
   );
 };

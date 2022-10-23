@@ -1,99 +1,72 @@
-import styled from "styled-components";
-import PostContentBodyEditHeader from "./PostContentBodyEditHeader";
-
-const PostContentBox = styled.div`
-  margin: 10px 0px 0px 0px;
-  padding: 20px 20px;
-  height: fit-content;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-`;
-
-const PostContentText = styled.div`
-  white-space: pre-wrap;
-  font-size: 14px;
-  text-align: left;
-  letter-spacing: 0.56px;
-  color: #1d1d1d;
-  white-space: pre-wrap;
-  font-weight: 400;
-`;
-
-const PostContentErrorText = styled.div`
-  white-space: pre-wrap;
-  font-size: 14px;
-  text-align: center;
-  letter-spacing: 0.56px;
-  color: #1d1d1d;
-  white-space: pre-wrap;
-  font-weight: 400;
-`;
-
-const InputForm = styled.textarea`
-  background-color: #fbfbfb;
-  width: 41vw;
-  height: 47vh;
-  white-space: pre-wrap;
-  border: none;
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const BottonLine = styled.div`
-  margin: 5px 0px;
-  border-top: 2px solid #bdbdbd;
-`;
+import {
+  BottonLine,
+  InputForm,
+  PostContentBox,
+  PostContentInfoBox,
+  PostContentLikeCount,
+  PostContentText,
+  PostContentTime,
+} from "../../styles/PostContent/PostContentBodyStyle";
+import {
+  TagInput,
+  TagInputBox,
+  TagInputBoxTitle,
+} from "../../styles/write/WriteInputBoxStyle";
 
 const PostContentBody = ({
   postInfo,
   state,
   onChange,
   editing,
-  onClick,
   errorPostInfo,
-  errorEditInfo,
+  isMyLike,
 }) => {
   return (
     <PostContentBox>
-      {editing ? (
-        <>
-          <PostContentBodyEditHeader
-            onClick={onClick}
-            errorEditInfo={errorEditInfo}
-          ></PostContentBodyEditHeader>
-          <InputForm
-            name="editContent"
-            value={state.editContent}
-            type="text"
-            required
-            onChange={onChange}
-          ></InputForm>
-          <input
-            name="editTag"
-            value={state.editTag}
-            type="text"
-            required
-            onChange={onChange}
-          ></input>
-          <BottonLine></BottonLine>
-          <input
-            name="editTag"
-            value={state.editTag}
-            type="text"
-            required
-            onChange={onChange}
-          ></input>
-        </>
-      ) : !errorPostInfo ? (
-        <PostContentText>{postInfo.postContent}</PostContentText>
-      ) : (
-        <PostContentErrorText>
-          찾으려는 포스트가 존재하지 않습니다.
-        </PostContentErrorText>
-      )}
+      {postInfo.created_timestamp &&
+        (editing ? (
+          <>
+            <InputForm
+              name="editContent"
+              value={state.editContent}
+              type="text"
+              required
+              onChange={onChange}
+            ></InputForm>
+            <BottonLine></BottonLine>
+            <TagInputBox>
+              <TagInput
+                name="editTag"
+                value={state.editTag}
+                type="text"
+                required
+                onChange={onChange}
+                placeholder="고민 글에 태그를 추가해보세요!"
+              ></TagInput>
+              <TagInputBoxTitle>
+                #{state.editTag.replace(/ /g, "")}
+              </TagInputBoxTitle>
+            </TagInputBox>
+          </>
+        ) : (
+          !errorPostInfo &&
+          (postInfo.post_rep_accept ? (
+            "해당 포스트는 관리자에 의해 블라인드 처리되었습니다."
+          ) : (
+            <>
+              <PostContentText>{postInfo.postContent}</PostContentText>
+              <PostContentInfoBox>
+                <PostContentTime>
+                  {postInfo.created_timestamp !== null &&
+                    postInfo.created_timestamp}
+                </PostContentTime>
+                <PostContentLikeCount isMyLike={isMyLike}>
+                  {postInfo.created_timestamp !== null && postInfo.like_count}
+                </PostContentLikeCount>
+              </PostContentInfoBox>
+            </>
+          ))
+        ))}
     </PostContentBox>
   );
 };

@@ -5,7 +5,7 @@ import PostCommentElement from "./PostCommentElement";
 
 const PostCommentBox = styled.div`
   margin: 10px 0px 0px 00px;
-  padding: 10px 20px;
+  padding: 10px 10px;
   width: 100%;
   height: fit-content;
   background-color: #fbfbfb;
@@ -24,16 +24,29 @@ const NoCommentText = styled.div`
 `;
 
 const PostCommentContent = ({
+  setPostComments,
   getPostComments,
   postComments,
   isTablet,
   setIsLoadingComments,
   isLoadingComments,
+  isAdmin,
+  setAlertInfo,
+  postInfo,
 }) => {
   useEffect(() => {
+    setPostComments([]);
     getPostComments();
     setIsLoadingComments(true);
-  }, []);
+    //eslint-disable-next-line
+  }, [postInfo.id]);
+
+  // useEffect(() => {
+  //   setPostComments([]);
+  //   getPostComments();
+  //   setIsLoadingComments(true);
+  //   //eslint-disable-next-line
+  // }, [postInfo]);
 
   return (
     <PostCommentBox>
@@ -48,6 +61,8 @@ const PostCommentContent = ({
             created_timestamp={comment.created_timestamp}
             getPostComments={getPostComments}
             isTablet={isTablet}
+            isAdmin={isAdmin}
+            setAlertInfo={setAlertInfo}
           ></PostCommentElement>
         ))
       ) : (

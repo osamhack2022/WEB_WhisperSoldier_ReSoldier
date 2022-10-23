@@ -8,6 +8,8 @@ export const ProfileSelectStore = atom({
     myComment: false,
     likePost: false,
     likeComment: false,
+    reportedPost: false,
+    reportedComment: false,
   },
 });
 

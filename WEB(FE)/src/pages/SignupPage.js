@@ -72,15 +72,6 @@ const SignupPage = () => {
             console.log("로그아웃 성공");
           });
           console.log(authService.currentUser);
-          /*
-          if (authService.currentUser) {
-            setUserInfo((prev) => ({ ...prev, isLogin: true }));
-          }*/
-          /*await signOut(authService)
-            .then(() => {
-              console.log("로그아웃 성공");
-            })*/
-          //navigate("/");
         } else {
           console.log(
             "이미 인증된 계정입니다. 로그인으로 가서 로그인 해보세요"

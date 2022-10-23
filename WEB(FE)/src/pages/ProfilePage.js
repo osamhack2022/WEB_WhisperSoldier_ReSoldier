@@ -31,8 +31,10 @@ import { useMediaQuery } from "react-responsive";
 import SideButtonBox from "../components/common/SideButtonBox";
 import { BackButton } from "../components/common/Buttons";
 import { getSelectObj } from "../modules/GetSelectObj";
+import ReportedPost from "../components/admin/ReportedPost";
+import ReportedComment from "../components/admin/ReportedComment";
 
-const ProfilePage = () => {
+const ProfilePage = ({ isAdmin }) => {
   const [myProfileImg, setMyProfileImg] = useState(
     JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey)).providerData[0]
       .photoURL
@@ -58,6 +60,8 @@ const ProfilePage = () => {
     myComment: false,
     likePost: false,
     likeComment: false,
+    reportedPost: false,
+    reportedComment: false,
   });
   const [showContent, setShowContent] = useState(false);
 
@@ -117,6 +121,23 @@ const ProfilePage = () => {
     }
   };
 
+  const onReportedPost = () => {
+    setcurrentPage((prev) => getSelectObj(prev, "reportedPost"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "reportedPost"));
+    if (!isTablet) {
+      setShowContent(true);
+      setShowContentStore(true);
+    }
+  };
+
+  const onReportedComment = () => {
+    setcurrentPage((prev) => getSelectObj(prev, "reportedComment"));
+    setProfileSelectStore((prev) => getSelectObj(prev, "reportedComment"));
+    if (!isTablet) {
+      setShowContent(true);
+      setShowContentStore(true);
+    }
+  };
   const BackMenu = () => {
     setShowContent(false);
     setShowContentStore(false);
@@ -130,7 +151,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (updateProfileInfo) {
-      setCurrentSessionKey((prev) =>
+      setCurrentSessionKey(
         JSON.parse(sessionStorage.getItem(whisperSodlierSessionKey))
       );
       setMyProfileImg(
@@ -139,6 +160,7 @@ const ProfilePage = () => {
       );
     }
     setUpdateProfileInfo(false);
+    //eslint-disable-next-line
   }, [updateProfileInfo]);
 
   return (
@@ -151,27 +173,47 @@ const ProfilePage = () => {
               <MyInfoTextSection>
                 <MyInfoMainText>{userName} 님</MyInfoMainText>
                 <MyInfoText notTop={true}>
-                  위솔과 함께한지{" "}
-                  {calTimeToDateString(currentSessionKey.createdAt)}
-                  일째
+                  {isAdmin
+                    ? "위솔 관리자님 환영합니다"
+                    : `위솔과 함께한지
+                  ${calTimeToDateString(currentSessionKey.createdAt)}
+                  일째`}
                 </MyInfoText>
               </MyInfoTextSection>
             </MyInfoBox>
           </PrimaryMenuBox>
           <PrimaryMenuBox isNotTop={true}>
-            <PrimaryMenuButton onClick={onProfile}>
-              프로필 설정
-            </PrimaryMenuButton>
-            <PrimaryMenuButton onClick={onMyPost}>작성한 글</PrimaryMenuButton>
-            <PrimaryMenuButton onClick={onMyComment}>
-              작성한 댓글
-            </PrimaryMenuButton>
-            <PrimaryMenuButton onClick={onLikePost}>
-              공감한 글
-            </PrimaryMenuButton>
-            <PrimaryMenuButton onClick={onLikeComment} bottom={true}>
-              공감한 댓글
-            </PrimaryMenuButton>
+            {isAdmin ? (
+              <>
+                <PrimaryMenuButton onClick={onProfile}>
+                  프로필 설정
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onReportedPost}>
+                  신고된 글
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onReportedComment} bottom={true}>
+                  신고된 댓글
+                </PrimaryMenuButton>
+              </>
+            ) : (
+              <>
+                <PrimaryMenuButton onClick={onProfile}>
+                  프로필 설정
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onMyPost}>
+                  작성한 글
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onMyComment}>
+                  작성한 댓글
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onLikePost}>
+                  공감한 글
+                </PrimaryMenuButton>
+                <PrimaryMenuButton onClick={onLikeComment} bottom={true}>
+                  공감한 댓글
+                </PrimaryMenuButton>
+              </>
+            )}
           </PrimaryMenuBox>
           <PrimaryMenuBox isNotTop={true}>
             <PrimaryMenuButton onClick={onLogout} bottom={true} logout={true}>
@@ -188,22 +230,38 @@ const ProfilePage = () => {
         </SideButtonBox>
       )}
 
-      {(isTablet || showContent) && (
-        <ProfileCotentContainer>
-          {currentPage.profile && (
-            <ChangeProfile
-              setUserName={setUserName}
-              setUpdateProfileInfo={setUpdateProfileInfo}
-              myProfileImg={myProfileImg}
-              setMyProfileImg={setMyProfileImg}
-            ></ChangeProfile>
-          )}
-          {currentPage.myPost && <MyPostBoard></MyPostBoard>}
-          {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
-          {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
-          {currentPage.likeComment && <MyCommentLikeBoard></MyCommentLikeBoard>}
-        </ProfileCotentContainer>
-      )}
+      {(isTablet || showContent) &&
+        (!isAdmin ? (
+          <ProfileCotentContainer>
+            {currentPage.profile && (
+              <ChangeProfile
+                setUserName={setUserName}
+                setUpdateProfileInfo={setUpdateProfileInfo}
+                myProfileImg={myProfileImg}
+                setMyProfileImg={setMyProfileImg}
+              ></ChangeProfile>
+            )}
+            {currentPage.myPost && <MyPostBoard></MyPostBoard>}
+            {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
+            {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
+            {currentPage.likeComment && (
+              <MyCommentLikeBoard></MyCommentLikeBoard>
+            )}
+          </ProfileCotentContainer>
+        ) : (
+          <ProfileCotentContainer>
+            {currentPage.profile && (
+              <ChangeProfile
+                setUserName={setUserName}
+                setUpdateProfileInfo={setUpdateProfileInfo}
+                myProfileImg={myProfileImg}
+                setMyProfileImg={setMyProfileImg}
+              ></ChangeProfile>
+            )}
+            {currentPage.reportedPost && <ReportedPost></ReportedPost>}
+            {currentPage.reportedComment && <ReportedComment></ReportedComment>}
+          </ProfileCotentContainer>
+        ))}
     </ProfileContainer>
   );
 };

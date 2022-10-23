@@ -1,5 +1,6 @@
 export default function calTimeToString(timeStamp) {
-  if(!timeStamp){ /* 테스트 코드 */
+  if (!timeStamp) {
+    /* 테스트 코드 */
     return "방금전";
   }
   const value = new Date() - timeStamp.toDate();
@@ -11,9 +12,12 @@ export default function calTimeToString(timeStamp) {
   } else if (Math.floor(value / (1000 * 60 * 60)) < 24) {
     const returnValue = Math.floor(value / (1000 * 60 * 60));
     return `${returnValue}시간 전`;
-  } else if (Math.floor(value / (1000 * 60 * 60)) < 744) {
+  } else if (Math.floor(value / (1000 * 60 * 60)) < 720) {
     const returnValue = Math.floor(value / (1000 * 60 * 60 * 24));
     return `${returnValue}일 전`;
+  } else if (Math.floor(value / (1000 * 60 * 60)) < 8440) {
+    const returnValue = Math.floor(value / (1000 * 60 * 60 * 24 * 30));
+    return `${returnValue}달 전`;
   } else {
     return "오래 전";
   }

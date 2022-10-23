@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
+import checkCurseWord from "../../modules/CheckCurseWord";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
+  PostContentBodyBox,
   PostContentBodyContainer,
   PostContentContainerBox,
   SideButtonContainer,
@@ -15,10 +17,10 @@ import {
 import { SideOptionContainer } from "../../styles/write/WriteContainerStyle";
 import { BackButton } from "../common/Buttons";
 import SideButtonBox from "../common/SideButtonBox";
-import PopularPostContainer from "../container/PopularPostContainer";
-import RecommandTagContainer from "../container/RecommandTagContainer";
-import InputTagContainer from "./InputTageContainer";
+import RecentPostContainer from "../container/PopularPostContainer";
+import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
+import PostContentAlert from "./PostContentAlert";
 import PostContentBody from "./PostContentBody";
 import PostContentTitle from "./PostContentTiltle";
 import {
@@ -26,7 +28,7 @@ import {
   WriteUserButtonContainer,
 } from "./SideButtonContainer";
 
-const PostContentContainer = () => {
+const PostContentContainer = ({ isAdmin }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
   const goBack = () => {
@@ -48,6 +50,9 @@ const PostContentContainer = () => {
   const [postInfo, setPostInfo] = useRecoilState(PostInfo);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
+  const location = useLocation();
+  // console.log(location);
+
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
     comment: "",
@@ -63,6 +68,19 @@ const PostContentContainer = () => {
 
   const [postUserNickname, setPostUserNickname] = useState("");
   const [postUserProfileImg, setPostUserProfileImg] = useState("");
+
+  const [alertInfo, setAlertInfo] = useState({
+    editPost: false,
+    addLikePost: false,
+    subLikePost: false,
+    createComment: false,
+    editComment: false,
+    deleteComment: false,
+    addLikeComment: false,
+    subComment: false,
+    reportPost: false,
+    reportComment: false,
+  });
 
   const getIsLiked = async (currentPostInfo = null) => {
     const { uid: currentUserUid } = JSON.parse(
@@ -80,7 +98,6 @@ const PostContentContainer = () => {
     );
 
     const querySnapshot = await getDocs(likeCheckQuery);
-    console.log(querySnapshot);
     if (querySnapshot.docs.length === 0) {
       setIsLikedByMe(false);
     } else {
@@ -92,78 +109,64 @@ const PostContentContainer = () => {
     setEditing((prev) => !prev);
   };
 
-  const onClick = async (e) => {
-    e.preventDefault();
-    if (state.editContent.length === 0) {
-      setErrorEditInfo(true);
-      setTimeout(() => {
-        setErrorEditInfo(false);
-      }, 3000);
-    } else {
-      const check = window.confirm("정말로 수정하시겠습니까?");
-      if (check) {
-        await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-          text: state.editContent,
-          tag_name: state.editTag,
-        })
-          .then(
-            setPostInfo((prev) => ({
-              ...prev,
-              postContent: state.editContent,
-              tag_name: state.editTag,
-            }))
-          )
-          .then(alert("수정되었습니다."))
-          .then(setEditing(false));
+  const onEditPostClick = async () => {
+    await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
+      text: state.editContent,
+      tag_name: state.editTag.replace(/ /g, ""),
+    });
+    const currentTag = postInfo.tag_name;
+    const nextTag = state.editTag.replace(/ /g, "");
 
+    if (nextTag !== currentTag) {
+      if (currentTag.length !== 0) {
         const oldtagSnap = await getDocs(
           query(
             collection(dbService, "Tag"),
             where("tag_name", "==", postInfo.tag_name)
           )
         );
-        if (oldtagSnap.docs.length === 0) {
-          console.log("Could not find Old Tag");
-        } else {
-          updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
-            tag_count: increment(-1),
+        updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
+          tag_count: increment(-1),
+        });
+      }
+
+      if (nextTag.length !== 0) {
+        const nextTagSnap = await getDocs(
+          query(collection(dbService, "Tag"), where("tag_name", "==", nextTag))
+        );
+        if (nextTagSnap.docs.length === 0) {
+          await addDoc(collection(dbService, "Tag"), {
+            tag_count: 1,
+            tag_name: nextTag,
           });
-          console.log(
-            "Old Tag count incremented by -1 as the tag EXISTS in collection"
-          );
+        } else {
+          await updateDoc(doc(dbService, "Tag", nextTagSnap.docs[0].id), {
+            tag_count: increment(1),
+          });
         }
-
-        if (state.editTag !== "") {
-          const newTagSnap = await getDocs(
-            query(
-              collection(dbService, "Tag"),
-              where("tag_name", "==", state.editTag)
-            )
-          );
-          if (newTagSnap.docs.length === 0) {
-            const tagDocRef = await addDoc(collection(dbService, "Tag"), {
-              tag_count: 1,
-              tag_name: state.editTag,
-            });
-            console.log("Tag added to collection with ID: ", tagDocRef.id);
-          } else {
-            updateDoc(doc(dbService, "Tag", newTagSnap.docs[0].id), {
-              tag_count: increment(1),
-            });
-            console.log(
-              "Tag count incremented by 1 as the tag EXISTS in collection"
-            );
-          }
-        }
-
-        setIsUpdatePostList((prev) => ({
-          ...prev,
-          searchPage: true,
-          newestPage: true,
-          popularPage: true,
-        }));
       }
     }
+
+    setPostInfo((prev) => ({
+      ...prev,
+      postContent: state.editContent,
+      tag_name: nextTag,
+    }));
+
+    setEditing(false);
+
+    setIsUpdatePostList((prev) => ({
+      ...prev,
+      searchPage: true,
+      newestPage: true,
+      popularPage: true,
+    }));
+
+    setAlertInfo((prev) => ({ ...prev, editPost: true }));
+    setTimeout(
+      () => setAlertInfo((prev) => ({ ...prev, editPost: false })),
+      3000
+    );
   };
 
   const getPostUserNickname = async (refreshData = null) => {
@@ -197,9 +200,13 @@ const PostContentContainer = () => {
           .toLocaleString(),
         id: contentObj.id,
         like_count: contentObj.like_count,
+        post_rep_accept: contentObj.post_rep_accept,
+        post_report: contentObj.post_report,
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
+        post_report: contentObj.post_report,
+        post_rep_accept: contentObj.post_rep_accept,
       }));
       setState((prev) => ({
         ...prev,
@@ -214,6 +221,16 @@ const PostContentContainer = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (postInfo.created_timestamp === null) {
+  //     getContent();
+  //   } else {
+  //     getIsLiked();
+  //     getPostUserNickname();
+  //   }
+  //   // eslint-disable-next-line
+  // }, []);
+
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();
@@ -222,78 +239,71 @@ const PostContentContainer = () => {
       getPostUserNickname();
     }
     // eslint-disable-next-line
-  }, []);
+  }, [postInfo]);
+
+  useEffect(() => {
+    if (postInfo.id !== id) {
+      getContent();
+    }
+    //eslint-disable-next-line
+  }, [location]);
 
   return (
     <PostContentContainerBox>
-      <SideButtonContainer>
-        <SideButtonBox>
-          <BackButton goBack={goBack} isMobile={!isTablet}>
-            뒤로가기
-          </BackButton>
-          {!isTablet &&
-            postInfo.created_timestamp &&
-            authService.currentUser &&
-            (authService.currentUser.uid === postInfo.creator_id ? (
-              <WriteUserButtonContainer
-                editing={editing}
-                postInfo={postInfo}
-                toggleEditing={toggleEditing}
-                isMobile={!isTablet}
-              ></WriteUserButtonContainer>
-            ) : (
-              <OtherUserButtonContainer
-                isMobile={!isTablet}
-                isLikedByMe={isLikedByMe}
-                setIsLikedByMe={setIsLikedByMe}
-                postInfo={postInfo}
-                setPostInfo={setPostInfo}
-              ></OtherUserButtonContainer>
-            ))}
-        </SideButtonBox>
-
-        {isTablet && postInfo.created_timestamp ? (
-          <SideButtonBox isNotTop={true}>
-            {authService.currentUser ? (
-              authService.currentUser.uid === postInfo.creator_id ? (
+      <PostContentAlert alertInfo={alertInfo} />
+      <PostContentBodyContainer>
+        <SideButtonContainer>
+          <SideButtonBox>
+            <BackButton goBack={goBack} isMobile={isTablet ? "false" : "true"}>
+              뒤로가기
+            </BackButton>
+            {!isAdmin &&
+              postInfo.created_timestamp &&
+              authService.currentUser &&
+              !postInfo.post_rep_accept &&
+              (authService.currentUser.uid === postInfo.creator_id ? (
                 <WriteUserButtonContainer
                   editing={editing}
                   postInfo={postInfo}
                   toggleEditing={toggleEditing}
+                  isMobile={isTablet ? "false" : "true"}
                 ></WriteUserButtonContainer>
               ) : (
                 <OtherUserButtonContainer
-                  postInfo={postInfo}
+                  isMobile={isTablet ? "false" : "true"}
                   isLikedByMe={isLikedByMe}
-                  setPostInfo={setPostInfo}
                   setIsLikedByMe={setIsLikedByMe}
+                  postInfo={postInfo}
+                  setPostInfo={setPostInfo}
+                  setAlertInfo={setAlertInfo}
+                  postUserNickname={postUserNickname}
                 ></OtherUserButtonContainer>
-              )
-            ) : (
-              <></>
-            )}
+              ))}
           </SideButtonBox>
-        ) : (
-          <></>
-        )}
-      </SideButtonContainer>
-      <PostContentBodyContainer>
-        <PostContentTitle
-          postInfo={postInfo}
-          errorPostInfo={errorPostInfo}
-          isMyLike={isLikedByMe}
-          postUserNickname={postUserNickname}
-          postUserProfileImg={postUserProfileImg}
-        ></PostContentTitle>
-        <PostContentBody
-          postInfo={postInfo}
-          state={state}
-          onChange={onChange}
-          editing={editing}
-          onClick={onClick}
-          errorPostInfo={errorPostInfo}
-          errorEditInfo={errorEditInfo}
-        ></PostContentBody>
+        </SideButtonContainer>
+
+        <PostContentBodyBox>
+          <PostContentTitle
+            editing={editing}
+            postInfo={postInfo}
+            errorPostInfo={errorPostInfo}
+            postUserNickname={postUserNickname}
+            postUserProfileImg={postUserProfileImg}
+            onClick={onEditPostClick}
+            errorEditInfo={errorEditInfo}
+            state={state}
+            setErrorEditInfo={setErrorEditInfo}
+          ></PostContentTitle>
+          <PostContentBody
+            postInfo={postInfo}
+            state={state}
+            onChange={onChange}
+            editing={editing}
+            isMyLike={isLikedByMe}
+            errorPostInfo={errorPostInfo}
+          ></PostContentBody>
+        </PostContentBodyBox>
+
         {postInfo.created_timestamp && !editing && (
           <PostCommentContainer
             postInfo={postInfo}
@@ -301,18 +311,17 @@ const PostContentContainer = () => {
             setState={setState}
             onChange={onChange}
             isTablet={isTablet}
+            isAdmin={isAdmin}
+            setAlertInfo={setAlertInfo}
           ></PostCommentContainer>
         )}
       </PostContentBodyContainer>
       <SideOptionContainer>
         {postInfo.created_timestamp ? (
           editing ? (
-            <>
-              <InputTagContainer></InputTagContainer>
-              <RecommandTagContainer></RecommandTagContainer>
-            </>
+            <SideOptionForm />
           ) : (
-            <PopularPostContainer></PopularPostContainer>
+            <RecentPostContainer />
           )
         ) : (
           <></>
