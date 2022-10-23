@@ -63,7 +63,7 @@ const PopularPostBoard = () => {
   const [isNextLikeOrderPostExist, setIsNextLikeOrderPostExist] = useState(false);
   const [likePostCountIndex, setLikePostCountIndex] = useState(0);
 
-  const getFirstTen = useCallback(async () => {
+  const getFirstTen = async () => {
     let q = query(collection(dbService, "WorryPost"),
       orderBy("like_count", "desc"),
       orderBy("created_timestamp", orderDescOrAsc),
@@ -91,7 +91,7 @@ const PopularPostBoard = () => {
             idx = idx + 1;
             console.log("after idx change");
             console.log("현재까지 문서 중 기간 제한을 통과한 문서 개수: ", idx)
-            setLikePostCountIndex(prev => prev + 1);
+            setLikePostCountIndex((prev) => (prev + 1));
             console.log("after FilterIndex change");
           }
           console.log("after IF");
@@ -110,7 +110,7 @@ const PopularPostBoard = () => {
         // 가져올 스냅샷이 존재하지 않음
       }
     }
-  }, []);
+  };
     // 테스트 통과하면 "다음 10개 보기"를 위해 nextLikeOrderPostsSnapshot 지정해주기
   
   const snapshotToPosts = (snapshot) => {
@@ -264,8 +264,8 @@ const PopularPostBoard = () => {
         setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
         setCurrentScrollPos(0);
       }
-      getFirst();
-      //getFirstTen();
+      //getFirst();
+      getFirstTen();
     } else {
       console.log("get global state!");
       setPosts(postsRecoil);
