@@ -1,14 +1,16 @@
 import { curseWords } from "../lib/Const";
 
-const checkCurseWords = (text) => {
+const checkCurseWord = (text) => {
+	console.log(curseWords);
 	for (let n = 0; n < curseWords.length; ++n) {
-		const textRidOfSpecialLetters = text.replace(/[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/gi, "");
+		let textRidOfSpecialLetters = text.replace(/[^0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/gi, "");
 		if (textRidOfSpecialLetters.indexOf(curseWords[n]) !== -1) {
-			return ("*" + curseWords[n].substr(1));
+			return ("*" + curseWords[n].substring(1));
 		} else {
-			return;
+			continue;
 		}
 	}
+	return;
 }
 
-export default checkCurseWords;
+export default checkCurseWord;

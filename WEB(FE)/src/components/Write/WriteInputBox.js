@@ -7,7 +7,7 @@ import { authService } from "../../lib/FAuth";
 import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
-import checkCurseWords from "../../modules/CheckCurseWord";
+import checkCurseWord from "../../modules/CheckCurseWord";
 
 const InputBox = styled.div`
   //margin-left: 10px;
@@ -66,7 +66,7 @@ const WritePostBox = ({ navigate }) => {
 
   const onClick = async (e) => {
     e.preventDefault();
-    const curseWord = checkCurseWords(state.postContent);
+    const curseWord = checkCurseWord(state.postContent);
     if (state.postContent.length === 0) {
       setErrorWritePostInfo((prev) => ({ ...prev, isError: true }));
       setTimeout(() => {
