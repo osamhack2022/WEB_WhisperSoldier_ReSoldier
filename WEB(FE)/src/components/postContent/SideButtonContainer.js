@@ -332,30 +332,6 @@ export const OtherUserButtonContainer = ({
       navigate("/message");
     }
   };
-  const getReportStatuses = async () => {
-    const reportCheckSnap = await getDoc(doc(dbService, "WorryPost", postInfo.id));
-    if (reportCheckSnap.data().post_report) {
-      console.log("이미 신고된 포스트임");
-      setIsReported(true);
-    }
-    if (reportCheckSnap.data().post_rep_accept) {
-      console.log("블라인드된 포스트임")
-      setIsReportAccepted(true);
-    }
-  }
-  const onClickReportPost = async (e) => {
-    if (isReported) {
-      alert("이미 누군가에 의해 신고된 Post입니다.");
-    } else {
-      updateDoc(doc(dbService, "WorryPost", postInfo.id), {
-        "post_report": true,
-      })
-        .then(setPostInfo((prev) => ({
-          ...prev,
-          post_report: true
-        })))
-        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
-        .then(setIsReported(true));
 
   const reportPost = async () => {
     await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
