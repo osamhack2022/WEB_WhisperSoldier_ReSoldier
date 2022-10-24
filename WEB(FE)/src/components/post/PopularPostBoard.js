@@ -271,8 +271,8 @@ const PopularPostBoard = () => {
         setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
         setCurrentScrollPos(0);
       }
-      //getFirst();
-      getFirstTen();
+      getFirst();
+      //getFirstTen();
     } else {
       console.log("get global state!");
       setPosts(postsRecoil);

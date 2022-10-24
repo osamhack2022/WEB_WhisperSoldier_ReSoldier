@@ -97,7 +97,7 @@ const WritePostHeader = ({
       const curseWord = checkCurseWord(state.postContent);
       if (curseWord) {
         alert(
-          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
+          "욕 또는 비속어가 감지되었습니다. 건전한 상담 문화에 걸맞는 표현을 사용해주세요."
         );
       } else {
         setOpenDialogForWritePost(true);
