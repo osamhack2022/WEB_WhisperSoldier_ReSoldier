@@ -69,13 +69,9 @@ const CheckDefaultProfileImgDialog = ({
       photoURL: "",
     })
       .then(() => {
-        // Profile updated!
-        // ...
         if (myProfileImg) {
           deleteObject(ref(storageService, myProfileImg));
         }
-        console.log("프로필 사진 변경 성공");
-        // alert("닉네임 변경을 성공했습니다.");
         updateDoc(
           doc(
             dbService,
@@ -93,11 +89,8 @@ const CheckDefaultProfileImgDialog = ({
         }, 3000);
       })
       .catch((error) => {
-        // An error occurred
-        // ...
         console.log(error);
       });
-    //setUpdateProfileInfo(true);
   };
   return (
     <div>

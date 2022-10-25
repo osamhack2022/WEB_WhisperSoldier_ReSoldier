@@ -128,7 +128,6 @@ const WritePostHeader = ({
         <WsDialogTitle>고민 작성 완료하시겠습니까?</WsDialogTitle>
         <DialogActions>
           <CancelButton
-            // onClick={}
             onClick={handleCloseDialogForWritePost}
             color="primary"
             autoFocus

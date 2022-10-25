@@ -1,3 +1,4 @@
+import { Dialog, DialogActions } from "@mui/material";
 import { signInWithEmailAndPassword, updatePassword } from "firebase/auth";
 import { useState } from "react";
 import styled from "styled-components";
@@ -5,6 +6,11 @@ import { whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import media from "../../modules/MediaQuery";
 import { useAndSetForm } from "../../modules/useForm";
+import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
+import {
+  CancelButton,
+  ConfirmButton,
+} from "./CheckDefaultProfileImgNestDialog";
 
 const ChangePasswordFormStyle = styled.div`
   display: flex;
@@ -12,7 +18,7 @@ const ChangePasswordFormStyle = styled.div`
   justify-content: flex-start;
   height: fit-content;
   width: 320px;
-  flex-wrap :no-wrap;
+  flex-wrap: no-wrap;
   ${media.tablet`
   width: 180px;
   `}
@@ -79,7 +85,7 @@ export const ChangePasswordButton = styled.button`
   }
 `;
 
-const ChangePasswordForm = () => {
+const ChangePasswordForm = ({ setSuccessInfo }) => {
   const currentUserKey = JSON.parse(
     sessionStorage.getItem(whisperSodlierSessionKey)
   );
@@ -96,7 +102,10 @@ const ChangePasswordForm = () => {
     isNewPasswordErr: false,
     isLoading: false,
   });
-  const onChangePassword = (e) => {
+
+  const [openDialogForChangePassword, setOpenDialogForChangePassword] =
+    useState(false);
+  const handleClickOpenDialogForChangePassword = async (e) => {
     e.preventDefault();
     if (passworInputValue.current.length > 0) {
       if (
@@ -114,38 +123,7 @@ const ChangePasswordForm = () => {
             passworInputValue.current
           )
             .then((userCredential) => {
-              const check = window.confirm("비밀번호를 바꾸시겠습니까?");
-              if (check) {
-                updatePassword(authService.currentUser, passworInputValue.new)
-                  .then(() => {
-                    alert("비밀번호가 변경되었습니다.");
-                  })
-                  .catch((error) => {
-                    setPasswordErrorInfo((prev) => ({
-                      ...prev,
-                      isErr: true,
-                      isLoading: false,
-                      isNewPasswordErr: true,
-                      errMsg: "오류가 발생했습니다",
-                    }));
-                    setTimeout(() => {
-                      setPasswordErrorInfo((prev) => ({
-                        ...prev,
-                        isErr: false,
-                        isLoading: false,
-                        isCurrentPasswordErr: false,
-                        isNewPasswordErr: false,
-                        errMsg: "",
-                      }));
-                      setPasswordInputValue((prev) => ({
-                        ...prev,
-                        current: "",
-                        new: "",
-                        checkNew: "",
-                      }));
-                    }, 3000);
-                  });
-              }
+              setOpenDialogForChangePassword(true);
             })
             .catch((error) => {
               const errorCode = error.code;
@@ -266,6 +244,46 @@ const ChangePasswordForm = () => {
     }
   };
 
+  const handleCloseDialogForChangePassword = async () => {
+    setOpenDialogForChangePassword(false);
+  };
+
+  const onChangePassword = async () => {
+    await updatePassword(authService.currentUser, passworInputValue.new)
+      .then(() => {
+        setSuccessInfo((prev) => ({
+          ...prev,
+          password: true,
+        }));
+        setPasswordInputValue((prev) => ({
+          ...prev,
+          current: "",
+          new: "",
+          checkNew: "",
+        }));
+        setTimeout(() => {
+          setSuccessInfo((prev) => ({ ...prev, password: false }));
+        }, 3000);
+      })
+      .catch((error) => {
+        setSuccessInfo((prev) => ({
+          ...prev,
+          errorPassword: true,
+        }));
+        setPasswordInputValue((prev) => ({
+          ...prev,
+          current: "",
+          new: "",
+          checkNew: "",
+        }));
+        setTimeout(() => {
+          setSuccessInfo((prev) => ({ ...prev, errorPassword: false }));
+        }, 3000);
+      });
+
+    setOpenDialogForChangePassword(false);
+  };
+
   return (
     <ChangePasswordFormStyle>
       <form>
@@ -298,11 +316,32 @@ const ChangePasswordForm = () => {
         ></AuthInputBox>
         <ChangePasswordButton
           type="submit"
-          onClick={onChangePassword}
+          onClick={handleClickOpenDialogForChangePassword}
           error={passwordErrorInfo.isErr}
         >
           {passwordErrorInfo.isErr ? passwordErrorInfo.errMsg : "비밀번호 변경"}
         </ChangePasswordButton>
+
+        <Dialog
+          open={openDialogForChangePassword}
+          onClose={handleCloseDialogForChangePassword}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <WsDialogTitle>비밀번호를 변경하시겠습니까?</WsDialogTitle>
+          <DialogActions>
+            <CancelButton
+              onClick={handleCloseDialogForChangePassword}
+              color="primary"
+              autoFocus
+            >
+              취소
+            </CancelButton>
+            <ConfirmButton color="primary" onClick={onChangePassword}>
+              변경
+            </ConfirmButton>
+          </DialogActions>
+        </Dialog>
       </form>
     </ChangePasswordFormStyle>
   );

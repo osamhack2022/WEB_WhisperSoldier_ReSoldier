@@ -1,6 +1,3 @@
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { authService } from "../lib/FAuth";
 import { useEffect, useState } from "react";
 import MyCommentBoard from "../components/profile/MyCommentBoard";
 import MyPostLikeBoard from "../components/profile/MyPostLikeBoard";
@@ -33,6 +30,7 @@ import { BackButton } from "../components/common/Buttons";
 import { getSelectObj } from "../modules/GetSelectObj";
 import ReportedPost from "../components/admin/ReportedPost";
 import ReportedComment from "../components/admin/ReportedComment";
+import Logout from "../components/profile/Logout";
 
 const ProfilePage = ({ isAdmin }) => {
   const [myProfileImg, setMyProfileImg] = useState(
@@ -53,7 +51,6 @@ const ProfilePage = ({ isAdmin }) => {
       .displayName
   );
 
-  const navigate = useNavigate();
   const [currentPage, setcurrentPage] = useState({
     profile: true,
     myPost: false,
@@ -69,13 +66,6 @@ const ProfilePage = ({ isAdmin }) => {
     useRecoilState(ProfileSelectStore);
   const [showContentStore, setShowContentStore] =
     useRecoilState(ShowContentStore);
-
-  const onLogout = async () => {
-    await signOut(authService).then(() => {
-      console.log("[Profile.js]로그아웃 성공");
-    });
-    navigate("/", { replace: true });
-  };
 
   const onProfile = () => {
     setcurrentPage((prev) => getSelectObj(prev, "profile"));
@@ -163,8 +153,6 @@ const ProfilePage = ({ isAdmin }) => {
     //eslint-disable-next-line
   }, [updateProfileInfo]);
 
-  console.log(myProfileImg);
-
   return (
     <ProfileContainer>
       {(isTablet || !showContent) && (
@@ -218,9 +206,7 @@ const ProfilePage = ({ isAdmin }) => {
             )}
           </PrimaryMenuBox>
           <PrimaryMenuBox isNotTop={true}>
-            <PrimaryMenuButton onClick={onLogout} bottom={true} logout={true}>
-              로그아웃
-            </PrimaryMenuButton>
+            <Logout />
           </PrimaryMenuBox>
         </PrimaryMenuBar>
       )}

@@ -5,6 +5,7 @@ import { styled } from "@mui/system";
 import { deleteUser, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { adminSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import {
   dbFunction,
@@ -149,7 +150,8 @@ const WthdrawConfirmDialog = ({
       .then(() => {
         console.log("회원탈퇴 성공");
         setOpen(false);
-        navigate("/", { replace: true });
+        sessionStorage.removeItem(adminSessionKey);
+        // navigate("/", { replace: true });
         window.location.reload();
       })
       .catch((error) => {

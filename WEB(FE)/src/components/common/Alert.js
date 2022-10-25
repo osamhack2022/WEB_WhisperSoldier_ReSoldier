@@ -5,7 +5,7 @@ const AlertBox = styled.div`
   position: fixed;
   text-align: center;
   z-index: 3;
-  top: 134px;
+  top: ${(props) => (props.profile ? "96px" : "134px")};
   left: 50%;
   transform: translate(-50%, 0);
 `;
@@ -100,6 +100,74 @@ export const HomeContentAlert = ({ alertState }) => {
       <AlertBox>
         <Grow in={alertState.deletePost}>
           <Alert severity="error">고민 포스트를 삭제했습니다.</Alert>
+        </Grow>
+      </AlertBox>
+    </>
+  );
+};
+
+export const UpdateProfileAlert = ({ successInfo }) => {
+  return (
+    <>
+      <AlertBox profile="true">
+        <Grow in={successInfo.nickname}>
+          <Alert severity="success">닉네임 변경했습니다.</Alert>
+        </Grow>
+      </AlertBox>
+
+      <AlertBox profile="true">
+        <Grow in={successInfo.profileImg}>
+          <Alert severity="success">프로필 사진 변경했습니다.</Alert>
+        </Grow>
+      </AlertBox>
+
+      <AlertBox profile="true">
+        <Grow in={successInfo.defaultProfileImg}>
+          <Alert severity="info">기본 프로필 사진으로 변경했습니다.</Alert>
+        </Grow>
+      </AlertBox>
+
+      <AlertBox profile="true">
+        <Grow in={successInfo.password}>
+          <Alert severity="success">비밀번호를 변경했습니다.</Alert>
+        </Grow>
+      </AlertBox>
+
+      <AlertBox profile="true">
+        <Grow in={successInfo.errorPassword}>
+          <Alert severity="error">
+            비밀번호 보안이 약합니다.
+            <br />
+            8자 이상으로 설정해주세요.
+          </Alert>
+        </Grow>
+      </AlertBox>
+    </>
+  );
+};
+
+export const ChatPageAlert = ({ successInfo }) => {
+  return (
+    <>
+      <AlertBox>
+        <Grow in={successInfo.deleteProcess}>
+          <Alert severity="info">
+            {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다.
+          </Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox>
+        <Grow in={successInfo.blockProcess}>
+          <Alert severity="error">
+            {successInfo.chatWithUserNickname}님과의 채팅을 차단했습니다.
+          </Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox>
+        <Grow in={successInfo.unblockProcess}>
+          <Alert severity="info">
+            {successInfo.chatWithUserNickname}님과의 채팅을 차단해제했습니다
+          </Alert>
         </Grow>
       </AlertBox>
     </>

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import EmailImage from "../../asset/email.png";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { AuthMainLink } from "../common/Buttons";
 

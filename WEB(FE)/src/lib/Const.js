@@ -9,6 +9,12 @@ export const TabletQuery = `(min-width:768px)`;
 export const whisperSodlierSessionKey = `firebase:authUser:${FApiKey}:[DEFAULT]`;
 export const adminSessionKey = `firebase:admin:${FApiKey}:[DEFAULT]`;
 
+export const BannerImgUrl = [
+  "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F1.png?alt=media&token=c2bd9675-067c-4f02-bbfa-71c0cc4fd886",
+  "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F2.png?alt=media&token=b2c4cbbc-2cde-4aec-9ecc-1477a375d5b5",
+  "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F3.png?alt=media&token=c3d10ebb-34c0-44c3-8f0e-149104af9385",
+];
+
 export const curseWords = [
   //   "대충욕하는거",
   //   "심한욕",

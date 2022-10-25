@@ -5,42 +5,13 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import ChatContentBoard from "../components/chat/ChatContentBoard";
 import ChatPairBoard from "../components/chat/ChatPairBoard";
+import { ChatPageAlert } from "../components/common/Alert";
 import { BackButton } from "../components/common/Buttons";
 import SideButtonBox from "../components/common/SideButtonBox";
 import { TabletQuery, whisperSodlierSessionKey } from "../lib/Const";
 import { dbService } from "../lib/FStore";
 import media from "../modules/MediaQuery";
 import { StartFirstChat } from "../store/ChatStore";
-
-const SuccesDeleteInfoTextBox = styled.div`
-  position: absolute;
-  z-index: 2;
-  font-size: 14px;
-  text-align: center;
-  top: 82px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  padding: 14px 10px 8px 10px;
-  border-radius: 5px;
-  height: 48px;
-  width: fit-content;
-  background-color: rgba(166, 86, 70, 10);
-  opacity: ${(props) => (props.success ? "0.9" : "0")};
-  visibility: ${(props) => (props.success ? "visible" : "hidden")};
-  /* display: ${(props) => (props.success ? "block" : "none")}; */
-  color: #ffffff;
-  transition: all 0.5s;
-  ${media.tablet`
-    padding: 14px 5px 16px 8px;
-    width: 250px;
-  `}
-  ${media.mobile`
-  top : 72px;
-  left : 5vw;
-  transform: inherit;
-  width: 90%;
-  `}
-`;
 
 const ChatContainer = styled.div`
   margin: 0px auto;
@@ -121,7 +92,6 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    console.log(startFirstChat);
     if (startFirstChat.exist) {
       startChat();
       setSHowChatContent(true);
@@ -132,15 +102,7 @@ const ChatPage = () => {
 
   return (
     <ChatContainer>
-      <SuccesDeleteInfoTextBox success={successInfo.deleteProcess}>
-        {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다
-      </SuccesDeleteInfoTextBox>
-      <SuccesDeleteInfoTextBox success={successInfo.blockProcess}>
-        {successInfo.chatWithUserNickname}님과의 채팅을 차단했습니다
-      </SuccesDeleteInfoTextBox>
-      <SuccesDeleteInfoTextBox success={successInfo.unblockProcess}>
-        {successInfo.chatWithUserNickname}님과의 채팅을 차단해제했습니다
-      </SuccesDeleteInfoTextBox>
+      <ChatPageAlert successInfo={successInfo} />
       {(isTablet || !showChatContent) && (
         <ChatPairBoard
           toggleShowChatContent={toggleShowChatContent}

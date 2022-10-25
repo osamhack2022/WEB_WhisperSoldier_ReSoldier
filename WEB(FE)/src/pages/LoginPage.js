@@ -58,6 +58,10 @@ const LoginPage = () => {
         }, 3000);
       } else {
         if (authService.currentUser.displayName === null) {
+          sessionStorage.setItem(
+            adminSessionKey,
+            JSON.stringify({ admin: false, id: "" })
+          );
           navigate("/welcome", { replace: true });
         } else {
           const currentUserInfo = await getDoc(
