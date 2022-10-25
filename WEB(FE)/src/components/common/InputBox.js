@@ -38,4 +38,6 @@ export const SearchBar = styled.input`
     padding: 16px 5px 16px 15px;
     width: 200px;
   `}
+  ${media.mobile`
+    flex-grow : 1;`}
 `;

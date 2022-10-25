@@ -29,13 +29,6 @@ const PostElement = ({ post, nonAdditionalInfo, admin }) => {
       comment_count: post.comment_count,
       tag_name: post.tag_name,
     }));
-    console.log(
-      "post_report:",
-      post.post_report,
-      "\n",
-      "post_rep_accept: ",
-      post.post_rep_accept
-    );
     setCurrentScrollPos(window.scrollY);
     window.scrollTo(0, 0);
   };

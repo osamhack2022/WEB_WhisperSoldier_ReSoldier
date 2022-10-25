@@ -114,9 +114,10 @@ const PostCommentForm = ({
     } else {
       const curseWord = checkCurseWord(state.comment);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinenceComment: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinenceComment: false }));
+        }, 3000);
       } else {
         setOpenDialogForCreateComment(true);
       }

@@ -10,6 +10,7 @@ import {
   HomeMainContentBox,
   HomeSubContentBox,
 } from "../../styles/common/HomeContainerStyle";
+import { HomeContentAlert } from "../common/Alert";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
 import PostBox from "./PostBox";
@@ -75,12 +76,7 @@ const HomeContainer = () => {
   }, [processInfo]);
   return (
     <HomeContainerBox>
-      <AlertTextBox success={alertState.writePost}>
-        고민 포스트를 성공적으로 업로드랬습니다.
-      </AlertTextBox>
-      <AlertTextBox success={alertState.deletePost} redcolor="true">
-        고민 포스트를 삭제했습니다.
-      </AlertTextBox>
+      <HomeContentAlert alertState={alertState} />
       <HomeMainContentBox>
         <HomeContentUpperBox>
           <BannerBox></BannerBox>

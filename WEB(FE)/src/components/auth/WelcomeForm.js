@@ -217,11 +217,25 @@ const WelcomeForm = () => {
 
   const onGetRandomNickname = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      "https://nickname.hwanmoo.kr/?format=json&count=1"
-    );
-    console.log(response.data.words[0]);
-    setInputValue((prev) => ({ ...prev, nickname: response.data.words[0] }));
+
+    const getRandomNickname = {
+      method: "GET",
+      url: "https://proxy.cors.sh/https://nickname.hwanmoo.kr/",
+      params: { format: "json", count: "2" },
+    };
+
+    axios
+      .request(getRandomNickname)
+      .then(function (response) {
+        console.log(response.data.words[0]);
+        setInputValue((prev) => ({
+          ...prev,
+          nickname: response.data.words[0],
+        }));
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   return (

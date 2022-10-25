@@ -7,6 +7,8 @@ import testBannerImg1 from "../../asset/1.png";
 import testBannerImg2 from "../../asset/2.png";
 import testBannerImg3 from "../../asset/3.png";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { storageFunction, storageService } from "../../lib/FStore";
 
 const BannerBoxStyle = styled.div`
   padding: 0px;
@@ -104,6 +106,12 @@ const PreviousArrowButton = ({ className, style, onClick }) => {
 };
 
 const BannerBox = () => {
+  const [banneerImgUrl, setBannerImgUrl] = useState([
+    "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F1.png?alt=media&token=c2bd9675-067c-4f02-bbfa-71c0cc4fd886",
+    "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F2.png?alt=media&token=b2c4cbbc-2cde-4aec-9ecc-1477a375d5b5",
+    "https://firebasestorage.googleapis.com/v0/b/whisper-soldier-database.appspot.com/o/bannerImg%2F3.png?alt=media&token=c3d10ebb-34c0-44c3-8f0e-149104af9385",
+  ]);
+  const { ref } = storageFunction;
   const settings = {
     dots: true,
     infinite: true,
@@ -115,13 +123,14 @@ const BannerBox = () => {
     nextArrow: <NextArrowButton />,
     prevArrow: <PreviousArrowButton />,
   };
+
   return (
     <BannerBoxStyle>
       <BannerSliderStyle>
         <Slider {...settings}>
-          <BannerImgBox src={testBannerImg1}></BannerImgBox>
-          <BannerImgBox src={testBannerImg2}></BannerImgBox>
-          <BannerImgBox src={testBannerImg3}></BannerImgBox>
+          <BannerImgBox src={banneerImgUrl[0]}></BannerImgBox>
+          <BannerImgBox src={banneerImgUrl[1]}></BannerImgBox>
+          <BannerImgBox src={banneerImgUrl[2]}></BannerImgBox>
         </Slider>
       </BannerSliderStyle>
     </BannerBoxStyle>

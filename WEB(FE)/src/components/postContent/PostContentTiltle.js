@@ -29,6 +29,7 @@ const PostContentTitle = ({
   errorEditInfo,
   state,
   setErrorEditInfo,
+  setAlertInfo,
 }) => {
   const [openDialogForEditPost, setOpenDialogForEditPost] = useState(false);
   const handleClickOpenDialogForEditPost = () => {
@@ -40,9 +41,10 @@ const PostContentTitle = ({
     } else {
       const curseWord = checkCurseWord(state.editContent);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinencePost: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinencePost: false }));
+        }, 3000);
       } else {
         setOpenDialogForEditPost(true);
       }

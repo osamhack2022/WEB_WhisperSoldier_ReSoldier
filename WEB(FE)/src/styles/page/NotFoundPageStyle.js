@@ -8,7 +8,7 @@ export const NotFoundContainer = styled.div`
   flex-direction: row;
   margin: 0px auto;
   width: 960px;
-
+  height: ${(props) => props.notlogin && "100vh"};
   ${media.smallDesktop`
   margin: inherit;
   width: inherit;
@@ -24,11 +24,14 @@ export const NotFoundContainer = styled.div`
 `;
 
 export const NotFoundInfoBlock = styled.div`
+  position: ${(props) => (props.notlogin ? "absolute" : "relative")};
+  top: ${(props) => props.notlogin && "50%"};
+  left: ${(props) => props.notlogin && "50%"};
+  transform: ${(props) => props.notlogin && "translate(-50%,-50%)"};
   display: flex;
   flex-direction: column;
   justify-items: center;
   align-items: center;
-  position: relative;
   margin-top: 10px;
   margin: auto;
   padding: 10px 20px;
@@ -39,10 +42,10 @@ export const NotFoundInfoBlock = styled.div`
   border: 1px solid rgb(189, 189, 189);
   transition: all 0.5s;
   ${media.tablet`
-    width : 250px;
+    width : 300px;
   `}
   ${media.mobile`
-    width : 100%;
+    width : ${(props) => (props.notlogin ? "300px" : "100%")};
   `}
 `;
 

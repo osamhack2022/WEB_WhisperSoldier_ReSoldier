@@ -85,6 +85,7 @@ const WritePostHeader = ({
   errorWritePostInfo,
   state,
   setErrorWritePostInfo,
+  setAlertInfo,
 }) => {
   const [openDialogForWritePost, setOpenDialogForWritePost] = useState(false);
   const handleClickOpenDialogForWritePost = () => {
@@ -96,9 +97,10 @@ const WritePostHeader = ({
     } else {
       const curseWord = checkCurseWord(state.postContent);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinencePost: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinencePost: false }));
+        }, 3000);
       } else {
         setOpenDialogForWritePost(true);
       }

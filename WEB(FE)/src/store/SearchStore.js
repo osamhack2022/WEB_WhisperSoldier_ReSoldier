@@ -17,3 +17,8 @@ export const ResultList = atom({
   key: "resultList",
   default: [],
 });
+
+export const ShowSearchContent = atom({
+  key: "showSearchContent",
+  default: false,
+});

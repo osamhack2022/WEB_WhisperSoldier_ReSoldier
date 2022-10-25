@@ -1,7 +1,9 @@
 import { Alert, Grow } from "@mui/material";
 import { useState } from "react";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
+import { ShowSearchContent } from "../../store/SearchStore";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar } from "./InputBox";
 
@@ -21,9 +23,11 @@ const SearchBox = styled.div`
   `}
   ${media.mobile`
     margin-left : inherit;
+    width : 100%;
     position: relative;
     left:inherit;
     transform: inherit;
+    margin-bottom: 10px;
   `}
 `;
 
@@ -33,15 +37,19 @@ const AlertBox = styled.div`
   z-index: 3;
   left: 50%;
   transform: translate(-50%, 0);
+  ${media.mobile`
+  top : 112px;`}
 `;
 
 const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
   const [isInputError, setIsInputError] = useState(false);
+  const setShowSearchContent = useSetRecoilState(ShowSearchContent);
 
   const onSearchClick = (e) => {
     e.preventDefault();
     if (inputValue.searchWord.length !== 0) {
       navigate(`/search?keyword=${inputValue.searchWord}`);
+      setShowSearchContent(true);
     } else {
       setIsInputError(true);
       setTimeout(() => {
@@ -54,6 +62,7 @@ const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
     if (e.key === "Enter") {
       if (inputValue.searchWord.length !== 0) {
         navigate(`/search?keyword=${inputValue.searchWord}`);
+        setShowSearchContent(true);
       } else {
         setIsInputError(true);
         setTimeout(() => {

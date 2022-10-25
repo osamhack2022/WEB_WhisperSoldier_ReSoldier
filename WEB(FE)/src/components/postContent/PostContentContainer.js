@@ -5,7 +5,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import checkCurseWord from "../../modules/CheckCurseWord";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -20,7 +19,7 @@ import SideButtonBox from "../common/SideButtonBox";
 import RecentPostContainer from "../container/PopularPostContainer";
 import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
-import PostContentAlert from "./PostContentAlert";
+import { PostContentAlert } from "../common/Alert";
 import PostContentBody from "./PostContentBody";
 import PostContentTitle from "./PostContentTiltle";
 import {
@@ -80,6 +79,8 @@ const PostContentContainer = ({ isAdmin }) => {
     subComment: false,
     reportPost: false,
     reportComment: false,
+    impertinencePost: false,
+    impertinenceComment: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -293,6 +294,7 @@ const PostContentContainer = ({ isAdmin }) => {
             errorEditInfo={errorEditInfo}
             state={state}
             setErrorEditInfo={setErrorEditInfo}
+            setAlertInfo={setAlertInfo}
           ></PostContentTitle>
           <PostContentBody
             postInfo={postInfo}

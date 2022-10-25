@@ -163,6 +163,8 @@ const ProfilePage = ({ isAdmin }) => {
     //eslint-disable-next-line
   }, [updateProfileInfo]);
 
+  console.log(myProfileImg);
+
   return (
     <ProfileContainer>
       {(isTablet || !showContent) && (

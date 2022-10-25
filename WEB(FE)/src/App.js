@@ -104,6 +104,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/reset" element={<ResetPage />} />
+          <Route path="*" element={<NotFoundPage notLogin="true" />} />
         </Routes>
       )}
     </>

@@ -1,7 +1,8 @@
-import { Dialog, DialogActions } from "@mui/material";
+import { Alert, Dialog, DialogActions, Grow } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
+import styled from "styled-components";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import checkCurseWord from "../../modules/CheckCurseWord";
@@ -114,9 +115,10 @@ const PostCommentElement = ({
     } else {
       const curseWord = checkCurseWord(newComment);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 해당 욕은 " + curseWord + "입니다."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinenceComment: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinenceComment: false }));
+        }, 3000);
       } else {
         setOpenDialogForEditComment(true);
       }
