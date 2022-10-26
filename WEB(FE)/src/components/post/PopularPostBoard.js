@@ -22,19 +22,18 @@ import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
-import { useLocation } from "react-router-dom";
 import { limit, orderBy, startAfter } from "firebase/firestore";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const PopularPostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
-  //let { params } = useParams();
-  const location = useLocation();
   const { getDocs, query, collection } = dbFunction;
 
   const [posts, setPosts] = useState([]);
   const [nextPostSnapShot, setNextPostSnapShot] = useState({});
   const [isNextPostExist, setIsNextPostExist] = useState(false);
   const [isShowContainer, setIsShowContainer] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [postsRecoil, setPostsRecoil] = useRecoilState(PostsRecoil);
   const [countCurrentPost, setCountCurrentPost] =
@@ -198,6 +197,7 @@ const PopularPostBoard = () => {
         console.log("error with get Post!");
       }
     }
+    setIsLoading(false);
   };
 
   const moveNext = async () => {
@@ -264,6 +264,7 @@ const PopularPostBoard = () => {
       setIsNextPostExist(true);
       setIsNextPostExistRecoil(true);
     }
+    setIsLoading(false);
   };
 
   const onSearchSubmit = () => {
@@ -279,10 +280,7 @@ const PopularPostBoard = () => {
   };
 
   useEffect(() => {
-    console.log("[PostBoard-popular.js]", isUpdatePostList.popularPage);
-
     if (postsRecoil.length === 0 || isUpdatePostList.popularPage) {
-      console.log("frsh or refresh data!");
       if (isUpdatePostList.newestPage) {
         setPosts([]);
         setNextPostSnapShot({});
@@ -296,7 +294,6 @@ const PopularPostBoard = () => {
       //getFirst();
       //getFirstTen();
     } else {
-      console.log("get global state!");
       setPosts(postsRecoil);
       setIsNextPostExist(isNextPostExistRecoil);
       recoverPost();
@@ -333,12 +330,14 @@ const PopularPostBoard = () => {
             </SideOptionContainer>
           )}
           <PostBoardBodyContainer>
-            {posts.length !== 0 ? (
+            {isLoading ? (
+              <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+            ) : posts.length !== 0 ? (
               posts.map((post) => (
                 <PostElement key={post.id} post={post}></PostElement>
               ))
             ) : (
-              <div>잠시만 기다려 주세요</div>
+              <InfoTextBox>포스트가 존재하지 않습니다.</InfoTextBox>
             )}
           </PostBoardBodyContainer>
           {isNextPostExist && (

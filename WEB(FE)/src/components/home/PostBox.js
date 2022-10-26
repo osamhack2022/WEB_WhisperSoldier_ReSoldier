@@ -5,6 +5,7 @@ import { useSetRecoilState } from "recoil";
 import { getSearchQuery } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
 import { IsUpdatePostList } from "../../store/PostStore";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import {
   PostBoxStyle,
   PostBoxTitle,
@@ -16,6 +17,7 @@ import PostElement from "../post/PostElement";
 const PostBox = ({ isLikeDesc }) => {
   const navigate = useNavigate();
   const [postList, setPostList] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const getFivePost = async () => {
@@ -38,6 +40,7 @@ const PostBox = ({ isLikeDesc }) => {
         setPostList((prev) => [...prev, postObj]);
       });
     }
+    setLoading(false);
   };
 
   const MoreButtonClick = () => {
@@ -68,16 +71,20 @@ const PostBox = ({ isLikeDesc }) => {
       <PostBoxTitle>
         {isLikeDesc ? "인기 고민 포스트" : "최신 고민 포스트"}
       </PostBoxTitle>
-      {postList.length !== 0 ? (
-        postList.map((post) => (
-          <PostElement key={post.id} post={post}></PostElement>
-        ))
+      {isLoading ? (
+        <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+      ) : postList.length !== 0 ? (
+        <>
+          {postList.map((post) => (
+            <PostElement key={post.id} post={post}></PostElement>
+          ))}
+          <PostMoreBox>
+            <PostMoreLink onClick={MoreButtonClick}>더보기</PostMoreLink>
+          </PostMoreBox>
+        </>
       ) : (
-        <div>잠시만 기다려 주세요</div>
+        <InfoTextBox>포스트가 존재하지 않습니다</InfoTextBox>
       )}
-      <PostMoreBox>
-        <PostMoreLink onClick={MoreButtonClick}>더보기</PostMoreLink>
-      </PostMoreBox>
     </PostBoxStyle>
   );
 };

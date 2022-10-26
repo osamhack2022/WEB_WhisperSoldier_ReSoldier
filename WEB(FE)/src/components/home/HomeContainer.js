@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
+import { TabletQuery } from "../../lib/Const";
+import { useAndSetForm } from "../../modules/useForm";
 import { ProcessInfoStore } from "../../store/SuccessStore";
 import {
   HomeContainerBox,
@@ -11,47 +13,24 @@ import {
   HomeSubContentBox,
 } from "../../styles/common/HomeContainerStyle";
 import { HomeContentAlert } from "../common/Alert";
+import SearchSection from "../common/SearchSection";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
 import PostBox from "./PostBox";
 
-const AlertTextBox = styled.div`
-  position: fixed;
-  z-index: 3;
-  font-size: 14px;
-  text-align: center;
-  top: 82px;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 14px 27px 8px 27px;
-  border-radius: 5px;
-  height: 48px;
-  width: 350px;
-  background-color: ${(props) =>
-    props.redcolor ? "rgba(166, 86, 70, 10)" : "rgba(65, 129, 177, 10)"};
-  opacity: ${(props) => (props.success ? "0.9" : "0")};
-  visibility: ${(props) => (props.success ? "visible" : "hidden")};
-  color: #ffffff;
-  transition: all 0.5s;
-  ${media.tablet`
-    padding: 14px 5px 16px 8px;
-    width: 250px;
-  `}
-  ${media.mobile`
-  top : 72px;
-  left : 5vw;
-  transform: inherit;
-  width: 90%;
-  `}
-`;
-
 const HomeContainer = () => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
+  const navigate = useNavigate();
   const [processInfo, setProcessInfoStore] = useRecoilState(ProcessInfoStore);
   const [alertState, setAlertState] = useState({
     writePost: false,
     deletePost: false,
   });
+  const [inputValue, setInputChange, onChange] = useAndSetForm({
+    searchWord: "",
+  });
 
+  //작업 상테 변경될때마다 업데이트
   useEffect(() => {
     if (processInfo.finishWritePost) {
       setAlertState((prev) => ({ ...prev, writePost: true }));
@@ -74,9 +53,17 @@ const HomeContainer = () => {
     }
     //eslint-disable-next-line
   }, [processInfo]);
+
   return (
     <HomeContainerBox>
       <HomeContentAlert alertState={alertState} />
+      {!isTablet && (
+        <SearchSection
+          navigate={navigate}
+          inputValue={inputValue}
+          onChange={onChange}
+        ></SearchSection>
+      )}
       <HomeMainContentBox>
         <HomeContentUpperBox>
           <BannerBox></BannerBox>

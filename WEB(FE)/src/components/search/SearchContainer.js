@@ -3,6 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { TabletQuery } from "../../lib/Const";
 import { useAndSetForm } from "../../modules/useForm";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { SideOptionContainer } from "../../styles/post/PostBoardStyle";
 import {
   SearchContainerBox,
@@ -30,6 +31,8 @@ const SearchContainer = ({
   setOrderDescOrAsc,
   isLoading,
   searchKeyword,
+  isShowMobileContent,
+  setShowMobileContent,
 }) => {
   const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
@@ -54,16 +57,20 @@ const SearchContainer = ({
           navigate={navigate}
           inputValue={inputValue}
           onChange={onChange}
-          searchpage="true"
         ></SearchSection>
       )}
+      {/* {(isShowMobileContent || isTablet) && (
+        
+      )} */}
+
       <SearchContentBox>
         <PostBoardTitleContainer
           onShowSideContainer={onShowSideContainer}
           isShowContainer={isShowContainer}
         >
-          '{currentSearchKeyword}' 검색 결과 : {countResult}중{" "}
-          {currentSearchCount}개의 고민 포스트
+          '{currentSearchKeyword}' 검색 결과
+          {/* : {countResult}중<br />
+          {currentSearchCount}개의 고민 포스트 */}
         </PostBoardTitleContainer>
         {!isTablet && isShowContainer && (
           <SideOptionContainer>
@@ -80,13 +87,15 @@ const SearchContainer = ({
         )}
 
         <PostBoardBodyContainer>
-          {searchResults.map((result) => (
-            <PostElement key={result.id} post={result}></PostElement>
-          ))}
-          {isLoading
-            ? "잠시만 기다려주세요"
-            : searchResults.length === 0 &&
-              `'${currentSearchKeyword}'에 대한 검색결과가 없습니다.`}
+          {isLoading ? (
+            <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+          ) : searchResults.length === 0 ? (
+            <InfoTextBox>{`'${currentSearchKeyword}'에 대한 검색결과가 없습니다.`}</InfoTextBox>
+          ) : (
+            searchResults.map((result) => (
+              <PostElement key={result.id} post={result}></PostElement>
+            ))
+          )}
         </PostBoardBodyContainer>
         {!isLoading && isNextResultExist && (
           <MoreLoadPostButton updatePostList={onMoreSearchPost}>
@@ -94,6 +103,7 @@ const SearchContainer = ({
           </MoreLoadPostButton>
         )}
       </SearchContentBox>
+
       {isTablet && (
         <SideOptionContainer>
           <SideOptionFormForPostBoard

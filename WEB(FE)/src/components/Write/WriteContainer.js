@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { GetTagQuery } from "../../modules/GetTagQuery";
 import { Alert, Grow } from "@mui/material";
 import styled from "styled-components";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const AlertBox = styled.div`
   position: fixed;
@@ -35,7 +36,6 @@ export const SideOptionForm = () => {
   const getTop20Tag = async () => {
     try {
       const top20TagSnapshot = await getDocs(
-        // GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
         GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
       );
       top20TagSnapshot.forEach((tag) => {
@@ -61,8 +61,8 @@ export const SideOptionForm = () => {
       <TagBoxTitleForSideBox>인기 고민 태그</TagBoxTitleForSideBox>
       <TagContentBox>
         {loading ? (
-          <div>잠시만 기다려 주새요</div>
-        ) : (
+          <InfoTextBox>잠시만 기다려 주새요</InfoTextBox>
+        ) : tagList.length !== 0 ? (
           <>
             {tagList.map((tag) => (
               <TagElementForSideBox key={tag.id}>
@@ -72,6 +72,8 @@ export const SideOptionForm = () => {
               </TagElementForSideBox>
             ))}
           </>
+        ) : (
+          <InfoTextBox>태그가 존재하지 않습니다.</InfoTextBox>
         )}
       </TagContentBox>
     </SideOptionFormBox>

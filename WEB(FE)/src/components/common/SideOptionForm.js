@@ -38,12 +38,6 @@ const SetSettingButton = ({ onClick, children }) => {
   );
 };
 
-// export const SideOptionForm = () => {
-//   return (
-//     <SideOptionFormBox>태그 입력 및 태그 추천 넣을 공간</SideOptionFormBox>
-//   );
-// };
-
 export const SideOptionFormForPostBoard = ({
   onSearchSubmit,
   setTimeDepthValue,

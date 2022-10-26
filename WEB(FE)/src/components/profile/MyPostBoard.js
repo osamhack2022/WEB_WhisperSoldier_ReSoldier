@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
@@ -16,6 +17,7 @@ const MyPostBoard = () => {
   const [postsCreated, setPostsCreated] = useState([]);
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const snapShotToCreatedPosts = (snapshot) => {
     if (snapshot) {
@@ -76,13 +78,16 @@ const MyPostBoard = () => {
         setIsNextItemExist(true);
       }
     }
+    setIsLoading(false);
   };
 
   const onNextMyPosts = async (e) => {
     e.preventDefault();
     myPostBoard(true);
   };
+
   useEffect(() => {
+    setPostsCreated([]);
     myPostBoard(false);
     // eslint-disable-next-line
   }, []);
@@ -91,10 +96,12 @@ const MyPostBoard = () => {
     <>
       <ProfileCotentBox>
         <SectionTitle>작성한 고민 글</SectionTitle>
-        {postsCreated.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : postsCreated.length !== 0 ? (
           postsCreated.map((post) => <PostElement key={post.id} post={post} />)
         ) : (
-          <div>잠시만 기다려 주세요</div>
+          <InfoTextBox>작성한 포스트가 존재하지 않습니다.</InfoTextBox>
         )}
       </ProfileCotentBox>
       {isNextItemExist && (

@@ -1,9 +1,7 @@
 import { Alert, Grow } from "@mui/material";
 import { useState } from "react";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
-import { ShowSearchContent } from "../../store/SearchStore";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
 import { SearchBar } from "./InputBox";
 
@@ -38,18 +36,16 @@ const AlertBox = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   ${media.mobile`
-  top : 112px;`}
+  top : 122px;`}
 `;
 
-const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
+const SearchSection = ({ navigate, inputValue, onChange }) => {
   const [isInputError, setIsInputError] = useState(false);
-  const setShowSearchContent = useSetRecoilState(ShowSearchContent);
 
   const onSearchClick = (e) => {
     e.preventDefault();
     if (inputValue.searchWord.length !== 0) {
       navigate(`/search?keyword=${inputValue.searchWord}`);
-      setShowSearchContent(true);
     } else {
       setIsInputError(true);
       setTimeout(() => {
@@ -62,7 +58,6 @@ const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
     if (e.key === "Enter") {
       if (inputValue.searchWord.length !== 0) {
         navigate(`/search?keyword=${inputValue.searchWord}`);
-        setShowSearchContent(true);
       } else {
         setIsInputError(true);
         setTimeout(() => {
@@ -74,7 +69,7 @@ const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
 
   return (
     <>
-      <SearchBox searchpage={searchpage ? "true" : "false"}>
+      <SearchBox>
         <SearchBar
           name="searchWord"
           type="search"
@@ -91,7 +86,7 @@ const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
       </SearchBox>
       <AlertBox>
         <Grow in={isInputError}>
-          <Alert severity="error">검색어를 입력해주세요</Alert>
+          <Alert severity="warning">검색어를 입력해주세요</Alert>
         </Grow>
       </AlertBox>
     </>

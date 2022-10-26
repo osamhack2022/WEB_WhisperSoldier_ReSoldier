@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
@@ -25,15 +26,15 @@ const MyCommentLikeBoard = () => {
   const [commentsLiked, setCommentsLiked] = useState([]);
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
-  console.log(commentsLiked);
-  const snapshotToLikedComments = (snapshot) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const snapshotToLikedComments = async (snapshot) => {
     if (snapshot) {
       snapshot.forEach(async (document) => {
         const commentLikeObj = {
           ...document.data(),
           id: document.id,
         };
-        console.log("commentLikeObj: ", commentLikeObj.associated_comment_id);
         const commentRef = doc(
           dbService,
           "Comment",
@@ -43,7 +44,7 @@ const MyCommentLikeBoard = () => {
         const commentLikedObj = {
           ...commentSnap.data(),
           id: commentSnap.id,
-          like_timestamp : document.data().created_timestamp,
+          like_timestamp: document.data().created_timestamp,
         };
         setCommentsLiked((prev) => [...prev, commentLikedObj]);
       });
@@ -60,7 +61,6 @@ const MyCommentLikeBoard = () => {
         setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
         const afterSnapshot = await getDocs(
-          // 이 부분을 getProfilePageQuery로 처리할 시 try-catch에서 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
           query(
             collection(dbService, "CommentLike"),
             orderBy("created_timestamp", "desc"),
@@ -97,6 +97,7 @@ const MyCommentLikeBoard = () => {
         setIsNextItemExist(true);
       }
     }
+    setIsLoading(false);
   };
 
   const onNextMyLikeComments = async (e) => {
@@ -105,28 +106,29 @@ const MyCommentLikeBoard = () => {
   };
 
   useEffect(() => {
+    setCommentsLiked([]);
     myCommentLikeBoard(false);
   }, []);
   return (
     <>
       <ProfileCotentBox>
         <SectionTitle>공감한 댓글</SectionTitle>
-        {commentsLiked.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : commentsLiked.length !== 0 ? (
           commentsLiked.map((comment) => (
-            //<div key={comment.id}>
-            //<Link to={`/post/${comment.associated_post_id}`}>
-            //{comment.comment_text}
-            //</Link>
-            //<hr />
-            //</div>
             <CommentElement key={comment.id} comment={comment}></CommentElement>
           ))
         ) : (
-          <div>잠시만 기다려 주세요</div>
+          <InfoTextBox>공감한 댓글이 존재하지 않습니다.</InfoTextBox>
         )}
       </ProfileCotentBox>
       {isNextItemExist && (
-        <MoreLoadPostButton updatePostList={onNextMyLikeComments} isMarginLeft={true} isComment={true}></MoreLoadPostButton>
+        <MoreLoadPostButton
+          updatePostList={onNextMyLikeComments}
+          isMarginLeft={true}
+          isComment={true}
+        ></MoreLoadPostButton>
       )}
     </>
   );

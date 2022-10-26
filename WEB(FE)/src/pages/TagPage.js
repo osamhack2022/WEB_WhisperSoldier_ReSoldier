@@ -6,15 +6,19 @@ import media from "../modules/MediaQuery";
 import CalTagCount from "../modules/CalTagCount";
 import MoreLoadPostButton from "../components/post/MoreLoadPostButton";
 import {
+  EraserSearchButton,
+  SearchTagButton,
   TagBox,
-  // TagBoxSubTitle,
   TagBoxTitle,
   TagBoxTitleBox,
   TagBoxTitleUpperContent,
+  TagContainerBox,
   TagCountBox,
   TagElementBox,
   TagElementContainer,
   TagNameBox,
+  TagSearchBox,
+  TagSearchInput,
 } from "../styles/page/TagPageStyle";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -28,107 +32,9 @@ import {
   PostBoardMoreButtonText,
   PostBoardMoreUpButton,
 } from "../components/post/PostBoardTilteContainer";
+import { InfoTextBox } from "../styles/admin/ReportedPostStyle";
 
-export const TagContainerBox = styled.div`
-  margin: 0px auto;
-  width: 960px;
-  ${media.smallDesktop`
-    margin: inherit;
-    width: inherit;
-    padding: 0px 10vw;
-  `}
-  ${media.mobile`
-    padding: 0px 5vw;
-  `}
-`;
-
-const TagSearchBox = styled.div`
-  position: absolute;
-  right: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  ${media.mobile`
-  position : inherit;
-  right: inherit;
-  margin-top: 10px;
-  width : 100%;
-  justify-content: flex-end;
-  `}
-`;
-
-const TagSearchInput = styled.input`
-  border: none;
-  margin: 0px 5px;
-  width: 120px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #bdbdbd;
-  background-color: #fbfbfb;
-  &:focus {
-    outline: none;
-  }
-  ${media.mobile`
-  flex-grow :1;
-  `}
-`;
-
-const SearchTagButton = styled.button`
-  position: relative;
-  padding: 0px 10px;
-  color: #ffffff;
-  height: 28px;
-  width: ${(props) => (props.error ? "120px" : "45px")};
-  background-color: ${(props) => (props.error ? "#a65646" : "#1a7541")};
-  font-weight: 500;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 25px;
-  cursor: ${(props) => (props.error ? "default" : "pointer")};
-  border: ${(props) =>
-    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
-  transition: all 0.5s;
-  white-space: nowrap;
-  &:hover {
-    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
-    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
-  }
-
-  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
-
-  @keyframes vibration {
-    from {
-      transform: rotate(1deg);
-    }
-    to {
-      transform: rotate(-1deg);
-    }
-  }
-`;
-
-const EraserSearchButton = styled.button`
-  position: relative;
-  padding: 0px 10px;
-  color: rgb(26, 117, 65);
-  height: 28px;
-  width: 55px;
-  font-weight: 500;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none;
-  background-color: rgba(0, 0, 0, 0);
-  margin-left: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  border-radius: 25px;
-  border: 1.5px solid rgb(26, 117, 65);
-  &:hover {
-    background: #0d552c;
-    color: #ffffff;
-  }
-`;
-const { collection, limit, orderBy, query, where } = dbFunction;
+const { collection, query, where } = dbFunction;
 
 const TagPage = () => {
   const navigate = useNavigate();
@@ -138,6 +44,7 @@ const TagPage = () => {
   const { getDocs } = dbFunction;
   const [tags, setTags] = useState([]);
   const [state, onChange] = useForm({ postTag: "" });
+  const [isLoading, setLoading] = useState(true);
 
   const [nextTagSnapshot, setNextTagSnapshot] = useState({});
   const [isNextTagExist, setIsNextTagExist] = useState(false);
@@ -159,7 +66,7 @@ const TagPage = () => {
     }
   };
 
-  const getFirst = async () => {
+  const getFirstTags = async () => {
     const firstSnapshot = await getDocs(
       GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
     );
@@ -190,9 +97,10 @@ const TagPage = () => {
         console.log("Error with getting tags!");
       }
     }
+    setLoading(false);
   };
 
-  const moveNext = async () => {
+  const moveNextTags = async () => {
     const querySnapshot = await getDocs(
       GetTagQuery(
         "Tag",
@@ -237,22 +145,6 @@ const TagPage = () => {
       )
     );
   };
-  // const onSearchSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (selectedTag !== "") {
-  //     setTagPosts([]);
-  //     getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
-  //   } else {
-  //     console.log("아직 태그를 선택하지 않았습니다.")
-  //   }
-  // };
-
-  // const selectTag = async (tagName) => {
-  //   setSelectedTag(tagName);
-  //   setTagPosts([]);
-  //   console.log("tagName: ", tagName);
-  //   getFirstTagPosts(tagName);
-  // };
 
   const MoveToTagBoard = (tagDocs) => {
     setTagInfo((prev) => ({
@@ -267,7 +159,7 @@ const TagPage = () => {
 
   useEffect(() => {
     setTags([]);
-    getFirst();
+    getFirstTags();
     //eslint-disable-next-line
   }, []);
 
@@ -307,7 +199,9 @@ const TagPage = () => {
         </TagBoxTitleBox>
 
         <TagElementContainer>
-          {tags.length !== 0 ? (
+          {isLoading ? (
+            <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+          ) : tags.length !== 0 ? (
             tags.map((tagdoc) => (
               <TagElementBox
                 key={tagdoc.id}
@@ -318,12 +212,12 @@ const TagPage = () => {
               </TagElementBox>
             ))
           ) : (
-            <div>잠시만 기다려 주세요</div>
+            <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
           )}
         </TagElementContainer>
       </TagBox>
       {isNextTagExist && (
-        <MoreLoadPostButton updatePostList={moveNext} tag="true">
+        <MoreLoadPostButton updatePostList={moveNextTags} tag="true">
           20개 더 보기
         </MoreLoadPostButton>
       )}

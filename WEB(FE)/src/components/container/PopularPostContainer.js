@@ -13,6 +13,7 @@ import {
   PostElementTime,
 } from "../../styles/post/PostElementStyle";
 import { Link } from "react-router-dom";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const PostElementBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
@@ -99,6 +100,7 @@ const PostElement = ({ post }) => {
 
 const RecentPostContainer = () => {
   const [postList, setPostList] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const { getDocs } = dbFunction;
 
   const getFivePost = async () => {
@@ -114,6 +116,7 @@ const RecentPostContainer = () => {
         setPostList((prev) => [...prev, postObj]);
       });
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -124,12 +127,14 @@ const RecentPostContainer = () => {
   return (
     <RecentPostBox>
       <PostBoxTitle>최신 고민 포스트</PostBoxTitle>
-      {postList.length !== 0 ? (
+      {isLoading ? (
+        <InfoTextBox>잠시만 기다려 주새요</InfoTextBox>
+      ) : postList.length !== 0 ? (
         postList.map((post) => (
           <PostElement key={post.id} post={post}></PostElement>
         ))
       ) : (
-        <div>잠시만 기다려 주세요</div>
+        <InfoTextBox>포스트가 존재하지 않습니다.</InfoTextBox>
       )}
     </RecentPostBox>
   );
