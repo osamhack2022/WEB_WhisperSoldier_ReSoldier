@@ -163,7 +163,7 @@ const TagPostBoardCotent = () => {
       setTagPosts([]);
       getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
     } else {
-      console.log("아직 태그를 선택하지 않았습니다.");
+      // console.log("아직 태그를 선택하지 않았습니다.");
     }
   };
 

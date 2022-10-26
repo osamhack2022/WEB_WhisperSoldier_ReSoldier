@@ -31,6 +31,7 @@ import { getSelectObj } from "../modules/GetSelectObj";
 import ReportedPost from "../components/admin/ReportedPost";
 import ReportedComment from "../components/admin/ReportedComment";
 import Logout from "../components/profile/Logout";
+import { Helmet } from "react-helmet-async";
 
 const ProfilePage = ({ isAdmin }) => {
   const [myProfileImg, setMyProfileImg] = useState(
@@ -154,103 +155,110 @@ const ProfilePage = ({ isAdmin }) => {
   }, [updateProfileInfo]);
 
   return (
-    <ProfileContainer>
-      {(isTablet || !showContent) && (
-        <PrimaryMenuBar>
-          <PrimaryMenuBox>
-            <MyInfoBox>
-              <MyInfoIconBox myProfileImg={myProfileImg}></MyInfoIconBox>
-              <MyInfoTextSection>
-                <MyInfoMainText>{userName} 님</MyInfoMainText>
-                <MyInfoText notTop={true}>
-                  {isAdmin
-                    ? "위솔 관리자님 환영합니다"
-                    : `위솔과 함께한지
+    <>
+      <Helmet>
+        <title>내 프로필 - Whisper Soldier</title>
+      </Helmet>
+      <ProfileContainer>
+        {(isTablet || !showContent) && (
+          <PrimaryMenuBar>
+            <PrimaryMenuBox>
+              <MyInfoBox>
+                <MyInfoIconBox myProfileImg={myProfileImg}></MyInfoIconBox>
+                <MyInfoTextSection>
+                  <MyInfoMainText>{userName} 님</MyInfoMainText>
+                  <MyInfoText notTop={true}>
+                    {isAdmin
+                      ? "위솔 관리자님 환영합니다"
+                      : `위솔과 함께한지
                   ${calTimeToDateString(currentSessionKey.createdAt)}
                   일째`}
-                </MyInfoText>
-              </MyInfoTextSection>
-            </MyInfoBox>
-          </PrimaryMenuBox>
-          <PrimaryMenuBox isNotTop={true}>
-            {isAdmin ? (
-              <>
-                <PrimaryMenuButton onClick={onProfile}>
-                  프로필 설정
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onReportedPost}>
-                  신고된 글
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onReportedComment} bottom={true}>
-                  신고된 댓글
-                </PrimaryMenuButton>
-              </>
-            ) : (
-              <>
-                <PrimaryMenuButton onClick={onProfile}>
-                  프로필 설정
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onMyPost}>
-                  작성한 글
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onMyComment}>
-                  작성한 댓글
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onLikePost}>
-                  공감한 글
-                </PrimaryMenuButton>
-                <PrimaryMenuButton onClick={onLikeComment} bottom={true}>
-                  공감한 댓글
-                </PrimaryMenuButton>
-              </>
-            )}
-          </PrimaryMenuBox>
-          <PrimaryMenuBox isNotTop={true}>
-            <Logout />
-          </PrimaryMenuBox>
-        </PrimaryMenuBar>
-      )}
-      {!isTablet && showContent && (
-        <SideButtonBox>
-          <BackButton goBack={BackMenu} isMobile={!isTablet} notRight={true}>
-            뒤로가기
-          </BackButton>
-        </SideButtonBox>
-      )}
+                  </MyInfoText>
+                </MyInfoTextSection>
+              </MyInfoBox>
+            </PrimaryMenuBox>
+            <PrimaryMenuBox isNotTop={true}>
+              {isAdmin ? (
+                <>
+                  <PrimaryMenuButton onClick={onProfile}>
+                    프로필 설정
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onReportedPost}>
+                    신고된 글
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onReportedComment} bottom={true}>
+                    신고된 댓글
+                  </PrimaryMenuButton>
+                </>
+              ) : (
+                <>
+                  <PrimaryMenuButton onClick={onProfile}>
+                    프로필 설정
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onMyPost}>
+                    작성한 글
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onMyComment}>
+                    작성한 댓글
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onLikePost}>
+                    공감한 글
+                  </PrimaryMenuButton>
+                  <PrimaryMenuButton onClick={onLikeComment} bottom={true}>
+                    공감한 댓글
+                  </PrimaryMenuButton>
+                </>
+              )}
+            </PrimaryMenuBox>
+            <PrimaryMenuBox isNotTop={true}>
+              <Logout />
+            </PrimaryMenuBox>
+          </PrimaryMenuBar>
+        )}
+        {!isTablet && showContent && (
+          <SideButtonBox>
+            <BackButton goBack={BackMenu} isMobile={!isTablet} notRight={true}>
+              뒤로가기
+            </BackButton>
+          </SideButtonBox>
+        )}
 
-      {(isTablet || showContent) &&
-        (!isAdmin ? (
-          <ProfileCotentContainer>
-            {currentPage.profile && (
-              <ChangeProfile
-                setUserName={setUserName}
-                setUpdateProfileInfo={setUpdateProfileInfo}
-                myProfileImg={myProfileImg}
-                setMyProfileImg={setMyProfileImg}
-              ></ChangeProfile>
-            )}
-            {currentPage.myPost && <MyPostBoard></MyPostBoard>}
-            {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
-            {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
-            {currentPage.likeComment && (
-              <MyCommentLikeBoard></MyCommentLikeBoard>
-            )}
-          </ProfileCotentContainer>
-        ) : (
-          <ProfileCotentContainer>
-            {currentPage.profile && (
-              <ChangeProfile
-                setUserName={setUserName}
-                setUpdateProfileInfo={setUpdateProfileInfo}
-                myProfileImg={myProfileImg}
-                setMyProfileImg={setMyProfileImg}
-              ></ChangeProfile>
-            )}
-            {currentPage.reportedPost && <ReportedPost></ReportedPost>}
-            {currentPage.reportedComment && <ReportedComment></ReportedComment>}
-          </ProfileCotentContainer>
-        ))}
-    </ProfileContainer>
+        {(isTablet || showContent) &&
+          (!isAdmin ? (
+            <ProfileCotentContainer>
+              {currentPage.profile && (
+                <ChangeProfile
+                  setUserName={setUserName}
+                  setUpdateProfileInfo={setUpdateProfileInfo}
+                  myProfileImg={myProfileImg}
+                  setMyProfileImg={setMyProfileImg}
+                ></ChangeProfile>
+              )}
+              {currentPage.myPost && <MyPostBoard></MyPostBoard>}
+              {currentPage.myComment && <MyCommentBoard></MyCommentBoard>}
+              {currentPage.likePost && <MyPostLikeBoard></MyPostLikeBoard>}
+              {currentPage.likeComment && (
+                <MyCommentLikeBoard></MyCommentLikeBoard>
+              )}
+            </ProfileCotentContainer>
+          ) : (
+            <ProfileCotentContainer>
+              {currentPage.profile && (
+                <ChangeProfile
+                  setUserName={setUserName}
+                  setUpdateProfileInfo={setUpdateProfileInfo}
+                  myProfileImg={myProfileImg}
+                  setMyProfileImg={setMyProfileImg}
+                ></ChangeProfile>
+              )}
+              {currentPage.reportedPost && <ReportedPost></ReportedPost>}
+              {currentPage.reportedComment && (
+                <ReportedComment></ReportedComment>
+              )}
+            </ProfileCotentContainer>
+          ))}
+      </ProfileContainer>
+    </>
   );
 };
 

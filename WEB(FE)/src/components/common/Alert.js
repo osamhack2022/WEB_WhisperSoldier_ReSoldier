@@ -19,6 +19,11 @@ export const PostContentAlert = ({ alertInfo }) => {
         </Grow>
       </AlertBox>
       <AlertBox>
+        <Grow in={alertInfo.tagOneLetterInput}>
+          <Alert severity="warning">태그를 두글자 이상 입력해주세요.</Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox>
         <Grow in={alertInfo.createComment}>
           <Alert severity="success">댓글을 작성했습니다.</Alert>
         </Grow>
@@ -168,6 +173,26 @@ export const ChatPageAlert = ({ successInfo }) => {
           <Alert severity="info">
             {successInfo.chatWithUserNickname}님과의 채팅을 차단해제했습니다
           </Alert>
+        </Grow>
+      </AlertBox>
+    </>
+  );
+};
+
+export const WritePostAlert = ({ alertInfo }) => {
+  return (
+    <>
+      <AlertBox>
+        <Grow in={alertInfo.impertinencePost}>
+          <Alert severity="warning">
+            본문에 부적절한 표현이 있습니다. <br />
+            건전한 상담 문화에 걸맞는 표현을 사용해주세요.
+          </Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox>
+        <Grow in={alertInfo.tagOneLetterInput}>
+          <Alert severity="warning">태그를 두글자 이상 입력해주세요.</Alert>
         </Grow>
       </AlertBox>
     </>

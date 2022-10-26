@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import {
   NotFoundContainer,
@@ -35,15 +36,20 @@ const NotFoundPage = ({ notLogin }) => {
     navigate("/", { replace: true });
   };
   return (
-    <NotFoundContainer notlogin={notLogin}>
-      <NotFoundInfoBlock notlogin={notLogin}>
-        <NotFoundIcon />
-        <NotFoundText>잘못된 접근입니다.</NotFoundText>
-        <MoveHomeButton onClick={onMoveHomeClick}>
-          {notLogin ? "처음으로 이동" : "홈으로 이동"}
-        </MoveHomeButton>
-      </NotFoundInfoBlock>
-    </NotFoundContainer>
+    <>
+      <Helmet>
+        <title>Not Found</title>
+      </Helmet>
+      <NotFoundContainer notlogin={notLogin}>
+        <NotFoundInfoBlock notlogin={notLogin}>
+          <NotFoundIcon />
+          <NotFoundText>잘못된 접근입니다.</NotFoundText>
+          <MoveHomeButton onClick={onMoveHomeClick}>
+            {notLogin ? "처음으로 이동" : "홈으로 이동"}
+          </MoveHomeButton>
+        </NotFoundInfoBlock>
+      </NotFoundContainer>
+    </>
   );
 };
 

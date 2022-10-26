@@ -268,8 +268,6 @@ const ChatContentBoard = ({
       return () => {
         unsubscribe();
       };
-    } else {
-      console.log("no selected chat pair");
     }
     //eslint-disable-next-line
   }, [currentChatPair]);

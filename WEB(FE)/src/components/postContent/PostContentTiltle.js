@@ -1,5 +1,5 @@
 import { Dialog, DialogActions } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkCurseWord from "../../modules/CheckCurseWord";
 import { PostContentErrorText } from "../../styles/PostContent/PostContentBodyStyle";
 import {
@@ -37,6 +37,11 @@ const PostContentTitle = ({
       setErrorEditInfo(true);
       setTimeout(() => {
         setErrorEditInfo(false);
+      }, 3000);
+    } else if (state.editTag.length === 1) {
+      setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: false }));
       }, 3000);
     } else {
       const curseWord = checkCurseWord(state.editContent);

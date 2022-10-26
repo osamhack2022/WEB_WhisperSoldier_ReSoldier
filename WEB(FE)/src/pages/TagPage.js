@@ -33,6 +33,7 @@ import {
   PostBoardMoreUpButton,
 } from "../components/post/PostBoardTilteContainer";
 import { InfoTextBox } from "../styles/admin/ReportedPostStyle";
+import { Helmet } from "react-helmet-async";
 
 const { collection, query, where } = dbFunction;
 
@@ -94,7 +95,7 @@ const TagPage = () => {
           setIsNextTagExist(true);
         }
       } catch (e) {
-        console.log("Error with getting tags!");
+        // console.log("Error with getting tags!");
       }
     }
     setLoading(false);
@@ -164,64 +165,66 @@ const TagPage = () => {
   }, []);
 
   return (
-    <TagContainerBox>
-      <TagBox>
-        <TagBoxTitleBox>
-          <TagBoxTitleUpperContent>
-            <TagBoxTitle>고민 태그</TagBoxTitle>
-            {/* <TagBoxSubTitle>
-            태그를 선택해 관련 포스트를 탐색해보세요!
-          </TagBoxSubTitle> */}
-            <PostBoardMoreButtonBox onClick={onShowSideContainer}>
-              <PostBoardMoreButtonText>태그 검색</PostBoardMoreButtonText>
-              {!isShowContainer ? (
-                <PostBoardMoreButton></PostBoardMoreButton>
-              ) : (
-                <PostBoardMoreUpButton></PostBoardMoreUpButton>
-              )}
-            </PostBoardMoreButtonBox>
-          </TagBoxTitleUpperContent>
+    <>
+      <Helmet>
+        <title>고민 태그 - Whisper Soldier</title>
+      </Helmet>
+      <TagContainerBox>
+        <TagBox>
+          <TagBoxTitleBox>
+            <TagBoxTitleUpperContent>
+              <TagBoxTitle>고민 태그</TagBoxTitle>
+              <PostBoardMoreButtonBox onClick={onShowSideContainer}>
+                <PostBoardMoreButtonText>태그 검색</PostBoardMoreButtonText>
+                {!isShowContainer ? (
+                  <PostBoardMoreButton></PostBoardMoreButton>
+                ) : (
+                  <PostBoardMoreUpButton></PostBoardMoreUpButton>
+                )}
+              </PostBoardMoreButtonBox>
+            </TagBoxTitleUpperContent>
 
-          {(isTablet || isShowContainer) && (
-            <TagSearchBox>
-              #
-              <TagSearchInput
-                name="postTag"
-                placeholder="태그를 검색해보세요!"
-                type="text"
-                value={state.postTag}
-                onChange={onChange}
-              ></TagSearchInput>
-              <SearchTagButton onClick={getSearchTag}>검색</SearchTagButton>
-              <EraserSearchButton>초기화</EraserSearchButton>
-            </TagSearchBox>
-          )}
-        </TagBoxTitleBox>
+            {(isTablet || isShowContainer) && (
+              <TagSearchBox>
+                #
+                <TagSearchInput
+                  name="postTag"
+                  placeholder="태그를 검색해보세요!"
+                  type="text"
+                  value={state.postTag}
+                  onChange={onChange}
+                ></TagSearchInput>
+                <SearchTagButton onClick={getSearchTag}>검색</SearchTagButton>
+                <EraserSearchButton>초기화</EraserSearchButton>
+              </TagSearchBox>
+            )}
+          </TagBoxTitleBox>
 
-        <TagElementContainer>
-          {isLoading ? (
-            <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
-          ) : tags.length !== 0 ? (
-            tags.map((tagdoc) => (
-              <TagElementBox
-                key={tagdoc.id}
-                onClick={() => MoveToTagBoard(tagdoc)}
-              >
-                <TagNameBox>#{tagdoc.tag_name}</TagNameBox>
-                <TagCountBox>{CalTagCount(tagdoc.tag_count)}</TagCountBox>
-              </TagElementBox>
-            ))
-          ) : (
-            <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
-          )}
-        </TagElementContainer>
-      </TagBox>
-      {isNextTagExist && (
-        <MoreLoadPostButton updatePostList={moveNextTags} tag="true">
-          20개 더 보기
-        </MoreLoadPostButton>
-      )}
-    </TagContainerBox>
+          <TagElementContainer>
+            {isLoading ? (
+              <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+            ) : tags.length !== 0 ? (
+              tags.map((tagdoc) => (
+                <TagElementBox
+                  key={tagdoc.id}
+                  onClick={() => MoveToTagBoard(tagdoc)}
+                >
+                  <TagNameBox>#{tagdoc.tag_name}</TagNameBox>
+                  <TagCountBox>{CalTagCount(tagdoc.tag_count)}</TagCountBox>
+                </TagElementBox>
+              ))
+            ) : (
+              <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
+            )}
+          </TagElementContainer>
+        </TagBox>
+        {isNextTagExist && (
+          <MoreLoadPostButton updatePostList={moveNextTags} tag="true">
+            20개 더 보기
+          </MoreLoadPostButton>
+        )}
+      </TagContainerBox>
+    </>
   );
 };
 

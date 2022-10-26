@@ -94,6 +94,11 @@ const WritePostHeader = ({
       setTimeout(() => {
         setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
       }, 3000);
+    } else if (state.postTag.length === 1) {
+      setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: false }));
+      }, 3000);
     } else {
       const curseWord = checkCurseWord(state.postContent);
       if (curseWord) {

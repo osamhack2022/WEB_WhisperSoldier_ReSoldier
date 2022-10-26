@@ -1,5 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useMediaQuery } from "react-responsive";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -101,37 +102,42 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <ChatContainer>
-      <ChatPageAlert successInfo={successInfo} />
-      {(isTablet || !showChatContent) && (
-        <ChatPairBoard
-          toggleShowChatContent={toggleShowChatContent}
-          setCurrentChatPair={setCurrentChatPair}
-          setCurrentChatWithUser={setCurrentChatWithUser}
-        ></ChatPairBoard>
-      )}
-      {!isTablet && showChatContent && (
-        <SideButtonBox>
-          <BackButton
-            goBack={toggleShowChatContent}
-            isMobile={!isTablet}
-            notRight={true}
-          >
-            뒤로가기
-          </BackButton>
-        </SideButtonBox>
-      )}
-      {(isTablet || showChatContent) && (
-        <ChatContentBoard
-          currentChatPair={currentChatPair}
-          setCurrentChatPair={setCurrentChatPair}
-          currentChatWithUser={currentChatWithUser}
-          setCurrentChatWithUser={setCurrentChatWithUser}
-          setSHowChatContent={setSHowChatContent}
-          setSuccessInfo={setSuccessInfo}
-        ></ChatContentBoard>
-      )}
-    </ChatContainer>
+    <>
+      <Helmet>
+        <title>채팅 - Whisper Soldier</title>
+      </Helmet>
+      <ChatContainer>
+        <ChatPageAlert successInfo={successInfo} />
+        {(isTablet || !showChatContent) && (
+          <ChatPairBoard
+            toggleShowChatContent={toggleShowChatContent}
+            setCurrentChatPair={setCurrentChatPair}
+            setCurrentChatWithUser={setCurrentChatWithUser}
+          ></ChatPairBoard>
+        )}
+        {!isTablet && showChatContent && (
+          <SideButtonBox>
+            <BackButton
+              goBack={toggleShowChatContent}
+              isMobile={!isTablet}
+              notRight={true}
+            >
+              뒤로가기
+            </BackButton>
+          </SideButtonBox>
+        )}
+        {(isTablet || showChatContent) && (
+          <ChatContentBoard
+            currentChatPair={currentChatPair}
+            setCurrentChatPair={setCurrentChatPair}
+            currentChatWithUser={currentChatWithUser}
+            setCurrentChatWithUser={setCurrentChatWithUser}
+            setSHowChatContent={setSHowChatContent}
+            setSuccessInfo={setSuccessInfo}
+          ></ChatContentBoard>
+        )}
+      </ChatContainer>
+    </>
   );
 };
 

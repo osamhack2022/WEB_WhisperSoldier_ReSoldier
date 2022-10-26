@@ -10,6 +10,7 @@ import { useForm } from "../modules/useForm";
 import { useState } from "react";
 import { dbFunction, dbService } from "../lib/FStore";
 import { adminSessionKey } from "../lib/Const";
+import { Helmet } from "react-helmet-async";
 
 const LoginPage = () => {
   const [state, onChange] = useForm({
@@ -41,7 +42,6 @@ const LoginPage = () => {
       const {
         currentUser: { emailVerified },
       } = authService;
-      console.log(emailVerified);
       if (authService.currentUser.emailVerified === false) {
         setLoginErrorInfo((prev) => ({
           ...prev,
@@ -68,7 +68,6 @@ const LoginPage = () => {
             doc(dbService, "User", authService.currentUser.uid)
           );
           if (currentUserInfo.data() && currentUserInfo.data().admin) {
-            console.log("관리자 계정");
             sessionStorage.setItem(
               adminSessionKey,
               JSON.stringify({ admin: true, id: authService.currentUser.uid })
@@ -109,8 +108,8 @@ const LoginPage = () => {
             errMsg: "잠시후에 다시 시도해주세요",
           }));
       }
-      console.log(e.code);
-      console.log(e.message);
+      // console.log(e.code);
+      // console.log(e.message);
 
       setTimeout(() => {
         setLoginErrorInfo((prev) => ({
@@ -123,7 +122,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>로그인 - Whisper Soldier</title>
+      </Helmet>
       <LoginForm
         onSubmit={onSubmit}
         onChange={onChange}
@@ -131,7 +133,7 @@ const LoginPage = () => {
         password={state.password}
         loginErrorInfo={loginErrorInfo}
       ></LoginForm>
-    </div>
+    </>
   );
 };
 

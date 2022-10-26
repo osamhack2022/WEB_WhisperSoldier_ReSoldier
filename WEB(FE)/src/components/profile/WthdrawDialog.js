@@ -148,11 +148,10 @@ const WthdrawConfirmDialog = ({
     }
     await deleteUser(authService.currentUser)
       .then(() => {
-        console.log("회원탈퇴 성공");
         setOpen(false);
         sessionStorage.removeItem(adminSessionKey);
-        // navigate("/", { replace: true });
-        window.location.reload();
+        navigate("/", { replace: true });
+        // window.location.reload();
       })
       .catch((error) => {
         console.log(error);

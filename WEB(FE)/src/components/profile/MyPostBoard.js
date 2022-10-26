@@ -34,7 +34,6 @@ const MyPostBoard = () => {
   const myPostBoard = async (next) => {
     if (next) {
       try {
-        console.log("showing next");
         const querySnapshot = await getDocs(
           getProfilePageQuery("WorryPost", "creator_id", 10, nextItemSnapShot)
         );

@@ -16,17 +16,8 @@ import { dbFunction } from "../../lib/FStore";
 import { useEffect, useState } from "react";
 import { GetTagQuery } from "../../modules/GetTagQuery";
 import { Alert, Grow } from "@mui/material";
-import styled from "styled-components";
 import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
-
-const AlertBox = styled.div`
-  position: fixed;
-  text-align: center;
-  z-index: 3;
-  top: 82px;
-  left: 50%;
-  transform: translate(-50%, 0);
-`;
+import { WritePostAlert } from "../common/Alert";
 
 export const SideOptionForm = () => {
   const { getDocs } = dbFunction;
@@ -81,7 +72,10 @@ export const SideOptionForm = () => {
 };
 
 const WriteContainer = () => {
-  const [alertInfo, setAlertInfo] = useState({ impertinencePost: false });
+  const [alertInfo, setAlertInfo] = useState({
+    impertinencePost: false,
+    tagOneLetterInput: false,
+  });
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
@@ -89,14 +83,7 @@ const WriteContainer = () => {
 
   return (
     <WriteContainerBox>
-      <AlertBox>
-        <Grow in={alertInfo.impertinencePost}>
-          <Alert severity="warning">
-            본문에 부적절한 표현이 있습니다. <br />
-            건전한 상담 문화에 걸맞는 표현을 사용해주세요.
-          </Alert>
-        </Grow>
-      </AlertBox>
+      <WritePostAlert alertInfo={alertInfo} />
       <MainContentContainer>
         <SideButtonBoxForWritePage>
           <BackButton goBack={goBack} notRight={true}>

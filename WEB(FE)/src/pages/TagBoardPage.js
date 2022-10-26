@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import TagPostBoardCotent from "../components/tag/SelectTagPostBoard";
 import media from "../modules/MediaQuery";
@@ -20,9 +21,14 @@ const TagBoardContainerBox = styled.div`
 
 const TagBoard = () => {
   return (
-    <TagBoardContainerBox>
-      <TagPostBoardCotent />
-    </TagBoardContainerBox>
+    <>
+      <Helmet>
+        <title>게시판 - Whisper Soldier</title>
+      </Helmet>
+      <TagBoardContainerBox>
+        <TagPostBoardCotent />
+      </TagBoardContainerBox>
+    </>
   );
 };
 

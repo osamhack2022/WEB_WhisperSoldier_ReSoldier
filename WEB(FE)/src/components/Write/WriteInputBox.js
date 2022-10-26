@@ -34,7 +34,7 @@ const WritePostBox = ({ navigate, setAlertInfo }) => {
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setProcessInfoStore = useSetRecoilState(ProcessInfoStore);
 
-  const onClick = async (e) => {
+  const onWritePostClick = async (e) => {
     e.preventDefault();
     try {
       await addDoc(collection(dbService, "WorryPost"), {
@@ -86,7 +86,7 @@ const WritePostBox = ({ navigate, setAlertInfo }) => {
   return (
     <InputBox>
       <WritePostHeader
-        onClick={onClick}
+        onClick={onWritePostClick}
         errorWritePostInfo={errorWritePostInfo.isError}
         state={state}
         setErrorWritePostInfo={setErrorWritePostInfo}

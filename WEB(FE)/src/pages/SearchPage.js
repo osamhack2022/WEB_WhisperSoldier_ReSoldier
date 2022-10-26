@@ -7,6 +7,7 @@ import getTimeDepth from "../modules/GetTimeDepth";
 import { IsUpdatePostList } from "../store/PostStore";
 import { ResultList, SearchInfo } from "../store/SearchStore";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -132,7 +133,6 @@ const SearchPage = () => {
     if (snapshot) {
       let count = 0;
       let totalCount = 0;
-      console.log(resultList.length);
 
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
@@ -217,24 +217,29 @@ const SearchPage = () => {
   }, [searchParams.get("keyword")]);
 
   return (
-    <SearchContainer
-      onSearchSubmit={onSearchSubmit}
-      currentSearchKeyword={currentSearchKeyword}
-      countResult={countResult}
-      currentSearchCount={currentSearchCount}
-      searchResults={searchResults}
-      isNextResultExist={isNextResultExist}
-      setTimeDepthValue={setTimeDepthValue}
-      timeDepthSelect={timeDepthSelect}
-      setTimeDepthSelect={setTimeDepthSelect}
-      isResultDesc={isResultDesc}
-      setIsResultDesc={setIsResultDesc}
-      setOrderDescOrAsc={setOrderDescOrAsc}
-      isLoading={isLoading}
-      searchKeyword={searchKeyword}
-      isShowMobileContent={isShowMobileContent}
-      setShowMobileContent={setShowMobileContent}
-    ></SearchContainer>
+    <>
+      <Helmet>
+        <title>검색 - Whisper Soldier</title>
+      </Helmet>
+      <SearchContainer
+        onSearchSubmit={onSearchSubmit}
+        currentSearchKeyword={currentSearchKeyword}
+        countResult={countResult}
+        currentSearchCount={currentSearchCount}
+        searchResults={searchResults}
+        isNextResultExist={isNextResultExist}
+        setTimeDepthValue={setTimeDepthValue}
+        timeDepthSelect={timeDepthSelect}
+        setTimeDepthSelect={setTimeDepthSelect}
+        isResultDesc={isResultDesc}
+        setIsResultDesc={setIsResultDesc}
+        setOrderDescOrAsc={setOrderDescOrAsc}
+        isLoading={isLoading}
+        searchKeyword={searchKeyword}
+        isShowMobileContent={isShowMobileContent}
+        setShowMobileContent={setShowMobileContent}
+      ></SearchContainer>
+    </>
   );
 };
 

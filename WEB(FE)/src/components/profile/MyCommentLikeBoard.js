@@ -54,7 +54,6 @@ const MyCommentLikeBoard = () => {
   const myCommentLikeBoard = async (next) => {
     if (next) {
       try {
-        console.log("showing next liked comments");
         const querySnapshot = await getDocs(
           getProfilePageQuery("CommentLike", "user_id", 10, nextItemSnapShot)
         );

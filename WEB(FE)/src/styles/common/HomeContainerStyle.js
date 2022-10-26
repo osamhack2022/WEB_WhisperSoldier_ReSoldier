@@ -49,9 +49,14 @@ export const HomeContentUpperBox = styled.div`
 
 export const HomeContentLowerBox = styled.div`
   margin-top: 10px;
-  display: flex;
-  flex-direction: row;
+  /* display: flex;
+  flex-direction: row; */
   transition: all 0.5s;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  grid-auto-flow: row dense;
   ${media.tablet`
   flex-wrap: wrap;
   `}

@@ -35,7 +35,6 @@ const MyCommentBoard = () => {
   const myCommentBoard = async (next) => {
     if (next) {
       try {
-        console.log("showing next comments created");
         const querySnapshot = await getDocs(
           getProfilePageQuery("Comment", "commentor_id", 10, nextItemSnapShot)
         );

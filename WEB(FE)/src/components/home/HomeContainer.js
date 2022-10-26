@@ -71,6 +71,8 @@ const HomeContainer = () => {
         <HomeContentLowerBox>
           <PostBox></PostBox>
           <PostBox isLikeDesc={true}></PostBox>
+          <PostBox></PostBox>
+          <PostBox isLikeDesc={true}></PostBox>
         </HomeContentLowerBox>
       </HomeMainContentBox>
       <HomeSubContentBox>

@@ -103,7 +103,6 @@ const PostBoard = () => {
         } else {
           setIsNextPostExist(true);
           setIsNextPostExistRecoil(true);
-          console.log("more post data exist!");
         }
       } catch (e) {
         console.log("error with get Post!");

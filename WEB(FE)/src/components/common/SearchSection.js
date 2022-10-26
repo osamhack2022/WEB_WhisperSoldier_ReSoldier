@@ -40,29 +40,46 @@ const AlertBox = styled.div`
 `;
 
 const SearchSection = ({ navigate, inputValue, onChange }) => {
-  const [isInputError, setIsInputError] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    blankInput: false,
+    oneLetterInput: false,
+  });
 
   const onSearchClick = (e) => {
     e.preventDefault();
-    if (inputValue.searchWord.length !== 0) {
+    if (inputValue.searchWord.length >= 2) {
       navigate(`/search?keyword=${inputValue.searchWord}`);
     } else {
-      setIsInputError(true);
-      setTimeout(() => {
-        setIsInputError(false);
-      }, 2000);
+      if (inputValue.searchWord.length === 0) {
+        setAlertInfo((prev) => ({ ...prev, blankInput: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, blankInput: false }));
+        }, 3000);
+      } else {
+        setAlertInfo((prev) => ({ ...prev, oneLetterInput: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, oneLetterInput: false }));
+        }, 3000);
+      }
     }
   };
 
   const onKeyUp = (e) => {
     if (e.key === "Enter") {
-      if (inputValue.searchWord.length !== 0) {
+      if (inputValue.searchWord.length >= 2) {
         navigate(`/search?keyword=${inputValue.searchWord}`);
       } else {
-        setIsInputError(true);
-        setTimeout(() => {
-          setIsInputError(false);
-        }, 2000);
+        if (inputValue.searchWord.length === 0) {
+          setAlertInfo((prev) => ({ ...prev, blankInput: true }));
+          setTimeout(() => {
+            setAlertInfo((prev) => ({ ...prev, blankInput: false }));
+          }, 3000);
+        } else {
+          setAlertInfo((prev) => ({ ...prev, oneLetterInput: true }));
+          setTimeout(() => {
+            setAlertInfo((prev) => ({ ...prev, oneLetterInput: false }));
+          }, 3000);
+        }
       }
     }
   };
@@ -85,8 +102,13 @@ const SearchSection = ({ navigate, inputValue, onChange }) => {
         </SearchButtonShape>
       </SearchBox>
       <AlertBox>
-        <Grow in={isInputError}>
+        <Grow in={alertInfo.blankInput}>
           <Alert severity="warning">검색어를 입력해주세요</Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox>
+        <Grow in={alertInfo.oneLetterInput}>
+          <Alert severity="warning">두글자 이상 입력해주세요</Alert>
         </Grow>
       </AlertBox>
     </>

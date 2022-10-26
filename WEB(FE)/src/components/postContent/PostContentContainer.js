@@ -50,7 +50,6 @@ const PostContentContainer = ({ isAdmin }) => {
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const location = useLocation();
-  // console.log(location);
 
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
@@ -81,6 +80,7 @@ const PostContentContainer = ({ isAdmin }) => {
     reportComment: false,
     impertinencePost: false,
     impertinenceComment: false,
+    tagOneLetterInput: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -206,8 +206,6 @@ const PostContentContainer = ({ isAdmin }) => {
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
-        post_report: contentObj.post_report,
-        post_rep_accept: contentObj.post_rep_accept,
       }));
       setState((prev) => ({
         ...prev,
@@ -218,7 +216,6 @@ const PostContentContainer = ({ isAdmin }) => {
       getPostUserNickname(contentObj);
     } else {
       setErrorPostInfo(true);
-      console.log("No such Document!");
     }
   };
 

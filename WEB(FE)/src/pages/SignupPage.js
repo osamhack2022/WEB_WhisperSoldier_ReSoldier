@@ -9,6 +9,7 @@ import SignUpForm from "../components/auth/SignUpForm";
 import { useForm } from "../modules/useForm";
 import EmailVerifiInfoForm from "../components/auth/EmailVerifiInfoForm";
 import { regex } from "../lib/Const";
+import { Helmet } from "react-helmet-async";
 
 const SignupPage = () => {
   const [state, onChange] = useForm({
@@ -63,19 +64,11 @@ const SignupPage = () => {
             isSuccess: true,
           }));
           sendEmailVerification(authService.currentUser)
-            .then(console.log("이메일 인증 메일 발송!"))
+            .then()
             .catch((error) => {
               console.log(error);
-              console.log(authService.currentUser);
             });
-          await signOut(authService).then(() => {
-            console.log("로그아웃 성공");
-          });
-          console.log(authService.currentUser);
-        } else {
-          console.log(
-            "이미 인증된 계정입니다. 로그인으로 가서 로그인 해보세요"
-          );
+          await signOut(authService);
         }
       } catch (error) {
         switch (error.code) {
@@ -107,8 +100,8 @@ const SignupPage = () => {
             break;
         }
 
-        console.log(error.code);
-        console.log(error.message);
+        // console.log(error.code);
+        // console.log(error.message);
 
         setTimeout(() => {
           setSignUpErrorInfo((prev) => ({
@@ -123,7 +116,10 @@ const SignupPage = () => {
   };
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>회원가입 - Whisper Soldier</title>
+      </Helmet>
       {signUpErrorInfo.isSuccess ? (
         <EmailVerifiInfoForm>환영합니다!</EmailVerifiInfoForm>
       ) : (
@@ -134,7 +130,7 @@ const SignupPage = () => {
           signUpErrorInfo={signUpErrorInfo}
         ></SignUpForm>
       )}
-    </div>
+    </>
   );
 };
 

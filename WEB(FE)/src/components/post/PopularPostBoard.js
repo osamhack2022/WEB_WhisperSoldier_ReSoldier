@@ -79,7 +79,7 @@ const PopularPostBoard = () => {
       // while문을 돌릴 수 있는 다른 로직을 찾는 중이다.
       let idx = -1;
       const rangeSnap = await getDocs(q);
-      console.log("Length of rangeSnap: ", rangeSnap.docs.length);
+      // console.log("Length of rangeSnap: ", rangeSnap.docs.length);
       /*처음 가져올때는, 전체 게시글이 10개 미만이 아닌 이상 무조건 10개를 가져오는게 맞다.*/
       if (rangeSnap) {
         //console.log("THE snapshot: ", rangeSnap.docs)
