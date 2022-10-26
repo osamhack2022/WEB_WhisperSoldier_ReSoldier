@@ -10,8 +10,7 @@ const AlertBox = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   ${media.mobile`
-  top: ${(props) => props.tag && "70px"};
-  
+  top: ${(props) => props.tag && "45px"};
   `}
 `;
 

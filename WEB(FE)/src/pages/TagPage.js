@@ -218,7 +218,10 @@ const TagPage = () => {
   };
 
   const onSearchClick = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
+
     if (state.postTag.length === 0) {
       setAlertInfo((prev) => ({ ...prev, blankInput: true }));
       setTimeout(() => {
@@ -250,6 +253,12 @@ const TagPage = () => {
       setShowSearchContent(false);
       setState((prev) => ({ ...prev, postTag: "" }));
       getFirstTags();
+    }
+  };
+
+  const onKeyUp = (e) => {
+    if (e.key === "Enter") {
+      onSearchClick();
     }
   };
 
@@ -290,6 +299,7 @@ const TagPage = () => {
                   type="text"
                   value={state.postTag}
                   onChange={onChange}
+                  onKeyUp={onKeyUp}
                 ></TagSearchInput>
                 <SearchTagButton onClick={onSearchClick}>검색</SearchTagButton>
                 <EraserSearchButton onClick={onClearSearchClick}>
