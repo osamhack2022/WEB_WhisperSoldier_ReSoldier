@@ -1,5 +1,6 @@
 import { Alert, Grow } from "@mui/material";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
@@ -31,7 +32,7 @@ const SearchBox = styled.div`
 
 const AlertBox = styled.div`
   position: fixed;
-  top: 84px;
+  top: ${(props) => (props.profile ? "96px" : "134px")};
   z-index: 3;
   left: 50%;
   transform: translate(-50%, 0);
@@ -40,6 +41,7 @@ const AlertBox = styled.div`
 `;
 
 const SearchSection = ({ navigate, inputValue, onChange }) => {
+  const location = useLocation();
   const [alertInfo, setAlertInfo] = useState({
     blankInput: false,
     oneLetterInput: false,
@@ -101,12 +103,12 @@ const SearchSection = ({ navigate, inputValue, onChange }) => {
           <SearchIcon></SearchIcon>
         </SearchButtonShape>
       </SearchBox>
-      <AlertBox>
+      <AlertBox profile={location.pathname === "/profile" ? "true" : "false"}>
         <Grow in={alertInfo.blankInput}>
           <Alert severity="warning">검색어를 입력해주세요</Alert>
         </Grow>
       </AlertBox>
-      <AlertBox>
+      <AlertBox profile={location.pathname === "/profile" ? "true" : "false"}>
         <Grow in={alertInfo.oneLetterInput}>
           <Alert severity="warning">두글자 이상 입력해주세요</Alert>
         </Grow>

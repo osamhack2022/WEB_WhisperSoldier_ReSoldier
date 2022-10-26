@@ -30,9 +30,11 @@ const NewestPostBoxStyle = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
-  width: 350px;
+  /* width: 350px; */
+  width: 100%;
+  margin-top: ${(props) => props.bottombox && "10px"};
   ${media.tablet`
-      width : 40%;
+      width : 100%;
     `}
   ${media.mobile`
   width : 100%
@@ -40,7 +42,7 @@ const NewestPostBoxStyle = styled.div`
 `;
 
 const PopularPostBoxStlye = styled.div`
-  margin-left: 10px;
+  /* margin-left: 10px; */
   position: relative;
   padding: 0px 20px 0px 20px;
   height: fit-content;
@@ -48,9 +50,11 @@ const PopularPostBoxStlye = styled.div`
   background-color: #fbfbfb;
   border-radius: 5px;
   border: 1px solid rgb(189, 189, 189);
-  width: 350px;
+  /* width: 350px; */
+  width: 100%;
+  margin-top: ${(props) => props.bottombox && "10px"};
   ${media.tablet`
-      width : 40%;
+      width : 100%;
     `}
   ${media.mobile`
      width : 100%;
@@ -58,11 +62,15 @@ const PopularPostBoxStlye = styled.div`
 `}
 `;
 
-export const PostBoxStyle = ({ isLikeDesc, children }) => {
+export const PostBoxStyle = ({ isLikeDesc, children, bottombox }) => {
   return isLikeDesc ? (
-    <PopularPostBoxStlye>{children}</PopularPostBoxStlye>
+    <PopularPostBoxStlye bottombox={bottombox ? "true" : "false"}>
+      {children}
+    </PopularPostBoxStlye>
   ) : (
-    <NewestPostBoxStyle>{children}</NewestPostBoxStyle>
+    <NewestPostBoxStyle bottombox={bottombox ? "true" : "false"}>
+      {children}
+    </NewestPostBoxStyle>
   );
 };
 

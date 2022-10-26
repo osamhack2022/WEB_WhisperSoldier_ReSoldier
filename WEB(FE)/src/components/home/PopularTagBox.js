@@ -17,9 +17,8 @@ import {
   TagElement,
 } from "../../styles/home/PopularTagBoxStyle";
 
-const TagBox = () => {
+const TagBox = ({ tagList, setTagList }) => {
   const { getDocs } = dbFunction;
-  const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const setTagInfo = useSetRecoilState(TagInfoStore);
@@ -59,7 +58,7 @@ const TagBox = () => {
   };
 
   useEffect(() => {
-    setTagList([]);
+    // setTagList([]);
     getTop20Tag();
     //eslint-disable-next-line
   }, []);

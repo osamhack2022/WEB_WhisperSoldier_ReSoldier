@@ -65,6 +65,16 @@ const PopularPostBoard = () => {
     useState(false);
   const [likePostCountIndex, setLikePostCountIndex] = useState(0);
 
+  const getFirstTenPopularPost = async () => {
+    const popularPostSnapshpot = await getDocs(
+      query(
+        collection(dbService, "WorryPost"),
+        orderBy("like_count", "desc"),
+        orderBy("created_timestamp", orderDescOrAsc)
+      )
+    );
+  };
+
   const getFirstTen = async () => {
     let q = query(
       collection(dbService, "WorryPost"),
@@ -73,7 +83,7 @@ const PopularPostBoard = () => {
       limit(10)
     );
 
-    setLikePostCountIndex(0); // setState는 비동기이기 때문에 while문같은 곳에 사용하면 안된다. 그러면 다른 방법을 찾아야된다.
+    // setLikePostCountIndex(0); // setState는 비동기이기 때문에 while문같은 곳에 사용하면 안된다. 그러면 다른 방법을 찾아야된다.
     //
     while (likePostCountIndex < 10) {
       // while문을 돌릴 수 있는 다른 로직을 찾는 중이다.

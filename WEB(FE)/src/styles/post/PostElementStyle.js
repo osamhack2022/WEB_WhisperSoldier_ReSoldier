@@ -18,7 +18,7 @@ export const PostElementTitle = styled(Link)`
   font-weight: 500;
   height: fit-content;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: ${(props) => (props.postbox === "true" ? "3" : "5")};
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

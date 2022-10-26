@@ -169,7 +169,7 @@ const TagPostBoardCotent = () => {
 
   const getTagInfo = async (id) => {
     const tagDocSnapShot = await getDoc(doc(dbService, "Tag", id));
-    if (tagDocSnapShot.exists()) {
+    if (tagDocSnapShot.exists() && tagDocSnapShot.data().tag_count >= 1) {
       const tagData = tagDocSnapShot.data();
       setSelectedTag(tagData.tag_name);
       getFirstTagPosts(tagData.tag_name, "desc", "week");

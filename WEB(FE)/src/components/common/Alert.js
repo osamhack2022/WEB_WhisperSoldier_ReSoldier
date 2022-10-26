@@ -1,13 +1,18 @@
 import { Alert, Grow } from "@mui/material";
 import styled from "styled-components";
+import media from "../../modules/MediaQuery";
 
 const AlertBox = styled.div`
   position: fixed;
   text-align: center;
   z-index: 3;
-  top: ${(props) => (props.profile ? "96px" : "134px")};
+  top: ${(props) => (props.profile ? "96px" : props.tag ? "90px" : "134px")};
   left: 50%;
   transform: translate(-50%, 0);
+  ${media.mobile`
+  top: ${(props) => props.tag && "70px"};
+  
+  `}
 `;
 
 export const PostContentAlert = ({ alertInfo }) => {
@@ -191,6 +196,23 @@ export const WritePostAlert = ({ alertInfo }) => {
         </Grow>
       </AlertBox>
       <AlertBox>
+        <Grow in={alertInfo.tagOneLetterInput}>
+          <Alert severity="warning">태그를 두글자 이상 입력해주세요.</Alert>
+        </Grow>
+      </AlertBox>
+    </>
+  );
+};
+
+export const TagPageAlert = ({ alertInfo }) => {
+  return (
+    <>
+      <AlertBox tag="true">
+        <Grow in={alertInfo.blankInput}>
+          <Alert severity="warning">태그를 입력해 주세요.</Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox tag="true">
         <Grow in={alertInfo.tagOneLetterInput}>
           <Alert severity="warning">태그를 두글자 이상 입력해주세요.</Alert>
         </Grow>

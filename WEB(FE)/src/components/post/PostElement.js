@@ -12,7 +12,7 @@ import {
   PostElementTitle,
 } from "../../styles/post/PostElementStyle";
 
-const PostElement = ({ post, nonAdditionalInfo, admin }) => {
+const PostElement = ({ post, nonAdditionalInfo, admin, postBox }) => {
   const setPostInfo = useSetRecoilState(PostInfo);
   const setCurrentScrollPos = useSetRecoilState(CurrentScrollPos);
 
@@ -34,7 +34,11 @@ const PostElement = ({ post, nonAdditionalInfo, admin }) => {
   };
   return (
     <PostElementBox>
-      <PostElementTitle to={`/post/${post.id}`} onClick={() => onClick(post)}>
+      <PostElementTitle
+        to={`/post/${post.id}`}
+        onClick={() => onClick(post)}
+        postbox={postBox === true ? "true" : "false"}
+      >
         {!post.post_rep_accept ? post.text : "블라인드된 포스트입니다."}
       </PostElementTitle>
 

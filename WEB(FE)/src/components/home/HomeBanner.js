@@ -10,7 +10,8 @@ import { BannerImgUrl } from "../../lib/Const";
 const BannerBoxStyle = styled.div`
   padding: 0px;
   position: relative;
-  width: 760px;
+  /* width: 760px; */
+  width: 100%;
   height: 240px;
 
   background-color: #fbfbfb;
@@ -19,7 +20,7 @@ const BannerBoxStyle = styled.div`
   border: 1px solid rgb(189, 189, 189);
   ${media.smallDesktop`
   width: 100%;
-  max-width : 710px;
+  /* max-width : 710px; */
   flex-grow: 1;
   `}
   ${media.tablet`
