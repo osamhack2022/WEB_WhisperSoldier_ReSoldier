@@ -17,7 +17,8 @@ const AlertBox = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   ${media.mobile`
-  top: ${(props) => (props.tag ? "45px" : props.write && "72px")};
+  top: ${(props) =>
+    props.tag ? "45px" : props.write ? "72px" : props.chatpage && "72px"};
   `}
 `;
 
@@ -165,21 +166,21 @@ export const UpdateProfileAlert = ({ successInfo }) => {
 export const ChatPageAlert = ({ successInfo }) => {
   return (
     <>
-      <AlertBox>
+      <AlertBox chatpage="true">
         <Grow in={successInfo.deleteProcess}>
           <Alert severity="info">
             {successInfo.chatWithUserNickname}님과의 채팅을 종료했습니다.
           </Alert>
         </Grow>
       </AlertBox>
-      <AlertBox>
+      <AlertBox chatpage="true">
         <Grow in={successInfo.blockProcess}>
           <Alert severity="error">
             {successInfo.chatWithUserNickname}님과의 채팅을 차단했습니다.
           </Alert>
         </Grow>
       </AlertBox>
-      <AlertBox>
+      <AlertBox chatpage="true">
         <Grow in={successInfo.unblockProcess}>
           <Alert severity="info">
             {successInfo.chatWithUserNickname}님과의 채팅을 차단해제했습니다

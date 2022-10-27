@@ -23,7 +23,7 @@ import WelcomePage from "./pages/WelcomePage";
 import LoadPage from "./pages/LoadPage";
 import TagBoard from "./pages/TagBoardPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import { Helmet } from "react-helmet-async";
+import MetaTag from "./components/common/MetaTag";
 
 const Body = styled.div`
   position: relative;
@@ -57,9 +57,7 @@ const App = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Whisper Soldier</title>
-      </Helmet>
+      <MetaTag />
       {/*각 페이지별 라우트 
     - 로그인 정보 객체가 있을 경우 서비스 화면, 없을 경우 로그인 관련 화면을 보여준다. */}
       {sessionObj ? (

@@ -29,7 +29,7 @@ const SignupPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (emailFormat.test(state.email) !== false) {
+    if (emailFormat.test(state.email) === false) {
       setSignUpErrorInfo((prev) => ({
         ...prev,
         isEmailError: true,
