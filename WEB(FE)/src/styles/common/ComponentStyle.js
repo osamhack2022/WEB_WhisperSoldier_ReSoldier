@@ -69,10 +69,9 @@ export const Button250px40px = styled.button`
       : "1px solid rgb(26, 117, 65)"};
   font-size: 14px;
   text-align: center;
-  letter-spacing: 0.56px;
   margin: 10px 0 10px;
   color: ${(props) => (props.isLoading ? "#003000" : "#ffffff")};
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.5s;
   cursor: ${(props) => !props.error && !props.isLoading && "pointer"};
   &:hover {

@@ -81,9 +81,9 @@ export const TagBoxTitleForSideBox = styled.div`
   width: 100%;
   margin-top: 5px;
   margin-bottom: 5px;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -97,9 +97,9 @@ export const TagElementForSideBox = styled.div`
   justify-content: space-between;
   padding: 4px 0px;
   text-decoration: none;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
   color: #3f3f3f;
-  font-weight: 500;
+  font-weight: 400;
   height: fit-content;
   ${media.tablet`
     flex : 1 1 40%;

@@ -24,7 +24,7 @@ width: 100%;
 
 export const ChatListTitleBox = styled.div`
   margin: 10px 0px 5px 0px;
-  padding: 13px 0px 17px 0px;
+  padding: 7px 0px 12px 0px;
   height: fit-content;
   border-bottom: 1px solid rgb(189, 189, 189);
   width: 100%;
@@ -34,7 +34,7 @@ export const ChatListTitleText = styled.div`
   font-size: 16px;
   text-align: center;
   font-weight: 600;
-  line-height: 1.2;
+  /* line-height: 1.2; */
 `;
 
 const LoadingBoxStyle = styled.div`

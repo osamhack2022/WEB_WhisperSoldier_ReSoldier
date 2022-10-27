@@ -52,7 +52,7 @@ export const ChatInfoTitle = styled.div`
 
 export const ChatInfoContent = styled.div`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;

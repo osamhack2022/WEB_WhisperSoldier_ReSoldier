@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   font-family: "IBM Plex Sans KR", sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
 }
 
@@ -17,7 +19,8 @@ body {
   overflow-y: scroll;
 }
 
-/* 커스텀 스크롤바
+/*
+커스텀 스크롤바
 body::-webkit-scrollbar {
   width: 10px;
 }
@@ -30,5 +33,4 @@ body::-webkit-scrollbar-thumb {
 
 body::-webkit-scrollbar-track {
   background: #c8c8c8;
-}
-*/
+} */

@@ -36,7 +36,7 @@ const PostBoxTitle = styled.div`
   margin-top: 5px;
   padding-bottom: 5px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -48,12 +48,12 @@ const PostElementTitle = styled(Link)`
   font-size: 13px;
   text-align: left;
   text-decoration: none;
-  letter-spacing: 0.56px;
+  /* letter-spacing: 0.56px; */
   color: #3f3f3f;
-  font-weight: 500;
+  font-weight: 400;
   height: fit-content;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

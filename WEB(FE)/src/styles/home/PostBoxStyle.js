@@ -75,12 +75,11 @@ export const PostBoxStyle = ({ isLikeDesc, children, bottombox }) => {
 };
 
 export const PostBoxTitle = styled.div`
-  font-size: 14x;
+  font-size: 15px;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
-  letter-spacing: 0.64px;
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -96,7 +95,7 @@ export const PostMoreBox = styled.div`
   letter-spacing: 0.64px;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 export const PostMoreLink = styled.div`
@@ -105,7 +104,6 @@ export const PostMoreLink = styled.div`
   width: fit-content;
   text-align: center;
   text-decoration: none;
-  letter-spacing: 0.64px;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 500;

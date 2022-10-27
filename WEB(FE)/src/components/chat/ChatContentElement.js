@@ -71,8 +71,8 @@ const ChatContentElementBox = styled.div`
 const ChatContentText = styled.div`
   padding: 10px;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
+  font-weight: 400;
+  /* line-height: 1.2; */
   white-space: pre-wrap;
 `;
 

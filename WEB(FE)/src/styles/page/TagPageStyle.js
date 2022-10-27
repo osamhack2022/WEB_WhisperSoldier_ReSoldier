@@ -55,7 +55,6 @@ export const TagBoxTitleUpperContent = styled.div`
 export const TagBoxTitle = styled.div`
   font-size: 16px;
   text-align: left;
-  letter-spacing: 0.64px;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 600;
@@ -97,7 +96,7 @@ export const TagNameBox = styled.div`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   transition: all 0.3s;
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 export const TagCountBox = styled.div`
@@ -122,7 +121,7 @@ export const TagElementBox = styled.div`
   `};
   &:hover ${TagNameBox} {
     color: #0d552c;
-    font-weight: 600;
+    font-weight: bold;
   }
 `;
 

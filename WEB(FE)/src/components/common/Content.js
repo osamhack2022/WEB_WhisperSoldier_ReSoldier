@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 const MsgBlock = styled.div`
-  font-size: 14px;
+  font-size: 15px;
   line-height: 2.14;
   text-align: center;
-  letter-spacing: 0.56px;
   color: #333333;
-  font-weight: 700;
+  font-weight: 500;
   height: 60px;
   width: 309px;
   margin: 10px 0px;

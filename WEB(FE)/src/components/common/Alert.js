@@ -6,11 +6,18 @@ const AlertBox = styled.div`
   position: fixed;
   text-align: center;
   z-index: 3;
-  top: ${(props) => (props.profile ? "96px" : props.tag ? "90px" : "134px")};
+  top: ${(props) =>
+    props.profile
+      ? "96px"
+      : props.tag
+      ? "90px"
+      : props.write
+      ? "96px"
+      : "134px"};
   left: 50%;
   transform: translate(-50%, 0);
   ${media.mobile`
-  top: ${(props) => props.tag && "45px"};
+  top: ${(props) => (props.tag ? "45px" : props.write && "72px")};
   `}
 `;
 
@@ -186,7 +193,7 @@ export const ChatPageAlert = ({ successInfo }) => {
 export const WritePostAlert = ({ alertInfo }) => {
   return (
     <>
-      <AlertBox>
+      <AlertBox write="true">
         <Grow in={alertInfo.impertinencePost}>
           <Alert severity="warning">
             본문에 부적절한 표현이 있습니다. <br />
@@ -194,7 +201,7 @@ export const WritePostAlert = ({ alertInfo }) => {
           </Alert>
         </Grow>
       </AlertBox>
-      <AlertBox>
+      <AlertBox write="true">
         <Grow in={alertInfo.tagOneLetterInput}>
           <Alert severity="warning">태그를 두글자 이상 입력해주세요.</Alert>
         </Grow>

@@ -19,7 +19,7 @@ import { updateDoc } from "firebase/firestore";
 export const ConfirmButton = styled(Button)({
   color: "#0d552c",
   fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "400",
+  fontWeight: "500",
   fontSize: "14px",
   textAlign: "center",
   "&:hover": {
@@ -31,7 +31,7 @@ export const ConfirmButton = styled(Button)({
 export const CancelButton = styled(Button)({
   color: "#a65646",
   fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "400",
+  fontWeight: "500",
   fontSize: "14px",
   textAlign: "center",
   "&:hover": {

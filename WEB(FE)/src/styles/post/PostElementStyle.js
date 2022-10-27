@@ -13,9 +13,8 @@ export const PostElementTitle = styled(Link)`
   font-size: 14px;
   text-align: left;
   text-decoration: none;
-  letter-spacing: 0.56px;
   color: #3f3f3f;
-  font-weight: 500;
+  font-weight: 400;
   height: fit-content;
   display: -webkit-box;
   -webkit-line-clamp: ${(props) => (props.postbox === "true" ? "3" : "5")};
@@ -28,7 +27,6 @@ export const PostElementTitle = styled(Link)`
 export const PostElementTime = styled.div`
   font-size: 12px;
   text-align: left;
-  letter-spacing: 0.48px;
   color: #bdbdbd;
   font-weight: 400;
 `;
@@ -45,7 +43,6 @@ const PostElementLikeIcon = styled(AiOutlineHeart)`
 const PostElementInfoText = styled.div`
   font-size: 12px;
   text-align: left;
-  letter-spacing: 0.48px;
   color: #4f4f4f;
   font-weight: 400;
 `;

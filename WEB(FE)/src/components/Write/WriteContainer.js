@@ -15,7 +15,6 @@ import { TagContentBox } from "../../styles/home/PopularTagBoxStyle";
 import { dbFunction } from "../../lib/FStore";
 import { useEffect, useState } from "react";
 import { GetTagQuery } from "../../modules/GetTagQuery";
-import { Alert, Grow } from "@mui/material";
 import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { WritePostAlert } from "../common/Alert";
 
