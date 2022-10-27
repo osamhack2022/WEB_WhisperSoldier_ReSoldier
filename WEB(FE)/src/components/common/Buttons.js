@@ -23,10 +23,9 @@ export const AuthButton = styled.button`
   border: 2px solid rgb(26, 117, 65);
   font-size: 14px;
   text-align: center;
-  letter-spacing: 0.56px;
   margin: 10px 0 10px;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.5s;
   &:hover {
     background: #0d552c;
@@ -43,9 +42,8 @@ export const AuthMainLink = styled(Link)`
   font-size: 14px;
   line-height: 48px;
   text-align: center;
-  letter-spacing: 0.56px;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   transition: all 0.5s;
   &:hover {
@@ -63,9 +61,8 @@ export const AuthLoadingButton = styled.div`
   font-size: 14px;
   line-height: 48px;
   text-align: center;
-  letter-spacing: 0.56px;
   color: #003000;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 export const AuthErrorButton = styled.div`
@@ -78,9 +75,8 @@ export const AuthErrorButton = styled.div`
   font-size: 14px;
   line-height: 48px;
   text-align: center;
-  letter-spacing: 0.56px;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 500;
   animation: vibration 0.1s 5;
 
   @keyframes vibration {
@@ -105,9 +101,8 @@ export const AuthSubLink = styled(Link)`
   text-decoration: none;
   font-size: 14px;
   text-align: center;
-  letter-spacing: 0.56px;
   color: #3f3f3f;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.5s;
   &:hover {
     background: #a6a6a6;
@@ -130,7 +125,6 @@ const FindPasswordButtonBlock = styled.div`
 const FindPasswordButtonLink = styled(Link)`
   font-size: 12px;
   text-align: center;
-  letter-spacing: 0.48px;
   text-decoration: none;
   color: #4f4f4f;
   font-weight: 600;
@@ -318,11 +312,11 @@ export const ChatButton = () => {
 const CommonButtonText = styled.div`
   font-size: ${(props) => (props.mobile ? "10px" : "12px")};
   text-align: center;
-  letter-spacing: 0.48px;
+  /* letter-spacing: 0.48px; */
   text-decoration: none;
   color: #4f4f4f;
   transition: all 0.3s;
-  font-weight: 600;
+  font-weight: bold;
 `;
 
 const BackButtonImg = styled(IoMdArrowBack)`

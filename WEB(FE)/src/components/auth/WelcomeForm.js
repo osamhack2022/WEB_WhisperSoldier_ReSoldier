@@ -105,7 +105,6 @@ const WelcomeForm = () => {
   const navigate = useNavigate();
 
   const onFileChange = (e) => {
-    console.log(e.target.files);
     const {
       target: { files },
     } = e;
@@ -141,14 +140,9 @@ const WelcomeForm = () => {
           );
 
           try {
-            await uploadString(attachmentRef, profileImg, "data_url").then(
-              (snapshot) => {
-                console.log("Uploaded a data_url string!");
-              }
-            );
+            await uploadString(attachmentRef, profileImg, "data_url");
             const profileImgUrl = await getDownloadURL(attachmentRef);
 
-            console.log("success upload image!");
             updateProfile(authService.currentUser, {
               photoURL: profileImgUrl,
             })
@@ -181,15 +175,12 @@ const WelcomeForm = () => {
           ),
           { nickname: inputValue.nickname, admin: false, profileImg: "" }
         );
-        console.log(authService.currentUser);
 
         updateProfile(authService.currentUser, {
           displayName: inputValue.nickname,
         })
           .then(() => {
-            console.log("닉네임 설정 성공");
             navigate("/", { replace: true });
-            console.log("WelcomeForm.js 에서 새로고침");
             window.location.reload();
           })
           .catch((error) => {
@@ -217,11 +208,24 @@ const WelcomeForm = () => {
 
   const onGetRandomNickname = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      "https://nickname.hwanmoo.kr/?format=json&count=1"
-    );
-    console.log(response.data.words[0]);
-    setInputValue((prev) => ({ ...prev, nickname: response.data.words[0] }));
+
+    const getRandomNickname = {
+      method: "GET",
+      url: "https://proxy.cors.sh/https://nickname.hwanmoo.kr/",
+      params: { format: "json", count: "2" },
+    };
+
+    axios
+      .request(getRandomNickname)
+      .then(function (response) {
+        setInputValue((prev) => ({
+          ...prev,
+          nickname: response.data.words[0],
+        }));
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   return (

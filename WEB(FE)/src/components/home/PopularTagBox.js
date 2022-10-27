@@ -5,6 +5,7 @@ import { dbFunction } from "../../lib/FStore";
 import CalTagCount from "../../modules/CalTagCount";
 import { GetTagQuery } from "../../modules/GetTagQuery";
 import { TagInfoStore } from "../../store/TagStore";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import {
   MoreTagButton,
   MoreTagButtonText,
@@ -16,9 +17,8 @@ import {
   TagElement,
 } from "../../styles/home/PopularTagBoxStyle";
 
-const TagBox = () => {
+const TagBox = ({ tagList, setTagList }) => {
   const { getDocs } = dbFunction;
-  const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const setTagInfo = useSetRecoilState(TagInfoStore);
@@ -55,11 +55,10 @@ const TagBox = () => {
       count: tagDocs.tag_count,
     }));
     navigate(`/tag/${tagDocs.id}`);
-    //to={`/tag/${tagdoc.id}`}
   };
 
   useEffect(() => {
-    setTagList([]);
+    // setTagList([]);
     getTop20Tag();
     //eslint-disable-next-line
   }, []);
@@ -69,8 +68,8 @@ const TagBox = () => {
       <TagBoxTitle>고민 태그</TagBoxTitle>
       <TagContentBox>
         {loading ? (
-          <div>잠시만 기다려 주새요</div>
-        ) : (
+          <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+        ) : tagList.length !== 0 ? (
           <>
             {tagList.map((tag) => (
               <TagElement key={tag.id} onClick={() => MoveToTagBoard(tag)}>
@@ -84,6 +83,8 @@ const TagBox = () => {
               </MoreTagButtonText>
             </MoreTagButton>
           </>
+        ) : (
+          <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
         )}
       </TagContentBox>
     </TagBoxStyle>

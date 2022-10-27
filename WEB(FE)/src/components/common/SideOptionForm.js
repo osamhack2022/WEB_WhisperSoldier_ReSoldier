@@ -38,12 +38,6 @@ const SetSettingButton = ({ onClick, children }) => {
   );
 };
 
-// export const SideOptionForm = () => {
-//   return (
-//     <SideOptionFormBox>태그 입력 및 태그 추천 넣을 공간</SideOptionFormBox>
-//   );
-// };
-
 export const SideOptionFormForPostBoard = ({
   onSearchSubmit,
   setTimeDepthValue,
@@ -52,6 +46,7 @@ export const SideOptionFormForPostBoard = ({
   setOrderDescOrAsc,
   isResultDesc,
   timeDepthSelect,
+  popularpost,
 }) => {
   //const isResultDesc = true;
   const onSelectWeek = () => {
@@ -127,17 +122,20 @@ export const SideOptionFormForPostBoard = ({
   return (
     <SideOptionFormBox>
       <SideOptionTitleBox>검색 설정</SideOptionTitleBox>
-      <OptionBox>
-        <OptionTitle>정렬</OptionTitle>
-        <OptionContentBox>
-          <OptionContent selected={!isResultDesc} onClick={onSelectAsc}>
-            오래된 순
-          </OptionContent>
-          <OptionContent selected={isResultDesc} onClick={onSelectDesc}>
-            최신 순
-          </OptionContent>
-        </OptionContentBox>
-      </OptionBox>
+      {!popularpost && (
+        <OptionBox>
+          <OptionTitle>정렬</OptionTitle>
+          <OptionContentBox>
+            <OptionContent selected={!isResultDesc} onClick={onSelectAsc}>
+              오래된 순
+            </OptionContent>
+            <OptionContent selected={isResultDesc} onClick={onSelectDesc}>
+              최신 순
+            </OptionContent>
+          </OptionContentBox>
+        </OptionBox>
+      )}
+
       <OptionBox>
         <OptionTitle>기간</OptionTitle>
         <OptionContentBox>

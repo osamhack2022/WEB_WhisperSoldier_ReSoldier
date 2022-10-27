@@ -19,12 +19,11 @@ export const TagBoxStyle = styled.div`
 `;
 
 export const TagBoxTitle = styled.div`
-  font-size: 16px;
+  font-size: 15px;
   width: 100%;
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
-  letter-spacing: 0.64px;
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -67,6 +66,7 @@ export const TagElement = styled.div`
 export const TagContentLeft = styled.div`
   width: fit-content;
   font-size: 14px;
+  font-weight: 400;
   text-align: left;
   overflow: hidden;
   display: -webkit-box;
@@ -78,6 +78,7 @@ export const TagContentLeft = styled.div`
 export const TagContentRight = styled.div`
   width: fit-content;
   font-size: 12px;
+  font-weight: 400;
   text-align: right;
   color: #bdbdbd;
 `;
@@ -102,7 +103,7 @@ export const MoreTagButtonText = styled.div`
   text-decoration: none;
   letter-spacing: 0.64px;
   color: #000000;
-  font-weight: 500;
+  font-weight: 400;
   transition: all 0.5s;
   cursor: pointer;
   &:hover {

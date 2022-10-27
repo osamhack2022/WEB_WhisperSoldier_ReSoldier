@@ -7,13 +7,9 @@ import getTimeDepth from "../modules/GetTimeDepth";
 import { IsUpdatePostList } from "../store/PostStore";
 import { ResultList, SearchInfo } from "../store/SearchStore";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
-import { TabletQuery } from "../lib/Const";
-// import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const SearchPage = () => {
-  // const location = useLocation();
-  const isTablet = useMediaQuery({ query: TabletQuery });
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -23,6 +19,7 @@ const SearchPage = () => {
     useRecoilState(IsUpdatePostList);
 
   const [isLoading, setLoading] = useState(true);
+  const [isShowMobileContent, setShowMobileContent] = useState(false);
 
   const [currentSearchKeyword, setCurrentSearchKeyword] = useState("");
 
@@ -43,21 +40,15 @@ const SearchPage = () => {
   const [isResultDesc, setIsResultDesc] = useState(true);
   const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
 
-  const searchKeyword = async (
-    countSearchPost,
-    firstSearch
-    // updateKeyword = null
-  ) => {
+  const searchKeyword = async (countSearchPost, firstSearch) => {
     let snapshot;
     const keyword = searchParams.get("keyword");
 
-    // 검색 후 첫 문서 탐색은 처음부터 탐색한다
     if (firstSearch) {
       snapshot = await getDocs(
         getSearchQuery(false, orderDescOrAsc, getTimeDepth(timeDepthValue))
       );
     } else {
-      // 마지막 탐색 시점부터 탐색한다.
       snapshot = await getDocs(
         getSearchQuery(
           false,
@@ -68,7 +59,6 @@ const SearchPage = () => {
       );
     }
 
-    // 문서가 존재하는 경우
     if (snapshot && snapshot.docs.length !== 0) {
       let count = 0;
       let totalCount = 0;
@@ -141,10 +131,8 @@ const SearchPage = () => {
     );
 
     if (snapshot) {
-      console.log("recover snapshot");
       let count = 0;
       let totalCount = 0;
-      console.log(resultList.length);
 
       for (let i = 0; i < snapshot.docs.length; i++) {
         const postObj = { ...snapshot.docs[i].data(), id: snapshot.docs[i].id };
@@ -193,63 +181,65 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    if (isTablet) {
-      const currentKeyword = searchParams.get("keyword");
+    setLoading(true);
 
-      if (currentKeyword) {
-        //param 값 (키워드)에 대해 포스트 검색
-        if (
-          searchInfo.searchKeyword === currentKeyword &&
-          resultList.length > 0 &&
-          !isUpdatePostList.searchPage
-        ) {
-          setCurrentSearchCount(searchInfo.currentCountPosts);
-          setCurrentSearchKeyword(currentKeyword);
-          setTimeDepthValue(searchInfo.timeSettingValue);
-          setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
-          setIsResultDesc(searchInfo.descSettingValue);
-          setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
-          setSearchResults(resultList);
-          setCountResult(searchInfo.countResultPosts);
-          recoverSnapshot();
-        } else {
-          setSearchResults([]);
-          setResultList([]);
-          setCurrentSearchCount(0);
-          searchKeyword(10, true);
-          setCurrentSearchKeyword(currentKeyword);
-          setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
-        }
+    const currentKeyword = searchParams.get("keyword");
+
+    if (currentKeyword) {
+      //param 값 (키워드)에 대해 포스트 검색
+      if (
+        searchInfo.searchKeyword === currentKeyword &&
+        resultList.length > 0 &&
+        !isUpdatePostList.searchPage
+      ) {
+        setCurrentSearchCount(searchInfo.currentCountPosts);
+        setCurrentSearchKeyword(currentKeyword);
+        setTimeDepthValue(searchInfo.timeSettingValue);
+        setTimeDepthSelect(getTimeDepthObj(searchInfo.timeSettingValue));
+        setIsResultDesc(searchInfo.descSettingValue);
+        setOrderDescOrAsc(searchInfo.descSettingValue ? "desc" : "asc");
+        setSearchResults(resultList);
+        setCountResult(searchInfo.countResultPosts);
+        recoverSnapshot();
       } else {
-        // param 값이 null인 경우 오류 페이지로 이동
-        navigate("/notfound", { replace: true });
+        setSearchResults([]);
+        setResultList([]);
+        setCurrentSearchCount(0);
+        searchKeyword(10, true);
+        setCurrentSearchKeyword(currentKeyword);
+        setIsUpdatePostList((prev) => ({ ...prev, searchPage: false }));
       }
+    } else {
+      // param 값이 null인 경우 오류 페이지로 이동
+      navigate("/notfound", { replace: true });
     }
     // eslint-disable-next-line
   }, [searchParams.get("keyword")]);
 
-  useEffect(() => {
-    if (!isTablet) {
-    }
-  }, []);
-
   return (
-    <SearchContainer
-      onSearchSubmit={onSearchSubmit}
-      currentSearchKeyword={currentSearchKeyword}
-      countResult={countResult}
-      currentSearchCount={currentSearchCount}
-      searchResults={searchResults}
-      isNextResultExist={isNextResultExist}
-      setTimeDepthValue={setTimeDepthValue}
-      timeDepthSelect={timeDepthSelect}
-      setTimeDepthSelect={setTimeDepthSelect}
-      isResultDesc={isResultDesc}
-      setIsResultDesc={setIsResultDesc}
-      setOrderDescOrAsc={setOrderDescOrAsc}
-      isLoading={isLoading}
-      searchKeyword={searchKeyword}
-    ></SearchContainer>
+    <>
+      <Helmet>
+        <title>검색 - Whisper Soldier</title>
+      </Helmet>
+      <SearchContainer
+        onSearchSubmit={onSearchSubmit}
+        currentSearchKeyword={currentSearchKeyword}
+        countResult={countResult}
+        currentSearchCount={currentSearchCount}
+        searchResults={searchResults}
+        isNextResultExist={isNextResultExist}
+        setTimeDepthValue={setTimeDepthValue}
+        timeDepthSelect={timeDepthSelect}
+        setTimeDepthSelect={setTimeDepthSelect}
+        isResultDesc={isResultDesc}
+        setIsResultDesc={setIsResultDesc}
+        setOrderDescOrAsc={setOrderDescOrAsc}
+        isLoading={isLoading}
+        searchKeyword={searchKeyword}
+        isShowMobileContent={isShowMobileContent}
+        setShowMobileContent={setShowMobileContent}
+      ></SearchContainer>
+    </>
   );
 };
 

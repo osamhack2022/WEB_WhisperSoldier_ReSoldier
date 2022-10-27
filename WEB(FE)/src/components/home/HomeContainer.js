@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
-import media from "../../modules/MediaQuery";
+import { TabletQuery } from "../../lib/Const";
+import { useAndSetForm } from "../../modules/useForm";
 import { ProcessInfoStore } from "../../store/SuccessStore";
 import {
   HomeContainerBox,
@@ -10,48 +12,29 @@ import {
   HomeMainContentBox,
   HomeSubContentBox,
 } from "../../styles/common/HomeContainerStyle";
+import { HomeContentAlert } from "../common/Alert";
+import SearchSection from "../common/SearchSection";
 import BannerBox from "./HomeBanner";
 import TagBox from "./PopularTagBox";
 import PostBox from "./PostBox";
-
-const AlertTextBox = styled.div`
-  position: fixed;
-  z-index: 3;
-  font-size: 14px;
-  text-align: center;
-  top: 82px;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 14px 27px 8px 27px;
-  border-radius: 5px;
-  height: 48px;
-  width: 350px;
-  background-color: ${(props) =>
-    props.redcolor ? "rgba(166, 86, 70, 10)" : "rgba(65, 129, 177, 10)"};
-  opacity: ${(props) => (props.success ? "0.9" : "0")};
-  visibility: ${(props) => (props.success ? "visible" : "hidden")};
-  color: #ffffff;
-  transition: all 0.5s;
-  ${media.tablet`
-    padding: 14px 5px 16px 8px;
-    width: 250px;
-  `}
-  ${media.mobile`
-  top : 72px;
-  left : 5vw;
-  transform: inherit;
-  width: 90%;
-  `}
-`;
+import TagPostBox from "./TagPostBox";
 
 const HomeContainer = () => {
+  const isTablet = useMediaQuery({ query: TabletQuery });
+  const navigate = useNavigate();
   const [processInfo, setProcessInfoStore] = useRecoilState(ProcessInfoStore);
   const [alertState, setAlertState] = useState({
     writePost: false,
     deletePost: false,
   });
+  const [inputValue, setInputChange, onChange] = useAndSetForm({
+    searchWord: "",
+  });
+  const [tagList, setTagList] = useState([]);
 
+  //작업 상테 변경될때마다 업데이트
   useEffect(() => {
+    // setTagList([]);
     if (processInfo.finishWritePost) {
       setAlertState((prev) => ({ ...prev, writePost: true }));
       setTimeout(() => {
@@ -73,25 +56,58 @@ const HomeContainer = () => {
     }
     //eslint-disable-next-line
   }, [processInfo]);
+
   return (
     <HomeContainerBox>
-      <AlertTextBox success={alertState.writePost}>
-        고민 포스트를 성공적으로 업로드랬습니다.
-      </AlertTextBox>
-      <AlertTextBox success={alertState.deletePost} redcolor="true">
-        고민 포스트를 삭제했습니다.
-      </AlertTextBox>
+      <HomeContentAlert alertState={alertState} />
+      {!isTablet && (
+        <SearchSection
+          navigate={navigate}
+          inputValue={inputValue}
+          onChange={onChange}
+        ></SearchSection>
+      )}
       <HomeMainContentBox>
         <HomeContentUpperBox>
-          <BannerBox></BannerBox>
+          <BannerBox />
         </HomeContentUpperBox>
         <HomeContentLowerBox>
-          <PostBox></PostBox>
-          <PostBox isLikeDesc={true}></PostBox>
+          {isTablet ? (
+            <>
+              <div>
+                <PostBox />
+                {tagList.length >= 1 && (
+                  <TagPostBox bottombox={true} tagList={tagList} first={true} />
+                )}
+              </div>
+              <div>
+                <PostBox isLikeDesc={true} />
+                {tagList.length >= 2 && (
+                  <TagPostBox
+                    bottombox={true}
+                    tagList={tagList}
+                    first={false}
+                  />
+                )}
+                {/* <PostBox isLikeDesc={true} bottombox={true}/> */}
+              </div>
+            </>
+          ) : (
+            <>
+              <PostBox />
+              <PostBox isLikeDesc={true} />
+              {tagList.length >= 1 && (
+                <TagPostBox bottombox={true} tagList={tagList} first={true} />
+              )}
+              {tagList.length >= 2 && (
+                <TagPostBox bottombox={true} tagList={tagList} first={false} />
+              )}
+            </>
+          )}
         </HomeContentLowerBox>
       </HomeMainContentBox>
       <HomeSubContentBox>
-        <TagBox></TagBox>
+        <TagBox tagList={tagList} setTagList={setTagList}></TagBox>
       </HomeSubContentBox>
     </HomeContainerBox>
   );

@@ -57,7 +57,7 @@ export const TagInputBoxTitle = styled.div`
   flex-grow: 1;
   margin-left: 20px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #000000;
   overflow: hidden;

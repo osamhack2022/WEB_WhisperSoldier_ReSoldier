@@ -24,7 +24,7 @@ const NavigationBox = styled.div`
 const Navigation = ({ isAdmin }) => {
   return (
     <NavigationBox>
-      <SearchNavButton toLink="/search"></SearchNavButton>
+      {/* <SearchNavButton toLink="/search"></SearchNavButton> */}
       {!isAdmin && <WriteNavButton></WriteNavButton>}
       {!isAdmin && <ChatNavButton></ChatNavButton>}
       <ProfileNavButton></ProfileNavButton>

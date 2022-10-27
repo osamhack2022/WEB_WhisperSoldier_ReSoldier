@@ -14,6 +14,7 @@ import getTimeDepth from "../../modules/GetTimeDepth";
 import { TagInfoStore } from "../../store/TagStore";
 import { TabletQuery } from "../../lib/Const";
 import { useMediaQuery } from "react-responsive";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const TagBoardContentContainer = styled.div`
   height: fit-content;
@@ -162,19 +163,13 @@ const TagPostBoardCotent = () => {
       setTagPosts([]);
       getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
     } else {
-      console.log("아직 태그를 선택하지 않았습니다.");
+      // console.log("아직 태그를 선택하지 않았습니다.");
     }
   };
 
-  // const selectTag = async (tagName) => {
-  //   setSelectedTag(tagName);
-  //   setTagPosts([]);
-  //   getFirstTagPosts(tagName, orderDescOrAsc, timeDepthValue);
-  // };
-
   const getTagInfo = async (id) => {
     const tagDocSnapShot = await getDoc(doc(dbService, "Tag", id));
-    if (tagDocSnapShot.exists()) {
+    if (tagDocSnapShot.exists() && tagDocSnapShot.data().tag_count >= 1) {
       const tagData = tagDocSnapShot.data();
       setSelectedTag(tagData.tag_name);
       getFirstTagPosts(tagData.tag_name, "desc", "week");
@@ -220,13 +215,15 @@ const TagPostBoardCotent = () => {
         )}
         <TagPostBoardBodyBox>
           {isLoading ? (
-            <div>잠시만 기다려 주세요</div>
+            <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
           ) : (
             tagPosts.map((tagpost) => (
               <PostElement key={tagpost.id} post={tagpost}></PostElement>
             ))
           )}
-          {!isLoading && errorTag && <div>존재하지 않는 태그입니다.</div>}
+          {!isLoading && errorTag && (
+            <InfoTextBox>존재하지 않는 태그입니다.</InfoTextBox>
+          )}
         </TagPostBoardBodyBox>
 
         {isNextTagPostExist && (

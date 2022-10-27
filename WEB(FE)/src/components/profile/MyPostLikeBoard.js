@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
 import PostElement from "../post/PostElement";
-
 
 const MyPostLikeBoard = () => {
   const { uid: currentUserUid } = JSON.parse(
@@ -27,6 +27,7 @@ const MyPostLikeBoard = () => {
   const [postsLiked, setPostsLiked] = useState([]);
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const snapShotToLikedPosts = (snapshot) => {
     if (snapshot) {
@@ -35,7 +36,6 @@ const MyPostLikeBoard = () => {
           ...document.data(),
           id: document.id,
         };
-        console.log("commentLikeObj: ", commentLikeObj);
         const postRef = doc(
           dbService,
           "WorryPost",
@@ -45,7 +45,7 @@ const MyPostLikeBoard = () => {
         const postLikedObj = {
           ...postSnap.data(),
           id: postSnap.id,
-          like_timestamp : document.data().created_timestamp,
+          like_timestamp: document.data().created_timestamp,
         };
         setPostsLiked((prev) => [...prev, postLikedObj]);
       });
@@ -55,7 +55,6 @@ const MyPostLikeBoard = () => {
   const myPostLikeBoard = async (next) => {
     if (next) {
       try {
-        console.log("showing next liked posts");
         const querySnapshot = await getDocs(
           getProfilePageQuery("PostLike", "user_id", 10, nextItemSnapShot)
         );
@@ -78,7 +77,6 @@ const MyPostLikeBoard = () => {
         } else {
           setIsNextItemExist(true);
         }
-        
       } catch (e) {
         if (
           e.message ===
@@ -101,6 +99,7 @@ const MyPostLikeBoard = () => {
         setIsNextItemExist(true);
       }
     }
+    setIsLoading(false);
   };
 
   const onNextMyLikePosts = async (e) => {
@@ -117,20 +116,21 @@ const MyPostLikeBoard = () => {
     <>
       <ProfileCotentBox>
         <SectionTitle>공감한 고민 글</SectionTitle>
-        {postsLiked.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : postsLiked.length !== 0 ? (
           postsLiked.map((post) => (
-            // <div key={post.id}>
-            //   <Link to={`/post/${post.id}`}>{post.text}</Link>
             <PostElement key={post.id} post={post}></PostElement>
-            /* <hr />
-          </div> */
           ))
         ) : (
-          <div>잠시만 기다려 주세요</div>
+          <InfoTextBox>공감한 포스트가 존재하지 않습니다.</InfoTextBox>
         )}
       </ProfileCotentBox>
       {isNextItemExist && (
-        <MoreLoadPostButton updatePostList={onNextMyLikePosts} isMarginLeft={true}></MoreLoadPostButton>
+        <MoreLoadPostButton
+          updatePostList={onNextMyLikePosts}
+          isMarginLeft={true}
+        ></MoreLoadPostButton>
       )}
     </>
   );

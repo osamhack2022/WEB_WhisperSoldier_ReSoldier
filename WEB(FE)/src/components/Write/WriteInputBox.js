@@ -6,7 +6,6 @@ import { useForm } from "../../modules/useForm";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { IsUpdatePostList } from "../../store/PostStore";
 import { ProcessInfoStore } from "../../store/SuccessStore";
-import checkCurseWord from "../../modules/CheckCurseWord";
 import {
   BottonLine,
   InputBox,
@@ -16,7 +15,7 @@ import {
   TagInputBoxTitle,
 } from "../../styles/write/WriteInputBoxStyle";
 
-const WritePostBox = ({ navigate }) => {
+const WritePostBox = ({ navigate, setAlertInfo }) => {
   const {
     doc,
     addDoc,
@@ -35,7 +34,7 @@ const WritePostBox = ({ navigate }) => {
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
   const setProcessInfoStore = useSetRecoilState(ProcessInfoStore);
 
-  const onClick = async (e) => {
+  const onWritePostClick = async (e) => {
     e.preventDefault();
     try {
       await addDoc(collection(dbService, "WorryPost"), {
@@ -87,10 +86,11 @@ const WritePostBox = ({ navigate }) => {
   return (
     <InputBox>
       <WritePostHeader
-        onClick={onClick}
+        onClick={onWritePostClick}
         errorWritePostInfo={errorWritePostInfo.isError}
         state={state}
         setErrorWritePostInfo={setErrorWritePostInfo}
+        setAlertInfo={setAlertInfo}
       ></WritePostHeader>
       <InputForm
         name="postContent"

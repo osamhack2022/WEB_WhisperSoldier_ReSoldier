@@ -10,7 +10,7 @@ const Block1 = styled.div`
 
 const FirstPage = () => {
   return (
-    <div>
+    <>
       <AuthTemplate>
         <FirstComment>고민이 있을땐 언제든지</FirstComment>
         <Block1></Block1>
@@ -19,7 +19,7 @@ const FirstPage = () => {
           나라사랑포털 이메일로 회원가입하기
         </AuthSubLink>
       </AuthTemplate>
-    </div>
+    </>
   );
 };
 
