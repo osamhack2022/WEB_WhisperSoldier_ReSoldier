@@ -17,17 +17,17 @@
 
 ## 프로젝트 소개
 
-> "오늘도 지적받았네. 다음엔 더 잘해서 한 사람 몫은 해야되는데..."
+> _"오늘도 지적 받았네. 다음엔 더 잘해서 한 사람 몫은 해야 되는데..."_
 >
-> "강 병장님 열심히 공부하시네... 나는 개인 정비 시간 때 뭘 해야될까?"
+> _"강 병장님 열심히 공부하시네... 나는 개인 정비 시간 때 뭘 해야될까?"_
 >
-> "여자친구 생일인데 군인인 내가 어떤 선물을 줘야 좋아할까?"
+> _"여자친구 생일인데 군인인 내가 어떤 선물을 줘야 좋아할까?"_
 >
-> "전역하면 뭐하고 살아야 하지??"
+> _"전역하면 뭐하고 살아야 하지??"_
 >
 > ...
 >
-> "어... 1년 N개월 동안 나 뭐 했지?"
+> _"어... 1년 N개월 동안 나 뭐 했지?"_
 
 전우님들은 입대 후 이런 저런 고민으로 우울하거나 힘들었던 경험이 있으신가요?
 
@@ -41,7 +41,6 @@
 위스퍼솔저는 영내생활자들의 고민을 동료의 시선에서 해결할 수 있도록 돕고자 합니다.
 
 기존 제도와 달리, 상담자와 피상담자를 부대 내에서의 입장의 차이로부터 해방하고, 전우 대 전우로서 "속삭이듯이" 안심하고 솔직하게 마음을 털어놓을 수 있게 하고자 합니다.
-<br/>
 
 ## 주요 기능
 
@@ -55,17 +54,17 @@
 
 ## DB Diagram
 
-<img src="Image\whispersoldier_service_flow_chart.png"/>
+<img style="width:500px;" src="Image\dbdiagram.png"/>
 
 ## UI/UX
 
 <table align="center">
 	<tr>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\main_page.png">
 		</td>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\post_page.png">
 		</td>
 	</tr>
 	<tr>
@@ -78,10 +77,10 @@
 	</tr>
 	<tr>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\postboard_page.png">
 		</td>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\chat_page.png">
 		</td>
 	</tr>
 	<tr>
@@ -94,10 +93,10 @@
 	</tr>
     <tr>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\profile_page.png">
 		</td>
 		<td>
-			<img style="width:500px;" src="Image\first_page.png">
+			<img style="width:500px;" src="Image\admin_page.png">
 		</td>
 	</tr>
 	<tr>
@@ -156,4 +155,4 @@
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
 
-- [라이센스 파일 링크]](LICENSE)
+- [라이센스 파일 링크](LICENSE)
