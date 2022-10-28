@@ -15,7 +15,7 @@
 *본인 나라사랑포털 이메일로도 가입 가능 합니다.
 </p><br/><br/>
 
-## 프로젝트 소개
+## **프로젝트 소개**
 
 > _"오늘도 지적 받았네. 다음엔 더 잘해서 한 사람 몫은 해야 되는데..."_
 >
@@ -41,22 +41,26 @@
 위스퍼솔저는 영내생활자들의 고민을 동료의 시선에서 해결할 수 있도록 돕고자 합니다.
 
 기존 제도와 달리, 상담자와 피상담자를 부대 내에서의 입장의 차이로부터 해방하고, 전우 대 전우로서 "속삭이듯이" 안심하고 솔직하게 마음을 털어놓을 수 있게 하고자 합니다.
+<br/><br/>
 
-## 주요 기능
+## **주요 기능**
 
 - "모두에게 들어요"에서 더 나아가 보다 깊이있는 상담을 위해 1대 1로 진행할 수 있는 채팅 기능
 - 직접 고민을 올리기 부담스럽다면 나와 비슷한 고민을 찾을 수 있는, 태그를 활용한 검색 기능
 - 요즘 전우들이 많이 공감하는 고민이 무엇인지 알 수 있는 인기 고민게시판
+  <br/><br/>
 
-## 서비스 플로우
+## **서비스 플로우**
 
 <img src="Image\whispersoldier_service_flow_chart.png"/>
+<br/><br/>
 
-## DB Diagram
+## **DB Diagram**
 
 <img style="width:500px;" src="Image\dbdiagram.png"/>
+<br/><br/>
 
-## UI/UX
+## **UI/UX**
 
 <table align="center">
 	<tr>
@@ -108,13 +112,15 @@
 		</td>
 	</tr>
 </table>
+<br/><br/>
 
-## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+## **컴퓨터 구성 / 필수 조건 안내 (Prerequisites)**
 
 - ECMAScript 6 지원 브라우저 사용
 - Google Chrome 버젼 77 이상을 권장합니다.
+  <br/><br/>
 
-## 기술 스택 (Technique Used)
+## **기술 스택 (Technique Used)**
 
 ### WEB Front-end
 
@@ -143,16 +149,19 @@
     		Notion
     </a>
 - <a href="#">
-    		Figma
-    </a>
+      		Figma
+      </a>
+  <br/><br/>
 
-## 팀 정보 (Team Information)
+## **팀 정보 (Team Information)**
 
 | 이름   | 계급      | 역할                   | Github                                          | Email                  |
 | ------ | --------- | ---------------------- | ----------------------------------------------- | ---------------------- |
 | 박상현 | 공군 병장 | 팀장, Frontend, 디자인 | [galaxy821](https://github.com/galaxy821)       | hoshino2085@gmail.com  |
 | 강태우 | 공군 병장 | Backend, DB 설계       | [colab-taewoo](https://github.com/colab-taewoo) | colab.taewoo@gmail.com |
 
-## 저작권 및 사용권 정보 (Copyleft / End User License)
+<br/><br/>
 
-- [라이센스 파일 링크](LICENSE)
+## **저작권 및 사용권 정보 (Copyleft / End User License)**
+
+- [Whisper Soldier License](LICENSE)
