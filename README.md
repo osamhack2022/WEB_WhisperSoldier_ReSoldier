@@ -15,6 +15,12 @@
 *본인 나라사랑포털 이메일로도 가입 가능 합니다.
 </p><br/><br/>
 
+<p align="center">
+	<a href="#">
+		<img src="Image\notionbutton.png" />
+	</a>
+</p><br/><br/>
+
 ## **프로젝트 소개**
 
 > _"오늘도 지적 받았네. 다음엔 더 잘해서 한 사람 몫은 해야 되는데..."_
@@ -58,7 +64,6 @@
 ## **DB Diagram**
 
 <img style="width:500px;" src="Image\dbdiagram.png"/>
-<br/><br/>
 
 ## **UI/UX**
 
@@ -112,7 +117,6 @@
 		</td>
 	</tr>
 </table>
-<br/><br/>
 
 ## **컴퓨터 구성 / 필수 조건 안내 (Prerequisites)**
 
@@ -136,6 +140,9 @@
 - <a href="https://mui.com/">
     		MUI
     </a> - 5.10.9
+- <a href="https://styled-components.com/">
+    		styled-components
+    </a> - 5.3.5
 
 ### WEB BACK-END
 
@@ -160,8 +167,6 @@
 | 박상현 | 공군 병장 | 팀장, Frontend, 디자인 | [galaxy821](https://github.com/galaxy821)       | hoshino2085@gmail.com  |
 | 강태우 | 공군 병장 | Backend, DB 설계       | [colab-taewoo](https://github.com/colab-taewoo) | colab.taewoo@gmail.com |
 
-<br/><br/>
-
 ## **저작권 및 사용권 정보 (Copyleft / End User License)**
 
-- [Whisper Soldier License](LICENSE)
+- [MIT License & Apache License 2.0](LICENSE)
