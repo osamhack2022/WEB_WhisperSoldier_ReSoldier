@@ -21,15 +21,13 @@
 	</a>
 </p><br/>
 
-<p alignt="center">
-	![testing](https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge)
-
-	[![Contributors][contributors-shield]][contributors-url]
-
-	[![Forks][forks-shield]][forks-url]
-	[![Stargazers][stars-shield]][stars-url]
-	[![Issues][issues-shield]][issues-url]
-	[![MIT License][license-shield]][license-url]
+<p align="center">
+	<img src="https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
+	<img src="https://img.shields.io/github/forks/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
+	<img src="https://img.shields.io/github/stars/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
+	<img src="https://img.shields.io/github/contributors/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
+	<img src="https://img.shields.io/badge/license-MIT%2C%20Apache%202.0-brightgreen?style=for-the-badge">
+	
 </p><br/>
 
 ## :scroll: 목차
