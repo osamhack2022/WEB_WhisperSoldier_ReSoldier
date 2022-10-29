@@ -52,7 +52,7 @@
 
 ## :bulb: **주요 기능**
 
-<img src="/workspace/WEB_WhisperSoldier_R/Image/Introduce_Functionailty/email_veri.png" width=360/>
+<img src="Image/Introduce_Functionailty/email_veri.png" width=360/>
 
 - 나라사랑이메일 인증 기능
     - 사용자가 국군 병사임을 증명할 수 있습니다.
