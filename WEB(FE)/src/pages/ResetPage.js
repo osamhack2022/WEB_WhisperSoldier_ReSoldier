@@ -5,6 +5,7 @@ import ResetForm from "../components/auth/ResetForm";
 import { useForm } from "../modules/useForm";
 import { regex } from "../lib/Const";
 import ResetVerifiInfoForm from "../components/auth/ResetVerificationForm";
+import { Helmet } from "react-helmet-async";
 
 const ResetPage = () => {
   const [state, onChange] = useForm({
@@ -35,7 +36,6 @@ const ResetPage = () => {
       setResetErrorInfo((prev) => ({ ...prev, isLoading: true }));
       sendPasswordResetEmail(auth, state.email)
         .then(() => {
-          console.log("send email success");
           setResetErrorInfo((prev) => ({
             ...prev,
             isLoading: false,
@@ -50,8 +50,8 @@ const ResetPage = () => {
           }));
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode);
-          console.log(errorMessage);
+          // console.log(errorCode);
+          // console.log(errorMessage);
           if (errorCode === "auth/user-not-found") {
             setResetErrorInfo((prev) => ({
               ...prev,
@@ -76,7 +76,10 @@ const ResetPage = () => {
   };
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Whisper Soldier 비밀번호 재설정</title>
+      </Helmet>
       {resetErrorInfo.isSucces ? (
         <ResetVerifiInfoForm>비밀번호 초기화</ResetVerifiInfoForm>
       ) : (
@@ -87,7 +90,7 @@ const ResetPage = () => {
           resetErrorInfo={resetErrorInfo}
         ></ResetForm>
       )}
-    </div>
+    </>
   );
 };
 

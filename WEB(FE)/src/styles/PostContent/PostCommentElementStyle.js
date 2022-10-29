@@ -133,10 +133,10 @@ export const CommentText = styled.div`
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
-  font-size: 13px;
+  font-size: 14px;
   width: 100%;
   /* line-height: 1.29; */
-  letter-spacing: 0.56px;
+  /* letter-spacing: 0.56px; */
   text-align: left;
   color: #000;
   word-break: break-all;

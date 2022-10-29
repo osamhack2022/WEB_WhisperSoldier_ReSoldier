@@ -22,18 +22,17 @@ import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
 import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
-// import { useLocation } from "react-router-dom";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const PostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
-  //let { params } = useParams();
-  // const location = useLocation();
   const { getDocs } = dbFunction;
 
   const [posts, setPosts] = useState([]);
   const [nextPostSnapShot, setNextPostSnapShot] = useState({});
   const [isNextPostExist, setIsNextPostExist] = useState(false);
   const [isShowContainer, setIsShowContainer] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [postsRecoil, setPostsRecoil] = useRecoilState(PostsRecoil);
   const [countCurrentPost, setCountCurrentPost] =
@@ -99,13 +98,11 @@ const PostBoard = () => {
           )
         );
         if (nextPostsSnapshot.docs.length === 0) {
-          console.log("no more post data!");
           setIsNextPostExist(false);
           setIsNextPostExistRecoil(false);
         } else {
           setIsNextPostExist(true);
           setIsNextPostExistRecoil(true);
-          console.log("more post data exist!");
         }
       } catch (e) {
         console.log("error with get Post!");
@@ -116,6 +113,7 @@ const PostBoard = () => {
       timeSettingValue: timeDepthValue,
       descSettingValue: isResultDesc,
     }));
+    setIsLoading(false);
   };
 
   const moveNext = async () => {
@@ -167,12 +165,6 @@ const PostBoard = () => {
   }, []);
 
   const recoverPost = async () => {
-    console.log(
-      "recoverPost : ",
-      postListSortOption.descSettingValue ? "desc" : "asc",
-      postListSortOption.timeSettingValue,
-      countCurrentPost
-    );
     const recoverSnapshot = await getDocs(
       getSearchQuery(
         false,
@@ -182,7 +174,6 @@ const PostBoard = () => {
         countCurrentPost
       )
     );
-    console.log(recoverSnapshot);
     setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
     const afterSnapshot = await getDocs(
       getSearchQuery(
@@ -200,6 +191,7 @@ const PostBoard = () => {
       setIsNextPostExist(true);
       setIsNextPostExistRecoil(true);
     }
+    setIsLoading(false);
   };
 
   const onSearchSubmit = () => {
@@ -216,7 +208,6 @@ const PostBoard = () => {
 
   useEffect(() => {
     if (postsRecoil.length === 0 || isUpdatePostList.newestPage) {
-      console.log("frsh or refresh data!");
       if (isUpdatePostList.newestPage) {
         setPosts([]);
         setNextPostSnapShot({});
@@ -235,7 +226,6 @@ const PostBoard = () => {
       }
       getFirst();
     } else {
-      console.log("get global state!");
       setPosts(postsRecoil);
       setIsNextPostExist(isNextPostExistRecoil);
       setTimeDepthValue(postListSortOption.timeSettingValue);
@@ -252,43 +242,16 @@ const PostBoard = () => {
     // eslint-disable-next-line
   }, []);
 
-  if (posts) {
-    return (
-      <>
-        <PostBoardContainer>
-          <PostBoardTitleContainer
-            onShowSideContainer={onShowSideContainer}
-            isShowContainer={isShowContainer}
-          >
-            최신 고민 게시판
-          </PostBoardTitleContainer>
-          {!isTablet && isShowContainer && (
-            <SideOptionContainer>
-              <SideOptionFormForPostBoard
-                onSearchSubmit={onSearchSubmit}
-                setTimeDepthValue={setTimeDepthValue}
-                timeDepthSelect={timeDepthSelect}
-                setTimeDepthSelect={setTimeDepthSelect}
-                isResultDesc={isResultDesc}
-                setIsResultDesc={setIsResultDesc}
-                setOrderDescOrAsc={setOrderDescOrAsc}
-              ></SideOptionFormForPostBoard>
-            </SideOptionContainer>
-          )}
-          <PostBoardBodyContainer>
-            {posts.length !== 0 ? (
-              posts.map((post) => (
-                <PostElement key={post.id} post={post}></PostElement>
-              ))
-            ) : (
-              <div>잠시만 기다려 주세요</div>
-            )}
-          </PostBoardBodyContainer>
-          {isNextPostExist && (
-            <MoreLoadPostButton updatePostList={onClick}></MoreLoadPostButton>
-          )}
-        </PostBoardContainer>
-        {isTablet && (
+  return (
+    <>
+      <PostBoardContainer>
+        <PostBoardTitleContainer
+          onShowSideContainer={onShowSideContainer}
+          isShowContainer={isShowContainer}
+        >
+          최신 고민 게시판
+        </PostBoardTitleContainer>
+        {!isTablet && isShowContainer && (
           <SideOptionContainer>
             <SideOptionFormForPostBoard
               onSearchSubmit={onSearchSubmit}
@@ -301,11 +264,36 @@ const PostBoard = () => {
             ></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}
-      </>
-    );
-  } else {
-    return <div>{"[개발]불러올 포스트가 없습니다ㅠ"}</div>;
-  }
+        <PostBoardBodyContainer>
+          {isLoading ? (
+            <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+          ) : posts.length !== 0 ? (
+            posts.map((post) => (
+              <PostElement key={post.id} post={post}></PostElement>
+            ))
+          ) : (
+            <InfoTextBox>포스트가 존재하지 않습니다.</InfoTextBox>
+          )}
+        </PostBoardBodyContainer>
+        {isNextPostExist && (
+          <MoreLoadPostButton updatePostList={onClick}></MoreLoadPostButton>
+        )}
+      </PostBoardContainer>
+      {isTablet && (
+        <SideOptionContainer>
+          <SideOptionFormForPostBoard
+            onSearchSubmit={onSearchSubmit}
+            setTimeDepthValue={setTimeDepthValue}
+            timeDepthSelect={timeDepthSelect}
+            setTimeDepthSelect={setTimeDepthSelect}
+            isResultDesc={isResultDesc}
+            setIsResultDesc={setIsResultDesc}
+            setOrderDescOrAsc={setOrderDescOrAsc}
+          ></SideOptionFormForPostBoard>
+        </SideOptionContainer>
+      )}
+    </>
+  );
 };
 
 export default PostBoard;

@@ -10,9 +10,9 @@ import { useState } from "react";
 import checkCurseWord from "../../modules/CheckCurseWord";
 
 const WritePostTitle = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 700;
@@ -85,6 +85,7 @@ const WritePostHeader = ({
   errorWritePostInfo,
   state,
   setErrorWritePostInfo,
+  setAlertInfo,
 }) => {
   const [openDialogForWritePost, setOpenDialogForWritePost] = useState(false);
   const handleClickOpenDialogForWritePost = () => {
@@ -93,12 +94,18 @@ const WritePostHeader = ({
       setTimeout(() => {
         setErrorWritePostInfo((prev) => ({ ...prev, isError: false }));
       }, 3000);
+    } else if (state.postTag.length === 1) {
+      setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: false }));
+      }, 3000);
     } else {
       const curseWord = checkCurseWord(state.postContent);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 건전한 상담 문화에 걸맞는 표현을 사용해주세요."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinencePost: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinencePost: false }));
+        }, 3000);
       } else {
         setOpenDialogForWritePost(true);
       }
@@ -126,7 +133,6 @@ const WritePostHeader = ({
         <WsDialogTitle>고민 작성 완료하시겠습니까?</WsDialogTitle>
         <DialogActions>
           <CancelButton
-            // onClick={}
             onClick={handleCloseDialogForWritePost}
             color="primary"
             autoFocus

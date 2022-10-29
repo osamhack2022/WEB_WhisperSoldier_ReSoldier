@@ -1,25 +1,27 @@
 import { dbFunction, dbService } from "../lib/FStore";
 import { GetTagQuery } from "../modules/GetTagQuery";
 import { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
-import media from "../modules/MediaQuery";
 import CalTagCount from "../modules/CalTagCount";
 import MoreLoadPostButton from "../components/post/MoreLoadPostButton";
 import {
+  EraserSearchButton,
+  SearchTagButton,
   TagBox,
-  // TagBoxSubTitle,
   TagBoxTitle,
   TagBoxTitleBox,
   TagBoxTitleUpperContent,
+  TagContainerBox,
   TagCountBox,
   TagElementBox,
   TagElementContainer,
   TagNameBox,
+  TagSearchBox,
+  TagSearchInput,
 } from "../styles/page/TagPageStyle";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { TagInfoStore } from "../store/TagStore";
-import { useForm } from "../modules/useForm";
+import { useAndSetForm } from "../modules/useForm";
 import { TabletQuery } from "../lib/Const";
 import { useMediaQuery } from "react-responsive";
 import {
@@ -28,107 +30,13 @@ import {
   PostBoardMoreButtonText,
   PostBoardMoreUpButton,
 } from "../components/post/PostBoardTilteContainer";
+import { InfoTextBox } from "../styles/admin/ReportedPostStyle";
+import { Helmet } from "react-helmet-async";
+import { TagPageAlert } from "../components/common/Alert";
 
-export const TagContainerBox = styled.div`
-  margin: 0px auto;
-  width: 960px;
-  ${media.smallDesktop`
-    margin: inherit;
-    width: inherit;
-    padding: 0px 10vw;
-  `}
-  ${media.mobile`
-    padding: 0px 5vw;
-  `}
-`;
-
-const TagSearchBox = styled.div`
-  position: absolute;
-  right: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  ${media.mobile`
-  position : inherit;
-  right: inherit;
-  margin-top: 10px;
-  width : 100%;
-  justify-content: flex-end;
-  `}
-`;
-
-const TagSearchInput = styled.input`
-  border: none;
-  margin: 0px 5px;
-  width: 120px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #bdbdbd;
-  background-color: #fbfbfb;
-  &:focus {
-    outline: none;
-  }
-  ${media.mobile`
-  flex-grow :1;
-  `}
-`;
-
-const SearchTagButton = styled.button`
-  position: relative;
-  padding: 0px 10px;
-  color: #ffffff;
-  height: 28px;
-  width: ${(props) => (props.error ? "120px" : "45px")};
-  background-color: ${(props) => (props.error ? "#a65646" : "#1a7541")};
-  font-weight: 500;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 25px;
-  cursor: ${(props) => (props.error ? "default" : "pointer")};
-  border: ${(props) =>
-    props.error ? "1px solid rgb(166, 86, 70)" : "1px solid rgb(26, 117, 65)"};
-  transition: all 0.5s;
-  white-space: nowrap;
-  &:hover {
-    background: ${(props) => (props.error ? "#a65646" : "#0d552c")};
-    color: ${(props) => (props.error ? "#ffffff" : "#ffffff")};
-  }
-
-  animation: ${(props) => (props.error ? "vibration 0.1s 5" : "none")};
-
-  @keyframes vibration {
-    from {
-      transform: rotate(1deg);
-    }
-    to {
-      transform: rotate(-1deg);
-    }
-  }
-`;
-
-const EraserSearchButton = styled.button`
-  position: relative;
-  padding: 0px 10px;
-  color: rgb(26, 117, 65);
-  height: 28px;
-  width: 55px;
-  font-weight: 500;
-  font-size: 11px;
-  text-align: center;
-  text-decoration: none;
-  background-color: rgba(0, 0, 0, 0);
-  margin-left: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  border-radius: 25px;
-  border: 1.5px solid rgb(26, 117, 65);
-  &:hover {
-    background: #0d552c;
-    color: #ffffff;
-  }
-`;
-const { collection, limit, orderBy, query, where } = dbFunction;
+const { collection, query, where, orderBy, startAfter } = dbFunction;
+const FIRSTSEARCH = true;
+const NONFIRSTSEARCH = false;
 
 const TagPage = () => {
   const navigate = useNavigate();
@@ -137,15 +45,26 @@ const TagPage = () => {
 
   const { getDocs } = dbFunction;
   const [tags, setTags] = useState([]);
-  const [state, onChange] = useForm({ postTag: "" });
+  const [searchTag, setSearchTag] = useState([]);
+  const [state, setState, onChange] = useAndSetForm({ postTag: "" });
+  const [isLoading, setLoading] = useState(true);
+  const [isSearchLoading, setSearchLoading] = useState(true);
+  const [showSearchContent, setShowSearchContent] = useState(false);
 
   const [nextTagSnapshot, setNextTagSnapshot] = useState({});
   const [isNextTagExist, setIsNextTagExist] = useState(false);
+  const [nextSearchTagSnapshot, setNextSearchTagSnapshot] = useState({});
+  const [isNextSearchTagExist, setIsNextSearchTagExist] = useState(false);
 
   const [isShowContainer, setIsShowContainer] = useState(false);
   const onShowSideContainer = useCallback(() => {
     setIsShowContainer((prev) => !prev);
   }, []);
+
+  const [alertInfo, setAlertInfo] = useState({
+    blankInput: false,
+    tagOneLetterInput: false,
+  });
 
   const snapshotToTags = (snapshot) => {
     if (snapshot) {
@@ -159,7 +78,7 @@ const TagPage = () => {
     }
   };
 
-  const getFirst = async () => {
+  const getFirstTags = async () => {
     const firstSnapshot = await getDocs(
       GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
     );
@@ -187,12 +106,13 @@ const TagPage = () => {
           setIsNextTagExist(true);
         }
       } catch (e) {
-        console.log("Error with getting tags!");
+        // console.log("Error with getting tags!");
       }
     }
+    setLoading(false);
   };
 
-  const moveNext = async () => {
+  const moveNextTags = async () => {
     const querySnapshot = await getDocs(
       GetTagQuery(
         "Tag",
@@ -226,33 +146,63 @@ const TagPage = () => {
     snapshotToTags(querySnapshot);
   };
 
-  const getSearchTag = async () => {
-    const searchTagSnapshot = await getDocs(
-      query(
-        collection(dbService, "Tag"),
-        // orderBy("tag_count", "desc"),
-        // where("tag_count", ">", 0),
-        where("tag_name", ">=", state.postTag),
-        where("tag_name", "<=", state.postTag + "\uf8ff")
-      )
-    );
-  };
-  // const onSearchSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (selectedTag !== "") {
-  //     setTagPosts([]);
-  //     getFirstTagPosts(selectedTag, orderDescOrAsc, timeDepthValue);
-  //   } else {
-  //     console.log("아직 태그를 선택하지 않았습니다.")
-  //   }
-  // };
+  const getSearchTag = async (firstSearch) => {
+    let searchTagSnapshot;
 
-  // const selectTag = async (tagName) => {
-  //   setSelectedTag(tagName);
-  //   setTagPosts([]);
-  //   console.log("tagName: ", tagName);
-  //   getFirstTagPosts(tagName);
-  // };
+    if (firstSearch) {
+      searchTagSnapshot = await getDocs(
+        query(
+          collection(dbService, "Tag"),
+          orderBy("tag_count", "desc"),
+          where("tag_count", ">", 0)
+        )
+      );
+    } else {
+      searchTagSnapshot = await getDocs(
+        query(
+          collection(dbService, "Tag"),
+          orderBy("tag_count", "desc"),
+          where("tag_count", ">", 0),
+          startAfter(nextSearchTagSnapshot)
+        )
+      );
+    }
+
+    if (searchTagSnapshot && searchTagSnapshot.docs.length !== 0) {
+      let count = 0;
+      let totalCount = 0;
+      for (let i = 0; i < searchTagSnapshot.docs.length; i++) {
+        const tagObj = {
+          ...searchTagSnapshot.docs[i].data(),
+          id: searchTagSnapshot.docs[i].id,
+        };
+        const tagNameToBeChecked = String(tagObj.tag_name);
+
+        if (tagNameToBeChecked.includes(state.postTag)) {
+          if (count < 20) {
+            setSearchTag((prev) => [...prev, tagObj]);
+            count += 1;
+            totalCount += 1;
+          } else if (count === 20) {
+            count += 1;
+            totalCount += 1;
+            setNextSearchTagSnapshot(searchTagSnapshot.docs[i - 1]);
+          } else {
+            totalCount += 1;
+          }
+        }
+      }
+      if (count > 20) {
+        count -= 1;
+      }
+      if (totalCount <= 20) {
+        setIsNextSearchTagExist(false);
+      } else {
+        setIsNextSearchTagExist(true);
+      }
+    }
+    setSearchLoading(false);
+  };
 
   const MoveToTagBoard = (tagDocs) => {
     setTagInfo((prev) => ({
@@ -265,69 +215,148 @@ const TagPage = () => {
     //to={`/tag/${tagdoc.id}`}
   };
 
+  const onSearchClick = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    if (state.postTag.length === 0) {
+      setAlertInfo((prev) => ({ ...prev, blankInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, blankInput: false }));
+      }, 3000);
+    } else if (state.postTag.length === 1) {
+      setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: false }));
+      }, 3000);
+    } else {
+      setSearchTag([]);
+      setShowSearchContent(true);
+      setSearchLoading(true);
+      getSearchTag(FIRSTSEARCH);
+    }
+  };
+
+  const onMoreSearchClick = (e) => {
+    e.preventDefault();
+    getSearchTag(NONFIRSTSEARCH);
+  };
+
+  const onClearSearchClick = (e) => {
+    e.preventDefault();
+    if (showSearchContent) {
+      setTags([]);
+      setSearchTag([]);
+      setShowSearchContent(false);
+      setState((prev) => ({ ...prev, postTag: "" }));
+      getFirstTags();
+    }
+  };
+
+  const onKeyUp = (e) => {
+    if (e.key === "Enter") {
+      onSearchClick();
+    }
+  };
+
   useEffect(() => {
     setTags([]);
-    getFirst();
+    setSearchTag([]);
+    getFirstTags();
     //eslint-disable-next-line
   }, []);
 
   return (
-    <TagContainerBox>
-      <TagBox>
-        <TagBoxTitleBox>
-          <TagBoxTitleUpperContent>
-            <TagBoxTitle>고민 태그</TagBoxTitle>
-            {/* <TagBoxSubTitle>
-            태그를 선택해 관련 포스트를 탐색해보세요!
-          </TagBoxSubTitle> */}
-            <PostBoardMoreButtonBox onClick={onShowSideContainer}>
-              <PostBoardMoreButtonText>태그 검색</PostBoardMoreButtonText>
-              {!isShowContainer ? (
-                <PostBoardMoreButton></PostBoardMoreButton>
+    <>
+      <Helmet>
+        <title>고민 태그 - Whisper Soldier</title>
+      </Helmet>
+      <TagContainerBox>
+        <TagPageAlert alertInfo={alertInfo} />
+        <TagBox>
+          <TagBoxTitleBox>
+            <TagBoxTitleUpperContent>
+              <TagBoxTitle>고민 태그</TagBoxTitle>
+              <PostBoardMoreButtonBox onClick={onShowSideContainer}>
+                <PostBoardMoreButtonText>태그 검색</PostBoardMoreButtonText>
+                {!isShowContainer ? (
+                  <PostBoardMoreButton></PostBoardMoreButton>
+                ) : (
+                  <PostBoardMoreUpButton></PostBoardMoreUpButton>
+                )}
+              </PostBoardMoreButtonBox>
+            </TagBoxTitleUpperContent>
+
+            {(isTablet || isShowContainer) && (
+              <TagSearchBox>
+                #
+                <TagSearchInput
+                  name="postTag"
+                  placeholder="태그를 검색해보세요!"
+                  type="text"
+                  value={state.postTag}
+                  onChange={onChange}
+                  onKeyUp={onKeyUp}
+                ></TagSearchInput>
+                <SearchTagButton onClick={onSearchClick}>검색</SearchTagButton>
+                <EraserSearchButton onClick={onClearSearchClick}>
+                  초기화
+                </EraserSearchButton>
+              </TagSearchBox>
+            )}
+          </TagBoxTitleBox>
+
+          {showSearchContent ? (
+            <TagElementContainer>
+              {isSearchLoading ? (
+                <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+              ) : searchTag.length !== 0 ? (
+                searchTag.map((tagdoc) => (
+                  <TagElementBox
+                    key={tagdoc.id}
+                    onClick={() => MoveToTagBoard(tagdoc)}
+                  >
+                    <TagNameBox>#{tagdoc.tag_name}</TagNameBox>
+                    <TagCountBox>{CalTagCount(tagdoc.tag_count)}</TagCountBox>
+                  </TagElementBox>
+                ))
               ) : (
-                <PostBoardMoreUpButton></PostBoardMoreUpButton>
+                <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
               )}
-            </PostBoardMoreButtonBox>
-          </TagBoxTitleUpperContent>
-
-          {(isTablet || isShowContainer) && (
-            <TagSearchBox>
-              #
-              <TagSearchInput
-                name="postTag"
-                placeholder="태그를 검색해보세요!"
-                type="text"
-                value={state.postTag}
-                onChange={onChange}
-              ></TagSearchInput>
-              <SearchTagButton onClick={getSearchTag}>검색</SearchTagButton>
-              <EraserSearchButton>초기화</EraserSearchButton>
-            </TagSearchBox>
-          )}
-        </TagBoxTitleBox>
-
-        <TagElementContainer>
-          {tags.length !== 0 ? (
-            tags.map((tagdoc) => (
-              <TagElementBox
-                key={tagdoc.id}
-                onClick={() => MoveToTagBoard(tagdoc)}
-              >
-                <TagNameBox>#{tagdoc.tag_name}</TagNameBox>
-                <TagCountBox>{CalTagCount(tagdoc.tag_count)}</TagCountBox>
-              </TagElementBox>
-            ))
+            </TagElementContainer>
           ) : (
-            <div>잠시만 기다려 주세요</div>
+            <TagElementContainer>
+              {isLoading ? (
+                <InfoTextBox>잠시만 기다려주세요</InfoTextBox>
+              ) : tags.length !== 0 ? (
+                tags.map((tagdoc) => (
+                  <TagElementBox
+                    key={tagdoc.id}
+                    onClick={() => MoveToTagBoard(tagdoc)}
+                  >
+                    <TagNameBox>#{tagdoc.tag_name}</TagNameBox>
+                    <TagCountBox>{CalTagCount(tagdoc.tag_count)}</TagCountBox>
+                  </TagElementBox>
+                ))
+              ) : (
+                <InfoTextBox>태그가 존재하지 않습니다</InfoTextBox>
+              )}
+            </TagElementContainer>
           )}
-        </TagElementContainer>
-      </TagBox>
-      {isNextTagExist && (
-        <MoreLoadPostButton updatePostList={moveNext} tag="true">
-          20개 더 보기
-        </MoreLoadPostButton>
-      )}
-    </TagContainerBox>
+        </TagBox>
+        {(isNextTagExist || isNextSearchTagExist) && (
+          <MoreLoadPostButton
+            updatePostList={
+              showSearchContent ? onMoreSearchClick : moveNextTags
+            }
+            tag="true"
+          >
+            20개 더 보기
+          </MoreLoadPostButton>
+        )}
+      </TagContainerBox>
+    </>
   );
 };
 

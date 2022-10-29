@@ -13,7 +13,7 @@ export const SectionTitle = styled.div`
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -27,7 +27,7 @@ export const FunctionTitle = styled.div`
   margin-top: 10px;
   padding-bottom: 10px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
   font-weight: 600;

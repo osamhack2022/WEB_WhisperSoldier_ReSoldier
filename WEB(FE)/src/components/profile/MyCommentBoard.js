@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { whisperSodlierSessionKey } from "../../lib/Const";
 import { dbFunction, dbService } from "../../lib/FStore";
 import { getProfilePageQuery } from "../../modules/GetProfilePageQuery";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 import { SectionTitle } from "../../styles/profile/ChangeProfileStyle";
 import { ProfileCotentBox } from "../../styles/profile/ProfilePageStyle";
 import MoreLoadPostButton from "../post/MoreLoadPostButton";
@@ -17,8 +18,8 @@ const MyCommentBoard = () => {
   const [commentsCreated, setCommentsCreated] = useState([]);
   const [nextItemSnapShot, setNextItemSnapShot] = useState({});
   const [isNextItemExist, setIsNextItemExist] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log(commentsCreated);
   const snapShotToCreatedComments = (snapshot) => {
     if (snapshot) {
       snapshot.forEach((doc) => {
@@ -34,7 +35,6 @@ const MyCommentBoard = () => {
   const myCommentBoard = async (next) => {
     if (next) {
       try {
-        console.log("showing next comments created");
         const querySnapshot = await getDocs(
           getProfilePageQuery("Comment", "commentor_id", 10, nextItemSnapShot)
         );
@@ -77,6 +77,7 @@ const MyCommentBoard = () => {
         setIsNextItemExist(true);
       }
     }
+    setIsLoading(false);
   };
 
   const onNextMyComments = async (e) => {
@@ -85,18 +86,21 @@ const MyCommentBoard = () => {
   };
 
   useEffect(() => {
+    setCommentsCreated([]);
     myCommentBoard(false);
   }, []);
   return (
     <>
       <ProfileCotentBox>
         <SectionTitle>작성한 댓글</SectionTitle>
-        {commentsCreated.length !== 0 ? (
+        {isLoading ? (
+          <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+        ) : commentsCreated.length !== 0 ? (
           commentsCreated.map((comment) => (
             <CommentElement key={comment.id} comment={comment}></CommentElement>
           ))
         ) : (
-          <div>잠시만 기다려 주세요</div>
+          <InfoTextBox>작성한 댓글이 존재하지 않습니다.</InfoTextBox>
         )}
       </ProfileCotentBox>
       {isNextItemExist && (

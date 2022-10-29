@@ -13,6 +13,7 @@ import {
   PostElementTime,
 } from "../../styles/post/PostElementStyle";
 import { Link } from "react-router-dom";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
 
 const PostElementBox = styled.div`
   border-bottom: 1px solid #dcdcdc;
@@ -35,7 +36,7 @@ const PostBoxTitle = styled.div`
   margin-top: 5px;
   padding-bottom: 5px;
   text-align: left;
-  letter-spacing: 0.64px;
+  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -47,12 +48,12 @@ const PostElementTitle = styled(Link)`
   font-size: 13px;
   text-align: left;
   text-decoration: none;
-  letter-spacing: 0.56px;
+  /* letter-spacing: 0.56px; */
   color: #3f3f3f;
-  font-weight: 500;
+  font-weight: 400;
   height: fit-content;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -99,6 +100,7 @@ const PostElement = ({ post }) => {
 
 const RecentPostContainer = () => {
   const [postList, setPostList] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const { getDocs } = dbFunction;
 
   const getFivePost = async () => {
@@ -114,6 +116,7 @@ const RecentPostContainer = () => {
         setPostList((prev) => [...prev, postObj]);
       });
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -124,12 +127,14 @@ const RecentPostContainer = () => {
   return (
     <RecentPostBox>
       <PostBoxTitle>최신 고민 포스트</PostBoxTitle>
-      {postList.length !== 0 ? (
+      {isLoading ? (
+        <InfoTextBox>잠시만 기다려 주새요</InfoTextBox>
+      ) : postList.length !== 0 ? (
         postList.map((post) => (
           <PostElement key={post.id} post={post}></PostElement>
         ))
       ) : (
-        <div>잠시만 기다려 주세요</div>
+        <InfoTextBox>포스트가 존재하지 않습니다.</InfoTextBox>
       )}
     </RecentPostBox>
   );

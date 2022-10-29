@@ -20,21 +20,21 @@ import {
 } from "../../styles/post/PostBoardStyle";
 import { useMediaQuery } from "react-responsive";
 import { TabletQuery } from "../../lib/Const";
-import { getSearchQuery, getTimeDepthObj } from "../../modules/GetSearchQuery";
 import getTimeDepth from "../../modules/GetTimeDepth";
-import { useLocation } from "react-router-dom";
-import { limit, orderBy, startAfter } from "firebase/firestore";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
+
+const FIRSTSEARCH = true;
+const NONFIRSTSEARCH = false;
 
 const PopularPostBoard = () => {
   const isTablet = useMediaQuery({ query: TabletQuery });
-  //let { params } = useParams();
-  const location = useLocation();
-  const { getDocs, query, collection,  } = dbFunction;
+  const { getDocs, query, collection, orderBy, startAfter } = dbFunction;
 
   const [posts, setPosts] = useState([]);
   const [nextPostSnapShot, setNextPostSnapShot] = useState({});
   const [isNextPostExist, setIsNextPostExist] = useState(false);
   const [isShowContainer, setIsShowContainer] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [postsRecoil, setPostsRecoil] = useRecoilState(PostsRecoil);
   const [countCurrentPost, setCountCurrentPost] =
@@ -57,192 +57,97 @@ const PopularPostBoard = () => {
     fullYear: false,
     allTime: false,
   });
-  const [orderDescOrAsc, setOrderDescOrAsc] = useState("desc");
-  const [isResultDesc, setIsResultDesc] = useState(true);
-  const [nextLikeFliterPostSnapShot, setNextLikeFilterPostSnapShot] = useState({});
-  const [isNextLikeOrderPostExist, setIsNextLikeOrderPostExist] = useState(false);
-  const [likePostCountIndex, setLikePostCountIndex] = useState(0);
 
-  const getFirstTen = async () => {
-    let q = query(collection(dbService, "WorryPost"),
-      orderBy("like_count", "desc"),
-      orderBy("created_timestamp", orderDescOrAsc),
-      limit(10)
-    )
-
-    setLikePostCountIndex(0); // setState는 비동기이기 때문에 while문같은 곳에 사용하면 안된다. 그러면 다른 방법을 찾아야된다. 
-    // 
-    while (likePostCountIndex < 10) { // while문을 돌릴 수 있는 다른 로직을 찾는 중이다.
-      let idx = -1
-      const rangeSnap = await getDocs(q);
-      console.log("Length of rangeSnap: ", rangeSnap.docs.length); 
-      /*처음 가져올때는, 전체 게시글이 10개 미만이 아닌 이상 무조건 10개를 가져오는게 맞다.*/
-      if (rangeSnap) {
-        //console.log("THE snapshot: ", rangeSnap.docs)
-        rangeSnap.forEach((doc) => {
-          const postObj = {
-            ...doc.data(),
-            id: doc.id,
-          };
-          console.log("THE snapshot from inside forEach: ", rangeSnap.docs)
-          console.log("current timeDepth from date is: ", getTimeDepth(timeDepthValue));
-          console.log("current doc timestamp is: ", postObj.created_timestamp);
-					idx = idx + 1;
-          if (postObj.created_timestamp >= getTimeDepth(timeDepthValue) && likePostCountIndex < 10) {
-            setPosts((prev) => [...prev, postObj]);
-            console.log("after idx change");
-            console.log("통과 해당 문서의 인덱스: ", idx)
-            setLikePostCountIndex((prev) => (prev + 1));
-            console.log("after FilterIndex change");
-          }
-          console.log("after IF");
-        })
-				console.log("rangesnapshot's last 통과한 document: ", rangeSnap.docs[idx])
-        setNextLikeFilterPostSnapShot((prev) => rangeSnap.docs[idx]) // 함수형 동기처리 시도했으나 실패... 만약 다시 돌아오게 된다면 원인을 찾아보아야겠다
-        console.log("nextLikeFliterPostSnapShot: ", nextLikeFliterPostSnapShot);
-      } else {
-        // 가져올 스냅샷이 존재하지 않음
-        const skipSnapshot = await getDocs(query(collection(dbService, "WorryPost"),
-        orderBy("like_count", "desc"),
-        orderBy("created_timestamp", orderDescOrAsc),
-        limit(10)
-      ))
-        setNextLikeFilterPostSnapShot((prev) => {return rangeSnap.docs[rangeSnap.docs.length - 1]});
-      }
-      //쿼리 업데이트
-      q = query(collection(dbService, "WorryPost"),
-      orderBy("like_count", "desc"),
-      orderBy("created_timestamp", orderDescOrAsc),
-      startAfter(nextLikeFliterPostSnapShot),
-      limit(10)
-      )
-    }
-  };
-    // 테스트 통과하면 "다음 10개 보기"를 위해 nextLikeOrderPostsSnapshot 지정해주기
-  
-  const snapshotToPosts = (snapshot) => {
-    if (snapshot) {
-      snapshot.forEach((doc) => {
-        const postObj = {
-          ...doc.data(),
-          id: doc.id,
-        };
-        console.log("current timeDepth from date is: ", getTimeDepth(timeDepthValue));
-        console.log("current doc timestamp is: ", postObj.created_timestamp);
-        if (postObj.created_timestamp >= getTimeDepth(timeDepthValue)) {
-          setPosts((prev) => [...prev, postObj]);
-          setPostsRecoil((prev) => [...prev, postObj]);
-        }
-        /* setPosts((prev) => [...prev, postObj]);
-        setPostsRecoil((prev) => [...prev, postObj]); */
-      }
+  const getTenPopularPost = async (firstSearch) => {
+    let popularPostSnapshpot;
+    if (firstSearch) {
+      popularPostSnapshpot = await getDocs(
+        query(
+          collection(dbService, "WorryPost"),
+          orderBy("like_count", "desc"),
+          orderBy("created_timestamp", "desc")
+        )
       );
-      ///console.log("TestTimestampPost: ", posts[0].created_timestamp);
-      /* setPosts(posts.filter((post) => (post.created_timestamp < getTimeDepth(timeDepthValue))));
-      setPostsRecoil(postsRecoil.filter((post) => (post.created_timestamp < getTimeDepth(timeDepthValue)))); */
-    }
-  };
-
-  const getFirst = async () => {
-    const firstSnapshot = await getDocs(
-      getSearchQuery(true, orderDescOrAsc, null, null, 10)
-    );
-    setNextPostSnapShot(firstSnapshot.docs[firstSnapshot.docs.length - 1]);
-    snapshotToPosts(firstSnapshot);
-    if (firstSnapshot.docs.length < 10) {
-      setIsNextPostExist(false);
-      setIsNextPostExistRecoil(false);
     } else {
-      try {
-        const nextPostsSnapshot = await getDocs(
-          getSearchQuery(
-            true,
-            orderDescOrAsc,
-            null,
-            firstSnapshot.docs[firstSnapshot.docs.length - 1],
-            1
-          )
-        );
-        if (nextPostsSnapshot.docs.length === 0) {
-          console.log("no more post data!");
-          setIsNextPostExist(false);
-          setIsNextPostExistRecoil(false);
-        } else {
-          setIsNextPostExist(true);
-          setIsNextPostExistRecoil(true);
-          console.log("more post data exist!");
+      popularPostSnapshpot = await getDocs(
+        query(
+          collection(dbService, "WorryPost"),
+          orderBy("like_count", "desc"),
+          orderBy("created_timestamp", "desc"),
+          startAfter(nextPostSnapShot)
+        )
+      );
+    }
+
+    if (popularPostSnapshpot && popularPostSnapshpot) {
+      let count = 0;
+      let totalCount = 0;
+      for (let i = 0; i < popularPostSnapshpot.docs.length; i++) {
+        const postObj = {
+          ...popularPostSnapshpot.docs[i].data(),
+          id: popularPostSnapshpot.docs[i].id,
+        };
+        if (postObj.created_timestamp >= getTimeDepth(timeDepthValue)) {
+          if (count < 10) {
+            setPosts((prev) => [...prev, postObj]);
+            count += 1;
+            totalCount += 1;
+          } else if (count === 10) {
+            count += 1;
+            totalCount += 1;
+            setNextPostSnapShot(popularPostSnapshpot.docs[i - 1]);
+          } else {
+            totalCount += 1;
+          }
         }
-      } catch (e) {
-        console.log("error with get Post!");
       }
-    }
-  };
-
-  const moveNext = async () => {
-    const querySnapshot = await getDocs(
-      getSearchQuery(true, orderDescOrAsc, null, nextPostSnapShot, 10)
-    );
-    setNextPostSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
-
-    const afterSnapshot = await getDocs(
-      getSearchQuery(
-        true,
-        orderDescOrAsc,
-        null,
-        querySnapshot.docs[querySnapshot.docs.length - 1],
-        1
-      )
-    );
-
-    setCountCurrentPost((prev) => prev + 10);
-    if (afterSnapshot.docs.length === 0) {
-      setIsNextPostExist(false);
-      setIsNextPostExistRecoil(false);
+      if (count > 10) {
+        count -= 1;
+      }
+      if (totalCount <= 10) {
+        setIsNextPostExist(false);
+      } else {
+        setIsNextPostExist(true);
+      }
     } else {
-      setIsNextPostExist(true);
-      setIsNextPostExistRecoil(true);
+      setIsNextPostExist(false);
     }
-    snapshotToPosts(querySnapshot);
-
-    setPostListSortOption((prev) => ({
-      ...prev,
-      timeSettingValue: timeDepthValue,
-      descSettingValue: isResultDesc,
-    }));
+    setIsLoading(false);
   };
 
   const onClick = async (e) => {
     e.preventDefault();
-    moveNext();
+    getTenPopularPost(NONFIRSTSEARCH);
   };
 
   const onShowSideContainer = useCallback(() => {
     setIsShowContainer((prev) => !prev);
   }, []);
 
-  const recoverPost = async () => {
-    const recoverSnapshot = await getDocs(
-      getSearchQuery(true, orderDescOrAsc, null, null, countCurrentPost)
-    );
-    console.log(recoverSnapshot);
-    setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
-    const afterSnapshot = await getDocs(
-      getSearchQuery(
-        true,
-        orderDescOrAsc,
-        null,
-        recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
-        1
-      )
-    );
-    if (afterSnapshot.docs.length === 0) {
-      setIsNextPostExist(false);
-      setIsNextPostExistRecoil(false);
-    } else {
-      setIsNextPostExist(true);
-      setIsNextPostExistRecoil(true);
-    }
-  };
+  // const recoverPost = async () => {
+  //   const recoverSnapshot = await getDocs(
+  //     getSearchQuery(true, orderDescOrAsc, null, null, countCurrentPost)
+  //   );
+  //   console.log(recoverSnapshot);
+  //   setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
+  //   const afterSnapshot = await getDocs(
+  //     getSearchQuery(
+  //       true,
+  //       orderDescOrAsc,
+  //       null,
+  //       recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
+  //       1
+  //     )
+  //   );
+  //   if (afterSnapshot.docs.length === 0) {
+  //     setIsNextPostExist(false);
+  //     setIsNextPostExistRecoil(false);
+  //   } else {
+  //     setIsNextPostExist(true);
+  //     setIsNextPostExistRecoil(true);
+  //   }
+  //   setIsLoading(false);
+  // };
 
   const onSearchSubmit = () => {
     setPosts([]);
@@ -253,37 +158,34 @@ const PopularPostBoard = () => {
     setIsNextPostExist(false);
     setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
     setCurrentScrollPos(0);
-    getFirst();
+    getTenPopularPost(FIRSTSEARCH);
   };
 
   useEffect(() => {
-    console.log("[PostBoard-popular.js]", isUpdatePostList.popularPage);
-
-    if (postsRecoil.length === 0 || isUpdatePostList.popularPage) {
-      console.log("frsh or refresh data!");
+    // if (postsRecoil.length === 0 || isUpdatePostList.popularPage)
+    if (true) {
       if (isUpdatePostList.newestPage) {
-        setPosts([]);
-        setNextPostSnapShot({});
-        setIsNextPostExist(false);
         setPostsRecoil([]);
         setCountCurrentPost(10);
         setIsNextPostExist(false);
         setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
         setCurrentScrollPos(0);
       }
-      getFirst();
-      //getFirstTen();
-    } else {
-      console.log("get global state!");
-      setPosts(postsRecoil);
-      setIsNextPostExist(isNextPostExistRecoil);
-      recoverPost();
-      setTimeout(
-        () => window.scrollTo(currentScrollPos, currentScrollPos),
-        100
-      );
-      setCurrentScrollPos(0);
+      setPosts([]);
+      setNextPostSnapShot({});
+      setIsNextPostExist(false);
+      getTenPopularPost(FIRSTSEARCH);
     }
+    // else {
+    //   setPosts(postsRecoil);
+    //   setIsNextPostExist(isNextPostExistRecoil);
+    //   recoverPost();
+    //   setTimeout(
+    //     () => window.scrollTo(currentScrollPos, currentScrollPos),
+    //     100
+    //   );
+    //   setCurrentScrollPos(0);
+    // }
     // eslint-disable-next-line
   }, []);
 
@@ -304,19 +206,19 @@ const PopularPostBoard = () => {
                 setTimeDepthValue={setTimeDepthValue}
                 timeDepthSelect={timeDepthSelect}
                 setTimeDepthSelect={setTimeDepthSelect}
-                isResultDesc={isResultDesc}
-                setIsResultDesc={setIsResultDesc}
-                setOrderDescOrAsc={setOrderDescOrAsc}
+                popularpost={true}
               ></SideOptionFormForPostBoard>
             </SideOptionContainer>
           )}
           <PostBoardBodyContainer>
-            {posts.length !== 0 ? (
+            {isLoading ? (
+              <InfoTextBox>잠시만 기다려 주세요</InfoTextBox>
+            ) : posts.length !== 0 ? (
               posts.map((post) => (
                 <PostElement key={post.id} post={post}></PostElement>
               ))
             ) : (
-              <div>잠시만 기다려 주세요</div>
+              <InfoTextBox>포스트가 존재하지 않습니다.</InfoTextBox>
             )}
           </PostBoardBodyContainer>
           {isNextPostExist && (
@@ -330,9 +232,7 @@ const PopularPostBoard = () => {
               setTimeDepthValue={setTimeDepthValue}
               timeDepthSelect={timeDepthSelect}
               setTimeDepthSelect={setTimeDepthSelect}
-              isResultDesc={isResultDesc}
-              setIsResultDesc={setIsResultDesc}
-              setOrderDescOrAsc={setOrderDescOrAsc}
+              popularpost={true}
             ></SideOptionFormForPostBoard>
           </SideOptionContainer>
         )}

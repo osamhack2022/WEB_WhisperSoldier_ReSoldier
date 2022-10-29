@@ -51,14 +51,11 @@ const NicknameForm = ({ setNicknameStep }) => {
           ),
           { nickname: inputValue.nickname, admin: false, profileImg: "" }
         );
-        console.log(authService.currentUser);
 
         updateProfile(authService.currentUser, {
           displayName: inputValue.nickname,
         })
-          .then(() => {
-            console.log("닉네임 설정 성공");
-          })
+          .then(() => {})
           .catch((error) => {
             console.log(error);
           });
@@ -83,7 +80,6 @@ const NicknameForm = ({ setNicknameStep }) => {
     const response = await axios.get(
       "https://nickname.hwanmoo.kr/?format=json&count=1"
     );
-    console.log(response.data.words[0]);
     setInputValue((prev) => ({ ...prev, nickname: response.data.words[0] }));
   };
 

@@ -3,15 +3,15 @@ import Slider from "react-slick";
 import media from "../../modules/MediaQuery";
 import "../../styles/slick/slick.css";
 import "../../styles/slick/slick-theme.css";
-import testBannerImg1 from "../../asset/1.png";
-import testBannerImg2 from "../../asset/2.png";
-import testBannerImg3 from "../../asset/3.png";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
+import { useState } from "react";
+import { BannerImgUrl } from "../../lib/Const";
 
 const BannerBoxStyle = styled.div`
   padding: 0px;
   position: relative;
-  width: 760px;
+  /* width: 760px; */
+  width: 100%;
   height: 240px;
 
   background-color: #fbfbfb;
@@ -20,7 +20,7 @@ const BannerBoxStyle = styled.div`
   border: 1px solid rgb(189, 189, 189);
   ${media.smallDesktop`
   width: 100%;
-  max-width : 710px;
+  /* max-width : 710px; */
   flex-grow: 1;
   `}
   ${media.tablet`
@@ -115,13 +115,14 @@ const BannerBox = () => {
     nextArrow: <NextArrowButton />,
     prevArrow: <PreviousArrowButton />,
   };
+
   return (
     <BannerBoxStyle>
       <BannerSliderStyle>
         <Slider {...settings}>
-          <BannerImgBox src={testBannerImg1}></BannerImgBox>
-          <BannerImgBox src={testBannerImg2}></BannerImgBox>
-          <BannerImgBox src={testBannerImg3}></BannerImgBox>
+          <BannerImgBox src={BannerImgUrl[0]}></BannerImgBox>
+          <BannerImgBox src={BannerImgUrl[1]}></BannerImgBox>
+          <BannerImgBox src={BannerImgUrl[2]}></BannerImgBox>
         </Slider>
       </BannerSliderStyle>
     </BannerBoxStyle>

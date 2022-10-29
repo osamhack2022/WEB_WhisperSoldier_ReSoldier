@@ -20,7 +20,7 @@ export const PostContentText = styled.div`
   /* white-space: pre-wrap; */
   font-size: 14px;
   text-align: left;
-  letter-spacing: 0.56px;
+  /* letter-spacing: 0.56px; */
   color: #1d1d1d;
   word-break: break-all;
   white-space: pre-wrap;

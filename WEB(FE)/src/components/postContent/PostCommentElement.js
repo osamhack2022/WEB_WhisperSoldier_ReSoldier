@@ -114,9 +114,10 @@ const PostCommentElement = ({
     } else {
       const curseWord = checkCurseWord(newComment);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 건전한 상담 문화에 걸맞는 표현을 사용해주세요."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinenceComment: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinenceComment: false }));
+        }, 3000);
       } else {
         setOpenDialogForEditComment(true);
       }
@@ -179,7 +180,6 @@ const PostCommentElement = ({
   };
 
   const toggleLike = async () => {
-    console.log("toggleLike - Comment");
     const commentDocRef = doc(dbService, "Comment", commentElement.id);
     if (isLikedByMe) {
       const querySnapshot = await getDocs(getLikeCheckQuery(currentUserUid));
@@ -234,7 +234,6 @@ const PostCommentElement = ({
     }
     const checkSnapshot = await getDocs(checkQuery);
     if (checkSnapshot.docs.length === 0) {
-      console.log("새 채팅방을 생성");
       const newChatRef = await addDoc(collection(dbService, "ChatPair"), {
         created_timestamp: serverTimestamp(),
         is_report_and_block: "",
@@ -256,7 +255,6 @@ const PostCommentElement = ({
       }));
       navigate("/message");
     } else {
-      console.log("기존 채팅방 존재");
       setStartFirstChat((prev) => ({
         ...prev,
         exist: true,
@@ -267,7 +265,6 @@ const PostCommentElement = ({
   };
 
   const onDeleteCommentClick = async () => {
-    console.log(`deleting ${commentElement.id}`);
     await deleteDoc(doc(dbService, "Comment", commentElement.id));
     const updateRef = doc(
       dbService,
@@ -323,26 +320,12 @@ const PostCommentElement = ({
       doc(dbService, "Comment", commentElement.id)
     );
     if (reportCheckSnap.data().comment_report) {
-      console.log("이미 신고된 댓글임");
       setIsReported(true);
     }
     if (reportCheckSnap.data().comment_rep_accept) {
-      console.log("블라인드된 댓글임");
       setIsReportAccepted(true);
     }
   };
-  const onClickReportComment = async () => {
-    if (isReported) {
-      alert("이미 누군가에 의해 신고된 댓글입니다.");
-    } else {
-      updateDoc(doc(dbService, "Comment", commentElement.id), {
-        comment_report: true,
-      })
-        .then(alert("신고가 접수되었습니다. 관리자 확인 후 처리 예정입니다."))
-        .then(setIsReported(true));
-    }
-  };
-
   const reportComment = async () => {
     await updateDoc(doc(dbService, "Comment", commentElement.id), {
       comment_report: true,
@@ -354,7 +337,6 @@ const PostCommentElement = ({
       setAlertInfo((prev) => ({ ...prev, reportComment: false }));
     }, 3000);
   };
-  
   useEffect(() => {
     getIsLiked();
     getReportStatuses();
@@ -563,14 +545,3 @@ const PostCommentElement = ({
 };
 
 export default PostCommentElement;
-
-/** 
- *         <form onSubmit={onCommentEditAndSubmit}>
-          <textarea
-            style={{ whiteSpace: "pre-wrap" }}
-            value={newComment}
-            onChange={onCommentChange}
-          />
-          <button type="submit">댓글 수정</button>
-        </form>
-*/

@@ -34,7 +34,6 @@ const ChatPairBoard = ({
 
   const getCurrentChatPair = async (pairId, chatWithUser, isBlocked) => {
     setCurrentChatPair(pairId);
-    
 
     const chatPairSnap = await getDoc(doc(dbService, "ChatPair", pairId));
     const chatPairReadByArray = chatPairSnap.data().recentMessage.read_by;
@@ -46,35 +45,31 @@ const ChatPairBoard = ({
       });
     }
 
-    if(isBlocked){
-      if(isBlocked === currentUserInfo.uid){
-        console.log(isBlocked, "차단함(나)");
+    if (isBlocked) {
+      if (isBlocked === currentUserInfo.uid) {
         setCurrentChatWithUser((prev) => ({
           ...prev,
           nickname: chatWithUser.nickname,
           profileImg: chatWithUser.profileImg,
-          blocked : true,
-          blockedByMe : true,
+          blocked: true,
+          blockedByMe: true,
         }));
-      }
-      else{
-        console.log(isBlocked, "차단함");
+      } else {
         setCurrentChatWithUser((prev) => ({
           ...prev,
           nickname: chatWithUser.nickname,
           profileImg: chatWithUser.profileImg,
-          blocked : true,
-          blockedByMe : false,
+          blocked: true,
+          blockedByMe: false,
         }));
       }
-    }
-    else{
+    } else {
       setCurrentChatWithUser((prev) => ({
         ...prev,
         nickname: chatWithUser.nickname,
         profileImg: chatWithUser.profileImg,
-        blocked : false,
-        blockedByMe : false,
+        blocked: false,
+        blockedByMe: false,
       }));
     }
   };

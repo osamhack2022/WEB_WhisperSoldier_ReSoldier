@@ -50,7 +50,7 @@ export const WriteUserButtonContainer = ({
       )
     );
     if (oldtagSnap.docs.length === 0) {
-      console.log("Could not find Old Tag");
+      // console.log("Could not find Old Tag");
     } else {
       updateDoc(doc(dbService, "Tag", oldtagSnap.docs[0].id), {
         tag_count: increment(-1),
@@ -213,7 +213,6 @@ export const OtherUserButtonContainer = ({
   };
 
   const onReportPostClick = () => {
-    console.log(openDialogForReportPost, openDialogForReportedPost);
     setOpenDialogForReportPost(false);
     reportPost();
     setAlertInfo((prev) => ({ ...prev, reportPost: true }));
@@ -231,7 +230,6 @@ export const OtherUserButtonContainer = ({
       sessionStorage.getItem(whisperSodlierSessionKey)
     );
     const postDocRef = doc(dbService, "WorryPost", postInfo.id);
-    console.log(postDocRef);
     if (isLikedByMe) {
       const likeCheckQuery = query(
         collection(dbService, "PostLike"),
@@ -240,7 +238,7 @@ export const OtherUserButtonContainer = ({
       );
       const querySnapshot = await getDocs(likeCheckQuery);
       if (querySnapshot.docs.length === 0) {
-        console.log("you have not liked this yet.");
+        // console.log("you have not liked this yet.");
       } else {
         querySnapshot.forEach((like) => {
           deleteDoc(doc(dbService, "PostLike", like.id));
@@ -332,6 +330,7 @@ export const OtherUserButtonContainer = ({
       navigate("/message");
     }
   };
+
   const reportPost = async () => {
     await updateDoc(doc(dbService, "WorryPost", postInfo.id), {
       post_report: true,

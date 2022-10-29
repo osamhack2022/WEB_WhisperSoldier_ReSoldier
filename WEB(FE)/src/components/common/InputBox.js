@@ -26,7 +26,7 @@ export const SearchBar = styled.input`
   padding: 16px 27px 16px 27px;
   border-radius: 25px;
   height: 40px;
-  width: 300px;
+  width: 280px;
   background-color: #fbfbfb;
   text-decoration: none;
   border: 1.5px solid rgb(0, 0, 0);
@@ -38,4 +38,6 @@ export const SearchBar = styled.input`
     padding: 16px 5px 16px 15px;
     width: 200px;
   `}
+  ${media.mobile`
+    flex-grow : 1;`}
 `;

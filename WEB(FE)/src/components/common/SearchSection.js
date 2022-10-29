@@ -1,5 +1,6 @@
 import { Alert, Grow } from "@mui/material";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
 import { SearchButtonShape, SearchIcon } from "./Buttons";
@@ -21,51 +22,73 @@ const SearchBox = styled.div`
   `}
   ${media.mobile`
     margin-left : inherit;
+    width : 100%;
     position: relative;
     left:inherit;
     transform: inherit;
+    margin-bottom: 10px;
   `}
 `;
 
 const AlertBox = styled.div`
   position: fixed;
-  top: 84px;
+  top: ${(props) => (props.profile ? "96px" : "134px")};
   z-index: 3;
   left: 50%;
   transform: translate(-50%, 0);
+  ${media.mobile`
+  top : 122px;`}
 `;
 
-const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
-  const [isInputError, setIsInputError] = useState(false);
+const SearchSection = ({ navigate, inputValue, onChange }) => {
+  const location = useLocation();
+  const [alertInfo, setAlertInfo] = useState({
+    blankInput: false,
+    oneLetterInput: false,
+  });
 
   const onSearchClick = (e) => {
     e.preventDefault();
-    if (inputValue.searchWord.length !== 0) {
+    if (inputValue.searchWord.length >= 2) {
       navigate(`/search?keyword=${inputValue.searchWord}`);
     } else {
-      setIsInputError(true);
-      setTimeout(() => {
-        setIsInputError(false);
-      }, 2000);
+      if (inputValue.searchWord.length === 0) {
+        setAlertInfo((prev) => ({ ...prev, blankInput: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, blankInput: false }));
+        }, 3000);
+      } else {
+        setAlertInfo((prev) => ({ ...prev, oneLetterInput: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, oneLetterInput: false }));
+        }, 3000);
+      }
     }
   };
 
   const onKeyUp = (e) => {
     if (e.key === "Enter") {
-      if (inputValue.searchWord.length !== 0) {
+      if (inputValue.searchWord.length >= 2) {
         navigate(`/search?keyword=${inputValue.searchWord}`);
       } else {
-        setIsInputError(true);
-        setTimeout(() => {
-          setIsInputError(false);
-        }, 2000);
+        if (inputValue.searchWord.length === 0) {
+          setAlertInfo((prev) => ({ ...prev, blankInput: true }));
+          setTimeout(() => {
+            setAlertInfo((prev) => ({ ...prev, blankInput: false }));
+          }, 3000);
+        } else {
+          setAlertInfo((prev) => ({ ...prev, oneLetterInput: true }));
+          setTimeout(() => {
+            setAlertInfo((prev) => ({ ...prev, oneLetterInput: false }));
+          }, 3000);
+        }
       }
     }
   };
 
   return (
     <>
-      <SearchBox searchpage={searchpage ? "true" : "false"}>
+      <SearchBox>
         <SearchBar
           name="searchWord"
           type="search"
@@ -80,9 +103,14 @@ const SearchSection = ({ navigate, inputValue, onChange, searchpage }) => {
           <SearchIcon></SearchIcon>
         </SearchButtonShape>
       </SearchBox>
-      <AlertBox>
-        <Grow in={isInputError}>
-          <Alert severity="error">검색어를 입력해주세요</Alert>
+      <AlertBox profile={location.pathname === "/profile" ? "true" : "false"}>
+        <Grow in={alertInfo.blankInput}>
+          <Alert severity="warning">검색어를 입력해주세요</Alert>
+        </Grow>
+      </AlertBox>
+      <AlertBox profile={location.pathname === "/profile" ? "true" : "false"}>
+        <Grow in={alertInfo.oneLetterInput}>
+          <Alert severity="warning">두글자 이상 입력해주세요</Alert>
         </Grow>
       </AlertBox>
     </>

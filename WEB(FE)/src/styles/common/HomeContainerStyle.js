@@ -42,17 +42,36 @@ export const HomeContentUpperBox = styled.div`
   justify-content: space-between;
   align-items: center;
   transition: all 0.5s;
+  flex-grow: 1;
   ${media.tablet`
   flex-direction : column;
   `}
 `;
 
 export const HomeContentLowerBox = styled.div`
-  margin-top: 10px;
+  /*  */
+  /* display: flex;
+  flex-direction: row; */
+  transition: all 0.5s;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  grid-auto-flow: row dense;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(100px, auto));
+  /* overflow: unset; */
+  ${media.tablet`
+  
+  `}
+  ${media.mobile`
   display: flex;
   flex-direction: row;
-  transition: all 0.5s;
-  ${media.tablet`
   flex-wrap: wrap;
+  grid-template-columns: inherit;
+  gap: inherit;
+  grid-auto-flow: inherit;
+  width: 100%;
+  grid-template-columns: inherit;
   `}
 `;

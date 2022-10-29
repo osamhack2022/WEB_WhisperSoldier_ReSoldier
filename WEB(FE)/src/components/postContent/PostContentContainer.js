@@ -5,7 +5,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { TabletQuery, whisperSodlierSessionKey } from "../../lib/Const";
 import { authService } from "../../lib/FAuth";
 import { dbFunction, dbService } from "../../lib/FStore";
-import checkCurseWord from "../../modules/CheckCurseWord";
 import { useAndSetForm } from "../../modules/useForm";
 import { IsUpdatePostList, PostInfo } from "../../store/PostStore";
 import {
@@ -20,7 +19,7 @@ import SideButtonBox from "../common/SideButtonBox";
 import RecentPostContainer from "../container/PopularPostContainer";
 import { SideOptionForm } from "../Write/WriteContainer";
 import PostCommentContainer from "./PostCommentContainer";
-import PostContentAlert from "./PostContentAlert";
+import { PostContentAlert } from "../common/Alert";
 import PostContentBody from "./PostContentBody";
 import PostContentTitle from "./PostContentTiltle";
 import {
@@ -51,7 +50,6 @@ const PostContentContainer = ({ isAdmin }) => {
   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const location = useLocation();
-  // console.log(location);
 
   const [state, setState, onChange] = useAndSetForm({
     editContent: postInfo.postContent,
@@ -80,6 +78,9 @@ const PostContentContainer = ({ isAdmin }) => {
     subComment: false,
     reportPost: false,
     reportComment: false,
+    impertinencePost: false,
+    impertinenceComment: false,
+    tagOneLetterInput: false,
   });
 
   const getIsLiked = async (currentPostInfo = null) => {
@@ -205,8 +206,6 @@ const PostContentContainer = ({ isAdmin }) => {
         postContent: contentObj.text,
         comment_count: contentObj.comment_count,
         tag_name: contentObj.tag_name,
-        post_report: contentObj.post_report,
-        post_rep_accept: contentObj.post_rep_accept,
       }));
       setState((prev) => ({
         ...prev,
@@ -217,7 +216,6 @@ const PostContentContainer = ({ isAdmin }) => {
       getPostUserNickname(contentObj);
     } else {
       setErrorPostInfo(true);
-      console.log("No such Document!");
     }
   };
 
@@ -293,6 +291,7 @@ const PostContentContainer = ({ isAdmin }) => {
             errorEditInfo={errorEditInfo}
             state={state}
             setErrorEditInfo={setErrorEditInfo}
+            setAlertInfo={setAlertInfo}
           ></PostContentTitle>
           <PostContentBody
             postInfo={postInfo}

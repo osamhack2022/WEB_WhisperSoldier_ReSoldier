@@ -15,6 +15,8 @@ import { TagContentBox } from "../../styles/home/PopularTagBoxStyle";
 import { dbFunction } from "../../lib/FStore";
 import { useEffect, useState } from "react";
 import { GetTagQuery } from "../../modules/GetTagQuery";
+import { InfoTextBox } from "../../styles/admin/ReportedPostStyle";
+import { WritePostAlert } from "../common/Alert";
 
 export const SideOptionForm = () => {
   const { getDocs } = dbFunction;
@@ -24,7 +26,6 @@ export const SideOptionForm = () => {
   const getTop20Tag = async () => {
     try {
       const top20TagSnapshot = await getDocs(
-        // GetTagQuery("Tag", "tag_count", "tag_count", ">", 0, 20)
         GetTagQuery("Tag", "tag_count", "desc", "tag_count", ">", 0, 20, null)
       );
       top20TagSnapshot.forEach((tag) => {
@@ -50,8 +51,8 @@ export const SideOptionForm = () => {
       <TagBoxTitleForSideBox>인기 고민 태그</TagBoxTitleForSideBox>
       <TagContentBox>
         {loading ? (
-          <div>잠시만 기다려 주새요</div>
-        ) : (
+          <InfoTextBox>잠시만 기다려 주새요</InfoTextBox>
+        ) : tagList.length !== 0 ? (
           <>
             {tagList.map((tag) => (
               <TagElementForSideBox key={tag.id}>
@@ -61,6 +62,8 @@ export const SideOptionForm = () => {
               </TagElementForSideBox>
             ))}
           </>
+        ) : (
+          <InfoTextBox>태그가 존재하지 않습니다.</InfoTextBox>
         )}
       </TagContentBox>
     </SideOptionFormBox>
@@ -68,6 +71,10 @@ export const SideOptionForm = () => {
 };
 
 const WriteContainer = () => {
+  const [alertInfo, setAlertInfo] = useState({
+    impertinencePost: false,
+    tagOneLetterInput: false,
+  });
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
@@ -75,6 +82,7 @@ const WriteContainer = () => {
 
   return (
     <WriteContainerBox>
+      <WritePostAlert alertInfo={alertInfo} />
       <MainContentContainer>
         <SideButtonBoxForWritePage>
           <BackButton goBack={goBack} notRight={true}>
@@ -82,7 +90,7 @@ const WriteContainer = () => {
           </BackButton>
         </SideButtonBoxForWritePage>
 
-        <WritePostBox navigate={navigate} />
+        <WritePostBox navigate={navigate} setAlertInfo={setAlertInfo} />
       </MainContentContainer>
       <SideOptionContainer>
         <SideOptionForm />

@@ -6,11 +6,10 @@ const PostBoardTitle = styled.span`
   font-size: 14px;
   width: fit-content;
   text-align: left;
-  letter-spacing: 0.64px;
   flex-grow: 1;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
-  font-weight: 600;
+  font-weight: bold;
 `;
 
 const PostBoardTitleBox = styled.div`
@@ -44,11 +43,10 @@ export const PostBoardMoreButtonText = styled.span`
   margin-right: 5px;
   font-size: 12px;
   text-align: center;
-  letter-spacing: 0.64px;
   color: #4f4f4f;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0);
-  font-weight: 700;
+  font-weight: 600;
   transition: all 0.3s;
 `;
 

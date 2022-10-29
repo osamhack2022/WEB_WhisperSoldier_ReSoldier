@@ -20,7 +20,7 @@ const InfoText = styled.div`
   margin-top: ${(props) => (props.top ? "20px" : "5px")};
   margin-bottom: ${(props) => !props.top && "20px"};
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const LoadPage = () => {

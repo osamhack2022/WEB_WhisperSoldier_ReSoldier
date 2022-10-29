@@ -3,10 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import styled from "@emotion/styled";
-import {
-  Dialog,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogActions } from "@mui/material";
 import { useState } from "react";
 import { WsDialogTitle } from "../../styles/profile/CheckDefaultProfileImgDialogStyle";
 import {
@@ -19,7 +16,7 @@ const ITEM_HEIGHT = 48;
 const ChatOptionMenuItem = styled(MenuItem)({
   backgroundColor: "rgba(0, 0, 0, 0)",
   fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "500",
+  fontWeight: "400",
   fontSize: "14px",
   width: "120px",
 });
@@ -40,7 +37,6 @@ export const ChatContentOptionMenu = ({
   const [openDialogForExitChat, setOpenDialogForExitChat] = useState(false);
   const [openDialogForBlockChat, setOpenDialogforBlockChat] = useState(false);
 
-
   const handleClickOpenDialogForExitChat = () => {
     setOpenDialogForExitChat(true);
   };
@@ -58,7 +54,6 @@ export const ChatContentOptionMenu = ({
     setOpenDialogforBlockChat(false);
     setAnchorEl(null);
   };
-
 
   return (
     <div>
@@ -87,7 +82,6 @@ export const ChatContentOptionMenu = ({
           },
         }}
       >
-        
         <ChatOptionMenuItem onClick={handleClickOpenDialogForExitChat}>
           채팅 나가기
         </ChatOptionMenuItem>
@@ -102,7 +96,10 @@ export const ChatContentOptionMenu = ({
             채팅방 나가면 채팅 내역은 삭제 됩니다.
           </WsDialogTitle>
           <DialogActions>
-            <ConfirmButton onClick={handleCloseDialogForExitChat} color="primary">
+            <ConfirmButton
+              onClick={handleCloseDialogForExitChat}
+              color="primary"
+            >
               취소
             </ConfirmButton>
             <CancelButton
@@ -128,7 +125,10 @@ export const ChatContentOptionMenu = ({
             채팅방을 차단하면 해제 전까지 상대방과 채팅할 수 없습니다.
           </WsDialogTitle>
           <DialogActions>
-            <ConfirmButton onClick={handleCloseDialogForBlockChat} color="primary">
+            <ConfirmButton
+              onClick={handleCloseDialogForBlockChat}
+              color="primary"
+            >
               취소
             </ConfirmButton>
             <CancelButton
@@ -148,12 +148,15 @@ export const ChatContentOptionMenu = ({
 const ChatOptionMenuItemForBlockByMe = styled(MenuItem)({
   backgroundColor: "rgba(0, 0, 0, 0)",
   fontFamily: "IBM Plex Sans KR, sans-serif",
-  fontWeight: "500",
+  fontWeight: "400",
   fontSize: "14px",
   width: "140px",
 });
 
-export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlockChatPairClick})=>{
+export const ChatContentOptionMenuBlockByMe = ({
+  onChatPairDeleteClick,
+  onUnBlockChatPairClick,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -165,7 +168,6 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
 
   const [openDialogForExitChat, setOpenDialogForExitChat] = useState(false);
   const [openDialogForBlockChat, setOpenDialogforBlockChat] = useState(false);
-
 
   const handleClickOpenDialogForExitChat = () => {
     setOpenDialogForExitChat(true);
@@ -212,8 +214,9 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
           },
         }}
       >
-        
-        <ChatOptionMenuItemForBlockByMe onClick={handleClickOpenDialogForExitChat}>
+        <ChatOptionMenuItemForBlockByMe
+          onClick={handleClickOpenDialogForExitChat}
+        >
           채팅 나가기
         </ChatOptionMenuItemForBlockByMe>
         <Dialog
@@ -227,7 +230,10 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
             채팅방 나가면 채팅 내역은 삭제 됩니다.
           </WsDialogTitle>
           <DialogActions>
-            <ConfirmButton onClick={handleCloseDialogForExitChat} color="primary">
+            <ConfirmButton
+              onClick={handleCloseDialogForExitChat}
+              color="primary"
+            >
               취소
             </ConfirmButton>
             <CancelButton
@@ -239,7 +245,9 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
             </CancelButton>
           </DialogActions>
         </Dialog>
-        <ChatOptionMenuItemForBlockByMe onClick={handleClickOpenDialogForBlockChat}>
+        <ChatOptionMenuItemForBlockByMe
+          onClick={handleClickOpenDialogForBlockChat}
+        >
           채팅 차단해제 하기
         </ChatOptionMenuItemForBlockByMe>
         <Dialog
@@ -253,7 +261,10 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
             채팅방을 차단해제하면 상대방과 채팅을 할 수 있습니다.
           </WsDialogTitle>
           <DialogActions>
-            <ConfirmButton onClick={handleCloseDialogForBlockChat} color="primary">
+            <ConfirmButton
+              onClick={handleCloseDialogForBlockChat}
+              color="primary"
+            >
               취소
             </ConfirmButton>
             <CancelButton
@@ -268,4 +279,4 @@ export const ChatContentOptionMenuBlockByMe = ({onChatPairDeleteClick, onUnBlock
       </Menu>
     </div>
   );
-}
+};

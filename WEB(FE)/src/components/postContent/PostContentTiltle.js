@@ -1,5 +1,5 @@
 import { Dialog, DialogActions } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkCurseWord from "../../modules/CheckCurseWord";
 import { PostContentErrorText } from "../../styles/PostContent/PostContentBodyStyle";
 import {
@@ -29,6 +29,7 @@ const PostContentTitle = ({
   errorEditInfo,
   state,
   setErrorEditInfo,
+  setAlertInfo,
 }) => {
   const [openDialogForEditPost, setOpenDialogForEditPost] = useState(false);
   const handleClickOpenDialogForEditPost = () => {
@@ -37,12 +38,18 @@ const PostContentTitle = ({
       setTimeout(() => {
         setErrorEditInfo(false);
       }, 3000);
+    } else if (state.editTag.length === 1) {
+      setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: true }));
+      setTimeout(() => {
+        setAlertInfo((prev) => ({ ...prev, tagOneLetterInput: false }));
+      }, 3000);
     } else {
       const curseWord = checkCurseWord(state.editContent);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 건전한 상담 문화에 걸맞는 표현을 사용해주세요."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinencePost: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinencePost: false }));
+        }, 3000);
       } else {
         setOpenDialogForEditPost(true);
       }

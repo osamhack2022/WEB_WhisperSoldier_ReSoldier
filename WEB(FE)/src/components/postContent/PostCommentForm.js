@@ -114,9 +114,10 @@ const PostCommentForm = ({
     } else {
       const curseWord = checkCurseWord(state.comment);
       if (curseWord) {
-        alert(
-          "욕 또는 비속어가 감지되었습니다. 건전한 상담 문화에 걸맞는 표현을 사용해주세요."
-        );
+        setAlertInfo((prev) => ({ ...prev, impertinenceComment: true }));
+        setTimeout(() => {
+          setAlertInfo((prev) => ({ ...prev, impertinenceComment: false }));
+        }, 3000);
       } else {
         setOpenDialogForCreateComment(true);
       }

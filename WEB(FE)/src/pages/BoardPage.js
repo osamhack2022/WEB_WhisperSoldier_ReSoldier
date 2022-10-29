@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import PopularPostBoard from "../components/post/PopularPostBoard";
 import PostBoard from "../components/post/PostBoard";
@@ -21,6 +22,7 @@ export const BoardContainer = styled.div`
 `;
 
 const BoardPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [kindOfBoard, setKindOfBoard] = useState("");
   useEffect(() => {
@@ -32,14 +34,21 @@ const BoardPage = () => {
     } else if (id === "like_count") {
       setKindOfBoard("like_count");
     } else {
-      // 잘못된 페이지
+      // 잘못된 페이지 경우 오류 페이지로 이동
+      navigate("/notfound", { replace: true });
     }
+    //eslint-disable-next-line
   }, []);
   return (
-    <BoardContainer>
-      {kindOfBoard === "latest" && <PostBoard></PostBoard>}
-      {kindOfBoard === "like_count" && <PopularPostBoard></PopularPostBoard>}
-    </BoardContainer>
+    <>
+      <Helmet>
+        <title>게시판 - Whisper Soldier</title>
+      </Helmet>
+      <BoardContainer>
+        {kindOfBoard === "latest" && <PostBoard></PostBoard>}
+        {kindOfBoard === "like_count" && <PopularPostBoard></PopularPostBoard>}
+      </BoardContainer>
+    </>
   );
 };
 

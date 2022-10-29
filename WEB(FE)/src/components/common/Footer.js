@@ -15,7 +15,6 @@ const FooterBox = styled.footer`
 const FooterText = styled.div`
   font-size: 12px;
   text-align: center;
-  letter-spacing: 0.48px;
   color: #555555;
   font-weight: 400;
   height: 14px;

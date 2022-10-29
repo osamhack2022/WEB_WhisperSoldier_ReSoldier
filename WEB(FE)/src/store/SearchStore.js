@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 export const SearchInfo = atom({
-  key: "searchInfo",
+  key: "searchInfoStore",
   default: {
     searchKeyword: "",
     countResultPosts: 0,
@@ -14,6 +14,11 @@ export const SearchInfo = atom({
 });
 
 export const ResultList = atom({
-  key: "resultList",
+  key: "resultListStore",
   default: [],
 });
+
+// export const ShowSearchContent = atom({
+//   key: "showSearchContent",
+//   default: false,
+// });

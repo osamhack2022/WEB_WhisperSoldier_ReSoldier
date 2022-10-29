@@ -4,15 +4,14 @@ import media from "../../modules/MediaQuery";
 import { MainTitle, SubTitle } from "../common/Logos";
 
 const TitleBox = styled.div`
-  /* padding-left: 20px; */
-  width: 160px;
+  width: fit-content;
   border: none;
   text-align: right;
   height: fit-content;
   cursor: pointer;
   ${media.smallDesktop`
   padding-left : 0px;
-    width : 160px;
+    width : fit-content;
   `}
   ${media.mobile`
     width : 100%;
@@ -34,7 +33,7 @@ export const HeaderTitleContainer = ({ navigate, setInputChange }) => {
   };
   return (
     <TitleBox onClick={onLogoClick}>
-      <MainTitle>Whisper Solider</MainTitle>
+      <MainTitle>Whisper Soldier</MainTitle>
       <SubTitle>익명 군 상담소</SubTitle>
     </TitleBox>
   );

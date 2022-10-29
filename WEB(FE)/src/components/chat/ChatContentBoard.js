@@ -179,7 +179,7 @@ const ChatContentBoard = ({
               sent_by: currentUserUid,
               sent_timestamp: serverTimestamp(),
             }
-          ).then(console.log("adding successful"));
+          );
 
           updateDoc(doc(dbService, "ChatPair", currentChatPair), {
             recentMessage: {
@@ -264,13 +264,10 @@ const ChatContentBoard = ({
         });
         setFirstLoading(false);
       });
-      console.log(currentChatWithUser);
 
       return () => {
         unsubscribe();
       };
-    } else {
-      console.log("no selected chat pair");
     }
     //eslint-disable-next-line
   }, [currentChatPair]);

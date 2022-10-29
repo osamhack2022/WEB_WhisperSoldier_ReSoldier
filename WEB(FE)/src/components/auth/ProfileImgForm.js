@@ -75,9 +75,8 @@ const Block1 = styled.div`
 `;
 const ProfileImgForm = () => {
   //   const [userInfo, setUserInfo] = useRecoilState(UserInfo);
-  const { doc, getDoc, getDocs, query, collection, where, setDoc, deleteDoc } =
-    dbFunction;
-  const { ref, uploadString, getDownloadURL, deleteObject } = storageFunction;
+  const { doc } = dbFunction;
+  const { ref, uploadString, getDownloadURL } = storageFunction;
 
   const navigate = useNavigate();
   const [profileImg, setProfileImg] = useState("");
@@ -89,7 +88,6 @@ const ProfileImgForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onFileChange = (e) => {
-    console.log(e.target.files);
     const {
       target: { files },
     } = e;
@@ -118,19 +116,14 @@ const ProfileImgForm = () => {
         }/${uuid()}`
       );
       try {
-        await uploadString(attachmentRef, profileImg, "data_url").then(
-          (snapshot) => {
-            console.log("Uploaded a data_url string!");
-          }
-        );
+        await uploadString(attachmentRef, profileImg, "data_url");
         const profileImgUrl = await getDownloadURL(attachmentRef);
 
-        console.log("success upload image!");
         updateProfile(authService.currentUser, {
           photoURL: profileImgUrl,
         })
           .then(() => {
-            console.log("프로필 사진 변경 성공");
+            // console.log("프로필 사진 변경 성공");
             // alert("닉네임 변경을 성공했습니다.");
             updateDoc(
               doc(
