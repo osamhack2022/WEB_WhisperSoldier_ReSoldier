@@ -22,7 +22,7 @@
 </p><br/>
 
 <p alignt="center">
-	![testing]("https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge")
+	![testing](https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge)
 
 	[![Contributors][contributors-shield]][contributors-url]
 
