@@ -21,7 +21,7 @@
 	</a>
 </p><br/>
 
-> **_목차_**
+## :scroll: 목차
 >
 > [:page_facing_up: 프로젝트 소개](#page_facing_up-프로젝트-소개)
 >
