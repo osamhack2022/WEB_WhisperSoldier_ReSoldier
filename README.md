@@ -82,7 +82,6 @@
 익명성을 활용하여 상담자와 피상담자를 부대 내에서의 입장의 차이로부터 해방하고, 전우 대 전우로서 "속삭이듯이", 안심하고 솔직하게 마음을 털어놓을 수 있게 하고자 합니다.
 <br/><br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :bulb: **주요 기능**
 
@@ -209,14 +208,12 @@
 	- 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.
   <br/><br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :chart_with_upwards_trend: **서비스 플로우**
 
 <img src="Image\whispersoldier_service_flow_chart.png"/>
 <br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :motorway: **로드맵**
 
@@ -254,14 +251,12 @@
 	- [x] 태그 검색
 	- [x] 태그 별 고민게시판
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :clipboard: **DB Diagram**
 
 <img style="width:500px;" src="Image\dbdiagram.png"/>
 <br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :iphone: **UI/UX**
 
@@ -317,7 +312,6 @@
 </table>
 <br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :electric_plug: **컴퓨터 구성 / 필수 조건 안내 (Prerequisites)**
 
@@ -325,7 +319,6 @@
 - Google Chrome 버젼 77 이상을 권장합니다.
   <br/><br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :computer:**기술 스택 (Technique Used)**
 
@@ -364,7 +357,6 @@
       </a>
   <br/><br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :running:**ReSoldier 팀 정보**
 ReSoldier : Resolve + Soldier - **“정해진 답이 없는 문제들에 대한 해결책을 찾는 병사들”**
@@ -376,10 +368,8 @@ ReSoldier : Resolve + Soldier - **“정해진 답이 없는 문제들에 대한
 | 강태우 | 공군 병장 | Backend, DB 설계       | [TaewooRiver](https://github.com/TaewooRiver) | colab.taewoo@gmail.com |
 <br/>
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
 
 ## :open_file_folder: **저작권 및 사용권 정보 (Copyleft / End User License)**
 
 - [MIT License & Apache License 2.0](LICENSE)
 
-<p align="right"><a href="#scroll-목차">:scroll:목차로 가기:scroll:</a></p>
