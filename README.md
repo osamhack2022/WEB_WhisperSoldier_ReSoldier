@@ -52,9 +52,109 @@
 
 ## :bulb: **주요 기능**
 
-- 고민 게시판에서 더 나아가 보다 깊이있는 상담을 위해 1대 1로 진행할 수 있는 채팅 기능
-- 직접 고민을 올리기 부담스럽다면 나와 비슷한 고민을 찾을 수 있는, 키워드 검색과 태그를 활용한 고민 조회 기능
-- 요즘 전우들이 많이 공감하는 고민이 무엇인지 알 수 있는 인기 고민게시판
+<img src="/workspace/WEB_WhisperSoldier_R/Image/Introduce_Functionailty/email_veri.png" width=360/>
+
+- 나라사랑이메일 인증 기능
+    - 사용자가 국군 병사임을 증명할 수 있습니다.
+
+<br/><br/>
+
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/upload_worry_1.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/upload_worry_2.png" width=360></td>
+	</tr>
+</table>
+
+- 고민 공유
+	- 고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.
+
+<br/><br/>
+
+<img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360>
+
+- 최신 고민게시판
+	- 전우들이 가장 최근 업로드한 고민을 알 수 있습니다.
+
+<br/><br/>
+
+<img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360>
+
+- 인기 고민게시판
+	- 전우들이 많이 공감하는 고민이 무엇인지 알 수 있습니다.
+
+<br/><br/>
+
+<img src="Image/Introduce_Functionailty/chat.png" width=360>
+
+- 1대 1 채팅 기능
+	- 고민 게시판보다 깊고 자세한 상담을 진행할 수 있습니다.
+
+<br/><br/>
+
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/keyword_search.png" width=360></td>
+	</tr>
+</table>
+
+- 키워드 검색과 태그 검색을 활용한 고민 조회 기능
+	- 직접 고민을 올리기 부담스럽다면, 나와 비슷한 고민을 조회해 해당 글에 달린 댓글을 읽고, 댓글을 단 사람과 1대 1 채팅을 진행할 수 있습니다.
+
+<br/><br/>
+
+<img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360>
+
+- 업로드 전 필터링 기능
+	- 고민 글 또는 댓글 작성 시 비속어를 감지하여 업로드를 사전에 방지합니다.
+
+<br/><br/>
+
+<img src="Image/Introduce_Functionailty/post_report.png" width=360>
+<img src="Image/Introduce_Functionailty/comment_report.png" width=360>
+<img src="Image/Introduce_Functionailty/chat_block.png" width=360>
+
+
+- 신고 및 차단 기능
+	- 부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.
+
+<br/><br/>
+
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
+	</tr>
+</table>
+
+- 마이페이지의 기능
+	- 사용자의 프로필 사진과 닉네임을 설정할 수 있습니다.
+	- 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.
+
+<br/><br/>
+
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/admin_reported_comments.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/admin_reported_posts.png" width=360></td>
+	</tr>
+</table>
+
+- 관리자 기능
+	- 관리자 계정으로 로그인하여 신고된 고민글과 댓글을 조회할 수 있습니다.
+	- 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.
   <br/><br/>
 
 ## :chart_with_upwards_trend: **서비스 플로우**
