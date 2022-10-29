@@ -111,10 +111,17 @@
 
 <br/><br/>
 
-<img src="Image/Introduce_Functionailty/post_report.png" width=360>
-<img src="Image/Introduce_Functionailty/comment_report.png" width=360>
-<img src="Image/Introduce_Functionailty/chat_block.png" width=360>
-
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/post_report.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/comment_report.png" width=360></td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/chat_block.png" width=360></td>
+	</tr>
+</table>
 
 - 신고 및 차단 기능
 	- 부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.
