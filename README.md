@@ -21,6 +21,27 @@
 	</a>
 </p><br/>
 
+> **_목차_**
+>
+> [:page_facing_up: 프로젝트 소개](#page_facing_up-프로젝트-소개)
+>
+> [:bulb: 주요 기능](#bulb-주요-기능)
+>
+> [:chart_with_upwards_trend: 서비스 플로우](#chart_with_upwards_trend-서비스-플로우)
+>
+> [:clipboard: DB Diagram](#clipboard-db-diagram)
+>
+> [:iphone: UI/UX](#iphone-uiux)
+>
+> [:electric_plug: 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)](#electric_plug-컴퓨터-구성--필수-조건-안내-prerequisites)
+>
+> [:computer:기술 스택 (Technique Used)](#computer기술-스택-technique-used)
+>
+> [:running:ReSoldier 팀 정보](#runningresoldier-팀-정보)
+>
+> [:open_file_folder: 저작권 및 사용권 정보 (Copyleft / End User License)](#open_file_folder-저작권-및-사용권-정보-copyleft--end-user-license)
+
+
 ## :page_facing_up: **프로젝트 소개**
 
 > _"오늘도 지적 받았네. 다음엔 더 잘해서 한 사람 몫은 해야 되는데..."_
