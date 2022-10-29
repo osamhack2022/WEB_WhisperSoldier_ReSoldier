@@ -1,4 +1,4 @@
-# **WhisperSoldier - 군 익명 상담소**
+# **WhisperSoldier - 익명 군 상담소**
 
 <p align="center"><img src="Image\readme_main_banner_img.png"></p>
 <p align="center">
@@ -130,6 +130,17 @@
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/keyword_search.png" width=360></td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/search_read_comment.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/search_ask_for_chat.png" width=360></td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/search_chatting.png" width=360></td>
 	</tr>
 </table>
 
