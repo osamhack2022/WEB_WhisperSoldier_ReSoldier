@@ -21,6 +21,17 @@
 	</a>
 </p><br/>
 
+<p alignt="center">
+	![testing]("https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge")
+
+	[![Contributors][contributors-shield]][contributors-url]
+
+	[![Forks][forks-shield]][forks-url]
+	[![Stargazers][stars-shield]][stars-url]
+	[![Issues][issues-shield]][issues-url]
+	[![MIT License][license-shield]][license-url]
+</p><br/>
+
 ## :scroll: 목차
 >
 > [:page_facing_up: 프로젝트 소개](#page_facing_up-프로젝트-소개)
