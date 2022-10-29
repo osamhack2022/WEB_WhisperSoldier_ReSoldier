@@ -29,6 +29,8 @@
 >
 > [:chart_with_upwards_trend: 서비스 플로우](#chart_with_upwards_trend-서비스-플로우)
 >
+>[:motorway: 로드맵](#motorway-로드맵)
+>
 > [:clipboard: DB Diagram](#clipboard-db-diagram)
 >
 > [:iphone: UI/UX](#iphone-uiux)
@@ -189,6 +191,43 @@
 
 <img src="Image\whispersoldier_service_flow_chart.png"/>
 <br/>
+
+## :motorway: **로드맵**
+
+- [x] 회원 관리 & 고민 글 (최소 기능 제품 MVP)
+	- [x] 로그인
+	- [x] 회원 가입
+	- [x] 이메일 인증
+	- [x] 고민 글 CRUD
+- [x] 댓글
+	- [x] 고민 글 내부에서 댓글 CRUD
+- [x] 고민 글 검색
+	- [x] 키워드로 고민 글 검색
+- [x] 홈페이지
+	- [x] 홈페이지 반응형 레이아웃
+	- [x] 홈페이지 배너
+	- [x] 홈페이지 게시글 컴포넌트
+- [x] 공감
+	- [x] 고민 글 공감
+	- [x] 댓글 공감
+- [x] 프로필 페이지
+	- [x] 프로필 변경
+	- [x] 내가 작성한 글
+	- [x] 내가 작성한 댓글
+	- [x] 내가 공감한 글
+	- [x] 내가 공감한 댓글
+- [x] 채팅
+	- [x] 익명 유저와 채팅
+- [x] 신고
+	- [x] 부적절한 글 신고
+	- [x] 부적절한 댓글 신고
+	- [x] 부적절한 채팅 차단
+	- [x] 관리자 페이지
+- [x] 태그
+	- [x] 고민 글 태그
+	- [x] 태그 검색
+	- [x] 태그 별 고민게시판
+
 
 ## :clipboard: **DB Diagram**
 
