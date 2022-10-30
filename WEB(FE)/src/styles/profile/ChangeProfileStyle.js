@@ -62,7 +62,6 @@ export const BigMyInfoIcon = styled(FaUserCircle)`
 export const CloesChangeProfileModalButton = styled(MdClose)`
   position: absolute;
   height: fit-content;
-  /* width: 100%;/// */
   right: 30px;
   color: #555555;
   cursor: pointer;
@@ -112,10 +111,6 @@ export const ChangeNickNameBox = styled.div`
   `}
 `;
 
-// export const createProfileImg = () =>{
-//   return;
-// };
-
 export const NicknameTextBox = styled.div`
   position: fixed;
   z-index: 3;
@@ -132,7 +127,6 @@ export const NicknameTextBox = styled.div`
     props.redcolor ? "rgba(166, 86, 70, 10)" : "rgba(65, 129, 177, 10)"};
   opacity: ${(props) => (props.success ? "0.9" : "0")};
   visibility: ${(props) => (props.success ? "visible" : "hidden")};
-  /* display: ${(props) => (props.success ? "block" : "none")}; */
   color: #ffffff;
   transition: all 0.5s;
   ${media.tablet`

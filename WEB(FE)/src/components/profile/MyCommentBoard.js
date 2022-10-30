@@ -39,7 +39,6 @@ const MyCommentBoard = () => {
           getProfilePageQuery("Comment", "commentor_id", 10, nextItemSnapShot)
         );
         const afterSnapshot = await getDocs(
-          // 이 부분을 getProfilePageQuery로 처리할 시 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
           query(
             collection(dbService, "Comment"),
             orderBy("created_timestamp", "desc"),

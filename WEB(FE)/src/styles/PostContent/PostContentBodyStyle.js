@@ -17,15 +17,12 @@ export const PostContentBox = styled.div`
 `;
 
 export const PostContentText = styled.div`
-  /* white-space: pre-wrap; */
   font-size: 14px;
   text-align: left;
-  /* letter-spacing: 0.56px; */
   color: #1d1d1d;
   word-break: break-all;
   white-space: pre-wrap;
   font-weight: 400;
-  /* margin-bottom: 5px; */
 `;
 
 export const PostContentErrorText = styled.div`
@@ -86,8 +83,6 @@ const PostContentInfoText = styled.div`
 const PostContentLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
-  /* position: absolute; */
-  /* right: 0px; */
   align-items: center;
   margin: 0px;
   text-decoration: none;

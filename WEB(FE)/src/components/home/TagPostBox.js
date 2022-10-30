@@ -16,7 +16,6 @@ const TagPostBox = ({ isLikeDesc, bottombox, tagList, first }) => {
   const navigate = useNavigate();
   const [postList, setPostList] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  //   const setIsUpdatePostList = useSetRecoilState(IsUpdatePostList);
 
   const getFiveTagPost = async (tag_name) => {
     const snapshot = await getDocs(

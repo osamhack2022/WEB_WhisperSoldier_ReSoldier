@@ -30,8 +30,6 @@ export const TagBoxTitleBox = styled.div`
   justify-content: flex-start;
   width: 100%;
   margin-bottom: 10px;
-  /* padding-bottom: 10px; */
-  /* border-bottom: 1px solid #dcdcdc; */
   padding: 15px 20px;
   background-color: #fbfbfb;
   border-radius: 5px;

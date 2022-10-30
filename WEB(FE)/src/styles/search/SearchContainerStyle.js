@@ -110,7 +110,6 @@ const SearcErrorTextBox = styled.div`
 export const SearchBarInSearchPage = ({
   inputValue,
   onChange,
-  //onSearchInputChange,
   onSearchSubmit,
   onKeyUp,
   isInputError,

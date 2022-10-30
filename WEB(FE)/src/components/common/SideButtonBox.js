@@ -3,9 +3,7 @@ import media from "../../modules/MediaQuery";
 
 const ButtonContainer = styled.div`
   display: flex;
-  /* flex-direction: column; */
   flex-direction: row;
-  /* justify-content: center; */
   justify-content: flex-start;
   align-items: center;
   height: fit-content;
@@ -18,11 +16,8 @@ const ButtonContainer = styled.div`
   padding: 0px 0px 0px 20px;
   margin-bottom: 10px;
   ${media.mobile`
-  /* flex-direction: row; */
-  /* justify-content: flex-start; */
   align-items : inherit;
   width: 100%;
-  /* padding: 0px 0px 0px 10px; */
   `}
 `;
 

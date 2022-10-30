@@ -1,12 +1,10 @@
 import {
   collection,
-  getDocs,
   limit,
   orderBy,
   query,
   startAfter,
   where,
-  Timestamp,
 } from "firebase/firestore";
 import { dbService } from "../lib/FStore";
 import getTimeDepth from "./GetTimeDepth";
@@ -56,9 +54,7 @@ export const getSearchQuery = (
     }
   } else {
     if (startAfterPoint) {
-      if (isOrderByLikes) {
-        // 추후에 "공감하기" 구현되면 사용될 예정
-      } else {
+      if (!isOrderByLikes) {
         return query(
           collection(dbService, "WorryPost"),
           orderBy("created_timestamp", orderDescOrAsc),
@@ -67,9 +63,7 @@ export const getSearchQuery = (
         );
       }
     } else {
-      if (isOrderByLikes) {
-        // 추후에 "공감하기" 구현되면 사용될 예정
-      } else {
+      if (!isOrderByLikes) {
         return query(
           collection(dbService, "WorryPost"),
           orderBy("created_timestamp", orderDescOrAsc),

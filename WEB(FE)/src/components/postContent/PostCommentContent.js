@@ -41,13 +41,6 @@ const PostCommentContent = ({
     //eslint-disable-next-line
   }, [postInfo.id]);
 
-  // useEffect(() => {
-  //   setPostComments([]);
-  //   getPostComments();
-  //   setIsLoadingComments(true);
-  //   //eslint-disable-next-line
-  // }, [postInfo]);
-
   return (
     <PostCommentBox>
       {isLoadingComments ? (

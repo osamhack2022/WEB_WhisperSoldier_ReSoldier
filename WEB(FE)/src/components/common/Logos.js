@@ -4,7 +4,6 @@ import media from "../../modules/MediaQuery";
 export const AuthLogo = styled.div`
   font-size: 32px;
   text-align: center;
-  /* text-transform: uppercase; */
   color: #1a7541;
   font-weight: 600;
   height: fit-content;
@@ -15,8 +14,6 @@ export const SubLogo = styled.div`
   position: relative;
   font-size: 18px;
   text-align: center;
-  /* letter-spacing: 0.72px; */
-  /* text-transform: uppercase; */
   color: #0d552c;
   font-weight: 600;
   height: fit-content;
@@ -39,7 +36,6 @@ export const MainTitle = styled.span`
   font-weight: 600;
   font-style: normal;
   line-height: normal;
-  /* letter-spacing: 1.12px; */
   text-align: center;
   color: #1a7541;
   ${media.smallDesktop`
@@ -57,7 +53,6 @@ export const SubTitle = styled.div`
   top: -5px;
   font-size: 13px;
   text-align: right;
-  /* letter-spacing: 0.72px; */
   color: #0d552c;
   font-weight: bold;
   margin-left: 10px;

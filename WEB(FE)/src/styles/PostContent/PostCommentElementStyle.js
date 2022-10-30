@@ -129,14 +129,11 @@ export const CommentTimeText = styled.div`
 `;
 
 export const CommentText = styled.div`
-  /* white-space: pre-wrap; */
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
   font-size: 14px;
   width: 100%;
-  /* line-height: 1.29; */
-  /* letter-spacing: 0.56px; */
   text-align: left;
   color: #000;
   word-break: break-all;
@@ -200,11 +197,9 @@ const EditButtonBlock = styled.div`
     transform: scale(1.1);
   }
   &:hover ${EditButtonImg} {
-    /*fill: #1A7541;*/
     color: #1a7541;
   }
   &:hover ${CancelButtonImg} {
-    /*fill: #1A7541;*/
     color: #a65646;
   }
 `;
@@ -251,7 +246,6 @@ const DeletePostButtonBlock = styled.div`
   }
 
   &:hover ${DeletePostButtonImg} {
-    /*fill: #1A7541;*/
     color: #a65646;
   }
 `;

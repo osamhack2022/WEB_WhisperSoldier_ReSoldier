@@ -219,16 +219,6 @@ const PostContentContainer = ({ isAdmin }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (postInfo.created_timestamp === null) {
-  //     getContent();
-  //   } else {
-  //     getIsLiked();
-  //     getPostUserNickname();
-  //   }
-  //   // eslint-disable-next-line
-  // }, []);
-
   useEffect(() => {
     if (postInfo.created_timestamp === null) {
       getContent();

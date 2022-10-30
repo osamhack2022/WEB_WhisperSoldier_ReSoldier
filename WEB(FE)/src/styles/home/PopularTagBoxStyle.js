@@ -54,7 +54,6 @@ export const TagElement = styled.div`
   color: #3f3f3f;
   font-weight: 500;
   height: fit-content;
-  /* border-bottom: 1px solid #dcdcdc; */
   cursor: pointer;
   ${media.tablet`
   flex : 1 1 40%;

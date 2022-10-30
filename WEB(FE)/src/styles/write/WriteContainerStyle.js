@@ -83,7 +83,6 @@ export const TagBoxTitleForSideBox = styled.div`
   margin-bottom: 5px;
   padding-bottom: 10px;
   text-align: left;
-  /* letter-spacing: 0.64px; */
   flex-grow: 1;
   color: #0d552c;
   background-color: rgba(0, 0, 0, 0);
@@ -97,7 +96,6 @@ export const TagElementForSideBox = styled.div`
   justify-content: space-between;
   padding: 4px 0px;
   text-decoration: none;
-  /* letter-spacing: 1px; */
   color: #3f3f3f;
   font-weight: 400;
   height: fit-content;

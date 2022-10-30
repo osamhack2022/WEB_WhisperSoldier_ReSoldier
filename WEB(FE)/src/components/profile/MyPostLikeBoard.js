@@ -63,7 +63,6 @@ const MyPostLikeBoard = () => {
         setNextItemSnapShot(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
         const afterSnapshot = await getDocs(
-          // 이 부분을 getProfilePageQuery로 처리할 시 try-catch에서 에러를 잡아내지 못했기에 그대로 쿼리로 보존했다.
           query(
             collection(dbService, "PostLike"),
             orderBy("created_timestamp", "desc"),

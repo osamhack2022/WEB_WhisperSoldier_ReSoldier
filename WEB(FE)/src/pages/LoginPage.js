@@ -108,8 +108,6 @@ const LoginPage = () => {
             errMsg: "잠시후에 다시 시도해주세요",
           }));
       }
-      // console.log(e.code);
-      // console.log(e.message);
 
       setTimeout(() => {
         setLoginErrorInfo((prev) => ({

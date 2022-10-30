@@ -18,8 +18,6 @@ const ChatContentElementBox = styled.div`
   align-items: center;
   border-radius: 10px;
   transition: all 0.5s;
-  //background-color: ${(props) => (props.me ? "#83C982" : "#DCDCDC")};
-  /* background-color: ${(props) => (props.me ? "#94DA89" : "#DCDCDC")}; */
   background-color: ${(props) => (props.me ? "#B2D299" : "#DCDCDC")};
 
   ${(props) =>
@@ -39,9 +37,6 @@ const ChatContentElementBox = styled.div`
           }
 
           &::after {
-            /* border-color: rgba(136, 183, 213, 0); */
-            /* border-color : #8CC37E */
-            /* border-left-color: #94da89; */
             border-left-color: #b2d299;
             border-width: 10px;
           }
@@ -72,7 +67,6 @@ const ChatContentText = styled.div`
   padding: 10px;
   font-size: 14px;
   font-weight: 400;
-  /* line-height: 1.2; */
   white-space: pre-wrap;
 `;
 

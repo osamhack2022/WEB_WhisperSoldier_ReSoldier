@@ -433,7 +433,6 @@ const PostCommentElement = ({
                   <WsDialogTitle>댓글을 삭제 하시겠습니까?</WsDialogTitle>
                   <DialogActions>
                     <ConfirmButton
-                      // onClick={}
                       onClick={handleCloseDialogForDeleteComment}
                       color="primary"
                       autoFocus

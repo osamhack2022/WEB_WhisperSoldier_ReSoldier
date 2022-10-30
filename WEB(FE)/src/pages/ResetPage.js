@@ -50,8 +50,6 @@ const ResetPage = () => {
           }));
           const errorCode = error.code;
           const errorMessage = error.message;
-          // console.log(errorCode);
-          // console.log(errorMessage);
           if (errorCode === "auth/user-not-found") {
             setResetErrorInfo((prev) => ({
               ...prev,

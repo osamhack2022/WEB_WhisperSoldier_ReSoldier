@@ -141,7 +141,7 @@ const PostCommentForm = ({
 
     if (textarea) {
       textarea.style.height = "33px";
-      let height = textarea.scrollHeight; // 높이
+      let height = textarea.scrollHeight;
       textarea.style.height = `${height}px`;
     }
   }, []);

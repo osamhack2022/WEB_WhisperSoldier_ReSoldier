@@ -616,4 +616,7 @@ export const curseWords = [
   "pennis",
   "pussy",
   "sex",
+  "ㅅㅂ",
+  "ㅂㅅ",
+  "ㄱㅅㄲ",
 ];

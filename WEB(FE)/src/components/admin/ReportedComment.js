@@ -17,7 +17,6 @@ import BlindDialog from "./BlindDialog";
 import CancelReportDialog from "./CancelReportDialog";
 
 const ReportedComment = () => {
-  // Comment에서 쿼리해오기
   const {
     doc,
     getDocs,

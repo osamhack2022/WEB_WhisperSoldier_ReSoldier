@@ -43,21 +43,6 @@ export const ChatContentBox = styled.div`
   height: 400px;
   padding: 10px 20px;
   overflow-y: scroll;
-  /* 커스텀 스크롤바
-  &:-webkit-scrollbar {
-    width: 10px;
-  }
-
-  &:-webkit-scrollbar-thumb {
-    height: 10%;
-    background: #0d552c;
-    border-radius: 25px;
-  }
-
-  &:-webkit-scrollbar-track {
-    background: #c8c8c8;
-  }
-  */
 `;
 
 export const ChatInputBox = styled.div`

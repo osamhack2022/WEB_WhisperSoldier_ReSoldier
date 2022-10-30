@@ -151,7 +151,6 @@ const WthdrawConfirmDialog = ({
         setOpen(false);
         sessionStorage.removeItem(adminSessionKey);
         navigate("/", { replace: true });
-        // window.location.reload();
       })
       .catch((error) => {
         console.log(error);

@@ -57,9 +57,7 @@ export const PostBoardMoreButtonBox = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    /* margin: 5px 0px; */
     text-decoration: none;
-    /* height: 48px; */
     width: 90px;
     align-items: center;
     transition: all 0.3s;

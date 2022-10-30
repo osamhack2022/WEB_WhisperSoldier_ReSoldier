@@ -1,26 +1,5 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../modules/MediaQuery";
-
-const TempPostBoxStyle = styled.div`
-  margin-left: ${(props) => (props.isLikeDesc ? "10px" : "0px")};
-  position: relative;
-  padding: 0px 20px 0px 20px;
-  height: fit-content;
-  flex-grow: 0.5;
-  background-color: #fbfbfb;
-  border-radius: 5px;
-  border: 1px solid rgb(189, 189, 189);
-  width: 350px;
-  ${media.tablet`
-      width : 40%;
-`}
-  ${media.mobile`
-    flex-grow:none;
-    width : 100%
-    margin: ${(props) => (props.isLikeDesc ? "10px 0px 0px 0px" : "inherit")};
-  ;`}
-`;
 
 const NewestPostBoxStyle = styled.div`
   position: relative;

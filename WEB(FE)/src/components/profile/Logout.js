@@ -28,7 +28,6 @@ const Logout = () => {
     await signOut(authService);
     sessionStorage.removeItem(adminSessionKey);
     navigate("/", { replace: true });
-    // window.location.reload();
   };
   return (
     <>

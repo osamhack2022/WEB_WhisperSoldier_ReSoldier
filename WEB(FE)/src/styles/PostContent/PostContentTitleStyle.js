@@ -86,8 +86,6 @@ export const PostContentTag = styled.div`
   margin-left: 15px;
   font-size: 12px;
   text-align: right;
-  /* position: absolute; */
-  /* right: 220px; */
   margin-right: 20px;
   letter-spacing: -0.34px;
   color: #4f4f4f;

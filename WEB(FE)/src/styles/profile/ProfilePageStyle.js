@@ -158,7 +158,6 @@ export const ProfileCotentBox = styled.div`
   margin-left: 10px;
   padding: 10px 20px;
   height: fit-content;
-  /* width: 500px; */
   flex-grow: 1;
 
   background-color: #fbfbfb;

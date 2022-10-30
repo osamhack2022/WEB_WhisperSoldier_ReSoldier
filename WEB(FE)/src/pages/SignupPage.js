@@ -100,9 +100,6 @@ const SignupPage = () => {
             break;
         }
 
-        // console.log(error.code);
-        // console.log(error.message);
-
         setTimeout(() => {
           setSignUpErrorInfo((prev) => ({
             ...prev,

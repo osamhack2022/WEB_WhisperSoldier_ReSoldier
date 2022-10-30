@@ -9,9 +9,7 @@ import { useRecoilState } from "recoil";
 import {
   CountCurrentPost,
   CurrentScrollPos,
-  IsNextPostExistRecoil,
   IsUpdatePostList,
-  PostListSortOption,
   PostsRecoil,
 } from "../../store/PostStore";
 import {
@@ -39,15 +37,10 @@ const PopularPostBoard = () => {
   const [postsRecoil, setPostsRecoil] = useRecoilState(PostsRecoil);
   const [countCurrentPost, setCountCurrentPost] =
     useRecoilState(CountCurrentPost);
-  const [isNextPostExistRecoil, setIsNextPostExistRecoil] = useRecoilState(
-    IsNextPostExistRecoil
-  );
   const [currentScrollPos, setCurrentScrollPos] =
     useRecoilState(CurrentScrollPos);
   const [isUpdatePostList, setIsUpdatePostList] =
     useRecoilState(IsUpdatePostList);
-  const [postListSortOption, setPostListSortOption] =
-    useRecoilState(PostListSortOption);
 
   const [timeDepthValue, setTimeDepthValue] = useState("week");
   const [timeDepthSelect, setTimeDepthSelect] = useState({
@@ -124,31 +117,6 @@ const PopularPostBoard = () => {
     setIsShowContainer((prev) => !prev);
   }, []);
 
-  // const recoverPost = async () => {
-  //   const recoverSnapshot = await getDocs(
-  //     getSearchQuery(true, orderDescOrAsc, null, null, countCurrentPost)
-  //   );
-  //   console.log(recoverSnapshot);
-  //   setNextPostSnapShot(recoverSnapshot.docs[recoverSnapshot.docs.length - 1]);
-  //   const afterSnapshot = await getDocs(
-  //     getSearchQuery(
-  //       true,
-  //       orderDescOrAsc,
-  //       null,
-  //       recoverSnapshot.docs[recoverSnapshot.docs.length - 1],
-  //       1
-  //     )
-  //   );
-  //   if (afterSnapshot.docs.length === 0) {
-  //     setIsNextPostExist(false);
-  //     setIsNextPostExistRecoil(false);
-  //   } else {
-  //     setIsNextPostExist(true);
-  //     setIsNextPostExistRecoil(true);
-  //   }
-  //   setIsLoading(false);
-  // };
-
   const onSearchSubmit = () => {
     setPosts([]);
     setNextPostSnapShot({});
@@ -162,30 +130,17 @@ const PopularPostBoard = () => {
   };
 
   useEffect(() => {
-    // if (postsRecoil.length === 0 || isUpdatePostList.popularPage)
-    if (true) {
-      if (isUpdatePostList.newestPage) {
-        setPostsRecoil([]);
-        setCountCurrentPost(10);
-        setIsNextPostExist(false);
-        setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
-        setCurrentScrollPos(0);
-      }
-      setPosts([]);
-      setNextPostSnapShot({});
+    if (isUpdatePostList.newestPage) {
+      setPostsRecoil([]);
+      setCountCurrentPost(10);
       setIsNextPostExist(false);
-      getTenPopularPost(FIRSTSEARCH);
+      setIsUpdatePostList((prev) => ({ ...prev, popularPage: false }));
+      setCurrentScrollPos(0);
     }
-    // else {
-    //   setPosts(postsRecoil);
-    //   setIsNextPostExist(isNextPostExistRecoil);
-    //   recoverPost();
-    //   setTimeout(
-    //     () => window.scrollTo(currentScrollPos, currentScrollPos),
-    //     100
-    //   );
-    //   setCurrentScrollPos(0);
-    // }
+    setPosts([]);
+    setNextPostSnapShot({});
+    setIsNextPostExist(false);
+    getTenPopularPost(FIRSTSEARCH);
     // eslint-disable-next-line
   }, []);
 

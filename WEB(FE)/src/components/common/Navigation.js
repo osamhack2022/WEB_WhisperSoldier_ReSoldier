@@ -1,10 +1,5 @@
 import styled from "styled-components";
-import {
-  ChatNavButton,
-  ProfileNavButton,
-  SearchNavButton,
-  WriteNavButton,
-} from "./Buttons";
+import { ChatNavButton, ProfileNavButton, WriteNavButton } from "./Buttons";
 
 const NavigationBox = styled.div`
   position: fixed;
@@ -24,7 +19,6 @@ const NavigationBox = styled.div`
 const Navigation = ({ isAdmin }) => {
   return (
     <NavigationBox>
-      {/* <SearchNavButton toLink="/search"></SearchNavButton> */}
       {!isAdmin && <WriteNavButton></WriteNavButton>}
       {!isAdmin && <ChatNavButton></ChatNavButton>}
       <ProfileNavButton></ProfileNavButton>

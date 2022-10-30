@@ -1,5 +1,4 @@
 import { dbFunction, dbService } from "../lib/FStore";
-import getTimeDepth from "./GetTimeDepth";
 
 const { collection, limit, orderBy, query, startAfter, where } = dbFunction;
 
@@ -13,7 +12,6 @@ export const GetTagQuery = (
   limitDocs = 0,
   startAfterPoint = null,
   searchTimeDepth = null
-  //Tag를 가져올때는 "where(orderByField, ">=", searchTimeDepth)," 부분이 실행되지 않도록 해야 함.
 ) => {
   if (searchTimeDepth) {
     if (startAfterPoint) {

@@ -58,7 +58,6 @@ const TagBox = ({ tagList, setTagList }) => {
   };
 
   useEffect(() => {
-    // setTagList([]);
     getTop20Tag();
     //eslint-disable-next-line
   }, []);

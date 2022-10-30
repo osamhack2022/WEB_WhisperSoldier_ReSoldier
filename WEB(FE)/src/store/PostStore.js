@@ -10,8 +10,6 @@ export const PostInfo = atom({
     post_rep_accept: false,
     post_report: false,
     comment_count: 0,
-    post_rep_accept: false,
-    post_report: false,
     postContent: "",
     tag_name: "",
   },

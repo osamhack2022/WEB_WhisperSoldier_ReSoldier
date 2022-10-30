@@ -59,18 +59,12 @@ const SearchContainer = ({
           onChange={onChange}
         ></SearchSection>
       )}
-      {/* {(isShowMobileContent || isTablet) && (
-        
-      )} */}
-
       <SearchContentBox>
         <PostBoardTitleContainer
           onShowSideContainer={onShowSideContainer}
           isShowContainer={isShowContainer}
         >
           '{currentSearchKeyword}' 검색 결과
-          {/* : {countResult}중<br />
-          {currentSearchCount}개의 고민 포스트 */}
         </PostBoardTitleContainer>
         {!isTablet && isShowContainer && (
           <SideOptionContainer>
