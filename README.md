@@ -202,12 +202,21 @@
 
 ## :chart_with_upwards_trend: **서비스 플로우**
 
-<img src="Image\whispersoldier_service_flow_chart.png"/>
+<table>
+	<tr>
+		<td align="center"><img src="Image\whispersoldier_service_flow_chart.png"/></td>
+	</tr>
+	<td align="center" colspan="2">
+			<p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">서비스 플로우 figma 페이지</a></p>
+	</td>
+</table>
 <br/>
 
 ## :motorway: **프로젝트 단계**
 
-애자일 방법론에 따라 MVP부터 단계별 프로젝트를 진행했습니다. <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428"><p>프로젝트 단계별 서비스 플로우 보기</p></a>
+애자일 방법론에 따라 MVP부터 단계별 프로젝트를 진행했습니다.
+
+<p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">프로젝트 단계별 서비스 플로우 보기</a></p>
 
 - [x] 장병들만 이용가능한 익명 고민 글 업로드 공간 : `최소 기능 제품, MVP(Minimum Viable Product)`
   - [x] 로그인
@@ -241,6 +250,7 @@
   - [x] 고민 글 태그
   - [x] 태그 검색
   - [x] 태그 별 고민게시판
+        <br/>
 
 ## :clipboard: **DB Diagram**
 
@@ -256,7 +266,6 @@
 		</td>
 	</tr>
 </table>
-
 <br/>
 
 ## :iphone: **UI/UX**
