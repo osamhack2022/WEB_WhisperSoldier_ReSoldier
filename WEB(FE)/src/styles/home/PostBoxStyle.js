@@ -32,12 +32,15 @@ const NewestPostBoxStyle = styled.div`
   border: 1px solid rgb(189, 189, 189);
   /* width: 350px; */
   width: 100%;
+  max-width: 375px;
   margin-top: ${(props) => props.bottombox && "10px"};
   ${media.tablet`
       width : 100%;
     `}
   ${media.mobile`
+  max-width: inherit;
   width : 100%
+  
   ;`}
 `;
 
@@ -52,6 +55,7 @@ const PopularPostBoxStlye = styled.div`
   border: 1px solid rgb(189, 189, 189);
   /* width: 350px; */
   width: 100%;
+  max-width: 375px;
   margin-top: ${(props) => props.bottombox && "10px"};
   ${media.tablet`
       width : 100%;
@@ -59,6 +63,7 @@ const PopularPostBoxStlye = styled.div`
   ${media.mobile`
      width : 100%;
     margin: 10px 0px 0px 0px;
+    max-width: inherit;
 `}
 `;
 

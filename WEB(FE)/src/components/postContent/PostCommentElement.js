@@ -327,6 +327,18 @@ const PostCommentElement = ({
     }
   };
 
+  const reportComment = async () => {
+    await updateDoc(doc(dbService, "Comment", commentElement.id), {
+      comment_report: true,
+      report_timestamp: serverTimestamp(),
+    });
+    setCurrentReportInfo(true);
+    setAlertInfo((prev) => ({ ...prev, reportComment: true }));
+    setTimeout(() => {
+      setAlertInfo((prev) => ({ ...prev, reportComment: false }));
+    }, 3000);
+  };
+
   useEffect(() => {
     getIsLiked();
     getReportStatuses();

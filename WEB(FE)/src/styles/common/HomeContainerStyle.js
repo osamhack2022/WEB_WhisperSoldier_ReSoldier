@@ -51,7 +51,7 @@ export const HomeContentUpperBox = styled.div`
 export const HomeContentLowerBox = styled.div`
   /*  */
   /* display: flex;
-  flex-direction: row; */
+    flex-direction: row; */
   transition: all 0.5s;
 
   display: grid;
@@ -59,19 +59,18 @@ export const HomeContentLowerBox = styled.div`
   gap: 10px;
   grid-auto-flow: row dense;
   width: 100%;
-  grid-template-columns: repeat(2, minmax(100px, auto));
+  /* grid-template-columns: repeat(2, minmax(100px, auto)); */
   /* overflow: unset; */
   ${media.tablet`
   
   `}
   ${media.mobile`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  grid-template-columns: inherit;
-  gap: inherit;
-  grid-auto-flow: inherit;
-  width: 100%;
-  grid-template-columns: inherit;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-template-columns: inherit;
+    gap: inherit;
+    grid-auto-flow: inherit;
+    /* width: 100%; */
   `}
 `;
