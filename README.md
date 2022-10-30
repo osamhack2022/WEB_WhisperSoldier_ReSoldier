@@ -87,82 +87,82 @@
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/email_veri.png" width=360/></td>
 	</tr>
+	<tr>
+		<td align="center">
+			<p><b>나라사랑이메일 인증 기능</b><br/>사용자가 국군 병사임을 증명할 수 있습니다.</p>
+		</td>
+	</tr>
 </table>
-
-- 나라사랑이메일 인증 기능
-  - 사용자가 국군 병사임을 증명할 수 있습니다.
-
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/upload_worry_1.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/upload_worry_2.png" width=360></td>
 	</tr>
+	<td align="center" colspan="2">
+			<p><b>고민 공유</b><br/>고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.</p>
+	</td>
 </table>
-
-- 고민 공유
-  - 고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.
-
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360></td>
 	</tr>
+	<td align="center">
+			<p><b>최신 고민게시판</b><br/>전우들이 가장 최근 업로드한 고민을 알 수 있습니다.</p>
+	</td>
 </table>
-- 최신 고민게시판
-	- 전우들이 가장 최근 업로드한 고민을 알 수 있습니다.
-
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360></td>
 	</tr>
+	<td align="center">
+			<p><b>인기 고민게시판</b><br/>전우들이 많이 공감하는 고민이 무엇인지 알 수 있습니다.</p>
+	</td>
 </table>
-- 인기 고민게시판
-	- 전우들이 많이 공감하는 고민이 무엇인지 알 수 있습니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/chat.png" width=360></td>
 	</tr>
+	<td align="center">
+			<p><b>1대 1 채팅 기능</b><br/>고민 게시판보다 깊고 자세한 상담을 진행할 수 있습니다.</p>
+	</td>
 </table>
-- 1대 1 채팅 기능
-	- 고민 게시판보다 깊고 자세한 상담을 진행할 수 있습니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/keyword_search.png" width=360></td>
 	</tr>
-</table>
-<table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/search_read_comment.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/search_ask_for_chat.png" width=360></td>
 	</tr>
-</table>
-<table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/search_chatting.png" width=360></td>
+		<td colspan="2"><img src="Image/Introduce_Functionailty/search_chatting.png" width=360></td>
 	</tr>
+	<td align="center" colspan="2">
+			<p><b>키워드 검색과 태그 검색을 활용한 고민 조회 기능</b><br/>직접 고민을 올리기 부담스럽다면, 나와 비슷한 고민을 조회해 해당 글에 달린 댓글을 읽고, 댓글을 단 사람과 1대 1 채팅을 진행할 수 있습니다.</p>
+	</td>
 </table>
-- 키워드 검색과 태그 검색을 활용한 고민 조회 기능
-	- 직접 고민을 올리기 부담스럽다면, 나와 비슷한 고민을 조회해 해당 글에 달린 댓글을 읽고, 댓글을 단 사람과 1대 1 채팅을 진행할 수 있습니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360></td>
 	</tr>
+	<td align="center">
+			<p><b>업로드 전 필터링 기능</b><br/>고민 글 또는 댓글 작성 시 비속어를 감지하여 업로드를 사전에 방지합니다.</p>
+	</td>
 </table>
-- 업로드 전 필터링 기능
-	- 고민 글 또는 댓글 작성 시 비속어를 감지하여 업로드를 사전에 방지합니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
@@ -172,10 +172,11 @@
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/chat_block.png" width=360></td>
 	</tr>
+	<td align="center" colspan="2">
+			<p><b>신고 및 차단 기능</b><br/>부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.</p>
+	</td>
 </table>
-- 신고 및 차단 기능
-	- 부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
@@ -189,22 +190,22 @@
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
 	</tr>
+	<td align="center" colspan="2">
+			<p><b>마이페이지의 기능</b><br/>사용자의 프로필 사진과 닉네임을 설정할 수 있습니다. 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.</p>
+	</td>
 </table>
-- 마이페이지의 기능
-	- 사용자의 프로필 사진과 닉네임을 설정할 수 있습니다.
-	- 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.
-<br/><br/>
+<br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/admin_reported_comments.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/admin_reported_posts.png" width=360></td>
 	</tr>
+	<td align="center" colspan="2">
+			<p><b>관리자 기능</b><br/>관리자 계정으로 로그인하여 신고된 고민글과 댓글을 조회할 수 있습니다. 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.</p>
+	</td>
 </table>
-- 관리자 기능
-	- 관리자 계정으로 로그인하여 신고된 고민글과 댓글을 조회할 수 있습니다.
-	- 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.
-  <br/><br/>
+<br/>
 
 ## :chart_with_upwards_trend: **서비스 플로우**
 
