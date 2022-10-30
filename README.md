@@ -391,6 +391,7 @@
 
 <p><a href="https://www.notion.so/sangsang9988/Front-End-Project-0cb3d4df3a1c4f6cad9a19d5d46c39a7">Front-End 문서 바로가기</a></p>
 <br/>
+
 ## :running:**ReSoldier 팀 정보**
 
 ReSoldier : Resolve + Soldier - **“정해진 답이 없는 문제들에 대한 해결책을 찾는 병사들”**
