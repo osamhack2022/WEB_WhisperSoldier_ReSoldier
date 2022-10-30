@@ -326,6 +326,7 @@ const PostCommentElement = ({
       setIsReportAccepted(true);
     }
   };
+
   const reportComment = async () => {
     await updateDoc(doc(dbService, "Comment", commentElement.id), {
       comment_report: true,
@@ -337,6 +338,7 @@ const PostCommentElement = ({
       setAlertInfo((prev) => ({ ...prev, reportComment: false }));
     }, 3000);
   };
+
   useEffect(() => {
     getIsLiked();
     getReportStatuses();

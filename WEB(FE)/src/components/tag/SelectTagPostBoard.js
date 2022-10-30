@@ -221,9 +221,16 @@ const TagPostBoardCotent = () => {
               <PostElement key={tagpost.id} post={tagpost}></PostElement>
             ))
           )}
-          {!isLoading && errorTag && (
-            <InfoTextBox>존재하지 않는 태그입니다.</InfoTextBox>
-          )}
+          {!isLoading &&
+            (errorTag ? (
+              <InfoTextBox>존재하지 않는 태그입니다.</InfoTextBox>
+            ) : (
+              tagPosts.length === 0 && (
+                <InfoTextBox>
+                  해당 기간에 #{selectedTag} 태그가 있는 게시물이 없습니다.
+                </InfoTextBox>
+              )
+            ))}
         </TagPostBoardBodyBox>
 
         {isNextTagPostExist && (

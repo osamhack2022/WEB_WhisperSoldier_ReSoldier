@@ -131,6 +131,9 @@ const PostCommentForm = ({
   const onCreatComment = () => {
     onCommentSubmit();
     setOpenDialogForCreateComment(false);
+
+    let textarea = document.querySelector(".autoTextarea");
+    textarea.style.height = "33px";
   };
 
   const autoResizeTextarea = useCallback(() => {
