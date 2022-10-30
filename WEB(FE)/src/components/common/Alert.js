@@ -25,7 +25,6 @@ const AlertBox = styled.div`
 `;
 
 export const PostContentAlert = ({ alertInfo, editing }) => {
-  console.log(editing === true ? "true" : "false");
   return (
     <>
       <AlertBox editing={editing === true ? "true" : "false"}>
