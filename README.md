@@ -377,6 +377,15 @@
 - <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=37%3A657">
       		<img src="https://img.shields.io/badge/FIGMA-555555?style=for-the-badge&logo=figma">
       </a>
+      
+### Deployment
+
+- <a href="https://aws.amazon.com/ko/ec2/?trk=68913a17-4967-41f6-a766-0f2eb338dd04&sc_channel=ps&s_kwcid=AL!4422!3!588924203019!e!!g!!aws%20ec2&ef_id=Cj0KCQjwwfiaBhC7ARIsAGvcPe4y_VId-SkPBRc5G2zYZpUwuOKHx8o3agoqT3s-gi7ixWu2P7Z0B0IaArl5EALw_wcB:G:s&s_kwcid=AL!4422!3!588924203019!e!!g!!aws%20ec2">
+  <img src="https://img.shields.io/badge/NOTION-555555?style=for-the-badge&logo=notion">
+    </a>
+- <a href="https://pm2.keymetrics.io/">
+      		<img src="https://img.shields.io/badge/FIGMA-555555?style=for-the-badge&logo=figma">
+      </a>
   <br/><br/>
 
 ## :running:**ReSoldier 팀 정보**
