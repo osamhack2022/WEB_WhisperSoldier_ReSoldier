@@ -238,7 +238,7 @@ const PostContentContainer = ({ isAdmin }) => {
 
   return (
     <PostContentContainerBox>
-      <PostContentAlert alertInfo={alertInfo} />
+      <PostContentAlert alertInfo={alertInfo} editing={editing} />
       <PostContentBodyContainer>
         <SideButtonContainer>
           <SideButtonBox>
