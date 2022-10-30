@@ -1,9 +1,9 @@
 # **WhisperSoldier - 익명 군 상담소**
 
-<p align="center"><img src="Image\readme_main_banner_img.png"></p>
+<p align="center"><img src="Image\etc\readme_main_banner_img.png"></p>
 <p align="center">
 	<a href="http://whispersoldier.site/">
-		<img src="Image\gobutton.png" />
+		<img src="Image\button\gobutton.png" />
 	</a>
 </p>
 
@@ -17,7 +17,7 @@
 
 <p align="center">
 	<a href="#">
-		<img src="Image\notionbutton.png" />
+		<img src="Image\button\notionbutton.png" />
 	</a>
 </p><br/>
 
@@ -142,7 +142,7 @@
 	</tr>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
-		<td align="center"><img src="Image\tagboard.png" width=360></td>
+		<td align="center"><img src="Image\Introduce_Functionailty\tagboard.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
 			<p><b>키워드 검색과 태그 검색을 활용한 고민 탐색</b><br/>나와 비슷한 고민을 탐색할 수 있습니다.</p>
@@ -177,7 +177,7 @@
 <table>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
-		<td align="center"><img src="Image\changeImg.png" width=360></td>
+		<td align="center"><img src="Image\Introduce_Functionailty\changeImg.png" width=360></td>
 	</tr>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
@@ -204,7 +204,7 @@
 
 <table>
 	<tr>
-		<td align="center"><img src="Image\whispersoldier_service_flow_chart.png"/></td>
+		<td align="center"><img src="Image\etc\whispersoldier_service_flow_chart.png"/></td>
 	</tr>
 	<td align="center" colspan="2">
 			<p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">서비스 플로우 figma 페이지</a></p>
@@ -257,7 +257,7 @@
 <table align="center">
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:400px;" src="Image\dbdiagram.png"/>
+			<img style="width:400px;" src="Image\etc\dbdiagram.png"/>
 		</td>
 	</tr>
 	<tr>
@@ -275,7 +275,7 @@
 <table align="center">
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\homepage.png">
+			<img style="width:1800px;" src="Image\ui\homepage.png">
 		</td>
 	</tr>
 	<tr>
@@ -285,7 +285,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\postpage.png">
+			<img style="width:1800px;" src="Image\ui\postpage.png">
 		</td>
 	</tr>
 	<tr>
@@ -295,7 +295,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\postboard.png">
+			<img style="width:1800px;" src="Image\ui\postboard.png">
 		</td>
 	</tr>
 	<tr>
@@ -305,7 +305,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\write.png">
+			<img style="width:1800px;" src="Image\ui\write.png">
 		</td>
 	</tr>
 	<tr>
@@ -315,7 +315,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\chat.png">
+			<img style="width:1800px;" src="Image\ui\chat.png">
 		</td>
 	</tr>
 	<tr>
@@ -325,7 +325,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\profile.png">
+			<img style="width:1800px;" src="Image\ui\profile.png">
 		</td>
 	</tr>
 	<tr>
