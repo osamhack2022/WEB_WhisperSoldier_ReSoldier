@@ -2,7 +2,7 @@
 
 <p align="center"><img src="Image\readme_main_banner_img.png"></p>
 <p align="center">
-	<a href="#">
+	<a href="http://whispersoldier.site/">
 		<img src="Image\gobutton.png" />
 	</a>
 </p>
@@ -31,14 +31,14 @@
 </p><br/>
 
 ## :scroll: 목차
->
+
 > [:page_facing_up: 프로젝트 소개](#page_facing_up-프로젝트-소개)
 >
 > [:bulb: 주요 기능](#bulb-주요-기능)
 >
 > [:chart_with_upwards_trend: 서비스 플로우](#chart_with_upwards_trend-서비스-플로우)
 >
->[:motorway: 로드맵](#motorway-로드맵)
+> [:motorway: 프로젝트 단계](#motorway-프로젝트-단계)
 >
 > [:clipboard: DB Diagram](#clipboard-db-diagram)
 >
@@ -51,7 +51,6 @@
 > [:running:ReSoldier 팀 정보](#runningresoldier-팀-정보)
 >
 > [:open_file_folder: 저작권 및 사용권 정보 (Copyleft / End User License)](#open_file_folder-저작권-및-사용권-정보-copyleft--end-user-license)
-
 
 ## :page_facing_up: **프로젝트 소개**
 
@@ -82,13 +81,16 @@
 익명성을 활용하여 상담자와 피상담자를 부대 내에서의 입장의 차이로부터 해방하고, 전우 대 전우로서 "속삭이듯이", 안심하고 솔직하게 마음을 털어놓을 수 있게 하고자 합니다.
 <br/><br/>
 
-
 ## :bulb: **주요 기능**
 
-<img src="Image/Introduce_Functionailty/email_veri.png" width=360/>
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/email_veri.png" width=360/></td>
+	</tr>
+</table>
 
 - 나라사랑이메일 인증 기능
-    - 사용자가 국군 병사임을 증명할 수 있습니다.
+  - 사용자가 국군 병사임을 증명할 수 있습니다.
 
 <br/><br/>
 
@@ -100,29 +102,36 @@
 </table>
 
 - 고민 공유
-	- 고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.
+  - 고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.
 
 <br/><br/>
 
-<img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360>
-
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360></td>
+	</tr>
+</table>
 - 최신 고민게시판
 	- 전우들이 가장 최근 업로드한 고민을 알 수 있습니다.
 
 <br/><br/>
 
-<img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360>
-
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360></td>
+	</tr>
+</table>
 - 인기 고민게시판
 	- 전우들이 많이 공감하는 고민이 무엇인지 알 수 있습니다.
-
 <br/><br/>
 
-<img src="Image/Introduce_Functionailty/chat.png" width=360>
-
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/chat.png" width=360></td>
+	</tr>
+</table>
 - 1대 1 채팅 기능
 	- 고민 게시판보다 깊고 자세한 상담을 진행할 수 있습니다.
-
 <br/><br/>
 
 <table>
@@ -142,17 +151,17 @@
 		<td><img src="Image/Introduce_Functionailty/search_chatting.png" width=360></td>
 	</tr>
 </table>
-
 - 키워드 검색과 태그 검색을 활용한 고민 조회 기능
 	- 직접 고민을 올리기 부담스럽다면, 나와 비슷한 고민을 조회해 해당 글에 달린 댓글을 읽고, 댓글을 단 사람과 1대 1 채팅을 진행할 수 있습니다.
-
 <br/><br/>
 
-<img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360>
-
+<table>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360></td>
+	</tr>
+</table>
 - 업로드 전 필터링 기능
 	- 고민 글 또는 댓글 작성 시 비속어를 감지하여 업로드를 사전에 방지합니다.
-
 <br/><br/>
 
 <table>
@@ -160,40 +169,30 @@
 		<td><img src="Image/Introduce_Functionailty/post_report.png" width=360></td>
 		<td><img src="Image/Introduce_Functionailty/comment_report.png" width=360></td>
 	</tr>
-</table>
-<table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/chat_block.png" width=360></td>
 	</tr>
 </table>
-
 - 신고 및 차단 기능
 	- 부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.
-
 <br/><br/>
 
 <table>
 	<tr>
 		<td><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
-	</tr>
-</table>
-<table>
-	<tr>
 		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+	</tr>
+	<tr>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
+		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+	</tr>
+	<tr>
 		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
 	</tr>
 </table>
-<table>
-	<tr>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
-	</tr>
-</table>
-
 - 마이페이지의 기능
 	- 사용자의 프로필 사진과 닉네임을 설정할 수 있습니다.
 	- 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.
-
 <br/><br/>
 
 <table>
@@ -202,61 +201,58 @@
 		<td><img src="Image/Introduce_Functionailty/admin_reported_posts.png" width=360></td>
 	</tr>
 </table>
-
 - 관리자 기능
 	- 관리자 계정으로 로그인하여 신고된 고민글과 댓글을 조회할 수 있습니다.
 	- 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.
   <br/><br/>
-
 
 ## :chart_with_upwards_trend: **서비스 플로우**
 
 <img src="Image\whispersoldier_service_flow_chart.png"/>
 <br/>
 
+## :motorway: **프로젝트 단계**
 
-## :motorway: **로드맵**
+애자일 방법론에 따라 MVP부터 단계별 프로젝트를 진행했습니다. <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428"><p>프로젝트 단계별 서비스 플로우 보기</p></a>
 
-- [x] 회원 관리 & 고민 글: `최소 기능 제품, MVP(Minimum Viable Product)`
-	- [x] 로그인
-	- [x] 회원 가입
-	- [x] 이메일 인증
-	- [x] 고민 글 CRUD
-- [x] 댓글
-	- [x] 고민 글 내부에서 댓글 CRUD
-- [x] 고민 글 검색
-	- [x] 키워드로 고민 글 검색
-- [x] 홈페이지
-	- [x] 홈페이지 반응형 레이아웃
-	- [x] 홈페이지 배너
-	- [x] 홈페이지 게시글 컴포넌트
-- [x] 공감
-	- [x] 고민 글 공감
-	- [x] 댓글 공감
-- [x] 프로필 페이지
-	- [x] 프로필 변경
-	- [x] 내가 작성한 글
-	- [x] 내가 작성한 댓글
-	- [x] 내가 공감한 글
-	- [x] 내가 공감한 댓글
-- [x] 채팅
-	- [x] 익명 유저와 채팅
-- [x] 신고
-	- [x] 부적절한 글 신고
-	- [x] 부적절한 댓글 신고
-	- [x] 부적절한 채팅 차단
-	- [x] 관리자 페이지
-- [x] 태그
-	- [x] 고민 글 태그
-	- [x] 태그 검색
-	- [x] 태그 별 고민게시판
-
+- [x] 장병들만 이용가능한 익명 고민 글 업로드 공간 : `최소 기능 제품, MVP(Minimum Viable Product)`
+  - [x] 로그인
+  - [x] 회원 가입
+  - [x] 나라사랑포털 이메일 인증
+  - [x] 고민 글 CRUD
+- [x] 장병들만 이용 가능한 익명 고민 게시판
+  - [x] 고민 글 내부에서 댓글 CRUD
+- [x] 검색 기능 있는 익명 군 상담소
+  - [x] 키워드로 고민 글 검색
+  - [x] 홈페이지 반응형 레이아웃
+  - [x] 홈페이지 배너
+  - [x] 홈페이지 게시글 컴포넌트
+- [x] 공감 기능이 있는 익명 군 상담소
+  - [x] 고민 글 공감
+  - [x] 댓글 공감
+- [x] 현실과 다른 나를 개성 있게 표현할 수 있는 익명 군 상담소
+  - [x] 프로필 변경
+  - [x] 내가 작성한 글
+  - [x] 내가 작성한 댓글
+  - [x] 내가 공감한 글
+  - [x] 내가 공감한 댓글
+- [x] 익명 유저와 실시간 채팅이 가능한 익명 군 상담소
+  - [x] 익명 유저와 채팅
+- [x] 포스트, 댓글 신고 가능한 익명 군 상담소
+  - [x] 부적절한 글 신고
+  - [x] 부적절한 댓글 신고
+  - [x] 부적절한 채팅 차단
+  - [x] 관리자 페이지
+- [x] #태그 기능이 있는 익명 군 상담소
+  - [x] 고민 글 태그
+  - [x] 태그 검색
+  - [x] 태그 별 고민게시판
 
 ## :clipboard: **DB Diagram**
 
 <img style="width:500px;" src="Image\dbdiagram.png"/>
+<a href="https://sangsang9988.notion.site/Whisper-Soldier-3f43e3b74f774487b6339cc58f6d65bb"><p>DB Document 바로가기</p</a>
 <br/>
-
 
 ## :iphone: **UI/UX**
 
@@ -312,13 +308,11 @@
 </table>
 <br/>
 
-
 ## :electric_plug: **컴퓨터 구성 / 필수 조건 안내 (Prerequisites)**
 
 - ECMAScript 6 지원 브라우저 사용
 - Google Chrome 버젼 77 이상을 권장합니다.
   <br/><br/>
-
 
 ## :computer:**기술 스택 (Technique Used)**
 
@@ -327,12 +321,11 @@
 - <a href="https://ko.reactjs.org/">
   		<img src="https://img.shields.io/badge/REACT.JS-18.2.0-brightgreen.svg?style=for-the-badge&logo=react">
   	</a>
-	
 - <a href="https://recoiljs.org/">
-	 <img src="https://img.shields.io/badge/RECOIL-0.7.5-brightgreen.svg?style=for-the-badge&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAk1BMVEX%2F%2F%2F8cHiEAAAAZGx4UFhr6%2BvoJDREPEhYXGR0VGBsNEBROT1Hu7u4bHiESFRj4%2BPgABg3l5uYAAAWpqqtFRkmDg4UAAAknKSzOzs7g4OHp6enBwcK2trdcXV83OTvZ2dmbm5yLjI2PkJFiY2WwsLEhIycwMjRWV1mjpKVLTU94eXq9vr9DREfR0dJucHGGh4g6PD7vgc%2FGAAAIq0lEQVR42u3dUXeivNYH8L0TCIARglQBkEpVQbHafv9P97591jrzQKYgem6SHH5r5rIX%2FxXaQLKzA7PZbDabzWaz2f8Sviuqe3mvih0HE6VVKcjGD3xBRFkVYBr%2BUYsA%2FyMQyToHo2xPG4pdVPgxmMOOiYsySqoQTHH2KP6NOnsbzFARir%2BhZA9GuBGKA0gBBggPPg4JGg76qwQOWm4q0F5%2BCXCY9xmB7lKCY8gVdHf3cYx1Ad1RimPoBjRnExxHOOgtepgwNfsPjQF%2FagrjE2YPE%2B5Ab%2Fxhwhw09zAh6K4JcEzQgO6OBMesYtBdllAc5p4y0N6eLXEQM2EhY%2Fft4RDvewcG2BMcYspCTcmGntEGzJCXbCBgDoaIFiuKMrpqIjDH%2FeRgX3C6g0ns7YJgF1lswTC8t6pIKw7GuXUG0f3OwTxpJyF9jwxP6M4JVTc%2FpfMYGjBb0MTEhLtuQpqBebJOwiW5gXmi7oKN2IN58jcP%2F3BrMI%2F9xaQqDOPE3YTOIQTjFDXFPygeQSvFouNz4DEtg17NVwo6uZ4c6w9iw6%2F2Ajus9x1oJK3p4635nGCX85mCPm7vdMLW%2FFpgl0daDrrI3rwJ%2B0k7eZdGvFVpCFrg3W1C8TE4Ja6wz2N12e63O1DfwenOdTAgbwKUuIEvCCFJe81tUFnrdwZmkT9bfLKkPvneX0FV0kxAk%2BKVjSiPndqdHl9%2FKCoYErYODqKMrLkWNRdByWEIv69wBGlSUFTt4r9YCoPChlAc5tRnUFPcHZrgDUbsXReHUaLo3n62pFNrucKj64xFpJWSEXmvJN%2B%2Fw5j0QqyxiFtQUdxNSK0YRm0vljMckeyUfzXF4C2CUXlcEkbxd07JQUEtww52gAd4%2BnUiRPiBR1FmHUFBOXm%2BVia%2FftwPi9rxsc9NMlBQ%2F%2FgPPW1hmrw4tsLBHvEFCrq5FDu8OoWpwrQkFDvoxgYFVT52ueQG08X9X8fNHhQUXaz%2FojAvpt2IQRmCgq4Ee4JF%2FlSdJna3GFNQUSuwxz9xmCzsLqguRQwqyhsHe9iBv%2FgIsC8bVJQmLvZYaxsms6j0kamiYkOxh9xfXQuJQE0VkyNW9kvVDFam7D7hBnuoe4SJMqe7E74DVX0RKSI5v7ITrnDC8CDkiIVZCSEqBeIrr6iZg%2BomlCL62BMk6dPnMf2d2meBAuyx6uzZ2ULxA0PpycIeVubwUPfX0HrLQWlpZ4mYeoHPyOPDB0f5rU1tBaFLzxGErETyfWi%2Fzufdw2MZnXFfsjOo7kxWn%2FePbZFmWcRDGx76cFDawFKdDU9pCXYEpQ1myaQ3odUZzHJ%2B87GHhGAOOzsn8j7GpgJDhFF6%2FEhWrnmdeexdEe%2Fb%2B6G51D5zUbY5axgp5FGW7Ypjdb%2BcGPl%2FK8F8x7Io%2Fk20NmiDR7tiezxX%2B3vz%2FZNsJXyPUhzlJRy0YKcf7aG5fCfoMyF8y6M4iRUUWvQqPb8TIn4eQ5dSfIZVp6C86HinKw9fYp00CFhdLJ%2Fia0SifEB%2BlobvGZa%2F5qC422FD8UXLzWcMqtvWDF9DrQ2pIlCc3RIXX%2BIy2mjQk5avCb7CE%2BT7axvqcO7Hwckoda3A8ZkghNQfaWTr2qZFRl3LZ4IxK3n%2FXJSH%2B3pf5EY0n6Ou54sVISJ5X9y%2FqnP8s3zDbdDK7tNCmWv9k4sQP7m0VVzssizKQxu0FLYCJZ6om%2Fs%2BLqIQTJA6VO5M%2BrlPOZijcaR8mzg37aR2l5VUNhhFKr30lgVMZ%2Begvnzh9UawmBYtSrdVey%2BbFJS3dZfdnb8HAaNttW7qJfkhmBP4y0KvxuushXFRTVjg0u6gZ6C2sNe1m2TwwK12sMdXvbNZ1O2NaDVTmikG2CMUj5hh55FbHeGxdEOliGWodELxdJXIlkgRydrWpG8JdbOJl%2BtIEVfrUIuE06tEYoJ97EOThMsMpllLESmJ1U3ov1SttbekiE6sRXed1REm4u1moP5NOfmbJc2H04Ty6mrwHqr6gS%2B900zFS7nyXdVp8dwdC7aGyTLpop2lewYlXZF2m0ClT0QknrT%2Fm4GKeLckDYP6BpPdaksqRdXhG9%2B%2FZM91V%2Boisao9A7v8twImO5JeRGuRg4oWDnZZpLlNblZSWRRR%2BXZ1qXxBgCMu6%2FOxyCbEtNcOovK9P8O7QInHmJW8lffH%2B2a8%2FwRsYkXvQHCxo1MATcjnNYdRUe8oEWXa3UbikcuZw5hKLDXoOVhuljgkEGUx%2FRJBv1X1NJCzxEEBGT2PsKW0M%2BZvGSgpaxiOEGOTJG%2B6hfp0C2ri9YbisCC5wqBqJU2JagrXaOEwSrbT%2BjBZDQdF2ddajEVMhiOWjrTYo6qsJb6LQ6x6N%2BkkN0lBYdnh23fo0NS44UM%2FdtKolfItLl0iLIrP1HDzXmfCEhTHs3S%2FOK0I8T3so3idsEVHE9AD37ZvgZQxGDpYGLOllrcGZsd3tpx0mGJLsZPQBn1kd4JdLh1qRky1PfdUkSkrMcVSsD8IB63sBeLDFq67r%2FW%2FWq5z1Zs70HvIDkP75%2F8%2F%2F0AzfBF058QYzBMT6epK8zCpu4551szoe2bknhciA%2FNkltSZxThR7Rp%2BRUn06XUSbo28SWdOqJo54ZzQPLyX8ArGsdsTmvxiyivBsMshXzkYJDoIin3LzeIGxsjKDf7N%2FzYmYvbN8DcBpmCGkuHvgs8QTFARHEI%2BwAC32sUh9HQF7dkfDIf599CID99h1M1Ad2eCY8QX6K4JcAxNQHc%2BRZlZvfVCggNMWXXjDxOmZpxilxn0LZw9THg1%2Fim9geYeJsxBc98ejqEb0N1e4BjnALq7ERxgxhaN3IxAFjQctHdNKA5yzqA%2F%2B8CGAy44GIBTD39HxQ6McDy5vwdkFRgiZtZvAVcGVdWktY8y5xSDQVJ5WZ%2BK5gpG4TEhvkXxB%2FV8QioOprGP90tisY2wTp%2F3OAQjRcU2PsfHawbmmc1ms9lsNpvNZv8HgDqcOSuQwGEAAAAASUVORK5CYII%3D">
+   <img src="https://img.shields.io/badge/RECOIL-0.7.5-brightgreen.svg?style=for-the-badge&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAk1BMVEX%2F%2F%2F8cHiEAAAAZGx4UFhr6%2BvoJDREPEhYXGR0VGBsNEBROT1Hu7u4bHiESFRj4%2BPgABg3l5uYAAAWpqqtFRkmDg4UAAAknKSzOzs7g4OHp6enBwcK2trdcXV83OTvZ2dmbm5yLjI2PkJFiY2WwsLEhIycwMjRWV1mjpKVLTU94eXq9vr9DREfR0dJucHGGh4g6PD7vgc%2FGAAAIq0lEQVR42u3dUXeivNYH8L0TCIARglQBkEpVQbHafv9P97591jrzQKYgem6SHH5r5rIX%2FxXaQLKzA7PZbDabzWaz2f8Sviuqe3mvih0HE6VVKcjGD3xBRFkVYBr%2BUYsA%2FyMQyToHo2xPG4pdVPgxmMOOiYsySqoQTHH2KP6NOnsbzFARir%2BhZA9GuBGKA0gBBggPPg4JGg76qwQOWm4q0F5%2BCXCY9xmB7lKCY8gVdHf3cYx1Ad1RimPoBjRnExxHOOgtepgwNfsPjQF%2FagrjE2YPE%2B5Ab%2Fxhwhw09zAh6K4JcEzQgO6OBMesYtBdllAc5p4y0N6eLXEQM2EhY%2Fft4RDvewcG2BMcYspCTcmGntEGzJCXbCBgDoaIFiuKMrpqIjDH%2FeRgX3C6g0ns7YJgF1lswTC8t6pIKw7GuXUG0f3OwTxpJyF9jwxP6M4JVTc%2FpfMYGjBb0MTEhLtuQpqBebJOwiW5gXmi7oKN2IN58jcP%2F3BrMI%2F9xaQqDOPE3YTOIQTjFDXFPygeQSvFouNz4DEtg17NVwo6uZ4c6w9iw6%2F2Ajus9x1oJK3p4635nGCX85mCPm7vdMLW%2FFpgl0daDrrI3rwJ%2B0k7eZdGvFVpCFrg3W1C8TE4Ja6wz2N12e63O1DfwenOdTAgbwKUuIEvCCFJe81tUFnrdwZmkT9bfLKkPvneX0FV0kxAk%2BKVjSiPndqdHl9%2FKCoYErYODqKMrLkWNRdByWEIv69wBGlSUFTt4r9YCoPChlAc5tRnUFPcHZrgDUbsXReHUaLo3n62pFNrucKj64xFpJWSEXmvJN%2B%2Fw5j0QqyxiFtQUdxNSK0YRm0vljMckeyUfzXF4C2CUXlcEkbxd07JQUEtww52gAd4%2BnUiRPiBR1FmHUFBOXm%2BVia%2FftwPi9rxsc9NMlBQ%2F%2FgPPW1hmrw4tsLBHvEFCrq5FDu8OoWpwrQkFDvoxgYFVT52ueQG08X9X8fNHhQUXaz%2FojAvpt2IQRmCgq4Ee4JF%2FlSdJna3GFNQUSuwxz9xmCzsLqguRQwqyhsHe9iBv%2FgIsC8bVJQmLvZYaxsms6j0kamiYkOxh9xfXQuJQE0VkyNW9kvVDFam7D7hBnuoe4SJMqe7E74DVX0RKSI5v7ITrnDC8CDkiIVZCSEqBeIrr6iZg%2BomlCL62BMk6dPnMf2d2meBAuyx6uzZ2ULxA0PpycIeVubwUPfX0HrLQWlpZ4mYeoHPyOPDB0f5rU1tBaFLzxGErETyfWi%2Fzufdw2MZnXFfsjOo7kxWn%2FePbZFmWcRDGx76cFDawFKdDU9pCXYEpQ1myaQ3odUZzHJ%2B87GHhGAOOzsn8j7GpgJDhFF6%2FEhWrnmdeexdEe%2Fb%2B6G51D5zUbY5axgp5FGW7Ypjdb%2BcGPl%2FK8F8x7Io%2Fk20NmiDR7tiezxX%2B3vz%2FZNsJXyPUhzlJRy0YKcf7aG5fCfoMyF8y6M4iRUUWvQqPb8TIn4eQ5dSfIZVp6C86HinKw9fYp00CFhdLJ%2Fia0SifEB%2BlobvGZa%2F5qC422FD8UXLzWcMqtvWDF9DrQ2pIlCc3RIXX%2BIy2mjQk5avCb7CE%2BT7axvqcO7Hwckoda3A8ZkghNQfaWTr2qZFRl3LZ4IxK3n%2FXJSH%2B3pf5EY0n6Ou54sVISJ5X9y%2FqnP8s3zDbdDK7tNCmWv9k4sQP7m0VVzssizKQxu0FLYCJZ6om%2Fs%2BLqIQTJA6VO5M%2BrlPOZijcaR8mzg37aR2l5VUNhhFKr30lgVMZ%2Begvnzh9UawmBYtSrdVey%2BbFJS3dZfdnb8HAaNttW7qJfkhmBP4y0KvxuushXFRTVjg0u6gZ6C2sNe1m2TwwK12sMdXvbNZ1O2NaDVTmikG2CMUj5hh55FbHeGxdEOliGWodELxdJXIlkgRydrWpG8JdbOJl%2BtIEVfrUIuE06tEYoJ97EOThMsMpllLESmJ1U3ov1SttbekiE6sRXed1REm4u1moP5NOfmbJc2H04Ty6mrwHqr6gS%2B900zFS7nyXdVp8dwdC7aGyTLpop2lewYlXZF2m0ClT0QknrT%2Fm4GKeLckDYP6BpPdaksqRdXhG9%2B%2FZM91V%2Boisao9A7v8twImO5JeRGuRg4oWDnZZpLlNblZSWRRR%2BXZ1qXxBgCMu6%2FOxyCbEtNcOovK9P8O7QInHmJW8lffH%2B2a8%2FwRsYkXvQHCxo1MATcjnNYdRUe8oEWXa3UbikcuZw5hKLDXoOVhuljgkEGUx%2FRJBv1X1NJCzxEEBGT2PsKW0M%2BZvGSgpaxiOEGOTJG%2B6hfp0C2ri9YbisCC5wqBqJU2JagrXaOEwSrbT%2BjBZDQdF2ddajEVMhiOWjrTYo6qsJb6LQ6x6N%2BkkN0lBYdnh23fo0NS44UM%2FdtKolfItLl0iLIrP1HDzXmfCEhTHs3S%2FOK0I8T3so3idsEVHE9AD37ZvgZQxGDpYGLOllrcGZsd3tpx0mGJLsZPQBn1kd4JdLh1qRky1PfdUkSkrMcVSsD8IB63sBeLDFq67r%2FW%2FWq5z1Zs70HvIDkP75%2F8%2F%2F0AzfBF058QYzBMT6epK8zCpu4551szoe2bknhciA%2FNkltSZxThR7Rp%2BRUn06XUSbo28SWdOqJo54ZzQPLyX8ArGsdsTmvxiyivBsMshXzkYJDoIin3LzeIGxsjKDf7N%2FzYmYvbN8DcBpmCGkuHvgs8QTFARHEI%2BwAC32sUh9HQF7dkfDIf599CID99h1M1Ad2eCY8QX6K4JcAxNQHc%2BRZlZvfVCggNMWXXjDxOmZpxilxn0LZw9THg1%2Fim9geYeJsxBc98ejqEb0N1e4BjnALq7ERxgxhaN3IxAFjQctHdNKA5yzqA%2F%2B8CGAy44GIBTD39HxQ6McDy5vwdkFRgiZtZvAVcGVdWktY8y5xSDQVJ5WZ%2BK5gpG4TEhvkXxB%2FV8QioOprGP90tisY2wTp%2F3OAQjRcU2PsfHawbmmc1ms9lsNpvNZv8HgDqcOSuQwGEAAAAASUVORK5CYII%3D">
   	</a>
 - <a href="https://reactrouter.com/en/main">
-    		<img src="https://img.shields.io/badge/REACT--ROUTER-0.7.5-brightgreen.svg?style=for-the-badge&logo=react-router">
+    		<img src="https://img.shields.io/badge/REACT--ROUTER-6.4.1-brightgreen.svg?style=for-the-badge&logo=react-router">
     </a>
 - <a href="https://mui.com/">
     		<img src="https://img.shields.io/badge/MATERIAL--UI-5.10.9-brightgreen.svg?style=for-the-badge&logo=mui">
@@ -341,35 +334,33 @@
     		<img src="https://img.shields.io/badge/STYLED--COMPONENTS-5.3.5-brightgreen.svg?style=for-the-badge&logo=styled-components">
     </a>
 
-
 ### WEB BACK-END
+
 - <a href="https://firebase.google.com/">
     		<img src="https://img.shields.io/badge/FIREBASE-9.10.0-brightgreen.svg?style=for-the-badge&logo=firebase">
-	</a>
+  </a>
 
 ### Communications
 
 - <a href="#">
-    		<img src="https://img.shields.io/badge/NOTION-555555?style=for-the-badge&logo=notion">
+  <img src="https://img.shields.io/badge/NOTION-555555?style=for-the-badge&logo=notion">
     </a>
-- <a href="#">
+- <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=37%3A657">
       		<img src="https://img.shields.io/badge/FIGMA-555555?style=for-the-badge&logo=figma">
       </a>
   <br/><br/>
 
-
 ## :running:**ReSoldier 팀 정보**
+
 ReSoldier : Resolve + Soldier - **“정해진 답이 없는 문제들에 대한 해결책을 찾는 병사들”**
 
-
-| 이름   | 계급      | 역할                   | Github                                          | Email                  |
-| ------ | --------- | ---------------------- | ----------------------------------------------- | ---------------------- |
-| 박상현 | 공군 병장 | 팀장, Frontend, 디자인 | [galaxy821](https://github.com/galaxy821)       | hoshino2085@gmail.com  |
+| 이름   | 계급      | 역할                   | Github                                        | Email                  |
+| ------ | --------- | ---------------------- | --------------------------------------------- | ---------------------- |
+| 박상현 | 공군 병장 | 팀장, Frontend, 디자인 | [galaxy821](https://github.com/galaxy821)     | hoshino2085@gmail.com  |
 | 강태우 | 공군 병장 | Backend, DB 설계       | [TaewooRiver](https://github.com/TaewooRiver) | colab.taewoo@gmail.com |
-<br/>
 
+<br/>
 
 ## :open_file_folder: **저작권 및 사용권 정보 (Copyleft / End User License)**
 
 - [MIT License & Apache License 2.0](LICENSE)
-
