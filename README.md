@@ -16,7 +16,7 @@
 </p><br/>
 
 <p align="center">
-	<a href="#">
+	<a href="https://www.notion.so/sangsang9988/Whisper-Soldier-65b3a30393de44598c91f5fb63ed5155">
 		<img src="Image\button\notionbutton.png" />
 	</a>
 </p><br/>
@@ -218,6 +218,7 @@
 
 <p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">프로젝트 단계별 서비스 플로우 보기</a></p>
 
+
 - [x] 장병들만 이용가능한 익명 고민 글 업로드 공간 : `최소 기능 제품, MVP(Minimum Viable Product)`
   - [x] 로그인
   - [x] 회원 가입
@@ -371,7 +372,7 @@
 
 ### Communications
 
-- <a href="#">
+- <a href="https://www.notion.so/sangsang9988/Whisper-Soldier-65b3a30393de44598c91f5fb63ed5155">
   <img src="https://img.shields.io/badge/NOTION-555555?style=for-the-badge&logo=notion">
     </a>
 - <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=37%3A657">
@@ -386,8 +387,10 @@
 - <a href="https://pm2.keymetrics.io/">
       		<img src="https://img.shields.io/badge/PM2-555555.svg?style=for-the-badge&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAADWElEQVR42mVTA5jrShTOs23btm3btm3bvmvbtm2z%2BnbrNk4mbdiJXnKNGHN%2BfecghmGYprHZZurQ%2BmJiA2Ld2V7gUUrODUVHpcaHqPdPQTv9ivVL0%2B1l1omYa2%2BGvr5Utx%2Fs4rorQu4Cbuwn8NuOwaqnmTV74WtSuCsyKXcUrqu3roixzZaIaa2PYbW3o5FxZc0JUUeN%2BOV22FN3kvMyvD%2BTeSGfM831HIiu2hjeEq7r9mDn%2FZGm26MFp4cKz43wIZh2FTmVLXT%2FIf58PJs3K1ySQ75VzV36PV01JlslqmbYzKqkh9v5YFN85Cs659zwaqvk7VNSr6FTbmAii%2BpbO7L3%2FUx7IHy%2BEpTMiSXD0hVfsDirWfyIhTHxBdVwc6TpYaLiNiLvSqLoTnrNJVT2XQD41K8vi5W%2FKpVGhWdbGRcBb8%2Bgw0B97E%2Fu8xzeLmY80NsqrbbL7ibZ1aw4WxNzNYmZGjhZCb%2B%2BVHz1RF4GurXu0XqmziMl9Qmf1cbnffCyN9jemQSSfXLwn4NCvx0Q%2BW7f6Od7Yx%2FsQby5O%2FXSLvRjCPMQElvus%2BRZxWapQ7y9mHZh8Oqf6YUgfOG3%2BDM%2FxJHZoyvG98wf3jOvf4%2Bcrt2z23bLbNwto3aX1Ko90usOzwajYbvUNNZM8u%2B0cZP%2BxPW%2FMV5cffTb2Ku%2FxRGhMwBylkGpiylyUkUOosiBFy1jpQ7nm53Nu%2F7Zd1WZFSshaxcVEP%2BM8a%2BXcYVjYsukcvFr7Kwb2oGB%2F5bwF%2FrRN4fCbw0F3hz0vtTreaaTG0IjecuNyO%2BhNTNvzonfDYNXasHjRWyU0S7%2FmE2qE9c2iWkknGy8dCXe4PdeXI1%2BNAI6gv4Ph8b3TednSffznfW7rvmkOuKXjfsLaQcBPyiO3%2FcrkBU7RcTQbFN8jpu6uwO9vilyQ1Pwqjq%2BPURmO5zX1Mj%2B2OgRWYGnWl%2Fu41Mn%2BR6Xcubn1KwPWpXrmsTedElVUUFjZRjmQcryyqEF8izlva%2BV%2BGsu9O14H%2FL7mp8WvdC86g%2FyjzZ%2Bw2wYyKaZWveg2d0ay3WjNzcrHuA%2BttB7V%2FPK892RswrfzcfuzgWSrK9baHted1s3WOuKdWgbIe%2Fp4PM9IM3hP7tSiQirF1bkvzTqtGPSNX19yf9h1eft7EhlLAAAAABJRU5ErkJggg%3D%3D">
       </a>
-  <br/><br/>
+  <br/>
 
+<p><a href="https://www.notion.so/sangsang9988/Front-End-Project-0cb3d4df3a1c4f6cad9a19d5d46c39a7">Front-End 문서 바로가기</a></p>
+<br/>
 ## :running:**ReSoldier 팀 정보**
 
 ReSoldier : Resolve + Soldier - **“정해진 답이 없는 문제들에 대한 해결책을 찾는 병사들”**
