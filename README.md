@@ -85,11 +85,11 @@
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/email_veri.png" width=360/></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/email_veri.png" width=360/></td>
 	</tr>
 	<tr>
 		<td align="center">
-			<p><b>나라사랑이메일 인증 기능</b><br/>사용자가 국군 병사임을 증명할 수 있습니다.</p>
+			<p><b>나라사랑포털 이메일 인증</b><br/>위스퍼솔져를 국군 장병들만 이용할 수 있도록 합니다.</p>
 		</td>
 	</tr>
 </table>
@@ -97,28 +97,28 @@
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/upload_worry_1.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/upload_worry_2.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/upload_worry_1.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/upload_worry_2.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
-			<p><b>고민 공유</b><br/>고민을 공유하고 댓글을 통해 조언을 받을 수 있습니다.</p>
+			<p><b>고민 글 작성</b><br/>위스퍼솔져에 자신의 고민을 작성할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/latest_worry_board.png" width=360></td>
 	</tr>
 	<td align="center">
-			<p><b>최신 고민게시판</b><br/>전우들이 가장 최근 업로드한 고민을 알 수 있습니다.</p>
+			<p><b>최신 고민게시판</b><br/>가장 최근 고민 글을 모아 볼 수 있습니다.<br/>우측 검색 설정에서 정렬과 기간을 변경할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/popular_worry_board.png" width=360></td>
 	</tr>
 	<td align="center">
 			<p><b>인기 고민게시판</b><br/>전우들이 많이 공감하는 고민이 무엇인지 알 수 있습니다.</p>
@@ -128,81 +128,74 @@
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/chat.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/chat.png" width=360></td>
 	</tr>
 	<td align="center">
-			<p><b>1대 1 채팅 기능</b><br/>고민 게시판보다 깊고 자세한 상담을 진행할 수 있습니다.</p>
+			<p><b>실시간 1대 1 채팅</b><br/>고민 게시판보다 깊고 자세한 상담을 <br/>익명의 사용자와 채팅을 통해 진행할 수 있습니다.<br/>*고민 글 또는 댓글의 채팅하기를 눌러 채팅을 시작할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/keyword_search.png" width=360></td>
+		<td align="center" colspan="2"><img src="Image/Introduce_Functionailty/keyword_search.png" width=360></td>
 	</tr>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/search_read_comment.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/search_ask_for_chat.png" width=360></td>
-	</tr>
-	<tr>
-		<td colspan="2"><img src="Image/Introduce_Functionailty/search_chatting.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
+		<td align="center"><img src="Image\tagboard.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
-			<p><b>키워드 검색과 태그 검색을 활용한 고민 조회 기능</b><br/>직접 고민을 올리기 부담스럽다면, 나와 비슷한 고민을 조회해 해당 글에 달린 댓글을 읽고, 댓글을 단 사람과 1대 1 채팅을 진행할 수 있습니다.</p>
+			<p><b>키워드 검색과 태그 검색을 활용한 고민 탐색</b><br/>나와 비슷한 고민을 탐색할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/curse_word_filtered.png" width=360></td>
 	</tr>
 	<td align="center">
-			<p><b>업로드 전 필터링 기능</b><br/>고민 글 또는 댓글 작성 시 비속어를 감지하여 업로드를 사전에 방지합니다.</p>
+			<p><b>단어 필터링</b><br/>고민 글 또는 댓글 작성 시 커뮤니티에 위배되는 텍스트를<br/>감지하여 해당 글을 게시할 수 없도록 합니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/post_report.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/comment_report.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/post_report.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/comment_report.png" width=360></td>
 	</tr>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/chat_block.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/chat_block.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
-			<p><b>신고 및 차단 기능</b><br/>부적절한 고민 글 또는 댓글을 신고하거나 부적절한 1대 1 채팅을 차단할 수 있습니다.</p>
+			<p><b>신고 및 차단</b><br/>부적절한 고민 글 또는 댓글을 신고하거나 부적절한 채팅을 차단할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
+		<td align="center"><img src="Image\changeImg.png" width=360></td>
 	</tr>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
-	</tr>
-	<tr>
-		<td><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/mypage_my_comment.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
-			<p><b>마이페이지의 기능</b><br/>사용자의 프로필 사진과 닉네임을 설정할 수 있습니다. 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.</p>
+			<p><b>마이 프로필</b><br/>사용자의 프로필 사진과 닉네임을 설정해 위스퍼 솔저 내 자신을 개성있게 표한 할 수 있습니다.<br/>또한, 본인이 작성하거나 공감한 고민 글, 댓글을 조회할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
 
 <table>
 	<tr>
-		<td><img src="Image/Introduce_Functionailty/admin_reported_comments.png" width=360></td>
-		<td><img src="Image/Introduce_Functionailty/admin_reported_posts.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/admin_reported_comments.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/admin_reported_posts.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
-			<p><b>관리자 기능</b><br/>관리자 계정으로 로그인하여 신고된 고민글과 댓글을 조회할 수 있습니다. 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.</p>
+			<p><b>관리자 콘텐츠 관리</b><br/>관리자 계정으로 신고된 고민글과 댓글을 조회할 수 있습니다.<br/>그리고 신고된 대상을 블라인드 또는 신고 취소 처리할 수 있습니다.</p>
 	</td>
 </table>
 <br/>
@@ -251,61 +244,87 @@
 
 ## :clipboard: **DB Diagram**
 
-<img style="width:500px;" src="Image\dbdiagram.png"/>
-<a href="https://sangsang9988.notion.site/Whisper-Soldier-3f43e3b74f774487b6339cc58f6d65bb"><p>DB Document 바로가기</p</a>
+<table align="center">
+	<tr>
+		<td align="center" colspan="2">
+			<img style="width:400px;" src="Image\dbdiagram.png"/>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<a href="https://sangsang9988.notion.site/Whisper-Soldier-3f43e3b74f774487b6339cc58f6d65bb"><p>DB Document 바로가기</p</a>
+		</td>
+	</tr>
+</table>
+
 <br/>
 
 ## :iphone: **UI/UX**
 
+테스크탑, 스마트폰, 태블릿 등 다양한 환경에 최적화된 반응형 웹을 구현했습니다.
+
 <table align="center">
 	<tr>
-		<td>
-			<img style="width:500px;" src="Image\main_page.png">
-		</td>
-		<td>
-			<img style="width:500px;" src="Image\post_page.png">
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\homepage.png">
 		</td>
 	</tr>
 	<tr>
-		<td align="center">
-			<b>메인 페이지</b>
-		</td>
-		<td align="center">
-			<b>고민 포스트 페이지</b>
+		<td align="center" colspan="2">
+			<b>메인 홈</b>
 		</td>
 	</tr>
 	<tr>
-		<td>
-			<img style="width:500px;" src="Image\postboard_page.png">
-		</td>
-		<td>
-			<img style="width:500px;" src="Image\chat_page.png">
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\postpage.png">
 		</td>
 	</tr>
 	<tr>
-		<td align="center">
+		<td align="center" colspan="2">
+			<b>고민 글</b>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\postboard.png">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
 			<b>고민 게시판</b>
 		</td>
-		<td align="center">
-			<b>채팅 페이지</b>
-		</td>
 	</tr>
-    <tr>
-		<td>
-			<img style="width:500px;" src="Image\profile_page.png">
-		</td>
-		<td>
-			<img style="width:500px;" src="Image\admin_page.png">
+	<tr>
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\write.png">
 		</td>
 	</tr>
 	<tr>
-		<td align="center">
-			<b>프로필 페이지</b>
-		</td>
-		<td align="center">
-			<b>관리자 페이지</b>
+		<td align="center" colspan="2">
+			<b>고민 작성</b>
 		</td>
 	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\chat.png">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<b>채팅</b>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<img style="width:1800px;" src="Image\profile.png">
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<b>프로필</b>
+		</td>
+	</tr>
+	<tr><td align="center" colspan="2"><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=94%3A503"><p>UI/UX 프로토타입 바로가기</p></a></td></tr>
 </table>
 <br/>
 
