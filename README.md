@@ -16,7 +16,7 @@
 </p><br/>
 
 <p align="center">
-	<a href="https://www.notion.so/sangsang9988/Whisper-Soldier-65b3a30393de44598c91f5fb63ed5155">
+	<a href="https://sangsang9988.notion.site/sangsang9988/Whisper-Soldier-65b3a30393de44598c91f5fb63ed5155">
 		<img src="Image\button\notionbutton.png" />
 	</a>
 </p><br/>
