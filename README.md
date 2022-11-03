@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-	<span>테스트 유저/관리자 ID : <code>testuser@narasarang.or.kr / admin@resoldier.com</code></span><br/>
+	<span>테스트 유저/관리자 ID : <code>testuser@narasarang.or.kr / testuser2@narasarang.or.kr / admin@resoldier.com</code></span><br/>
 	<span>PW : <code>12341234</code></span>
 </p>
 <p align="center">
@@ -405,7 +405,7 @@
       </a>
   <br/>
 
-<p><a href="https://www.notion.so/sangsang9988/Front-End-Project-0cb3d4df3a1c4f6cad9a19d5d46c39a7">Front-End 문서 바로가기</a></p>
+<p><a href="https://sangsang9988.notion.site/Front-End-Project-0cb3d4df3a1c4f6cad9a19d5d46c39a7">Front-End 문서 바로가기</a></p>
 <br/>
 
 ## :running:**ReSoldier 팀 정보**
