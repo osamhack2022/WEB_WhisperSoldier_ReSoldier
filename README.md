@@ -40,7 +40,7 @@
 		<p><a href="https://youtu.be/bAYJvDUx5S4"><b>시연 영상 - Youtube 링크</b></a></p>
 	</td>
 	<td align="center">
-		<p><a href="ppt/OSAM_WhisperSoldier_ReSoldier.pdf"><b>발표 자료</b></a></p>
+		<p><a href="Image/OSAM_WhisperSoldier_ReSoldier.pdf"><b>발표 자료</b></a></p>
 	</td>
 	</tr>	
 </table>
