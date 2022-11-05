@@ -8,11 +8,12 @@
 </p>
 
 <p align="center">
-	<span>테스트 유저/관리자 ID : <code>testuser@narasarang.or.kr / testuser2@narasarang.or.kr / admin@resoldier.com</code></span><br/>
-	<span>PW : <code>12341234</code></span>
+	<span>(임시)테스트 유저/관리자 ID : <code> 1998090068057@narasarang.or.kr / 2001140173643@narasarang.or.kr</code></span><br/>
+	<span>PW :<code>12341234</code></span>
 </p>
 <p align="center">
-*본인 나라사랑포털 이메일로도 가입 가능 합니다.
+*본인 나라사랑포털 이메일로도 가입 가능 합니다.<br/>
+*(11.05 추가)테스트 계정으로 본 서비스에 장난 글과 댓글을 작성한 뒤 테스트 계정을 탈퇴해 삭제되는 경우가 발생하였습니다.<br/>다른 사람들이 위스퍼 솔져를 원활하게 테스트할 수 있도록 계정 탈퇴 금지 및 건전한 서비스 이용을 부탁드립니다.
 </p><br/>
 
 <p align="center">
