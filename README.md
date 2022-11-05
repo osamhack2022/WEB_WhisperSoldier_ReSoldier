@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-	<span>(임시)테스트 유저/관리자 ID : <code> 1998090068057@narasarang.or.kr / 2001140173643@narasarang.or.kr</code></span><br/>
+	<span>(임시)테스트 유저/관리자 ID : <code> 1998090068057@narasarang.or.kr /hoshino208@naver.com</code></span><br/>
 	<span>PW :<code>12341234</code></span>
 </p>
 <p align="center">
