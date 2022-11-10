@@ -1,27 +1,19 @@
 # **WhisperSoldier - 익명 군 상담소**
 
-<p align="center"><img src="Image\etc\readme_main_banner_img.png"></p>
+<p align="center"><img src="Image/etc/readme_main_banner_img.png"></p>
 <p align="center">
 	<a href="http://whispersoldier.site/">
-		<img src="Image\button\gobutton.png" />
+		<img src="Image/button/gobutton.png" />
 	</a>
 </p>
-
-<p align="center">
-	<span>테스트 유저/관리자 ID : <code> testuser1@narasarang.or.kr / testuser2@narasarang.or.kr / admin@resoldier.com </code></span><br/>
-	<span>PW :<code>12341234</code></span>
-</p>
-<p align="center">
-*본인 나라사랑포털 이메일로도 가입 가능 합니다.<br/>
-*(11.05 추가)테스트 계정으로 본 서비스에 장난 글과 댓글을 작성한 뒤 테스트 계정을 탈퇴해 삭제되는 경우가 발생하였습니다.<br/>다른 사람들이 위스퍼 솔저를 원활하게 테스트할 수 있도록 계정 탈퇴 금지 및 건전한 서비스 이용을 부탁드립니다.
-</p><br/>
-
 <p align="center">
 	<a href="https://sangsang9988.notion.site/sangsang9988/Whisper-Soldier-65b3a30393de44598c91f5fb63ed5155">
-		<img src="Image\button\notionbutton.png" />
+		<img src="Image/button/notionbutton.png" />
 	</a>
+</p>
+<p align="center">
+*본인 나라사랑포털 이메일로 가입 가능 합니다.
 </p><br/>
-
 <p align="center">
 	<img src="https://img.shields.io/github/issues/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
 	<img src="https://img.shields.io/github/forks/osamhack2022/WEB_WhisperSoldier_ReSoldier?style=for-the-badge">
@@ -159,7 +151,7 @@
 	</tr>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/tag_search.png" width=360></td>
-		<td align="center"><img src="Image\Introduce_Functionailty\tagboard.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/tagboard.png" width=360></td>
 	</tr>
 	<td align="center" colspan="2">
 			<p><b>키워드 검색과 태그 검색을 활용한 고민 탐색</b><br/>나와 비슷한 고민을 탐색할 수 있습니다.</p>
@@ -194,7 +186,7 @@
 <table>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/mypage_profile.png" width=360></td>
-		<td align="center"><img src="Image\Introduce_Functionailty\changeImg.png" width=360></td>
+		<td align="center"><img src="Image/Introduce_Functionailty/changeImg.png" width=360></td>
 	</tr>
 	<tr>
 		<td align="center"><img src="Image/Introduce_Functionailty/mypage_my_post.png" width=360></td>
@@ -221,7 +213,7 @@
 
 <table>
 	<tr>
-		<td align="center"><img src="Image\etc\whispersoldier_service_flow_chart.png"/></td>
+		<td align="center"><img src="Image/etc/whispersoldier_service_flow_chart.png"/></td>
 	</tr>
 	<td align="center" colspan="2">
 			<p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">서비스 플로우 figma 페이지</a></p>
@@ -275,7 +267,7 @@
 <table align="center">
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:400px;" src="Image\etc\dbdiagram.png"/>
+			<img style="width:400px;" src="Image/etc/dbdiagram.png"/>
 		</td>
 	</tr>
 	<tr>
@@ -293,7 +285,7 @@
 <table align="center">
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\homepage.png">
+			<img style="width:1800px;" src="Image/ui/homepage.png">
 		</td>
 	</tr>
 	<tr>
@@ -303,7 +295,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\postpage.png">
+			<img style="width:1800px;" src="Image/ui/postpage.png">
 		</td>
 	</tr>
 	<tr>
@@ -313,7 +305,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\postboard.png">
+			<img style="width:1800px;" src="Image/ui/postboard.png">
 		</td>
 	</tr>
 	<tr>
@@ -323,7 +315,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\write.png">
+			<img style="width:1800px;" src="Image/ui/write.png">
 		</td>
 	</tr>
 	<tr>
@@ -333,7 +325,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\chat.png">
+			<img style="width:1800px;" src="Image/ui/chat.png">
 		</td>
 	</tr>
 	<tr>
@@ -343,7 +335,7 @@
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<img style="width:1800px;" src="Image\ui\profile.png">
+			<img style="width:1800px;" src="Image/ui/profile.png">
 		</td>
 	</tr>
 	<tr>
