@@ -1,5 +1,13 @@
 # **WhisperSoldier - 익명 군 상담소**
 
+<br/>
+<p align="center">
+	<a href="https://osam.kr/hackathon/awards?m=v&wdnId=106">
+		<b>🏆 OSAM 2022 국방부장관상 수상 🏆</b>
+	</a>
+</p>
+<br/>
+
 <p align="center"><img src="Image/etc/readme_main_banner_img.png"></p>
 <p align="center">
 	<a href="http://whispersoldier.site/">
@@ -227,7 +235,6 @@
 
 <p><a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=377%3A2428">프로젝트 단계별 서비스 플로우 보기</a></p>
 
-
 - [x] 장병들만 이용가능한 익명 고민 글 업로드 공간 : `최소 기능 제품, MVP(Minimum Viable Product)`
   - [x] 로그인
   - [x] 회원 가입
@@ -387,7 +394,8 @@
 - <a href="https://www.figma.com/file/u9GrV4UddbIoz0KXtnXOJq/Whisper-Soldier-Design?node-id=37%3A657">
       		<img src="https://img.shields.io/badge/FIGMA-555555?style=for-the-badge&logo=figma">
       </a>
-      
+
+
 ### Deployment
 
 - <a href="https://aws.amazon.com/ko/ec2/?trk=68913a17-4967-41f6-a766-0f2eb338dd04&sc_channel=ps&s_kwcid=AL!4422!3!588924203019!e!!g!!aws%20ec2&ef_id=Cj0KCQjwwfiaBhC7ARIsAGvcPe4y_VId-SkPBRc5G2zYZpUwuOKHx8o3agoqT3s-gi7ixWu2P7Z0B0IaArl5EALw_wcB:G:s&s_kwcid=AL!4422!3!588924203019!e!!g!!aws%20ec2">
